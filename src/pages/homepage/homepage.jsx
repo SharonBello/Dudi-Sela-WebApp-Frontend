@@ -13,7 +13,7 @@ export const Homepage = () => {
 
   return (
     <div className="home">
-      <section className="hero">
+      <section className="home-hero">
         <HomeHero />
       </section>
 

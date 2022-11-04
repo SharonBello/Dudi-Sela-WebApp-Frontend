@@ -3,10 +3,10 @@ import VideoPlayer from 'react-background-video-player'
 import { useSelector } from 'react-redux'
 
 export const HomeHero = () => {
-  const { loggedInUser } = useSelector((storeState) => storeState.userModule)
+  const { loggedUser } = useSelector((storeState) => storeState.userModule)
 
     return (
-        <div className="seller-hero">
+        <div className="hero">
             <VideoPlayer
                 className="video"
                 src={
@@ -20,7 +20,7 @@ export const HomeHero = () => {
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>
-                {!loggedInUser  ? <a href="/login" className="open-popup-join">כניסת משתמשים</a> : <a href="/user-reservations/new-reservation" className="open-popup-join">הזמנת מגרש</a>}
+                {!loggedUser  ? <a href="/login" className="open-popup-join">כניסת משתמשים</a> : <a href="/user-reservations/new-reservation" className="open-popup-join">הזמנת מגרש</a>}
             </div>
             <aside className="hero-stats">
                 <div className="box-row container">

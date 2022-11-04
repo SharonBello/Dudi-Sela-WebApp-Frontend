@@ -1,0 +1,25 @@
+//Base
+@import '../src/assets/global-scss/base/base.scss';
+@import '../src/assets/global-scss/base/helper.scss';
+@import '../src/assets/global-scss/base/layout.scss';
+@import '../src/assets/global-scss/base/main-general.scss';
+
+//Setup
+@import '../src/assets/global-scss/setup/typography.scss';
+@import '../src/assets/global-scss/setup/var.scss';
+
+//Pages
+@import '../src/pages/homepage/homepage.scss';
+@import '../src/pages/about/about.scss';
+@import '../src/pages/signup/signup.scss';
+@import '../src/pages/edit-reservation/edit-reservation.scss';
+@import '../src/pages/login/login.scss';
+@import '../src/pages/new-reservation/new-reservation.scss';
+@import '../src/pages/user-profile/user-profile.scss';
+@import '../src/pages/user-reservations/user-reservations.scss';
+
+//Components
+@import '../src/components/app-footer/app-footer.scss';
+@import '../src/components/app-header/app-header.scss';
+@import '../src/components/profile-menu/profile-menu.scss';
+@import '../src/components/side-menu/side-menu.scss';

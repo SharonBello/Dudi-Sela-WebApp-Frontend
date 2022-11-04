@@ -183,7 +183,7 @@ export const Login = () => {
                     sx={{ mt: 3, mb: 2 }}
                   >
                     {/* {isLogin ? 'Login' : 'Sign in'} */}
-                    כניסה לחשבון שלי >
+                    כניסה לחשבון שלי
                   </Button>
 
                   <Grid container>

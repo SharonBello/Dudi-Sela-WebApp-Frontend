@@ -3,5 +3,13 @@
     flex-direction: column;
     min-height: 100vh;
     flex: 1;
-    /* justify-content: space-between; */
+    justify-content: center;
+}
+
+.routes-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    flex: 1;
+    margin-block-start: calc(2vh + 2vw + 15vmin);
 }

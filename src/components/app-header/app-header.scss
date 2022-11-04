@@ -25,6 +25,10 @@
                 letter-spacing: rem(5px);
             }
         }
+
+        & .logo {
+            max-width: 5em;
+        }
     }
 
     & .nav-list {

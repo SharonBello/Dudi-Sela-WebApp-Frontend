@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, NavLink, useLocation, useParams } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { Logo } from '../../services/svg-service.js'
 import { logout, getLoggedUser } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 
 export const AppHeader = () => {
-  const params = useParams()
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   let { loggedUser } = useSelector((storeState) => storeState.userModule)
@@ -66,11 +64,10 @@ export const AppHeader = () => {
   }
 
   const onToggleSideMenu = () => {
-    console.log('on toggle side menu', isSideMenu)
+    // console.log('on toggle side menu', isSideMenu)
     let flag = !isSideMenu
     setSideMenu(flag)
   }
-
 
   if (loggedUser && !loggedUser.imgUrl) {
     loggedUser.imgUrl = "https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg"
@@ -84,13 +81,12 @@ export const AppHeader = () => {
     <header className="header container flex align-center">
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
-          <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
+          {width < 600 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
             {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} />}
-          </button>
+          </button>}
         </div>
         <div className="logo">
           <NavLink to="/" className="site-logo">
-
           <img src="https://res.cloudinary.com/primap/image/upload/v1667563747/General/Dudi%20Sela/Dudi-Logo_e5zm1a.svg" className="app-logo"
           alt="logo" />
           </NavLink>
@@ -98,12 +94,16 @@ export const AppHeader = () => {
       </article>
 
       <ul className="nav-list clean-list flex align-center">
-        {(pathname === '/' && loggedUser ? <li><NavLink to={`/user-reservations/:userId`} onClick={handleClick} className="link-page">Reservations</NavLink>
-        </li> : <li><NavLink to={'/login'} onClick={handleClick} className="link-page">Reservations</NavLink>
+      
+        {(pathname === '/' && loggedUser ? <li><Link to={`/user-reservations/:userId`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
+        </li> : <li><NavLink to={'/login'} onClick={handleClick} className="link-page">ההזמנות שלי</NavLink>
         </li>)}
 
+        <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
+        </li>
+
         <li>
-          {!loggedUser && <NavLink to='/login' rel="nofollow" className="open-popup-login link-page">Login</NavLink>}
+          {!loggedUser && <Link to='/login' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
           <div className="avatar-container">
             {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>
@@ -113,12 +113,9 @@ export const AppHeader = () => {
           </div>
         </li>
 
-        {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">Join</NavLink>
-        </li> : <li><NavLink to={`/user-reservations/new-reservation`} onClick={handleClick} className="link-page">New Reservation</NavLink>
+        {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
+        </li> : <li><NavLink to={`/user-reservations/new-reservation`} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
         </li>}
-
-        <li><NavLink to={`/about`} onClick={handleClick} className="about-page">About</NavLink>
-        </li>
       </ul>
     </header>
   )

@@ -17,7 +17,6 @@ export const userService = {
     getById,
     remove,
     update,
-    changeScore,
     onUserUpdate,
     getGoogleUser,
     signUpGoogle,
@@ -79,10 +78,11 @@ async function login(userCred) {
 
 async function signUpGoogle(user) {
     const userToAdd = {
-        fullName: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         imgUrl: user.picture,
-        userName: user.name,
-        password: user.email
+        email: user.email,
+        password: user.password
     }
     let userAdded = await httpService.post('auth/google', userToAdd)
     _handleLogin(userAdded)
@@ -92,7 +92,7 @@ async function signUpGoogle(user) {
 async function signup(userCred) {
     try {
         let users = await httpService.get('user')
-        const isUserExist = users.find(user => user.userName === userCred.userName && user.password === userCred.password)
+        const isUserExist = users.find(user => user.email === userCred.email && user.password === userCred.password)
         if (isUserExist) {
             const err = new Error('User already exist')
             throw err
@@ -110,14 +110,6 @@ async function signup(userCred) {
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
     return await httpService.post('auth/logout')
-}
-
-async function changeScore(by) {
-    const user = getLoggedUser()
-    if (!user) throw new Error('Not loggedin')
-    user.score = user.score + by || by
-    await update(user)
-    return user.score
 }
 
 function _handleLogin(user) {

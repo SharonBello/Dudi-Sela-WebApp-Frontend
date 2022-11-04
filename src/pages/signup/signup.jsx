@@ -1,4 +1,8 @@
-import * as React from 'react'
+import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
+
+import { TermsConditionsModal } from '../../components/terms-conditions-modal/terms-conditions-modal.jsx'
+
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -18,22 +22,12 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { prefixer } from 'stylis'
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  )
-}
+export const Signup = () => {
+  const [conditionsModal, setConditionsModal] = useState(false)
 
-const theme = createTheme({
-  direction: 'rtl',
-})
+  const theme = createTheme({
+    direction: 'rtl',
+  })
 
   // Create rtl cache
   const cacheRtl = createCache({
@@ -41,7 +35,23 @@ const theme = createTheme({
     stylisPlugins: [prefixer, rtlPlugin],
   })
 
-export const Signup = () => {
+  function Copyright(props) {
+    return (
+      <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        {' © כל הזכויות שמורות ל '}
+        <Link color="inherit" href="#">
+          Dudi Sela
+        </Link>{' '}
+        <br></br>
+        {new Date().getFullYear()}
+      </Typography>
+    )
+  }
+
+  const handleClose = () => {
+    setConditionsModal(false);
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -69,7 +79,8 @@ export const Signup = () => {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign up
+                כיף שבאת!
+                קדימה מתחילים!
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
@@ -80,7 +91,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="firstName"
-                      label="First Name"
+                      label="שם פרטי"
                       autoFocus
                     />
                   </Grid>
@@ -89,7 +100,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="lastName"
-                      label="Last Name"
+                      label="שפ משפחה"
                       name="lastName"
                       autoComplete="family-name"
                     />
@@ -99,7 +110,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="email"
-                      label="Email Address"
+                      label="כתובת מייל"
                       name="email"
                       autoComplete="email"
                     />
@@ -109,7 +120,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       name="password"
-                      label="Password"
+                      label="סיסמא"
                       type="password"
                       id="password"
                       autoComplete="new-password"
@@ -118,9 +129,18 @@ export const Signup = () => {
                   <Grid item xs={12}>
                     <FormControlLabel
                       control={<Checkbox value="allowExtraEmails" color="primary" />}
-                      label="I want to receive inspiration, marketing promotions and updates via email."
                     />
+                    <Grid item>
+                      אני מאשר/ת כי קראתי והנני מסכים/ה
+                      <Button onClick={() => setConditionsModal(!conditionsModal)}>
+                        לתקנון האתר ומדיניות הפרטיות
+                      </Button>
+                      {/* </a> */}
+                    </Grid>
                   </Grid>
+                  {conditionsModal && <section className="conditions-modal">
+                    <TermsConditionsModal conditionsModal={conditionsModal} handleClose={handleClose} />
+                  </section>}
                 </Grid>
                 <Button
                   type="submit"
@@ -128,13 +148,14 @@ export const Signup = () => {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign Up
+                  הרשמה
                 </Button>
-                <Grid container justifyContent="flex-end">
+                <Grid container justifyContent="center">
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
+                    כבר רשומים?
+                    <NavLink to="/login" variant="body2">
+                      כניסה
+                    </NavLink>
                   </Grid>
                 </Grid>
               </Box>

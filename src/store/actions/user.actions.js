@@ -1,6 +1,5 @@
 import { userService } from "../../services/user.service.js"
 
-
 export function loadUsers() {
     return async dispatch => {
         try {
@@ -42,7 +41,6 @@ export function removeUser(userId) {
 export function login(credentials) {
     return async (dispatch) => {
         try {
-
             const user = await userService.login(credentials)
             dispatch({
                 type: 'SET_USER',

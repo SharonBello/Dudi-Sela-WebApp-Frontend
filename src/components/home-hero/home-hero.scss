@@ -1,21 +1,23 @@
 .hero {
-    height: em(580px);
-    width: 100%;
+    max-height: rem(580px);
+    min-width: 100%;
     // background-color: $wiserr_business;
     overflow: hidden;
     position: relative;
     z-index: 0;
     margin: 0 auto;
 
-    .BackgroundVideo {
-        width: 100%;
-        // position: absolute;
-        position: fixed;
-        top: 0;
-        min-height: em(580px);
+    .video {
+        // width: unset;
+        // position: unset;
+        // position: fixed;
+        // top: unset;
+        min-height: rem(580px);
         z-index: 0;
         object-fit: cover;
-        aspect-ratio: auto 1031 / 580;
+        // aspect-ratio: auto 1031 / 580;
+
+        
     }
 
     .hero-text {
@@ -67,6 +69,7 @@
         }
 
     }
+
     .hero-stats {
         background-color: rgba(255, 255, 255, .3);
         width: 100%;
@@ -100,3 +103,6 @@
         }
     }
 }
+
+
+

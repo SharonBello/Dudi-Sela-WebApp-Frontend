@@ -11,5 +11,7 @@
     flex-direction: column;
     min-height: 100%;
     flex: 1;
-    margin-block-start: calc(2vh + 2vw + 15vmin);
+    position: relative;
+    // margin-block-start: calc(2vh + 2vw + 15vmin);
+    margin-block-start: 6em;
 }

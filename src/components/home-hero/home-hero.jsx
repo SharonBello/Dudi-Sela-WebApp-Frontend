@@ -15,6 +15,8 @@ export const HomeHero = () => {
                 autoPlay={true}
                 muted={true}
                 loop={true}
+                containerHeight="80vh"
+                containerWidth="100%"
             />
 
             <div className="hero-text">
@@ -24,7 +26,7 @@ export const HomeHero = () => {
             </div>
             <aside className="hero-stats">
                 <div className="box-row container">
-                    <ul>
+                    <ul className="clean-list flex align-center">
                         <li>
                             מגרשי אימון מקצועיים<br></br>
                             <strong>12 מגרשים</strong>

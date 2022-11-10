@@ -1,4 +1,5 @@
 import * as React from 'react'
+import axios from 'axios';
 import { useState, useEffect } from 'react'
 
 import Avatar from '@mui/material/Avatar'
@@ -9,7 +10,7 @@ import TextField from '@mui/material/TextField'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { cloudinaryService } from '../../services/cloudinary.service.js'
-import { login, signup, getLoggedUser, signUpGoogle } from '../../store/actions/user.actions.js'
+import { login, signup, getLoggedUser, signUpGoogle, setUserUid } from '../../store/actions/user.actions.js'
 import { AuthService } from '../../services/auth-service.js'
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
 import jwt_decode from 'jwt-decode'
@@ -91,25 +92,47 @@ export const Login = () => {
     }).catch(err => console.error(err))
   }
 
+  const loginUser = (username, password) => {
+    const payload = {
+      username,
+      password
+    }
+    console.log(payload)
+    axios.post('http://localhost:4000/signin', payload)
+    .then(function (response) {
+      console.log("uid", response.data.uid);
+      // save the uid into store
+      dispatch(setUserUid(response.data.uid))
+      navigate('/')
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   const handleSubmit = (ev) => {
     try {
       ev.preventDefault()
       const data = new FormData(ev.currentTarget)
-      const loginInfo = {
-        userName: data.get('userName'),
-        password: data.get('password'),
-      }
-      if (isLogin) {
-        dispatch(login(loginInfo))
-        dispatch(getLoggedUser())
-        navigate('/')
-      } else {
-        loginInfo.fullname = data.get('fullname')
-        loginInfo.imgUrl = imgUrl
-        dispatch(signup(loginInfo))
-        dispatch(getLoggedUser())
-        navigate('/')
-      }
+      // const loginInfo = {
+      //   userName: data.get('userName'),
+      //   password: data.get('password'),
+      // }
+      // if (isLogin) {
+      //   dispatch(login(loginInfo))
+      //   dispatch(getLoggedUser())
+      //   navigate('/')
+      // } else {
+      //   loginInfo.fullname = data.get('fullname')
+      //   loginInfo.imgUrl = imgUrl
+      //   dispatch(signup(loginInfo))
+      //   dispatch(getLoggedUser())
+      //   navigate('/')
+      // }
+
+
+      loginUser(data.get('userName'),data.get('password'))
+      // loginUser("sharonbello@hotmail.com", "q1w2e3r4")
+
     } catch (err) {
       console.log('err', err)
     }
@@ -118,7 +141,7 @@ export const Login = () => {
   const onChangePage = () => {
     setIsLogin(!isLogin)
   }
-  
+
   return (
     <main className="login-sign-up-container container flex flex-column">
       <CacheProvider value={cacheRtl}>
@@ -211,7 +234,7 @@ export const Login = () => {
                   </div>
                   <Grid container>
                     <Grid item>
-                    חדשים באתר? 
+                    חדשים באתר?
                       <NavLink to="/signup" variant="body2" onClick={onChangePage}>
                         {/* {isLogin ? 'Don\'t have an account? Sign Up' : 'Already have an account? Login'} */}
                         הרשמו כאן

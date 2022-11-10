@@ -118,3 +118,13 @@ export function getLoggedUser() {
         }
     }
 }
+
+export function setUserUid(uid) {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: 'SET_USER_UID', uid })
+        } catch (err) {
+            console.log('Cannot save uid', err)
+        }
+    }
+}

@@ -18,7 +18,7 @@ const routes = [
         component: <EditReservation />,
     },
     {
-        path: '/user-reservations/new-reservation',
+        path: '/user-reservations/new-reservation/:userId',
         component: <NewReservation />,
     },
     {
@@ -36,6 +36,10 @@ const routes = [
     {
         path: '/signup',
         component: <Signup />,
+    },
+    {
+        path: '/signout',
+        component: <Homepage />,
     },
     {
         path: '/',

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, getLoggedUser } from '../../store/actions/user.actions.js'
+import { logout, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
+import { authSignout } from '../../services/auth_signout.js';
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
@@ -77,6 +78,11 @@ export const AppHeader = () => {
     setIsActive(!isActive)
   }
 
+  const handleSignout = () => {
+    authSignout();
+    dispatch(setUserUid(null))
+  }
+
   return (
     <header className="header container flex align-center">
       <article className="logo-hamburger-container flex align-center">
@@ -94,9 +100,13 @@ export const AppHeader = () => {
       </article>
 
       <ul className="nav-list clean-list flex align-center">
-      
+
         {(pathname === '/' && loggedUser ? <li><Link to={`/user-reservations/:userId`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
-        </li> : <li><NavLink to={'/login'} onClick={handleClick} className="link-page">ההזמנות שלי</NavLink>
+        </li> : <li><NavLink to={'/user-reservations/:userId'} onClick={handleClick} className="link-page">ההזמנות שלי</NavLink>
+        </li>)}
+
+        {(pathname === '/' && loggedUser ? <li><Link to={`/user-reservations/new-reservation/:userId`} onClick={handleClick} className={`${homeClassName}`}>הזמן מגרש</Link>
+        </li> : <li><NavLink to={'/user-reservations/new-reservation/:userId'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
         </li>)}
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
@@ -104,6 +114,17 @@ export const AppHeader = () => {
 
         <li>
           {!loggedUser && <Link to='/login' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
+          <div className="avatar-container">
+            {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
+          </div>
+
+          <div className="profile-container" ref={profileRef}>
+            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} onLogout={onLogout} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
+          </div>
+        </li>
+
+        <li>
+          {!loggedUser && <Link to='/signout' rel="nofollow" className="open-popup-login link-page" onClick={() => handleSignout()}>יציאה</Link>}
           <div className="avatar-container">
             {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>

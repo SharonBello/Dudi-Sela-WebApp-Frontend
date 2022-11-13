@@ -13,6 +13,7 @@ import { cloudinaryService } from '../../services/cloudinary.service.js'
 import { login, signup, getLoggedUser, signUpGoogle, setUserUid } from '../../store/actions/user.actions.js'
 import { AuthService } from '../../services/auth-service.js'
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
+import { userService } from '../../services/user.service.js';
 import jwt_decode from 'jwt-decode'
 
 import Grid from '@mui/material/Grid'
@@ -97,11 +98,8 @@ export const Login = () => {
       username,
       password
     }
-    console.log(payload)
-    axios.post('http://localhost:4000/signin', payload)
+    userService.login(payload)
     .then(function (response) {
-      console.log("uid", response.data.uid);
-      // save the uid into store
       dispatch(setUserUid(response.data.uid))
       navigate('/')
     })
@@ -109,6 +107,7 @@ export const Login = () => {
       console.log(error);
     });
   }
+
   const handleSubmit = (ev) => {
     try {
       ev.preventDefault()

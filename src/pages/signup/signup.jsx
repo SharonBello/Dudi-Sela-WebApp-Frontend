@@ -153,7 +153,7 @@ export const Signup = () => {
                 <Grid container justifyContent="center">
                   <Grid item>
                     כבר רשומים?
-                    <NavLink to="/login" variant="body2">
+                    <NavLink to="/signin" variant="body2">
                       כניסה
                     </NavLink>
                   </Grid>

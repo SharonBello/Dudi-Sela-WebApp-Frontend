@@ -27,9 +27,7 @@ export function userReducer(state = initialState, action) {
             newState = { ...state, users: action.users }
             break
         case 'SET_USER_UID':
-            console.log("action.uid", action.uid)
             newState = { ...state, uid: action.uid }
-            console.log("new state", newState);
             break
         default:
             return state;

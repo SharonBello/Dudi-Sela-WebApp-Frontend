@@ -15,14 +15,14 @@ export const HomeHero = () => {
                 autoPlay={true}
                 muted={true}
                 loop={true}
-                containerHeight="80vh"
-                containerWidth="100%"
+                height="80vh"
+                width="100%"
             />
 
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>
-                {!loggedUser  ? <a href="/login" className="open-popup-join">כניסת משתמשים</a> : <a href="/user-reservations/new-reservation" className="open-popup-join">הזמנת מגרש</a>}
+                {!loggedUser  ? <a href="/signin" className="open-popup-join">כניסת משתמשים</a> : <a href="/user-reservations/new-reservation" className="open-popup-join">הזמנת מגרש</a>}
             </div>
             <aside className="hero-stats">
                 <div className="box-row container">

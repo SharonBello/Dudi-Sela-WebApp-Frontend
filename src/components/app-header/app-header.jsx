@@ -113,7 +113,7 @@ export const AppHeader = () => {
         </li>
 
         <li>
-          {!loggedUser && <Link to='/login' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
+          {!loggedUser && <Link to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
           <div className="avatar-container">
             {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>

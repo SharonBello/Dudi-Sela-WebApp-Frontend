@@ -23,7 +23,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick }) => {
   }
 
   const openLogin = () => {
-    navigate('/login')
+    navigate('/signin')
     closeMenu()
   }
 
@@ -48,10 +48,10 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick }) => {
         <nav className='menu-nav'>
 
           <ul className='side-menu-profile clean-list'>
-            <li>{user ? <NavLink to={`/user-profile/${user._id}`} className="sidebar-item">הפרופיל שלי</NavLink> : <NavLink to={'/login'} className="sidebar-item">הפרופיל שלי</NavLink>}</li>
+            <li>{user ? <NavLink to={`/user-profile/${user._id}`} className="sidebar-item">הפרופיל שלי</NavLink> : <NavLink to={'/signin'} className="sidebar-item">הפרופיל שלי</NavLink>}</li>
 
             {(pathname === '/' && loggedUser ? <li><NavLink to={`/user-reservations/${user._id}`} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
-            </li> : <li><NavLink to={'/login'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
+            </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
             </li>)}
 
           <li>

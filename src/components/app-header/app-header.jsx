@@ -79,8 +79,13 @@ export const AppHeader = () => {
   }
 
   const handleSignout = () => {
-    authSignout();
-    dispatch(setUserUid(null))
+    authSignout()
+    .then(function (response) {
+      console.log(response);
+      dispatch(setUserUid(null))
+      alert('user signed out')
+      //TODO show notification user sign out
+    })
   }
 
   return (

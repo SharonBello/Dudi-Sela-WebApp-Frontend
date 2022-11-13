@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-
+import { useNavigate, NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setUserUid } from '../../store/actions/user.actions.js'
 import { TermsConditionsModal } from '../../components/terms-conditions-modal/terms-conditions-modal.jsx'
-
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -16,7 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
+import { userService } from '../../services/user.service.js';
 import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
@@ -24,6 +24,8 @@ import { prefixer } from 'stylis'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const theme = createTheme({
     direction: 'rtl',
@@ -55,10 +57,20 @@ export const Signup = () => {
   const handleSubmit = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
+    const payload = {
       email: data.get('email'),
       password: data.get('password'),
+    }
+    userService.signup(payload)
+    .then(function (response) {
+      dispatch(setUserUid(response.data.uid))
+      navigate('/')
     })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+
   }
 
   return (
@@ -84,27 +96,6 @@ export const Signup = () => {
               </Typography>
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="given-name"
-                      name="firstName"
-                      required
-                      fullWidth
-                      id="firstName"
-                      label="שם פרטי"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="שפ משפחה"
-                      name="lastName"
-                      autoComplete="family-name"
-                    />
-                  </Grid>
                   <Grid item xs={12}>
                     <TextField
                       required

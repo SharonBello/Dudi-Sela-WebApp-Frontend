@@ -72,6 +72,14 @@ function login(payload) {
     }
 }
 
+function signup(payload) {
+    try {
+        return httpService.post('signup', payload);
+    } catch (err) {
+        throw err
+    }
+}
+
 async function signUpGoogle(user) {
     const userToAdd = {
         firstName: user.firstName,
@@ -83,24 +91,6 @@ async function signUpGoogle(user) {
     let userAdded = await httpService.post('auth/google', userToAdd)
     _handleLogin(userAdded)
     return userAdded
-}
-
-async function signup(userCred) {
-    try {
-        let users = await httpService.get('user')
-        const isUserExist = users.find(user => user.email === userCred.email && user.password === userCred.password)
-        if (isUserExist) {
-            const err = new Error('User already exist')
-            throw err
-        }
-
-        const user = await httpService.post('auth/signup', userCred)
-        _handleLogin(user)
-        return user
-    } catch (err) {
-        console.dir(err)
-        throw err
-    }
 }
 
 async function logout() {

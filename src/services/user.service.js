@@ -64,17 +64,22 @@ async function update(user) {
     return user
 }
 
-function login(payload) {
+async function login(payload) {
     try {
-        return httpService.post('signin', payload);
+        const loggedUser = await httpService.post('signin', payload)
+        _handleLogin(loggedUser)
+        return loggedUser
+
     } catch (err) {
         throw err
     }
 }
 
-function signup(payload) {
+async function signup(payload) {
     try {
-        return httpService.post('signup', payload);
+        const user = await httpService.post('auth/signup', payload)
+        _handleLogin(user)
+        return user;
     } catch (err) {
         throw err
     }
@@ -98,8 +103,8 @@ async function logout() {
     return await httpService.post('auth/logout')
 }
 
-function _handleLogin(username, password) {
-    const miniUser = { username, password }
+function _handleLogin(email, password) {
+    const miniUser = { email, password }
     sessionStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(miniUser))
 }
 

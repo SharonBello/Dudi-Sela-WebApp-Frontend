@@ -42,7 +42,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick }) => {
               </li>
             </ul>}
 
-          {user && loggedUser && <div><Logo /><br></br><h3>Hello, {loggedUser.userName}</h3></div>}
+          {user && loggedUser && <div><Logo /><br></br><h3>Hello, {loggedUser.email}</h3></div>}
         </div>
 
         <nav className='menu-nav'>

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import axios from 'axios';
 import { useState, useEffect } from 'react'
 
 import Avatar from '@mui/material/Avatar'
@@ -63,9 +62,9 @@ export const Login = () => {
     stylisPlugins: [prefixer, rtlPlugin],
   })
 
-  // function RTL(props) {
-  //   return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
-  // }
+  function RTL(props) {
+    return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
+  }
 
   const handleGoogleSignUp = (response) => {
     let userObject = jwt_decode(response.credential)
@@ -93,9 +92,9 @@ export const Login = () => {
     }).catch(err => console.error(err))
   }
 
-  const loginUser = (username, password) => {
+  const loginUser = (email, password) => {
     const payload = {
-      username,
+      email,
       password
     }
     userService.login(payload)
@@ -112,25 +111,23 @@ export const Login = () => {
     try {
       ev.preventDefault()
       const data = new FormData(ev.currentTarget)
-      // const loginInfo = {
-      //   userName: data.get('userName'),
-      //   password: data.get('password'),
-      // }
-      // if (isLogin) {
-      //   dispatch(login(loginInfo))
-      //   dispatch(getLoggedUser())
-      //   navigate('/')
-      // } else {
-      //   loginInfo.fullname = data.get('fullname')
-      //   loginInfo.imgUrl = imgUrl
-      //   dispatch(signup(loginInfo))
-      //   dispatch(getLoggedUser())
-      //   navigate('/')
-      // }
+      const loginInfo = {
+        email: data.get('email'),
+        password: data.get('password'),
+      }
+      if (isLogin) {
+        dispatch(login(loginInfo))
+        dispatch(getLoggedUser())
+        navigate('/')
+      } else {
+        // loginInfo.fullname = data.get('fullname')
+        // loginInfo.imgUrl = imgUrl
+        // dispatch(signup(loginInfo))
+        dispatch(getLoggedUser())
+        navigate('/')
+      }
 
-
-      loginUser(data.get('userName'),data.get('password'))
-      // loginUser("sharonbello@hotmail.com", "q1w2e3r4")
+      loginUser(data.get('email'),data.get('password'))
 
     } catch (err) {
       console.log('err', err)
@@ -172,10 +169,10 @@ export const Login = () => {
                     margin="normal"
                     required
                     fullWidth
-                    id="userName"
+                    id="email"
                     label="שם משתמש"
-                    name="userName"
-                    autoComplete="userName"
+                    name="email"
+                    autoComplete="email"
                     autoFocus
                   />
                   {!isLogin &&
@@ -216,7 +213,6 @@ export const Login = () => {
                     </Grid>
                   </Grid>
 
-
                   <div className="signInDiv flex flex-column">
                     <GoogleOAuthProvider clientId={AuthService.getClientId()}>
                       <div className="App">
@@ -231,6 +227,7 @@ export const Login = () => {
                       </div>
                     </GoogleOAuthProvider>
                   </div>
+
                   <Grid container>
                     <Grid item>
                     חדשים באתר?

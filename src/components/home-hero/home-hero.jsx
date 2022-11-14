@@ -3,7 +3,7 @@ import VideoPlayer from 'react-background-video-player'
 import { useSelector } from 'react-redux'
 
 export const HomeHero = () => {
-  const { loggedUser } = useSelector((storeState) => storeState.userModule)
+    const { loggedUser } = useSelector((storeState) => storeState.userModule)
 
     return (
         <div className="hero">
@@ -18,29 +18,29 @@ export const HomeHero = () => {
                 height="80vh"
                 width="100%"
             />
-
+            {/* <img src="https://res.cloudinary.com/primap/image/upload/v1667564825/General/Dudi%20Sela/kirill-zharkiy-ItKtQ-OaIzQ-unsplash_s8fipb.jpg" className="video" alt='' /> */}
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>
-                {!loggedUser  ? <a href="/signin" className="open-popup-join">כניסת משתמשים</a> : <a href="/user-reservations/new-reservation" className="open-popup-join">הזמנת מגרש</a>}
+                {!loggedUser ? <button  className="open-popup-join"><a href="/signin">כניסת משתמשים</a></button> : <button  className="open-popup-join"><a href="/user-reservations/new-reservation">הזמנת מגרש</a></button>}
             </div>
-            <aside className="hero-stats">
-                <div className="box-row container">
-                    <ul className="clean-list flex align-center">
-                        <li>
-                            מגרשי אימון מקצועיים<br></br>
-                            <strong>12 מגרשים</strong>
-                        </li>
-                        <li>
-                            אקדמיה לטניס תחרותי<br></br>
-                            <strong>תכניות מותאמות גיל</strong>
-                        </li>
-                        <li>
-                            מאמנים ברמה הגבוהה ביותר<br></br>
-                            <strong>צוות בכיר</strong>
-                        </li>
-                    </ul>
-                </div>
+            <aside className="hero-stats container">
+                <ul className="clean-list flex align-center">
+                    <li>
+                        מגרשי אימון מקצועיים<br></br>
+                        <strong>8 מגרשים</strong>
+                    </li>
+                    <hr width="1" size="100"></hr>
+                    <li>
+                        אקדמיה לטניס תחרותי<br></br>
+                        <strong>תכניות מותאמות גיל</strong>
+                    </li>
+                    <hr width="1" size="100"></hr>
+                    <li>
+                        מאמנים ברמה הגבוהה ביותר<br></br>
+                        <strong>צוות בכיר</strong>
+                    </li>
+                </ul>
             </aside>
         </div>
     )

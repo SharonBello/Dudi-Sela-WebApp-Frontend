@@ -77,7 +77,7 @@ async function login(payload) {
 
 async function signup(payload) {
     try {
-        const user = await httpService.post('auth/signup', payload)
+        const user = await httpService.post('signup', payload)
         _handleLogin(user)
         return user;
     } catch (err) {
@@ -100,7 +100,7 @@ async function signUpGoogle(user) {
 
 async function logout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
-    return await httpService.post('auth/logout')
+    return await httpService.post('logout')
 }
 
 function _handleLogin(email, password) {

@@ -7,7 +7,7 @@ export const HomeHero = () => {
 
     return (
         <div className="hero">
-            <VideoPlayer
+            {/* <VideoPlayer
                 className="video"
                 src={
                     "https://res.cloudinary.com/primap/video/upload/v1667564876/General/Dudi%20Sela/pexels-cottonbro-5730331_gtd9q3.mp4"
@@ -17,8 +17,8 @@ export const HomeHero = () => {
                 loop={true}
                 height="80vh"
                 width="100%"
-            />
-            {/* <img src="https://res.cloudinary.com/primap/image/upload/v1667564825/General/Dudi%20Sela/kirill-zharkiy-ItKtQ-OaIzQ-unsplash_s8fipb.jpg" className="video" alt='' /> */}
+            /> */}
+            <img src="https://res.cloudinary.com/primap/image/upload/v1667564825/General/Dudi%20Sela/kirill-zharkiy-ItKtQ-OaIzQ-unsplash_s8fipb.jpg" className="video" alt='' />
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>

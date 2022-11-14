@@ -15,9 +15,9 @@
             background-color: transparent;
             outline: none;
             border: none;
-            color: white;
+            color: $accent4;
             cursor: pointer;
-
+            
             &::after {
                 content: '\f0c9';
                 font-family: fa-solid;
@@ -26,16 +26,16 @@
                 letter-spacing: rem(5px);
             }
         }
-
+        
         & .logo {
             max-width: 5em;
         }
     }
-
+    
     & .nav-list {
         gap: calc(1vw + 1vh + 1vmin);
         font-size: calc(0.6vw + 0.6vh + 0.8vmin);
-        color: #F2F2F2;
+        color: $accent4;
         margin-right: auto;
 
         & .logo-img {
@@ -43,28 +43,28 @@
         }
 
         & .link-page {
-            color: #B9FBC0;
+            color:  $brand;
             font-weight: 500;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            color: white;
+            color: $accent4;
 
             & a {
                 font-size: calc(0.6vw + 0.6vh + 0.8vmin);
-                color: white;
+                color: $accent4;
             }
 
             &:hover {
-                color: #CFBAF0;
+                color: $brand;
             }
 
             &.open-popup-login:hover {
-                color: #CFBAF0;
+                color: $brand;
             }
         }
 
         & .active {
-            color: #B9FBC0;
+            color:  $brand;
             font-weight: 600;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;

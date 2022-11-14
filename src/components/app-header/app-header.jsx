@@ -11,6 +11,7 @@ export const AppHeader = () => {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   let { loggedUser } = useSelector((storeState) => storeState.userModule)
+  let { user } = useSelector((storeState) => storeState.userModule)
   const { court } = useSelector((storeState) => storeState.courtModule)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
@@ -34,7 +35,6 @@ export const AppHeader = () => {
     document.addEventListener("click", handleProfileClickOutside)
   }, [showProfileMenu])
 
-
   const handleSideClickOutside = (e) => {
     if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
   }
@@ -45,10 +45,10 @@ export const AppHeader = () => {
 
   let classHamburgerMenu = (width < 600) ? 'gray' : 'white'
 
-  const onLogout = () => {
-    dispatch(logout())
-    setShowProfileMenu(!showProfileMenu)
-  }
+  // const onLogout = () => {
+  //   dispatch(logout())
+  //   setShowProfileMenu(!showProfileMenu)
+  // }
 
   const onCloseMenu = () => {
     setShowProfileMenu(false)
@@ -60,12 +60,10 @@ export const AppHeader = () => {
   }
 
   const onToggleProfileMenu = (ev) => {
-    // ev.stopPropagation()
     setShowProfileMenu(!showProfileMenu)
   }
 
   const onToggleSideMenu = () => {
-    // console.log('on toggle side menu', isSideMenu)
     let flag = !isSideMenu
     setSideMenu(flag)
   }
@@ -80,10 +78,11 @@ export const AppHeader = () => {
 
   const handleSignout = () => {
     authSignout()
-    .then(function (response) {
+    .then((response) => {
       console.log(response);
       dispatch(setUserUid(null))
       alert('user signed out')
+      document.location.href = '/'
       //TODO show notification user sign out
     })
   }
@@ -93,7 +92,7 @@ export const AppHeader = () => {
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
           {width < 600 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
-            {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} />}
+            {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout}/>}
           </button>}
         </div>
         <div className="logo">
@@ -106,12 +105,12 @@ export const AppHeader = () => {
 
       <ul className="nav-list clean-list flex align-center">
 
-        {(pathname === '/' && loggedUser ? <li><Link to={`/user-reservations/:userId`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
-        </li> : <li><NavLink to={'/user-reservations/:userId'} onClick={handleClick} className="link-page">ההזמנות שלי</NavLink>
-        </li>)}
+        {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
+        {/* {(loggedUser ? <li><Link to={`/user-reservations/reservation?docId=${loggedUser._id}`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link> */}
+        </li> : <span></span>)}
 
-        {(pathname === '/' && loggedUser ? <li><Link to={`/user-reservations/new-reservation/:userId`} onClick={handleClick} className={`${homeClassName}`}>הזמן מגרש</Link>
-        </li> : <li><NavLink to={'/user-reservations/new-reservation/:userId'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
+        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation/:userId`} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
+        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
         </li>)}
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
@@ -124,24 +123,23 @@ export const AppHeader = () => {
           </div>
 
           <div className="profile-container" ref={profileRef}>
-            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} onLogout={onLogout} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
+            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} handleSignout={handleSignout} />}
           </div>
         </li>
 
-        <li>
+        {/* <li>
           {!loggedUser && <Link to='/signout' rel="nofollow" className="open-popup-login link-page" onClick={() => handleSignout()}>יציאה</Link>}
           <div className="avatar-container">
             {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>
 
           <div className="profile-container" ref={profileRef}>
-            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} onLogout={onLogout} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
+            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
           </div>
-        </li>
+        </li> */}
 
         {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
-        </li> : <li><NavLink to={`/user-reservations/new-reservation`} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
-        </li>}
+        </li> : <span></span>}
       </ul>
     </header>
   )

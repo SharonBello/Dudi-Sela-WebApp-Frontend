@@ -21,10 +21,10 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import rtlPlugin from 'stylis-plugin-rtl'
+// import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-import { prefixer } from 'stylis'
+// import { prefixer } from 'stylis'
 
 export const Login = () => {
   let { loggedUser } = useSelector((storeState) => storeState.userModule)
@@ -59,7 +59,7 @@ export const Login = () => {
   // Create rtl cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
+    // stylisPlugins: [prefixer, rtlPlugin],
   })
 
   function RTL(props) {
@@ -98,6 +98,7 @@ export const Login = () => {
       password
     }
     userService.login(payload)
+    // userService.login({ email: 'sharonbello@hotmail.com', password: 'q1w2e3r4'})
     .then(function (response) {
       dispatch(setUserUid(response.data.uid))
       navigate('/')

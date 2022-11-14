@@ -4,11 +4,13 @@ import thunk from 'redux-thunk'
 
 import { userReducer } from './reducers/user.reducer.js'
 import { courtReducer } from './reducers/court.reducer.js'
+import { reservationReducer } from './reducers/reservation.reducer.js'
 
 
 const rootReducer = combineReducers({
     courtModule: courtReducer,
     userModule: userReducer,
+    reservationModule: reservationReducer,
  })
  
  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

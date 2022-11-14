@@ -11,7 +11,40 @@ export const utilService = {
     sequenceId,
     getTimeStamp,
     getDateFromStamp,
-    createRandEmailAddress
+    createRandEmailAddress,
+    setDateTime,
+    getMonthNumber,
+    getYearNumber,
+    getLocalMonthName
+}
+
+function setDateTime(userDate) {
+    console.log("🚀 ~ file: util-service.js ~ line 21 ~ setDateTime ~ userDate", userDate)
+    let date = new Date(userDate).toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })
+    date = date.replace('T', ' ')
+    date = date.replace('Z', ' ')
+    let res = date.substring(0, 11)
+    // let res = date.substr(0,19)
+    return res
+}
+
+
+function getMonthNumber(userDate) {
+    let date = new Date(userDate).toLocaleDateString('he-IL', { month: 'numeric'})
+    date = date.replace('T', ' ')
+    date = date.replace('Z', ' ')
+    let res = date.substring(5, 2)
+    // let res = date.substr(0,19)
+    return +res
+}
+
+function getYearNumber(userDate) {
+    let date = new Date(userDate).toLocaleDateString('he-IL', { year: 'numeric'})
+    date = date.replace('T', ' ')
+    date = date.replace('Z', ' ')
+    let res = date.substring(0, 4)
+    // let res = date.substr(0,19)
+    return +res
 }
 
 function createRandEmailAddress() {
@@ -95,6 +128,13 @@ function getDayName(date, locale) {
 function getMonthName(date) {
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
+    ]
+    return monthNames[date.getMonth()]
+}
+
+function getLocalMonthName(date) {
+    const monthNames = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני",
+        "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"
     ]
     return monthNames[date.getMonth()]
 }

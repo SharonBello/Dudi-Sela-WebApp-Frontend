@@ -22,7 +22,7 @@ const routes = [
         component: <NewReservation />,
     },
     {
-        path: '/user-reservations/:userId',
+        path: '/user-reservations',
         component: <UserReservations />,
     },
     {

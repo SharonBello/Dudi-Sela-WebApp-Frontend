@@ -26,7 +26,7 @@ export const App = () => {
                      path={route.path} />)}
             </Routes>
          </main>
-         <footer className="app-footer-container container">
+         <footer className="app-footer-container">
             <AppFooter />
          </footer>
       </div>

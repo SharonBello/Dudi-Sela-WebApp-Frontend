@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector } from "react-redux"
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { loadReservations } from '../../store/actions/reservation.actions.js'
+import { ReservationList } from '../../components/reservation-list/reservation-list.jsx'
+import { Loader } from '../../components/loader.jsx'
+
 
 import axios from 'axios';
 
 export const UserReservations = () => {
-
   const [reservations, setReservations] = useState([]);
   const uid = useSelector((storeState) => storeState.userModule.uid);
 
+    // const { reservations } = useSelector((storeState) => storeState.reservationModule)
+    const [loader, setLoader] = useState(true)
+    const dispatch = useDispatch()
 
   useEffect(() => {
     const getReservations = async () => {
@@ -19,19 +25,27 @@ export const UserReservations = () => {
     };
     getReservations();
   }, [uid]);
+
+//   useEffect(() => {
+//     setTimeout(() => {
+//         setLoader(false)
+//     }, 1000)
+//     dispatch(loadReservations(uid))
+//     window.scrollTo(0, 0)
+// }, [])
+
+
   return (
-    <div>
-    <ul>
-      {reservations.map(item => (
-        <li key={item.id}>
-          <div>{item.startHour}</div>
-          <div>{item.endHour}</div>
-          <div>{item.date}</div>
-          <div>{item.courtNumber}</div>
-        </li>
-      ))}
-    </ul>
-  </div>
+    <section className="reservations-app-container">
+            <div>
+                <div className="reservations-preview-main-wrapper container">
+                    <div className="reservations-list-container flex flex-column">
+                        {/* {loader && <Loader />} */}
+                        <ReservationList reservations={reservations} />
+                    </div>
+                </div>
+            </div>
+        </section>
   )
 
 }

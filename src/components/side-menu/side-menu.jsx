@@ -5,17 +5,17 @@ import { logout, getLoggedUser } from '../../store/actions/user.actions.js'
 import { Logo } from '../../services/svg-service.js'
 
 
-export const SideMenu = ({ menuOpen, user, closeMenu, handleClick }) => {
+export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout }) => {
   const { loggedUser } = useSelector((storeState) => storeState.userModule)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const className = (menuOpen) ? 'open' : ''
 
-  const onLogout = () => {
-    dispatch(logout())
-    closeMenu()
-  }
+  // const onLogout = () => {
+  //   dispatch(logout())
+  //   closeMenu()
+  // }
 
   const openJoin = () => {
     navigate('/signup')
@@ -50,13 +50,13 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick }) => {
           <ul className='side-menu-profile clean-list'>
             <li>{user ? <NavLink to={`/user-profile/${user._id}`} className="sidebar-item">הפרופיל שלי</NavLink> : <NavLink to={'/signin'} className="sidebar-item">הפרופיל שלי</NavLink>}</li>
 
-            {(pathname === '/' && loggedUser ? <li><NavLink to={`/user-reservations/${user._id}`} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
+            {(pathname === '/' && loggedUser ? <li><NavLink to={`/user-reservations/reservation?=${loggedUser.uid}`} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
             </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
             </li>)}
 
           <li>
             {loggedUser ?
-              <NavLink to={'/'} onClick={() => onLogout()} className="sidebar-item">יציאה</NavLink> : <span></span>}
+              <NavLink to={'/'} onClick={() => handleSignout()} className="sidebar-item">יציאה</NavLink> : <span></span>}
           </li>
 
           </ul>

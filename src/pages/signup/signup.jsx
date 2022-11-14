@@ -17,10 +17,10 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { userService } from '../../services/user.service.js';
-import rtlPlugin from 'stylis-plugin-rtl'
+// import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-import { prefixer } from 'stylis'
+// import { prefixer } from 'stylis'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -34,7 +34,7 @@ export const Signup = () => {
   // Create rtl cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
+    // stylisPlugins: [prefixer, rtlPlugin],
   })
 
   function Copyright(props) {

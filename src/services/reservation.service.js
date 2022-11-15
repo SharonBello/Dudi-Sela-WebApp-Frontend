@@ -1,19 +1,7 @@
-import Axios from 'axios'
 import { httpService } from './http.service.js'
-import { getActionRemoveReservation, getActionAddReservation } from '../store/actions/reservation.actions.js'
+import { getActionRemoveReservation } from '../store/actions/reservation.actions.js'
 import { userService } from './user.service.js'
 
-const BASE_URL =
-    process.env.NODE_ENV === 'production'
-        ? '/api/reservation/'
-        : 'http://localhost:3030/api/reservation/'
-
-let axios = Axios.create({
-    withCredentials: true,
-})
-
-const STORAGE_KEY = 'reservation'
-const PAGE_SIZE = 32
 const reservationChannel = new BroadcastChannel('reservationChannel')
 
 export const reservationService = {

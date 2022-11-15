@@ -74,7 +74,7 @@ export const Login = () => {
     }, 3000)
     setTimeout(() => {
       navigate('/')
-    }, 3030)
+    }, 4000)
   }
 
   const uploadImg = (ev) => {

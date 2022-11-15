@@ -18,7 +18,7 @@ export const UserReservations = () => {
   useEffect(() => {
     const getReservations = async () => {
       const data = await axios(
-        'http://localhost:3030/reservations?docId='+uid,
+        'http://localhost:4000/reservations?docId='+uid,
       );
 
       setReservations(data.data.reservations);

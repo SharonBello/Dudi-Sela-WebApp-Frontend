@@ -42,7 +42,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   };
 
   const handleSubmit = (e) => {
+    console.log('click')
     if (uid) {
+      console.log('uid', uid)
       addReservation();
     }
     e.stopPropagation();
@@ -50,8 +52,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   return (
-    
-<form method="dialog">
+
+    <form>
       <label>startHour</label>
       <br />
       <input
@@ -103,6 +105,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         onClick={handleSubmit}
       />
     </form>
-    
+
   )
 }

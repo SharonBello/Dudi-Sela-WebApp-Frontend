@@ -30,7 +30,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       date
     }
     console.log('uid', uid);
-    axios.post('http://localhost:4000/reservations?docId=' + uid, payload)
+    axios.post('http://localhost:3030/reservations?docId=' + uid, payload)
       .then(function (response) {
         console.log(response.data.result);
       })

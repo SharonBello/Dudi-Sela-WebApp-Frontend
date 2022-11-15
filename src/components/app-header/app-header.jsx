@@ -17,7 +17,7 @@ export const AppHeader = () => {
   const { court } = useSelector((storeState) => storeState.courtModule)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const [ newReservationModal, setNewReservationModal ] = useState(false)
+  const [newReservationModal, setNewReservationModal] = useState(false)
   const { width } = useWindowDimensions()
   const menuRef = useRef(null)
   const profileRef = useRef(null)
@@ -81,13 +81,13 @@ export const AppHeader = () => {
 
   const handleSignout = () => {
     authSignout()
-    .then((response) => {
-      console.log(response);
-      dispatch(setUserUid(null))
-      alert('user signed out')
-      // document.location.href = '/'
-      //TODO show notification user sign out
-    })
+      .then((response) => {
+        console.log(response);
+        dispatch(setUserUid(null))
+        alert('user signed out')
+        // document.location.href = '/'
+        //TODO show notification user sign out
+      })
   }
 
   const handleNewReservation = () => {
@@ -106,18 +106,59 @@ export const AppHeader = () => {
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
           {width < 600 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
-            {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout}/>}
+            {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout} />}
           </button>}
         </div>
         <div className="logo">
           <NavLink to="/" className="site-logo">
-          <img src="https://res.cloudinary.com/primap/image/upload/v1667563747/General/Dudi%20Sela/Dudi-Logo_e5zm1a.svg" className="app-logo"
-          alt="logo" />
+            <img src="https://res.cloudinary.com/primap/image/upload/v1667563747/General/Dudi%20Sela/Dudi-Logo_e5zm1a.svg" className="app-logo"
+              alt="logo" />
           </NavLink>
         </div>
       </article>
-
       <ul className="nav-list clean-list flex align-center">
+
+        {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
+          {/* {(loggedUser ? <li><Link to={`/user-reservations/reservation?docId=${loggedUser._id}`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link> */}
+        </li> : <span></span>)}
+
+        {/* {((loggedUser && newReservationModal) ? <li onClick={handleNewReservation} className="link-page"><NewReservation newReservationModal={newReservationModal} closeModal={onToggleNewReservationModal}/>הזמן מגרש</li> :
+<li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
+</li>)} */}
+
+        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation/:userId`} onClick={handleNewReservation} className="link-page">הזמן מגרש</NavLink>
+        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
+        </li>)}
+
+        <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
+        </li>
+
+        <li>
+          {!loggedUser && <Link to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
+          <div className="avatar-container">
+            {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
+          </div>
+
+          <div className="profile-container" ref={profileRef}>
+            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} handleSignout={handleSignout} />}
+          </div>
+        </li>
+
+        {/* <li>
+  {!loggedUser && <Link to='/signout' rel="nofollow" className="open-popup-login link-page" onClick={() => handleSignout()}>יציאה</Link>}
+  <div className="avatar-container">
+    {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
+  </div>
+
+  <div className="profile-container" ref={profileRef}>
+    {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
+  </div>
+</li> */}
+
+        {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
+        </li> : <span></span>}
+      </ul>
+      {/* <ul className="nav-list clean-list flex align-center">
 
         <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
         </li>
@@ -139,20 +180,11 @@ export const AppHeader = () => {
           </div>
         </li>
 
-        {/* <li>
-          {!loggedUser && <Link to='/signout' rel="nofollow" className="open-popup-login link-page" onClick={() => handleSignout()}>יציאה</Link>}
-          <div className="avatar-container">
-            {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
-          </div>
-
-          <div className="profile-container" ref={profileRef}>
-            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
-          </div>
-        </li> */}
+        
 
         {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
         </li> : <span></span>}
-      </ul>
+      </ul> */}
     </header>
   )
 }

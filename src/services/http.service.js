@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const BASE_URL = process.env.NODE_ENV === 'production'
     ? '/api/'
-    : 'http://localhost:4000/'
+    : 'http://localhost:3030/'
 
 export const httpService = {
     get(endpoint, data) {

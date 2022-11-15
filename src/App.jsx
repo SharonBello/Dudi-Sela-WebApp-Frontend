@@ -9,9 +9,7 @@ import { AppFooter } from './components/app-footer/app-footer.jsx'
 import './main.scss'
 
 export const App = () => {
-   useEffect(() => {
-      // authListener();
-   }, [])
+
    return (
       <div className="app-container">
          <header className="app-header-container">
@@ -26,6 +24,7 @@ export const App = () => {
                      path={route.path} />)}
             </Routes>
          </main>
+
          <footer className="app-footer-container">
             <AppFooter />
          </footer>

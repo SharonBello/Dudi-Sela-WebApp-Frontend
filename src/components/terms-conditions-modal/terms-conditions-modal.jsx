@@ -26,14 +26,14 @@ export const TermsConditionsModal = ({ conditionsModal, handleClose }) => {
     // stylisPlugins: [prefixer, rtlPlugin],
   })
 
-  useEffect(() => {
-    if (conditionsModal) {
-      const { current: descriptionElement } = descriptionElementRef
-      if (descriptionElement !== null) {
-        descriptionElement.focus()
-      }
-    }
-  }, [conditionsModal])
+  // useEffect(() => {
+  //   if (conditionsModal) {
+  //     const { current: descriptionElement } = descriptionElementRef
+  //     if (descriptionElement !== null) {
+  //       descriptionElement.focus()
+  //     }
+  //   }
+  // }, [conditionsModal])
 
   return (
     <div>

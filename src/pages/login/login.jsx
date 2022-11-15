@@ -38,9 +38,9 @@ export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getLoggedUser())
-  }, [loggedUser])
+  // useEffect(() => {
+  //   dispatch(getLoggedUser())
+  // }, [loggedUser])
 
   // useEffect(() => {
   //   // eslint-disable-next-line no-undef

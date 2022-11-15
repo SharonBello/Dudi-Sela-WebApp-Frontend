@@ -18,7 +18,7 @@ const routes = [
         component: <EditReservation />,
     },
     {
-        path: '/user-reservations/new-reservation/:userId',
+        path: '/user-reservations/new-reservation',
         component: <NewReservation />,
     },
     {

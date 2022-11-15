@@ -28,7 +28,7 @@ export const HomeHero = () => {
                 <ul className="clean-list flex align-center">
                     <li>
                         מגרשי אימון מקצועיים<br></br>
-                        <strong>8 מגרשים</strong>
+                        <strong>6 לבוגרים, 3  לילדים</strong>
                     </li>
                     <hr width="1" size="100"></hr>
                     <li>

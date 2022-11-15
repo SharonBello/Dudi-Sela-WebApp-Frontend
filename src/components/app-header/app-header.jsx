@@ -1,20 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { authSignout } from '../../services/auth_signout.js';
+import { NewReservation } from '../../pages/new-reservation/new-reservation.jsx';
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
+  const { navigate } = useNavigate()
   let { loggedUser } = useSelector((storeState) => storeState.userModule)
   let { user } = useSelector((storeState) => storeState.userModule)
   const { court } = useSelector((storeState) => storeState.courtModule)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
+  const [ newReservationModal, setNewReservationModal ] = useState(false)
   const { width } = useWindowDimensions()
   const menuRef = useRef(null)
   const profileRef = useRef(null)
@@ -22,26 +25,26 @@ export const AppHeader = () => {
   let [isActive, setIsActive] = useState(false)
   let homeClassName = (pathname === '/') ? 'active' : 'link page'
 
-  useEffect(() => {
-    dispatch(getLoggedUser)
+  // useEffect(() => {
+  //   dispatch(getLoggedUser)
 
-  }, [dispatch, loggedUser])
+  // }, [dispatch, loggedUser])
 
-  useEffect(() => {
-    document.addEventListener("click", handleSideClickOutside)
-  }, [isSideMenu])
+  // useEffect(() => {
+  //   document.addEventListener("click", handleSideClickOutside)
+  // }, [isSideMenu])
 
-  useEffect(() => {
-    document.addEventListener("click", handleProfileClickOutside)
-  }, [showProfileMenu])
+  // useEffect(() => {
+  //   document.addEventListener("click", handleProfileClickOutside)
+  // }, [showProfileMenu])
 
-  const handleSideClickOutside = (e) => {
-    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
-  }
+  // const handleSideClickOutside = (e) => {
+  //   if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
+  // }
 
-  const handleProfileClickOutside = (e) => {
-    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
-  }
+  // const handleProfileClickOutside = (e) => {
+  //   if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
+  // }
 
   let classHamburgerMenu = (width < 600) ? 'gray' : 'white'
 
@@ -82,9 +85,20 @@ export const AppHeader = () => {
       console.log(response);
       dispatch(setUserUid(null))
       alert('user signed out')
-      document.location.href = '/'
+      // document.location.href = '/'
       //TODO show notification user sign out
     })
+  }
+
+  const handleNewReservation = () => {
+    // setNewReservationModal(!newReservationModal)
+    navigate('/user-reservations/new-reservation/:userId')
+  }
+
+  const onToggleNewReservationModal = () => {
+    let flag = !newReservationModal
+    setNewReservationModal(flag)
+
   }
 
   return (
@@ -105,13 +119,11 @@ export const AppHeader = () => {
 
       <ul className="nav-list clean-list flex align-center">
 
-        {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
-        {/* {(loggedUser ? <li><Link to={`/user-reservations/reservation?docId=${loggedUser._id}`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link> */}
-        </li> : <span></span>)}
-
-        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation/:userId`} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
-        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
-        </li>)}
+        <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
+        </li>
+        
+        <li><Link to={`/user-reservations/new-reservation`} onClick={handleClick}>הזמן מגרש</Link>
+        </li>
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
         </li>

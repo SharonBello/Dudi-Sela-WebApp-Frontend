@@ -11,9 +11,9 @@ export const ReservationList = ({ reservations }) => {
     const [qtyMonthlyReservations, setQtyMonthlyReservations] = useState(0)
     const [qtyYearReservations, setQtyYearReservations] = useState(0)
 
-    useEffect(() => {
-        calcTotals()
-    }, [reservations])
+    // useEffect(() => {
+    //     calcTotals()
+    // }, [reservations])
 
 
     const getYearReservations = () => {

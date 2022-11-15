@@ -1,7 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios';
 import { useSelector } from "react-redux"
-export const NewReservation = () => {
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+// import rtlPlugin from 'stylis-plugin-rtl'
+import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
+// import { prefixer } from 'stylis'
+
+export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const [startHour, setStartHour] = useState(0);
   const [endHour, setEndHour] = useState(0);
@@ -16,22 +29,27 @@ export const NewReservation = () => {
       courtNumber,
       date
     }
-    axios.post('http://localhost:4000/reservations?docId='+uid, payload)
-    .then(function (response) {
-      console.log(response.data.result);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    console.log('uid', uid);
+    axios.post('http://localhost:4000/reservations?docId=' + uid, payload)
+      .then(function (response) {
+        console.log(response.data.result);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const handleSubmit = (e) => {
+    if (uid) {
+      addReservation();
+    }
     e.stopPropagation();
     e.preventDefault();
-    addReservation();
   }
+
   return (
-    <form onSubmit={e => {handleSubmit(e)}}>
+    
+<form method="dialog" onSubmit={e => { handleSubmit(e) }}>
       <label>startHour</label>
       <br />
       <input
@@ -42,7 +60,7 @@ export const NewReservation = () => {
           setStartHour(e.target.value);
         }}
       />
-      <br/>
+      <br />
       <label>endHour</label>
       <br />
       <input
@@ -64,7 +82,7 @@ export const NewReservation = () => {
           setDate(e.target.value);
         }}
       />
-      <br/>
+      <br />
       <label>courtNumber</label>
       <br />
       <input
@@ -75,12 +93,13 @@ export const NewReservation = () => {
           setCourtNumber(e.target.value);
         }}
       />
-      <br/>
+      <br />
       <input
         className='submitButton'
         type='submit'
         value='Add Reservation'
       />
     </form>
+    
   )
 }

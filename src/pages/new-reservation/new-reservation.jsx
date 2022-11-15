@@ -30,12 +30,14 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       date
     }
     console.log('uid', uid);
-    axios.post('http://localhost:4000/reservations?docId=' + uid, payload)
+    axios.post('http://localhost:4000/reservations/reservations?docId=' + uid, payload)
       .then(function (response) {
         console.log(response.data.result);
+        alert("successful addition");
       })
       .catch(function (error) {
         console.log(error);
+        alert("failed to add");
       });
   };
 
@@ -49,7 +51,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   return (
     
-<form method="dialog" onSubmit={e => { handleSubmit(e) }}>
+<form method="dialog">
       <label>startHour</label>
       <br />
       <input
@@ -98,6 +100,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         className='submitButton'
         type='submit'
         value='Add Reservation'
+        onClick={handleSubmit}
       />
     </form>
     

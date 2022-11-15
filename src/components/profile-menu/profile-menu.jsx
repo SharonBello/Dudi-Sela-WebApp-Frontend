@@ -8,8 +8,8 @@ export const ProfileMenu = ({ user, closeMenu, onToggleMenu, handleSignout }) =>
                 <ul className="sub-category clean-list">
                     <li className="menu-item" onClick={() => closeMenu()}><NavLink to={`/user-profile/:userId`}>הפרופיל שלי</NavLink></li>
                     {user && <li className="menu-item" onClick={() => closeMenu()}><NavLink to={`/user-reservations/reservation?docId=${user._id}`}>ההזמנות שלי</NavLink></li>}
-                    <li className="menu-item" onClick={() => closeMenu()}><NavLink to={`/user-reservations/new-reservation`}>הזמנה חדשה</NavLink></li>
-                    <li className="menu-item logout" onClick={() => handleSignout()}><NavLink to={`/`}>יציאה</NavLink></li>
+                    <li className="menu-item" onClick={() => closeMenu()}><NavLink to={`/user-reservations/new-reservation`}>הזמן מגרש</NavLink></li>
+                    <li className="menu-item logout" onClick={() => handleSignout()}><NavLink to={`/signout`}>יציאה</NavLink></li>
                 </ul>
             </div>
         </section>

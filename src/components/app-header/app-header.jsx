@@ -122,11 +122,7 @@ export const AppHeader = () => {
           {/* {(loggedUser ? <li><Link to={`/user-reservations/reservation?docId=${loggedUser._id}`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link> */}
         </li> : <span></span>)}
 
-        {/* {((loggedUser && newReservationModal) ? <li onClick={handleNewReservation} className="link-page"><NewReservation newReservationModal={newReservationModal} closeModal={onToggleNewReservationModal}/>הזמן מגרש</li> :
-<li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
-</li>)} */}
-
-        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation/:userId`} onClick={handleNewReservation} className="link-page">הזמן מגרש</NavLink>
+        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמן מגרש</NavLink>
         </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
         </li>)}
 

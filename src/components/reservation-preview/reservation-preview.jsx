@@ -62,32 +62,32 @@ export const ReservationPreview = ({ item }) => {
                 <td data-label="מספר מגרש">{item.courtNumber}</td>
                 <td data-label="פעולות" className="flex align-center justify-center">
                     <table className="table-actions flex">
-
-                        <tr className="table-action-cell">
-
-                            <td className="table-cell-btn">
-                                {isEditable ? <button className="table-btn" onClick={onEditItem}>
-                                    <a href='/user-reservations/edit-reservation/:reservationId'>
-                                        <FontAwesomeIcon icon={faPenToSquare} />
-                                    </a>
-                                </button> : <button className="table-btn" disabled>
-                                    <a href='/user-reservations/edit-reservation/:reservationId' disabled>
-                                        <FontAwesomeIcon icon={faPenToSquare} />
-                                    </a>
-                                </button>}
-                            </td>
-                            <td className="table-cell-btn">
-                                {isCancelable ? <button className="table-btn" onClick={onCancelItem}>
-                                    <a href='/user-reservations/'>
-                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                    </a>
-                                </button> : <button className="table-btn" disabled>
-                                    <a href='/user-reservations/'>
-                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                    </a>
-                                </button>}
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr className="table-action-cell">
+                                <td className="table-cell-btn">
+                                    {isEditable ? <button className="table-btn" onClick={onEditItem}>
+                                        <a href='/user-reservations/edit-reservation/:reservationId'>
+                                            <FontAwesomeIcon icon={faPenToSquare} />
+                                        </a>
+                                    </button> : <button className="table-btn" disabled>
+                                        <a href='/user-reservations/edit-reservation/:reservationId' disabled>
+                                            <FontAwesomeIcon icon={faPenToSquare} />
+                                        </a>
+                                    </button>}
+                                </td>
+                                <td className="table-cell-btn">
+                                    {isCancelable ? <button className="table-btn" onClick={onCancelItem}>
+                                        <a href='/user-reservations/'>
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </a>
+                                    </button> : <button className="table-btn" disabled>
+                                        <a href='/user-reservations/'>
+                                            <FontAwesomeIcon icon={faTrashAlt} />
+                                        </a>
+                                    </button>}
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </td>
             </tr>

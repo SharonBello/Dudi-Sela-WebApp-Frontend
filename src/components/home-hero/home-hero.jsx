@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import VideoPlayer from 'react-background-video-player'
 import { useSelector } from 'react-redux'
 
@@ -22,7 +23,13 @@ export const HomeHero = () => {
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>
-                {!loggedUser ? <button  className="open-popup-join"><a href="/signin">כניסת משתמשים</a></button> : <button  className="open-popup-join"><a href="/user-reservations/new-reservation">הזמנת מגרש</a></button>}
+
+                {!loggedUser ? <button className="open-popup-join">
+                    <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">
+                        כניסת משתמשים</NavLink></button> :
+                    <button className="open-popup-join">
+                        <NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
+                    </button>}
             </div>
             <aside className="hero-stats container">
                 <ul className="clean-list flex align-center">

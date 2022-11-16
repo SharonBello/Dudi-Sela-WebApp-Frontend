@@ -1,8 +1,8 @@
 
 
 
-import axios from 'axios';
+import axios from 'axios'
 
 export const authSignout = () => {
-    return axios.post('http://localhost:4000/auth/signout');
+    return axios.post('http://localhost:4000/auth/signout')
 }

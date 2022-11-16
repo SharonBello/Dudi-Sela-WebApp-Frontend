@@ -30,13 +30,13 @@ function getUsers() {
 
 async function getGoogleUser(googleId) {
     try {
-        const user = await httpService.get(`user/google/${googleId}`);
+        const user = await httpService.get(`user/google/${googleId}`)
         if (user) {
-            sessionStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(user));
+            sessionStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(user))
         }
-        return user;
+        return user
     } catch (err) {
-        return false;
+        return false
     }
 }
 
@@ -79,7 +79,7 @@ async function signup(payload) {
     try {
         const user = await httpService.post('auth/signup', payload)
         _handleLogin(user)
-        return user;
+        return user
     } catch (err) {
         throw err
     }

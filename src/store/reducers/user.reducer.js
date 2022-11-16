@@ -4,7 +4,7 @@ const initialState = {
     users: [],
     uid: null,
     watchedUser: null,
-    // loggedUser: userService.getLoggedUser() || null,
+    loggedUser: null,
 }
 
 export function userReducer(state = initialState, action) {
@@ -29,7 +29,7 @@ export function userReducer(state = initialState, action) {
             newState = { ...state, uid: action.uid }
             break
         default:
-            return state;
+            return state
     }
     // For debug:
     // window.userState = newState

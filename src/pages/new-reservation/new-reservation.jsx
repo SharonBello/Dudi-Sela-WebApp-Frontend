@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios';
+import axios from 'axios'
 import { useSelector } from "react-redux"
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -16,11 +16,11 @@ import createCache from '@emotion/cache'
 
 export const NewReservation = ({ newReservationModal, closeModal }) => {
 
-  const [startHour, setStartHour] = useState(0);
-  const [endHour, setEndHour] = useState(0);
-  const [courtNumber, setCourtNumber] = useState(0);
-  const [date, setDate] = useState(new Date());
-  const uid = useSelector((storeState) => storeState.userModule.uid);
+  const [startHour, setStartHour] = useState(0)
+  const [endHour, setEndHour] = useState(0)
+  const [courtNumber, setCourtNumber] = useState(0)
+  const [date, setDate] = useState(new Date())
+  const uid = useSelector((storeState) => storeState.userModule.uid)
 
   const addReservation = () => {
     const payload = {
@@ -29,26 +29,26 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       courtNumber,
       date
     }
-    console.log('uid', uid);
+    console.log('uid', uid)
     axios.post('http://localhost:4000/reservations/reservations?docId=' + uid, payload)
       .then(function (response) {
-        console.log(response.data.result);
-        alert("successful addition");
+        console.log(response.data.result)
+        alert("successful addition")
       })
       .catch(function (error) {
-        console.log(error);
-        alert("failed to add");
-      });
-  };
+        console.log(error)
+        alert("failed to add")
+      })
+  }
 
   const handleSubmit = (e) => {
     console.log('click')
     if (uid) {
       console.log('uid', uid)
-      addReservation();
+      addReservation()
     }
-    e.stopPropagation();
-    e.preventDefault();
+    e.stopPropagation()
+    e.preventDefault()
   }
 
   return (
@@ -61,7 +61,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         value={startHour}
         type='number'
         onChange={(e) => {
-          setStartHour(e.target.value);
+          setStartHour(e.target.value)
         }}
       />
       <br />
@@ -72,7 +72,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         value={endHour}
         type='number'
         onChange={(e) => {
-          setEndHour(e.target.value);
+          setEndHour(e.target.value)
         }}
       />
       <br />
@@ -83,7 +83,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         value={date}
         type='date'
         onChange={(e) => {
-          setDate(e.target.value);
+          setDate(e.target.value)
         }}
       />
       <br />
@@ -94,7 +94,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         value={courtNumber}
         type='number'
         onChange={(e) => {
-          setCourtNumber(e.target.value);
+          setCourtNumber(e.target.value)
         }}
       />
       <br />

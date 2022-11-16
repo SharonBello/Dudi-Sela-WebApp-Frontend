@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setUserUid } from '../../store/actions/user.actions.js'
 import { TermsConditionsModal } from '../../components/terms-conditions-modal/terms-conditions-modal.jsx'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -16,11 +15,12 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { userService } from '../../services/user.service.js';
+import { userService } from '../../services/user.service.js'
 // import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
+import { login, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -51,7 +51,7 @@ export const Signup = () => {
   }
 
   const handleClose = () => {
-    setConditionsModal(false);
+    setConditionsModal(false)
   }
 
   const handleSubmit = (event) => {
@@ -62,15 +62,16 @@ export const Signup = () => {
       password: data.get('password'),
     }
     userService.signup(payload)
-    .then(function (response) {
+    .then((response) => {
       dispatch(setUserUid(response.data.uid))
-      navigate('/')
+      // dispatch(login(payload))
     })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-
+    dispatch(getLoggedUser())
+    // navigate('/')
+    // document.location.href = '/'
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   return (

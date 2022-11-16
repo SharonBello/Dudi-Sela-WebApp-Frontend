@@ -12,7 +12,7 @@ import { cloudinaryService } from '../../services/cloudinary.service.js'
 import { login, signup, getLoggedUser, signUpGoogle, setUserUid } from '../../store/actions/user.actions.js'
 import { AuthService } from '../../services/auth-service.js'
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
-import { userService } from '../../services/user.service.js';
+import { userService } from '../../services/user.service.js'
 import jwt_decode from 'jwt-decode'
 
 import Grid from '@mui/material/Grid'
@@ -38,9 +38,9 @@ export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   dispatch(getLoggedUser())
-  // }, [loggedUser])
+  useEffect(() => {
+    dispatch(getLoggedUser())
+  }, [loggedUser])
 
   // useEffect(() => {
   //   // eslint-disable-next-line no-undef
@@ -63,7 +63,7 @@ export const Login = () => {
   })
 
   function RTL(props) {
-    return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
+    return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>
   }
 
   const handleGoogleSignUp = (response) => {
@@ -98,14 +98,12 @@ export const Login = () => {
       password
     }
     userService.login(payload)
-    // userService.login({ email: 'sharonbello@hotmail.com', password: 'q1w2e3r4'})
-    .then(function (response) {
+    .then((response) => {
       dispatch(setUserUid(response.data.uid))
-      navigate('/')
     })
-    .catch(function (error) {
-      console.log(error);
-    });
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   const handleSubmit = (ev) => {
@@ -121,9 +119,6 @@ export const Login = () => {
         dispatch(getLoggedUser())
         navigate('/')
       } else {
-        // loginInfo.fullname = data.get('fullname')
-        // loginInfo.imgUrl = imgUrl
-        // dispatch(signup(loginInfo))
         dispatch(getLoggedUser())
         navigate('/')
       }

@@ -5,8 +5,8 @@ import { logout, getLoggedUser, setUserUid } from '../../store/actions/user.acti
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
-import { authSignout } from '../../services/auth_signout.js';
-import { NewReservation } from '../../pages/new-reservation/new-reservation.jsx';
+import { authSignout } from '../../services/auth_signout.js'
+import { NewReservation } from '../../pages/new-reservation/new-reservation.jsx'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
@@ -25,26 +25,26 @@ export const AppHeader = () => {
   let [isActive, setIsActive] = useState(false)
   let homeClassName = (pathname === '/') ? 'active' : 'link page'
 
-  // useEffect(() => {
-  //   dispatch(getLoggedUser)
+  useEffect(() => {
+    dispatch(getLoggedUser)
 
-  // }, [dispatch, loggedUser])
+  }, [loggedUser])
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleSideClickOutside)
-  // }, [isSideMenu])
+  useEffect(() => {
+    document.addEventListener("click", handleSideClickOutside)
+  }, [isSideMenu])
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleProfileClickOutside)
-  // }, [showProfileMenu])
+  useEffect(() => {
+    document.addEventListener("click", handleProfileClickOutside)
+  }, [showProfileMenu])
 
-  // const handleSideClickOutside = (e) => {
-  //   if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
-  // }
+  const handleSideClickOutside = (e) => {
+    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
+  }
 
-  // const handleProfileClickOutside = (e) => {
-  //   if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
-  // }
+  const handleProfileClickOutside = (e) => {
+    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
+  }
 
   let classHamburgerMenu = (width < 600) ? 'gray' : 'white'
 
@@ -82,10 +82,12 @@ export const AppHeader = () => {
   const handleSignout = () => {
     authSignout()
       .then((response) => {
-        console.log(response);
+        console.log(response)
         dispatch(setUserUid(null))
+          dispatch(logout())
         alert('user signed out')
-        // document.location.href = '/'
+        // navigate('/')
+        document.location.href = '/'
         //TODO show notification user sign out
       })
   }
@@ -130,7 +132,7 @@ export const AppHeader = () => {
         </li>
 
         <li>
-          {!loggedUser && <Link to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
+          {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
           <div className="avatar-container">
             {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>
@@ -151,7 +153,7 @@ export const AppHeader = () => {
   </div>
 </li> */}
 
-        {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
+        {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li> : <span></span>}
       </ul>
       {/* <ul className="nav-list clean-list flex align-center">

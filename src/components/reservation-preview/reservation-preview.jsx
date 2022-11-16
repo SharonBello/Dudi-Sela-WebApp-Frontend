@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
-import moment from 'moment';
-moment().format();
+import moment from 'moment'
+moment().format()
 
 export const ReservationPreview = ({ item }) => {
     let { isCancelable, setIsCancelable } = useState(false)
@@ -13,9 +13,9 @@ export const ReservationPreview = ({ item }) => {
     const navigate = useNavigate()
 
     const getTimeLeft = (item) => {
-        const currentDate = moment();
-        const future = moment(item.date);
-        const timeLeft = moment(future.diff(currentDate)).format("HH:mm:ss");
+        const currentDate = moment()
+        const future = moment(item.date)
+        const timeLeft = moment(future.diff(currentDate)).format("HH:mm:ss")
         return timeLeft
     }
 

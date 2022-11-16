@@ -1,4 +1,4 @@
-import { reservationService } from '../../services/reservation.service.js';
+import { reservationService } from '../../services/reservation.service.js'
 
 export function getActionRemoveReservation(reservationId) {
     return {

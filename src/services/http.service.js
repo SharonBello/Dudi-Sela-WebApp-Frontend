@@ -21,7 +21,7 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data = null) {
     try {
-        return axios.post(`${BASE_URL}${endpoint}`, data);
+        return axios.post(`${BASE_URL}${endpoint}`, data)
     } catch (err) {
         console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)

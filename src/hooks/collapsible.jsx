@@ -27,6 +27,6 @@ return (
 //             Click <i>Collapse</i> to hide this content...
 //         </Collapsible>
 //     </Collapsible>
-//     );
+//     )
 // }
-// export default App;
+// export default App

@@ -37,10 +37,10 @@ const routes = [
         path: '/signup',
         component: <Signup />,
     },
-    {
-        path: '/signout',
-        component: <Homepage />,
-    },
+    // {
+    //     path: '/signout',
+    //     component: <Homepage />,
+    // },
     {
         path: '/',
         component: <Homepage />,

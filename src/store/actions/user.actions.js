@@ -17,14 +17,14 @@ export function loadUsers() {
 export function googleLogin(googleUser) {
     return async (dispatch) => {
         try {
-            var loggedGoogleUser = await userService.getGoogleUser(googleUser);
-            const action = { type: "SET_USER", user: loggedGoogleUser };
-            dispatch(action);
-            return loggedGoogleUser;
+            var loggedGoogleUser = await userService.getGoogleUser(googleUser)
+            const action = { type: "SET_USER", user: loggedGoogleUser }
+            dispatch(action)
+            return loggedGoogleUser
         } catch (err) {
-            return false;
+            return false
         }
-    };
+    }
 }
 
 export function removeUser(userId) {
@@ -112,7 +112,8 @@ export function getLoggedUser() {
     return async (dispatch) => {
         try {
             let user = await userService.getLoggedUser()
-            dispatch({ type: 'SET_LOGGED_USER', user })
+            // dispatch({ type: 'SET_LOGGED_USER', user })
+            dispatch({ type: 'SET_USER_UID', user })
         } catch (err) {
             console.log('Cannot load user', err)
         }

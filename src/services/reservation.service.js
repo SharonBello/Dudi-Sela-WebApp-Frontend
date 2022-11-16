@@ -11,12 +11,7 @@ export const reservationService = {
     getById,
     remove,
     addNewReservation,
-    getAllReservations
-}
-
-function getAllReservations() {
-    query()
-        .then(reservations => reservations)
+    // getReservations
 }
 
 function getById(reservationId) {
@@ -25,12 +20,16 @@ function getById(reservationId) {
     return reservation
 }
 
-async function query() {
-    const { userId = '' } = userService.getLoggedUser()
-    const url = `?docId=${userId}`
-    const urlToRequest = 'reservation' + url
-    let reservations = httpService.get(urlToRequest)
-    return reservations
+async function query(uid) {
+    try {
+        let data = await httpService.get('reservations/reservations?docId=' + uid)
+        console.log("🚀 ~ file: reservation.service.js ~ line 34 ~ query ~ data", data)
+        let reservations = data.data.reservations
+        console.log("🚀 ~ file: reservation.service.js ~ line 35 ~ query ~ reservations", reservations)
+        return reservations
+    } catch (err) {
+        throw err
+    }
 }
 
 async function remove(reservationId) {

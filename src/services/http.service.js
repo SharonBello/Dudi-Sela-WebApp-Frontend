@@ -25,7 +25,14 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data = null) {
     try {
-        return axios.post(`${BASE_URL}${endpoint}`, data)
+        // return axios.post(`${BASE_URL}${endpoint}`, data)
+        const res = await axios({
+            url: `${BASE_URL}${endpoint}`,
+            method,
+            data,
+            params: (method === 'GET') ? data : null
+        })
+        return res
     } catch (err) {
         console.dir(err)
         if (err.response && err.response.status === 401) {

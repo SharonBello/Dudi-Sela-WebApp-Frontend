@@ -76,7 +76,7 @@ export const ReservationList = ({ reservations }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {reservations.map(item =>
+                    {reservations && reservations.map(item =>
                         <ReservationPreview
                         key={item.id}
                         item={item}

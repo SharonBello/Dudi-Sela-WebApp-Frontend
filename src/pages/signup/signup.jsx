@@ -66,7 +66,6 @@ export const Signup = () => {
       dispatch(setUserUid(response.data.uid))
       dispatch(login(payload))
       dispatch(getLoggedUser())
-      // document.location.href = '/'
       navigate('/')
     })
     .catch((error) => {

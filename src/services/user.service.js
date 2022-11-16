@@ -68,7 +68,7 @@ async function login(userCred) {
     try {
         const loggedUser = await httpService.post('auth/signin', userCred)
         if (loggedUser) {
-            // _handleLogin(userCred)
+            _handleLogin(userCred)
             return loggedUser
         }
     } catch (err) {

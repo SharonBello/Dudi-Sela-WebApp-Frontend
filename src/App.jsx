@@ -11,7 +11,7 @@ import './main.scss'
 export const App = () => {
 
    return (
-      <div className="app-container">
+      <div className="app-container flex">
          <header className="app-header-container">
             <AppHeader />
          </header>

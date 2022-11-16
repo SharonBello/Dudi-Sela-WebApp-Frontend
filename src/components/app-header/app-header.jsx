@@ -46,7 +46,9 @@ export const AppHeader = () => {
     if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
   }
 
-  let classHamburgerMenu = (width < 600) ? 'gray' : 'white'
+  let classHamburgerMenu = (width < 600) ? 'visible' : 'hidden'
+
+  let classNavList = (width < 500) ? 'hidden' : ''
 
   // const onLogout = () => {
   //   dispatch(logout())
@@ -117,7 +119,7 @@ export const AppHeader = () => {
           </NavLink>
         </div>
       </article>
-      <ul className="nav-list clean-list flex align-center">
+      <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
 
         {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
         </li> : <span></span>)}

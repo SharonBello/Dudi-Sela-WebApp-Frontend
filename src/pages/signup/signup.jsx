@@ -64,11 +64,11 @@ export const Signup = () => {
     userService.signup(payload)
     .then((response) => {
       dispatch(setUserUid(response.data.uid))
-      // dispatch(login(payload))
+      dispatch(login(payload))
+      dispatch(getLoggedUser())
+      // document.location.href = '/'
+      navigate('/')
     })
-    dispatch(getLoggedUser())
-    // navigate('/')
-    // document.location.href = '/'
     .catch((error) => {
       console.log(error)
     })

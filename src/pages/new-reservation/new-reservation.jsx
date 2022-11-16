@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
-import { useSelector } from "react-redux"
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { getLoggedUser } from '../../store/actions/user.actions.js'
+
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -15,12 +18,19 @@ import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
 
 export const NewReservation = ({ newReservationModal, closeModal }) => {
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [startHour, setStartHour] = useState(0)
   const [endHour, setEndHour] = useState(0)
   const [courtNumber, setCourtNumber] = useState(0)
   const [date, setDate] = useState(new Date())
-  const uid = useSelector((storeState) => storeState.userModule.uid)
+  let uid = useSelector((storeState) => storeState.userModule.uid)
+  let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
+
+
+  useEffect(() => {
+    dispatch(getLoggedUser)
+  }, [loggedUser])
 
   const addReservation = () => {
     const payload = {
@@ -28,31 +38,32 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       endHour,
       courtNumber,
       date
+
     }
-    console.log('uid', uid)
-    axios.post('http://localhost:4000/reservations/reservations?docId=' + uid, payload)
-      .then(function (response) {
-        console.log(response.data.result)
-        alert("successful addition")
-      })
-      .catch(function (error) {
-        console.log(error)
+    if (!loggedUser) {
+      navigate('/signin')
+    }
+    else if ((loggedUser && !uid) || uid) {
+      uid = loggedUser.data.uid
+      try {
+        axios.post('http://localhost:4000/reservations/reservations?docId=' + uid, payload)
+          .then(function (response) {
+            alert("successful addition")
+          })
+      }
+      catch (err) {
         alert("failed to add")
-      })
+      }
+    }
   }
 
   const handleSubmit = (e) => {
-    console.log('click')
-    if (uid) {
-      console.log('uid', uid)
-      addReservation()
-    }
+    addReservation()
     e.stopPropagation()
     e.preventDefault()
   }
 
   return (
-
     <form>
       <label>startHour</label>
       <br />
@@ -105,6 +116,5 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         onClick={handleSubmit}
       />
     </form>
-
   )
 }

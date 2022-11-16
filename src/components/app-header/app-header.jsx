@@ -12,7 +12,7 @@ export const AppHeader = () => {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
   const { navigate } = useNavigate()
-  let { loggedUser } = useSelector((storeState) => storeState.userModule)
+  let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let { user } = useSelector((storeState) => storeState.userModule)
   const { court } = useSelector((storeState) => storeState.courtModule)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
@@ -84,7 +84,7 @@ export const AppHeader = () => {
       .then((response) => {
         console.log(response)
         dispatch(setUserUid(null))
-          dispatch(logout())
+        dispatch(logout())
         alert('user signed out')
         // navigate('/')
         document.location.href = '/'

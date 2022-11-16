@@ -1,8 +1,12 @@
-import axios from 'axios'
+import Axios from 'axios'
 
 const BASE_URL = process.env.NODE_ENV === 'production'
     ? '/'
     : 'http://localhost:4000/'
+
+let axios = Axios.create({
+    withCredentials: true
+})
 
 export const httpService = {
     get(endpoint, data) {
@@ -23,7 +27,6 @@ async function ajax(endpoint, method = 'GET', data = null) {
     try {
         return axios.post(`${BASE_URL}${endpoint}`, data)
     } catch (err) {
-        console.log(`Had Issues ${method}ing to the backend, endpoint: ${endpoint}, with data: `, data)
         console.dir(err)
         if (err.response && err.response.status === 401) {
             sessionStorage.clear()

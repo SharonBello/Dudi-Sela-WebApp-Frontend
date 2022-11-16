@@ -37,7 +37,6 @@ export function getById(reservationId) {
     return async dispatch => {
         try {
             const reservation = await reservationService.getById(reservationId)    
-            console.log('reservation', reservation)
             dispatch({
                 type: 'GET_BY_ID',
                 reservation
@@ -59,7 +58,6 @@ export function addReservation(reservation) {
         }
         if (subscriber) reservationService.unsubscribe(subscriber)
         subscriber = (ev) => {
-            console.log('Got notified', ev.data)
             dispatch(ev.data)
         }
         reservationService.subscribe(subscriber)

@@ -86,7 +86,6 @@ export const AppHeader = () => {
         dispatch(setUserUid(null))
         dispatch(logout())
         alert('user signed out')
-        // navigate('/')
         document.location.href = '/'
         //TODO show notification user sign out
       })
@@ -121,7 +120,6 @@ export const AppHeader = () => {
       <ul className="nav-list clean-list flex align-center">
 
         {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
-          {/* {(loggedUser ? <li><Link to={`/user-reservations/reservation?docId=${loggedUser._id}`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link> */}
         </li> : <span></span>)}
 
         {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמן מגרש</NavLink>

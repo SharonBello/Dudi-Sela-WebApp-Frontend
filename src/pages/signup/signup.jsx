@@ -70,7 +70,7 @@ export const Signup = () => {
       navigate('/')
     })
     .catch((error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 

@@ -30,7 +30,7 @@ export const Login = () => {
   let { loggedUser } = useSelector((storeState) => storeState.userModule)
   const [isImg, setIsImg] = useState(false)
   const [imgUrl, setImgUrl] = useState('')
-  const [isLogin, setIsLogin] = useState(true)
+  const [isLogin, setIsLogin] = useState(false)
   const [loader, setLoader] = useState(false)
   const theme = createTheme({
     direction: 'rtl',
@@ -39,6 +39,7 @@ export const Login = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    //TODO - What is user already signed in?
     dispatch(getLoggedUser())
   }, [loggedUser])
 
@@ -98,12 +99,24 @@ export const Login = () => {
       password
     }
     userService.login(payload)
-    .then((response) => {
-      dispatch(setUserUid(response.data.uid))
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      .then((response) => {
+        if (response.data.result === 1) {
+          dispatch(setUserUid(null))
+          alert("user or password invalid")
+          setIsLogin(!isLogin)
+          navigate('/signin')
+
+        } else {
+          dispatch(setUserUid(response.data.uid))
+          setIsLogin(isLogin)
+          dispatch(login(payload))
+          dispatch(getLoggedUser())
+          navigate('/')
+        }
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   const handleSubmit = (ev) => {
@@ -114,19 +127,9 @@ export const Login = () => {
         email: data.get('email'),
         password: data.get('password'),
       }
-      if (isLogin) {
-        dispatch(login(loginInfo))
-        dispatch(getLoggedUser())
-        navigate('/')
-      } else {
-        dispatch(getLoggedUser())
-        navigate('/')
-      }
-
-      loginUser(data.get('email'),data.get('password'))
-
+      loginUser(loginInfo.email, loginInfo.password)
     } catch (err) {
-      console.log('err', err)
+      console.error('err', err)
     }
   }
 
@@ -156,7 +159,7 @@ export const Login = () => {
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
                   <label htmlFor='file-input' className='file-img'>
-                    {(!isLogin) ? (!isImg) ?
+                    {(!loggedUser) ? (!isImg) ?
                       <input className='file-input' type={'file'} name="imgUrl" value={''} onChange={uploadImg} />
                       : <Avatar alt="profile" src={imgUrl} />
                       : <span></span>}
@@ -171,16 +174,6 @@ export const Login = () => {
                     autoComplete="email"
                     autoFocus
                   />
-                  {!isLogin &&
-                    <TextField
-                      margin="normal"
-                      required
-                      fullWidth
-                      id="fullname"
-                      label="שם מלא"
-                      name="fullname"
-                      autoComplete="fullname"
-                    />}
                   <TextField
                     margin="normal"
                     required
@@ -217,7 +210,7 @@ export const Login = () => {
                             handleGoogleSignUp(credentialResponse)
                           }}
                           onError={() => {
-                            console.log("Login Failed")
+                            console.error("Login Failed")
                           }}
                         />
                       </div>
@@ -226,7 +219,7 @@ export const Login = () => {
 
                   <Grid container>
                     <Grid item>
-                    חדשים באתר?
+                      חדשים באתר?
                       <NavLink to="/signup" variant="body2" onClick={onChangePage}>
                         {/* {isLogin ? 'Don\'t have an account? Sign Up' : 'Already have an account? Login'} */}
                         הרשמו כאן

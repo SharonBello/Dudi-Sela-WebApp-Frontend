@@ -7,7 +7,7 @@ export function loadUsers() {
             const users = await userService.getUsers()
             dispatch({ type: 'SET_USERS', users })
         } catch (err) {
-            console.log('UserActions: err in loadUsers', err)
+            console.error('UserActions: err in loadUsers', err)
         } finally {
             dispatch({ type: 'LOADING_DONE' })
         }
@@ -33,7 +33,7 @@ export function removeUser(userId) {
             await userService.remove(userId)
             dispatch({ type: 'REMOVE_USER', userId })
         } catch (err) {
-            console.log('UserActions: err in removeUser', err)
+            console.error('UserActions: err in removeUser', err)
         }
     }
 }
@@ -48,9 +48,6 @@ export function login(credentials) {
             })
         } catch (err) {
             console.error('Error - cannot login:', err)
-            setTimeout(() => {
-                console.log('user error msg')
-            }, 3000)
             throw err
         }
     }
@@ -65,7 +62,7 @@ export function signUpGoogle(user) {
                 userToAdd
             })
         } catch (err) {
-            console.log('Cannot signup', err)
+            console.error('Cannot signup', err)
         }
     }
 }
@@ -79,7 +76,7 @@ export function signup(credentials) {
                 user
             })
         } catch (err) {
-            console.log('Cannot signup', err)
+            console.error('Cannot signup', err)
         }
     }
 }
@@ -93,7 +90,7 @@ export function logout() {
                 user: null
             })
         } catch (err) {
-            console.log('Cannot logout', err)
+            console.error('Cannot logout', err)
         }
     }
 }
@@ -104,7 +101,7 @@ export async function loadUser(userId) {
         return user
 
     } catch (err) {
-        console.log('Cannot load user', err)
+        console.error('Cannot load user', err)
     }
 }
 
@@ -112,10 +109,10 @@ export function getLoggedUser() {
     return async (dispatch) => {
         try {
             let user = await userService.getLoggedUser()
-            // dispatch({ type: 'SET_LOGGED_USER', user })
-            dispatch({ type: 'SET_USER_UID', user })
+            dispatch({ type: 'SET_LOGGED_USER', user })
+            // dispatch({ type: 'SET_USER_UID', user })
         } catch (err) {
-            console.log('Cannot load user', err)
+            console.error('Cannot load user', err)
         }
     }
 }
@@ -125,7 +122,7 @@ export function setUserUid(uid) {
         try {
             dispatch({ type: 'SET_USER_UID', uid })
         } catch (err) {
-            console.log('Cannot save uid', err)
+            console.error('Cannot save uid', err)
         }
     }
 }

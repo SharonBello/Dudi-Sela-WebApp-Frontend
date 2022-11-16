@@ -15,7 +15,7 @@ export const UserReservations = () => {
   }, [])
 
   const getReservationsData = (uid) => {
-    if (!loggedUser) {
+    if (!loggedUser || !uid) {
       navigate('/signin')
     }
     else if ((loggedUser && !uid) || uid) {

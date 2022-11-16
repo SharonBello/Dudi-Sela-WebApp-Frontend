@@ -1,6 +1,5 @@
 import { httpService } from './http.service.js'
 import { getActionRemoveReservation } from '../store/actions/reservation.actions.js'
-import { userService } from './user.service.js'
 
 const reservationChannel = new BroadcastChannel('reservationChannel')
 
@@ -11,7 +10,6 @@ export const reservationService = {
     getById,
     remove,
     addNewReservation,
-    // getReservations
 }
 
 function getById(reservationId) {
@@ -23,9 +21,7 @@ function getById(reservationId) {
 async function query(uid) {
     try {
         let data = await httpService.get('reservations/reservations?docId=' + uid)
-        console.log("🚀 ~ file: reservation.service.js ~ line 34 ~ query ~ data", data)
         let reservations = data.data.reservations
-        console.log("🚀 ~ file: reservation.service.js ~ line 35 ~ query ~ reservations", reservations)
         return reservations
     } catch (err) {
         throw err
@@ -37,21 +33,16 @@ async function remove(reservationId) {
     await httpService.delete(`reservation/${reservationId}`)
 }
 
-async function addNewReservation(reservation) {
-    if (reservation._id) {
-        await httpService.put(`reservation/${reservation._id}`, reservation)
-        return reservation
-    } else {
-        let newReservation = {
-            "court": reservation.court,
-            "date": reservation.date,
-            "start": reservation.start,
-            "end": reservation.end
-        }
-        newReservation = await httpService.post('reservation', newReservation)
+async function addNewReservation(uid, data) {
+    try {
+        let newReservation = await httpService.post('reservations/reservations?docId=' + uid, data)
         return newReservation
     }
+    catch (err) {
+        throw err
+    }
 }
+
 
 function subscribe(listener) {
     reservationChannel.addEventListener('message', listener)

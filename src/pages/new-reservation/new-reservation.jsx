@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 // import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
+import { reservationService } from '../../services/reservation.service'
 // import { prefixer } from 'stylis'
 
 export const NewReservation = ({ newReservationModal, closeModal }) => {
@@ -24,6 +25,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [endHour, setEndHour] = useState(0)
   const [courtNumber, setCourtNumber] = useState(0)
   const [date, setDate] = useState(new Date())
+
   let uid = useSelector((storeState) => storeState.userModule.uid)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
@@ -32,13 +34,12 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     dispatch(getLoggedUser)
   }, [loggedUser])
 
-  const addReservation = () => {
+  const addReservation = async () => {
     const payload = {
       startHour,
       endHour,
       courtNumber,
       date
-
     }
     if (!loggedUser) {
       navigate('/signin')
@@ -46,10 +47,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     else if ((loggedUser && !uid) || uid) {
       uid = loggedUser.data.uid
       try {
-        axios.post('http://localhost:4000/reservations/reservations?docId=' + uid, payload)
-          .then(function (response) {
-            alert("successful addition")
-          })
+        let newReservation = await reservationService.addNewReservation(uid, payload)
+        alert("successful addition")
+        return newReservation
       }
       catch (err) {
         alert("failed to add")

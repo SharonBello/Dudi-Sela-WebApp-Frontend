@@ -154,22 +154,15 @@ export const Login = () => {
               >
                 <Avatar sx={{ m: 1, bgcolor: '#1cbf73' }} />
                 <Typography component="h1" variant="h5">
-                  {/* {isLogin ? 'כניסה' : 'Sign Up'} */}
                   כיף שחזרתם!
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                  <label htmlFor='file-input' className='file-img'>
-                    {(!loggedUser) ? (!isImg) ?
-                      <input className='file-input' type={'file'} name="imgUrl" value={''} onChange={uploadImg} />
-                      : <Avatar alt="profile" src={imgUrl} />
-                      : <span></span>}
-                  </label>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
                     id="email"
-                    label="שם משתמש"
+                    label="אימייל"
                     name="email"
                     autoComplete="email"
                     autoFocus

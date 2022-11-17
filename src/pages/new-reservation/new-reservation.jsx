@@ -21,9 +21,9 @@ import { reservationService } from '../../services/reservation.service'
 export const NewReservation = ({ newReservationModal, closeModal }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [startHour, setStartHour] = useState(0)
-  const [endHour, setEndHour] = useState(0)
-  const [courtNumber, setCourtNumber] = useState(0)
+  const [startHour, setStartHour] = useState()
+  const [endHour, setEndHour] = useState()
+  const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(new Date())
 
   let uid = useSelector((storeState) => storeState.userModule.uid)
@@ -67,8 +67,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   return (
-    <form>
-      <label>startHour</label>
+    <form className="container">
+      <label>שעת התחלה</label>
       <br />
       <input
         name='startHour'
@@ -79,7 +79,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         }}
       />
       <br />
-      <label>endHour</label>
+      <label>שעת סיום</label>
       <br />
       <input
         name='endHour'
@@ -90,7 +90,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         }}
       />
       <br />
-      <label>Date</label>
+      <label>תאריך</label>
       <br />
       <input
         name='date'
@@ -101,7 +101,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         }}
       />
       <br />
-      <label>courtNumber</label>
+      <label>מספר מגרש</label>
       <br />
       <input
         name='courtNumber'
@@ -115,7 +115,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       <input
         className='submitButton'
         type='submit'
-        value='Add Reservation'
+        value='הזמן מגרש'
         onClick={handleSubmit}
       />
     </form>

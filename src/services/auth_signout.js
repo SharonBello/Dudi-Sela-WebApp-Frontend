@@ -2,7 +2,8 @@
 
 
 import axios from 'axios'
+import {httpService} from './http.service.js';
 
 export const authSignout = () => {
-    return axios.post('http://localhost:4000/auth/signout')
+    return httpService.post('auth/signout');    
 }

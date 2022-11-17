@@ -47,9 +47,12 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     else if ((loggedUser && !uid) || uid) {
       uid = loggedUser.data.uid
       try {
-        let newReservation = await reservationService.addNewReservation(uid, payload)
-        alert("successful addition")
-        return newReservation
+        let res = await reservationService.addNewReservation(uid, payload)
+        if (res.data.result === 0) {
+          alert("המגרש הוזמן בהצלחה")
+        } else {
+          alert("לא ניתן להזמין מגרש ")
+        }
       }
       catch (err) {
         alert("failed to add")

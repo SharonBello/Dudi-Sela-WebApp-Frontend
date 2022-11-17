@@ -38,10 +38,10 @@ export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    //TODO - What is user already signed in?
-    dispatch(getLoggedUser())
-  }, [loggedUser])
+  // useEffect(() => {
+  //   //TODO - What is user already signed in?
+  //   dispatch(getLoggedUser())
+  // }, [loggedUser])
 
   // useEffect(() => {
   //   // eslint-disable-next-line no-undef

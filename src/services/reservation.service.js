@@ -35,8 +35,8 @@ async function remove(reservationId) {
 
 async function addNewReservation(uid, data) {
     try {
-        let newReservation = await httpService.post('reservations/reservations?docId=' + uid, data)
-        return newReservation
+        let res = await httpService.post('reservations/reservations?docId=' + uid, data)
+        return res
     }
     catch (err) {
         throw err

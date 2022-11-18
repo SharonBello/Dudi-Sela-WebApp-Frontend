@@ -1,58 +1,48 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
-import { authSignout } from '../../services/auth_signout.js'
-import { NewReservation } from '../../pages/new-reservation/new-reservation.jsx'
+import { userService } from '../../services/user.service.js'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
   const { pathname } = useLocation()
-  const { navigate } = useNavigate()
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
-  let { user } = useSelector((storeState) => storeState.userModule)
-  const { court } = useSelector((storeState) => storeState.courtModule)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const [newReservationModal, setNewReservationModal] = useState(false)
+  const token = localStorage.getItem('user')
   const { width } = useWindowDimensions()
+
   const menuRef = useRef(null)
   const profileRef = useRef(null)
 
   let [isActive, setIsActive] = useState(false)
   let homeClassName = (pathname === '/') ? 'active' : 'link page'
-
-  useEffect(() => {
-    dispatch(getLoggedUser)
-
-  }, [loggedUser])
-
-  useEffect(() => {
-    document.addEventListener("click", handleSideClickOutside)
-  }, [isSideMenu])
-
-  useEffect(() => {
-    document.addEventListener("click", handleProfileClickOutside)
-  }, [showProfileMenu])
-
-  const handleSideClickOutside = (e) => {
-    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
-  }
-
-  const handleProfileClickOutside = (e) => {
-    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
-  }
-
   let classHamburgerMenu = (width < 600) ? 'visible' : 'hidden'
-
   let classNavList = (width < 500) ? 'hidden' : ''
 
-  // const onLogout = () => {
-  //   dispatch(logout())
-  //   setShowProfileMenu(!showProfileMenu)
+  // useEffect(() => {
+  //   dispatch(getLoggedUser)
+
+  // }, [loggedUser])
+
+  // useEffect(() => {
+  //   document.addEventListener("click", handleSideClickOutside)
+  // }, [isSideMenu])
+
+  // useEffect(() => {
+  //   document.addEventListener("click", handleProfileClickOutside)
+  // }, [showProfileMenu])
+
+  // const handleSideClickOutside = (e) => {
+  //   if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
+  // }
+
+  // const handleProfileClickOutside = (e) => {
+  //   if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
   // }
 
   const onCloseMenu = () => {
@@ -73,8 +63,9 @@ export const AppHeader = () => {
     setSideMenu(flag)
   }
 
-  if (loggedUser && !loggedUser.imgUrl) {
-    loggedUser.imgUrl = "https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg"
+  if (loggedUser && !loggedUser.picture) {
+    loggedUser.picture = "https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg"
+    console.log("🚀 ~ file: app-header.jsx ~ line 68 ~ AppHeader ~ loggedUser", loggedUser)
   }
 
   const handleClick = () => {
@@ -82,7 +73,7 @@ export const AppHeader = () => {
   }
 
   const handleSignout = () => {
-    authSignout()
+    userService.authSignout()
       .then((response) => {
         console.log(response)
         dispatch(setUserUid(null))
@@ -91,17 +82,6 @@ export const AppHeader = () => {
         document.location.href = '/'
         //TODO show notification user sign out
       })
-  }
-
-  const handleNewReservation = () => {
-    // setNewReservationModal(!newReservationModal)
-    navigate('/user-reservations/new-reservation/:userId')
-  }
-
-  const onToggleNewReservationModal = () => {
-    let flag = !newReservationModal
-    setNewReservationModal(flag)
-
   }
 
   return (
@@ -134,7 +114,7 @@ export const AppHeader = () => {
         <li>
           {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
           <div className="avatar-container">
-            {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
+            {loggedUser && <img className="avatar-img" src={`${loggedUser.picture}`} onClick={onToggleMenu} alt="Avatar"></img>}
           </div>
 
           <div className="profile-container" ref={profileRef}>

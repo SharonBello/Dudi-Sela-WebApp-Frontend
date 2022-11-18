@@ -1,61 +1,71 @@
+/* eslint-disable no-undef */
 import * as React from 'react'
 import { useState, useEffect } from 'react'
-
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { cloudinaryService } from '../../services/cloudinary.service.js'
-import { login, signup, getLoggedUser, signUpGoogle, setUserUid } from '../../store/actions/user.actions.js'
-import { AuthService } from '../../services/auth-service.js'
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google"
-import { userService } from '../../services/user.service.js'
-import jwt_decode from 'jwt-decode'
-
+import { login, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
 // import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
+import { userService } from '../../services/user.service.js'
 
 export const Login = () => {
-  let { loggedUser } = useSelector((storeState) => storeState.userModule)
-  const [isImg, setIsImg] = useState(false)
-  const [imgUrl, setImgUrl] = useState('')
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [isLogin, setIsLogin] = useState(false)
-  const [loader, setLoader] = useState(false)
+  const [user, setUser] = useState()
+
+
   const theme = createTheme({
     direction: 'rtl',
   })
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   //TODO - What is user already signed in?
-  //   dispatch(getLoggedUser())
-  // }, [loggedUser])
 
-  // useEffect(() => {
-  //   // eslint-disable-next-line no-undef
-  //   google.account.id.initialize({
-  //   // window.account.id.initialize({
-  //     // clientId: AuthService.getClientId(),
-  //     clientId: "617359385601-u3l9uaocobtbjeouarq1tdbud47u37p6.apps.googleusercontent.com",
-  //     callback: data => handleCredentialResponse(data)
-  //   })
-  // }, [])
+  useEffect(() => {
+    /* global google */
+    if (window.google) {
+      google.accounts.id.initialize({
+        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        callback: userService.handleCredentialResponse
+      })
+      // let cred = {id: '...', password: '...'};
+      // google.accounts.id.storeCredential(cred, ()=> {
+      //   console.log('storeCredential')
+      // })
+      google.accounts.id.renderButton(document.getElementById("loginDiv"), {
+        type: "standard",
+        theme: "filled_black",
+        size: "large",
+        text: "כניסה עם גוגל",
+        shape: "rectangular",
+      })
 
-  function handleCredentialResponse(response) {
-    console.log('encoded JWT ID Token:', response.credential)
-  }
+      // google.accounts.id.prompt()
+    }
+    // setIsLogin(isLogin)
+    // dispatch(login(user))
+    // dispatch(getLoggedUser())
+    // navigate('/')
+  }, []);
+
+
+  // const onSuccess = (res) => {
+  //   console.log('success:', res);
+  // }
+  // const onFailure = (err) => {
+  //   console.log('failed:', err);
+  // }
 
   // Create rtl cache
   const cacheRtl = createCache({
@@ -65,32 +75,6 @@ export const Login = () => {
 
   function RTL(props) {
     return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>
-  }
-
-  const handleGoogleSignUp = (response) => {
-    let userObject = jwt_decode(response.credential)
-    dispatch(signUpGoogle(userObject))
-    setTimeout(() => {
-      setLoader(true)
-    }, 3000)
-    setTimeout(() => {
-      navigate('/')
-    }, 4000)
-  }
-
-  const uploadImg = (ev) => {
-    const CLOUD_NAME = cloudinaryService.getCloudName()
-    const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
-    const formData = new FormData()
-    formData.append('file', ev.target.files[0])
-    formData.append('upload_preset', cloudinaryService.getPreset())
-    setIsImg(true)
-    return fetch(UPLOAD_URL, {
-      method: 'POST',
-      body: formData
-    }).then(res => res.json()).then(res => {
-      setImgUrl(res.url)
-    }).catch(err => console.error(err))
   }
 
   const loginUser = (email, password) => {
@@ -195,19 +179,7 @@ export const Login = () => {
                     </Grid>
                   </Grid>
 
-                  <div className="signInDiv flex flex-column">
-                    <GoogleOAuthProvider clientId={AuthService.getClientId()}>
-                      <div className="App">
-                        <GoogleLogin
-                          onSuccess={(credentialResponse) => {
-                            handleGoogleSignUp(credentialResponse)
-                          }}
-                          onError={() => {
-                            console.error("Login Failed")
-                          }}
-                        />
-                      </div>
-                    </GoogleOAuthProvider>
+                  <div id="loginDiv" className="googleSignin flex flex-column">
                   </div>
 
                   <Grid container>
@@ -224,8 +196,8 @@ export const Login = () => {
             </Container>
           </div>
         </ThemeProvider>
-      </CacheProvider>
-    </main>
+      </CacheProvider >
+    </main >
   )
 }
 

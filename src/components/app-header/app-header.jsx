@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { logout, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
@@ -25,25 +25,25 @@ export const AppHeader = () => {
   let classNavList = (width < 500) ? 'hidden' : ''
 
   // useEffect(() => {
-  //   dispatch(getLoggedUser)
+  //   dispatch(setLoggedUser)
 
   // }, [loggedUser])
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleSideClickOutside)
-  // }, [isSideMenu])
+  useEffect(() => {
+    document.addEventListener("click", handleSideClickOutside)
+  }, [isSideMenu])
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleProfileClickOutside)
-  // }, [showProfileMenu])
+  useEffect(() => {
+    document.addEventListener("click", handleProfileClickOutside)
+  }, [showProfileMenu])
 
-  // const handleSideClickOutside = (e) => {
-  //   if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
-  // }
+  const handleSideClickOutside = (e) => {
+    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
+  }
 
-  // const handleProfileClickOutside = (e) => {
-  //   if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
-  // }
+  const handleProfileClickOutside = (e) => {
+    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
+  }
 
   const onCloseMenu = () => {
     setShowProfileMenu(false)

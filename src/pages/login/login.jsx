@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { login, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -31,6 +31,13 @@ export const Login = () => {
     direction: 'rtl',
   })
 
+  useEffect(() => {
+    if (loggedUser) {
+      // setIsLogin(isLogin)
+      dispatch(setLoggedUser())
+      // navigate('/')
+    }
+  }, [])
 
   useEffect(() => {
     /* global google */
@@ -39,10 +46,6 @@ export const Login = () => {
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: userService.handleCredentialResponse
       })
-      // let cred = {id: '...', password: '...'};
-      // google.accounts.id.storeCredential(cred, ()=> {
-      //   console.log('storeCredential')
-      // })
       google.accounts.id.renderButton(document.getElementById("loginDiv"), {
         type: "standard",
         theme: "filled_black",
@@ -50,16 +53,10 @@ export const Login = () => {
         text: "כניסה עם גוגל",
         shape: "rectangular",
       })
-
-      // google.accounts.id.prompt()
     }
-    if (userService.getLoggedUser()) {
-      // dispatch(getLoggedUser())
-      // navigate('/')
-    }
-    // setIsLogin(isLogin)
-    // dispatch(login(user))
-    // dispatch(getLoggedUser())
+    setIsLogin(isLogin)
+    dispatch(setLoggedUser())
+   
   }, []);
 
   // Create rtl cache
@@ -89,7 +86,7 @@ export const Login = () => {
           dispatch(setUserUid(response.data.uid))
           setIsLogin(isLogin)
           dispatch(login(payload))
-          dispatch(getLoggedUser())
+          dispatch(setLoggedUser())
           navigate('/')
         }
       })

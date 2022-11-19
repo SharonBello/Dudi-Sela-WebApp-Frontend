@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getLoggedUser } from '../../store/actions/user.actions.js'
+import { setLoggedUser } from '../../store/actions/user.actions.js'
 // import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { DatePicker } from '@mui/x-date-pickers';
 
@@ -55,7 +55,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
 
   useEffect(() => {
-    dispatch(getLoggedUser)
+    dispatch(setLoggedUser)
   }, [loggedUser])
 
   useEffect(() => {
@@ -91,8 +91,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     if (!loggedUser) {
       navigate('/signin')
     }
-    else if ((loggedUser && !uid) || uid) {
-      uid = loggedUser.data.uid
+    else if (loggedUser || uid) {
+      // uid = loggedUser.data.uid
       try {
         let res = await reservationService.addNewReservation(uid, payload)
         if (res.data.result === 0) {

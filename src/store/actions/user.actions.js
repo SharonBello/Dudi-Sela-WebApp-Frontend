@@ -105,7 +105,7 @@ export async function loadUser(userId) {
     }
 }
 
-export function getLoggedUser() {
+export function setLoggedUser() {
     return async (dispatch) => {
         try {
             let user = await userService.getLoggedUser()

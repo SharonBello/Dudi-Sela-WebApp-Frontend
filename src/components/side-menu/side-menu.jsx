@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom'
 // import { loadGigs, setFilter } from '../../store/actions/gig.actions.js'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, getLoggedUser } from '../../store/actions/user.actions.js'
+import { logout, setLoggedUser } from '../../store/actions/user.actions.js'
 import { Logo } from '../../services/svg-service.js'
 
 

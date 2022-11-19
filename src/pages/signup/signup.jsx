@@ -20,7 +20,7 @@ import { userService } from '../../services/user.service.js'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
-import { login, getLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -65,7 +65,7 @@ export const Signup = () => {
     .then((response) => {
       dispatch(setUserUid(response.data.uid))
       dispatch(login(payload))
-      dispatch(getLoggedUser())
+      dispatch(setLoggedUser())
       navigate('/')
     })
     .catch((error) => {

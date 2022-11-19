@@ -53,19 +53,14 @@ export const Login = () => {
 
       // google.accounts.id.prompt()
     }
+    if (userService.getLoggedUser()) {
+      // dispatch(getLoggedUser())
+      // navigate('/')
+    }
     // setIsLogin(isLogin)
     // dispatch(login(user))
     // dispatch(getLoggedUser())
-    // navigate('/')
   }, []);
-
-
-  // const onSuccess = (res) => {
-  //   console.log('success:', res);
-  // }
-  // const onFailure = (err) => {
-  //   console.log('failed:', err);
-  // }
 
   // Create rtl cache
   const cacheRtl = createCache({

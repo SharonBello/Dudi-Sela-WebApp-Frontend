@@ -15,10 +15,7 @@ export const UserReservations = () => {
   }, [])
 
   const getReservationsData = async (uid) => {
-    if (!loggedUser || !uid) {
-      navigate('/signin')
-    }
-    else if (loggedUser || uid) {
+    if (loggedUser || uid) {
       // uid = loggedUser.data.uid
       let reservations = await reservationService.query(uid)
       setReservations(reservations)

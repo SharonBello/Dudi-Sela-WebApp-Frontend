@@ -45,7 +45,7 @@ async function authSignout() {
 }
 
 function _handleLogin(user) {
-    const miniUser = { email: user.email, uid: user.uid, firstName: user.firstName, lastName: user.lastName}
+    const miniUser = { email: user.email, uid: user.uid}
     localStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(miniUser))
 }
 
@@ -67,7 +67,7 @@ function handleCredentialResponse(response) {
         .then((res) => {
             _handleLogin(res.user)
             // console.log("🚀 ~ file: user.service.js ~ line 135 ~ .then ~ res.user", res.user)
-            // document.location.reload('http://localhost:3000/')
+            document.location.reload('http://localhost:3000/signin')
             
         })
         .catch((error) => {

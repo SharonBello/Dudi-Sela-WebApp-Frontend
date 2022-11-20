@@ -18,6 +18,7 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
 import { userService } from '../../services/user.service.js'
+import {PatternSharp} from '@mui/icons-material'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -26,16 +27,14 @@ export const Login = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [user, setUser] = useState()
 
-
   const theme = createTheme({
     direction: 'rtl',
   })
 
+
   useEffect(() => {
-    if (loggedUser) {
-      // setIsLogin(isLogin)
-      dispatch(setLoggedUser())
-      // navigate('/')
+    if (userService.getLoggedUser() && userService.getLoggedUser().email !== "") {
+      navigate('/')
     }
   }, [])
 

@@ -10,6 +10,9 @@ export const HomeHero = () => {
         <div className="hero">
             {/* <VideoPlayer
                 className="video"
+                // // src={
+                // //     "https://res.cloudinary.com/primap/video/upload/v1668944074/General/Dudi%20Sela/hero-video_xpnazb.mp4"
+                // // }
                 src={
                     "https://res.cloudinary.com/primap/video/upload/v1667564876/General/Dudi%20Sela/pexels-cottonbro-5730331_gtd9q3.mp4"
                 }

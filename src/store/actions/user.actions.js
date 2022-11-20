@@ -81,10 +81,10 @@ export function signup(credentials) {
     }
 }
 
-export function logout() {
+export function signout() {
     return async (dispatch) => {
         try {
-            await userService.logout()
+            await userService.authSignout()
             dispatch({
                 type: 'SET_USER',
                 user: null

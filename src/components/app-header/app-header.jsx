@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { signout, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
@@ -21,8 +21,8 @@ export const AppHeader = () => {
 
   let [isActive, setIsActive] = useState(false)
   let homeClassName = (pathname === '/') ? 'active' : 'link page'
-  let classHamburgerMenu = (width < 600) ? 'visible' : 'hidden'
-  let classNavList = (width < 500) ? 'hidden' : ''
+  let classHamburgerMenu = (width < 900) ? 'visible' : 'hidden'
+  let classNavList = (width < 600) ? 'hidden' : ''
 
   // useEffect(() => {
   //   dispatch(setLoggedUser)
@@ -77,7 +77,7 @@ export const AppHeader = () => {
       .then((response) => {
         console.log(response)
         dispatch(setUserUid(null))
-        dispatch(logout())
+        dispatch(signout())
         alert('user signed out')
         document.location.href = '/'
         //TODO show notification user sign out
@@ -88,7 +88,7 @@ export const AppHeader = () => {
     <header className="header container flex align-center">
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
-          {width < 600 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
+          {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
             {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout} />}
           </button>}
         </div>
@@ -104,7 +104,7 @@ export const AppHeader = () => {
         {(loggedUser ? <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
         </li> : <span></span>)}
 
-        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמן מגרש</NavLink>
+        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
         </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
         </li>)}
 
@@ -122,47 +122,10 @@ export const AppHeader = () => {
           </div>
         </li>
 
-        {/* <li>
-  {!loggedUser && <Link to='/signout' rel="nofollow" className="open-popup-login link-page" onClick={() => handleSignout()}>יציאה</Link>}
-  <div className="avatar-container">
-    {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
-  </div>
-
-  <div className="profile-container" ref={profileRef}>
-    {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} />}
-  </div>
-</li> */}
-
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li> : <span></span>}
       </ul>
-      {/* <ul className="nav-list clean-list flex align-center">
-
-        <li><Link to={`/user-reservations`} onClick={handleClick} className={`${homeClassName}`}>ההזמנות שלי</Link>
-        </li>
-        
-        <li><Link to={`/user-reservations/new-reservation`} onClick={handleClick}>הזמן מגרש</Link>
-        </li>
-
-        <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
-        </li>
-
-        <li>
-          {!loggedUser && <Link to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</Link>}
-          <div className="avatar-container">
-            {loggedUser && <img className="avatar-img" src={`${loggedUser.imgUrl}`} onClick={onToggleMenu} alt="Avatar"></img>}
-          </div>
-
-          <div className="profile-container" ref={profileRef}>
-            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} handleSignout={handleSignout} />}
-          </div>
-        </li>
-
-        
-
-        {!loggedUser ? <li><Link to={`/signup`} onClick={handleClick} className="link-page">הרשמה</Link>
-        </li> : <span></span>}
-      </ul> */}
+      
     </header>
   )
 }

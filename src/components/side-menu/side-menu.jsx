@@ -1,9 +1,7 @@
 import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom'
 // import { loadGigs, setFilter } from '../../store/actions/gig.actions.js'
 import { useSelector, useDispatch } from 'react-redux'
-import { logout, setLoggedUser } from '../../store/actions/user.actions.js'
-import { Logo } from '../../services/svg-service.js'
-
+import { signout } from '../../store/actions/user.actions.js'
 
 export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout }) => {
   const { loggedUser } = useSelector((storeState) => storeState.userModule)
@@ -12,10 +10,10 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
   const { pathname } = useLocation()
   const className = (menuOpen) ? 'open' : ''
 
-  // const onLogout = () => {
-  //   dispatch(logout())
-  //   closeMenu()
-  // }
+  const onSignout = () => {
+    dispatch(signout())
+    closeMenu()
+  }
 
   const openJoin = () => {
     navigate('/signup')
@@ -31,9 +29,16 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
     <div className={`background-backdrop overlay ${menuOpen ? 'visible' : ''}`}>
       <section className={`side-bar flex flex-column ${className}`} >
         <div className="menu-header">
-          <h2>X</h2>
+          <div className="logo-sidemenu-container flex">
+            <NavLink to="/" className="site-sidemenu-logo">
+              <img src="https://res.cloudinary.com/primap/image/upload/v1667563747/General/Dudi%20Sela/Dudi-Logo_e5zm1a.svg" className="app-logo"
+                alt="logo" />
+            </NavLink>
+            <h2>X</h2>
+          </div>
+
           {!user &&
-            <ul>
+            <ul className='user-sign-side-btn clean-list flex flex-column'>
               <li>
                 <button className="open-popup-side-menu" onClick={() => { openLogin() }}>כניסה</button>
               </li>
@@ -42,22 +47,29 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
               </li>
             </ul>}
 
-          {user && loggedUser && <div><Logo /><br></br><h3>Hello, {loggedUser.email}</h3></div>}
+          {user && loggedUser &&
+            <h3>כיף שחזרתם</h3>}
         </div>
 
         <nav className='menu-nav'>
+          <ul className='side-menu-profile clean-list flex flex-column'>
+            <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
 
-          <ul className='side-menu-profile clean-list'>
-            <li>{user ? <NavLink to={`/user-profile/${user._id}`} className="sidebar-item">הפרופיל שלי</NavLink> : <NavLink to={'/signin'} className="sidebar-item">הפרופיל שלי</NavLink>}</li>
+            {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}
 
-            {(pathname === '/' && loggedUser ? <li><NavLink to={`/user-reservations/reservation?=${loggedUser.uid}`} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
-            </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
-            </li>)}
+            {loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="sidebar-item">הזמנת מגרש</NavLink></li> : <span></span>}
 
-          <li>
-            {loggedUser ?
-              <NavLink to={'/'} onClick={() => handleSignout()} className="sidebar-item">יציאה</NavLink> : <span></span>}
-          </li>
+            {loggedUser ? <li><NavLink to={'/user-reservations'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
+            </li> : <span></span>}
+
+            <li>
+              <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" className="sidebar-item">צור קשר
+              </a>
+            </li>
+            <li>
+              {loggedUser ?
+                <NavLink to={'/'} onClick={() => handleSignout()} className="sidebar-item">יציאה</NavLink> : <span></span>}
+            </li>
 
           </ul>
 
@@ -65,4 +77,4 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
       </section>
     </div>
   )
-            }
+}

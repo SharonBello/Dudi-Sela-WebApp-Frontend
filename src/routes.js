@@ -26,7 +26,7 @@ const routes = [
         component: <UserReservations />,
     },
     {
-        path: '/user-profile/:userId',
+        path: '/user-profile',
         component: <UserProfile/>,
     },
     {

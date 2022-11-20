@@ -1,9 +1,8 @@
 .profile-menu-wrapper {
     position: absolute;
-    left: 0;
+    left: -150%;
 
     .profile-menu {
-        position: relative;
         z-index: 9999;
         background-color: $header;
         color: $accent2;
@@ -13,48 +12,22 @@
         font-weight: 400;
         margin-top: 12px;
         min-width: 180px;
-        //   padding: 5px 15px;
-
-        // .Menu-subcategory {
-        //   position: absolute;
-        //   left: calc(100% - 20px);
-        //   top: -11px;
-        //   width: 0;
-        //   height: 0;
-        //   border: 10px solid transparent;
-        //   border-top-width: 0;
-        //   border-bottom-color: $primary_600;
-        //   background: 0 0;
-        //   transform: translateX(-50%);
-        //   z-index: 9999;
-
-        //   &::after {
-        //     content: "";
-        //     width: 0;
-        //     height: 0;
-        //     top: 1px;
-        //     transform: translateX(-50%);
-        //     border-bottom-color: $white;
-        //     position: absolute;
-        //     border-color: transparent;
-        //     border-top-width: 10px;
-        //     border: transparent solid 10px;
-        //     outline: 0;
-        //   }
-        // }
-
+        padding: rem(10px);
+  
         ul {
-            display: flex;
-            flex-direction: column;
+            gap: rem(8px);
             align-items: flex-start;
             min-width: 100%;
             
             li {
                 // padding: 5px 0;
-                min-width: 100%;
+                width: 100%;
+                font-size: calc(1vw + 1vh + 0.8vmin);
+                cursor: pointer;
                 
                 &:hover {
                     background-color: $brand;
+                    cursor: pointer;
                 }
                 
                 a {
@@ -76,18 +49,22 @@
 
                     &:nth-of-type(4) {
                         padding-bottom: rem(15px);
-
+    
                         &:hover {
-                            color: $accent2;
+                            color: $header;
                         }
                     }
                 }
-
-                &.logout {
+                
+                &.signout {
                     width: 100%;
                     border-top: 1px solid $accent5;
                     cursor: pointer;
                     padding: 10px 0;
+                    
+                    &:hover {
+                        color: $header !important;
+                    }
                 }
             }
         }

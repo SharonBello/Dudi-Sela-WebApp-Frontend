@@ -45,7 +45,7 @@ async function authSignout() {
 }
 
 function _handleLogin(user) {
-    const miniUser = { email: user.email, uid: user.uid}
+    const miniUser = { email: user.email, uid: user.uid, firstName: user.firstName, lastName: user.lastName}
     localStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(miniUser))
 }
 

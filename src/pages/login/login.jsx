@@ -20,6 +20,7 @@ import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import {PatternSharp} from '@mui/icons-material'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
+// import { UserMessages } from "../../components/user-messages/user-messages.jsx"
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -68,7 +69,7 @@ export const Login = () => {
       .then((response) => {
         if (response.data.result === 1) {
           dispatch(setUserUid(null))
-          alert("user or password invalid")
+          // UserMessages('Incorrect email or password', 'error')
           setIsLogin(!isLogin)
           navigate('/signin')
 

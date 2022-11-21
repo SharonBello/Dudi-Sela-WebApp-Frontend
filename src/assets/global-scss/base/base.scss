@@ -7,11 +7,24 @@
     font-family: assistant;
     // font-size: calc(1vw + 1vh + 1vmin);
     font-size: calc(15px + 0.390625vw);
+    width: 100vw;
+    // background-color: red;
+    
+    & footer {
+      
+      #enable-toolbar-trigger-svg {
+        width: unset;
+      }
+    }
   }
   
   body {
+    // background-color: green;
     margin: 0;
     // overflow-x: hidden;
+    min-width: 100%;
+    max-height: 100vh;
+
   }
   
   h1,
@@ -36,4 +49,6 @@
     width: 100%;
   }
   
-  
+  .MuiPaper-root {
+    z-index: 9999;
+  }

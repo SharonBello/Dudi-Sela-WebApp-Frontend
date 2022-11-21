@@ -3,8 +3,9 @@ import { useNavigate } from "react-router"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-
+// import { UserMessages } from "../../components/user-messages/user-messages.jsx"
 import moment from 'moment'
+
 moment().format()
 
 export const ReservationPreview = ({ item }) => {
@@ -32,7 +33,7 @@ export const ReservationPreview = ({ item }) => {
     const onCancelItem = (item) => {
         getIsCancelable(item)
         if (isCancelable) {
-            alert('cancelItem')
+            // UserMessages('info')
         }
     }
 

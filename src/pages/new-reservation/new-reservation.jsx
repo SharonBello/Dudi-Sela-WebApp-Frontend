@@ -1,10 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { setLoggedUser } from '../../store/actions/user.actions.js'
-// import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
-import { DatePicker } from '@mui/x-date-pickers';
 
 import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
@@ -27,7 +24,14 @@ import createCache from '@emotion/cache'
 import { reservationService } from '../../services/reservation.service'
 import { courtService } from '../../services/court.service.js'
 import { MenuItem, Select } from '@mui/material'
+import InputLabel from '@mui/material/InputLabel';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
 import { prefixer } from 'stylis'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexGrow: 1,
   },
-}));
+}))
 
 export const NewReservation = ({ newReservationModal, closeModal }) => {
   const dispatch = useDispatch()
@@ -47,12 +51,14 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [date, setDate] = useState(new Date())
   const [courtsData, setCourtsData] = useState()
   const { width } = useWindowDimensions()
-  const classes = useStyles();
-  const todaysDate = dayjs('2014-08-18T21:11:54');
+  const classes = useStyles()
+  const todaysDate = dayjs('2014-08-18T21:11:54')
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [showFailureAlert, setShowFailureAlert] = useState(false)
+  const [OpenAlert, setOpenAlert] = useState(false)
 
   let uid = useSelector((storeState) => storeState.userModule.uid)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
-
 
   useEffect(() => {
     dispatch(setLoggedUser)
@@ -76,7 +82,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const getCourtsData = async () => {
     let res = await courtService.getCourts()
-    console.log('courts data', res.data)
     return res.data
   }
 
@@ -92,17 +97,16 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       navigate('/signin')
     }
     else if (loggedUser || uid) {
-      // uid = loggedUser.data.uid
       try {
         let res = await reservationService.addNewReservation(uid, payload)
         if (res.data.result === 0) {
-          alert("המגרש הוזמן בהצלחה")
+          setShowSuccessAlert(true)
         } else {
-          alert("לא ניתן להזמין מגרש ")
+          setShowSuccessAlert(false)
         }
       }
       catch (err) {
-        alert("failed to add")
+        setShowFailureAlert(true)
       }
     }
   }
@@ -110,12 +114,17 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const handleStartHourChange = (e) => {
     setStartHour(e.target.value)
   }
+
   const handleEndHourChange = (e) => {
     setEndHour(e.target.value)
   }
+
   const handleCourtNumberChange = (e) => {
     setCourtNumber(+e.target.innerHTML)
+    e.stopPropagation()
+    e.preventDefault()
   }
+
   const handleSubmit = (e) => {
     addReservation()
     e.stopPropagation()
@@ -125,21 +134,26 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const renderStartHourSelect = () => {
     if (courtsData) {
       return (
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={startHour}
-          onChange={(e) => handleStartHourChange(e)}
-          label="שעת התחלה"
-        >
-          {courtsData.start_time.map(option => {
-            return (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            )
-          })}
-        </Select>
+        <FormControl sx={{ m: 3, minWidth: 150 }}>
+          <InputLabel id="startHour">שעת התחלה</InputLabel>
+
+          <Select
+            labelId="startHour"
+            id="start-hour-select"
+            value={startHour}
+            onChange={(e) => handleStartHourChange(e)}
+            label="שעת התחלה"
+            Required
+          >
+            {courtsData.start_time.map(option => {
+              return (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
       )
     }
   }
@@ -147,21 +161,27 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const renderEndHourSelect = () => {
     if (courtsData) {
       return (
-        <Select
-          label="שעת סיום"
-          labelId="endHour"
-          id="endHour"
-          value={endHour}
-          onChange={(e) => handleEndHourChange(e)}
-        >
-          {courtsData.end_time.map(option => {
-            return (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            )
-          })}
-        </Select>
+        <FormControl sx={{ m: 3, minWidth: 150 }}>
+          <InputLabel id="endHour">שעת סיום</InputLabel>
+          <Select
+            label="שעת סיום"
+            labelId="endHour"
+            id="end-hour-select"
+            value={endHour}
+            onChange={(e) => handleEndHourChange(e)}
+            Required
+          >
+            {courtsData.end_time.map(option => {
+              return (
+                <MenuItem
+                  key={option}
+                  value={option}>
+                  {option}
+                </MenuItem>
+              )
+            })}
+          </Select>
+        </FormControl>
       )
     }
   }
@@ -170,14 +190,10 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     if (courtsData) {
       return (
         <>
-          <div className={classes.root}>
+          <div className="court-number-container flex">
             {courtsData.court_numbers.map(option => {
               return (
-                <Grid container key={option} value={option}>
-                    {/* <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group"> */}
-                      <Button onClick={(e) => handleCourtNumberChange(e)}>{option}</Button>
-                    {/* </ButtonGroup> */}
-                  </Grid>
+                <button className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
               )
             })}
           </div>
@@ -188,49 +204,117 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const handleChange = (newValue) => {
     setDate(newValue)
-  };
+  }
 
+  const handleCloseAlert = (event, reason) => {
+    setShowSuccessAlert(false)
+    setShowFailureAlert(false)
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  }
+
+  const alertAction = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseAlert}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  )
+
+  const renderSuccessAlert = () => {
+    if (showSuccessAlert) {
+      return (
+        <Snackbar
+          open={true}
+          autoHideDuration={60000}
+          onClose={handleCloseAlert}
+          action={alertAction}
+        >
+          <Alert
+            severity="success"
+            onClose={handleCloseAlert}
+            sx={{ width: '100%' }}
+          >
+            ההזמנה נקלטה בהצלחה</Alert>
+        </Snackbar>
+      )
+    }
+  }
+
+  const renderFailureAlert = () => {
+    if (showFailureAlert) {
+      return (
+        <Snackbar
+          open={true}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+          action={alertAction}
+        >
+          <Alert
+            severity="error"
+            onClose={handleCloseAlert}
+            sx={{ width: '100%' }}
+          // autoHideDuration={6000}
+          >
+            ההזמנה נכשלה</Alert>
+        </Snackbar>
+      )
+    }
+  }
   return (
-    <form className="container">
-      <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={theme}>
-          <div dir="rtl">
-            <Stack spacing={2}>
-              <label>שעת התחלה</label>
+    <>
+      {renderSuccessAlert()}
+      {renderFailureAlert()}
+      <form className="container flex flex-column">
+        <CacheProvider value={cacheRtl}>
+          <ThemeProvider theme={theme}>
+            <div className="form-container flex flex-column" dir="rtl">
+              <Stack spacing={3}>
+                <section className="hours-container flex">
+                  {renderStartHourSelect()}
+                  {renderEndHourSelect()}
+                </section>
 
-              {renderStartHourSelect()}
-              <label>שעת סיום</label>
-              {renderEndHourSelect()}
-
-
-              {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <MobileDatePicker
-                  label="תאריך"
-                  inputFormat="MM/DD/YYYY"
-                  value={date}
-                  onChange={handleChange}
-                  renderInput={(params) => <TextField {...params} />}
-                /></LocalizationProvider>
-                : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
-                  label="תאריך"
-                  inputFormat="MM/DD/YYYY"
-                  value={todaysDate}
-                  onChange={handleChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                </LocalizationProvider>}
-              <label>מספר מגרש</label>
-              {renderCourtNumberSelect()}
-            </Stack>
-          </div>
-        </ThemeProvider>
-      </CacheProvider>
-      <input
-        className='submitButton'
-        type='submit'
-        value='הזמן מגרש'
-        onClick={handleSubmit}
-      />
-    </form >
+                <section className="date-container flex">
+                  {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <MobileDatePicker
+                      label="תאריך"
+                      inputFormat="MM/DD/YYYY"
+                      value={date}
+                      onChange={handleChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    /></LocalizationProvider>
+                    : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
+                      label="תאריך"
+                      inputFormat="MM/DD/YYYY"
+                      value={todaysDate}
+                      onChange={handleChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                    </LocalizationProvider>}
+                </section>
+                <section className="court-number-section flex flex-column">
+                  <label>מספר מגרש</label>
+                  {renderCourtNumberSelect()}
+                </section>
+              </Stack>
+            </div>
+          </ThemeProvider>
+        </CacheProvider>
+        <input
+          className='submit-button'
+          type='submit'
+          value='הזמן מגרש'
+          onClick={handleSubmit}
+        />
+      </form >
+    </>
   )
 }

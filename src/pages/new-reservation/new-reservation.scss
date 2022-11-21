@@ -1,5 +1,103 @@
-.NewReservation {}
-
 form {
-    margin-top: 5%;
+    // margin-top: 5%;
+    flex: 1;
+    max-width: 100%;
+    
+    .form-container {
+        gap: rem(24px);
+        margin-block-start: 10%;
+        
+        .hours-container {
+            max-width: 100%;
+            flex-wrap: wrap;
+            gap: 3%;
+            justify-content: center;
+
+            .MuiFormControl-root {
+                margin-inline: unset !important;
+            }
+        }
+
+        .date-container {
+            justify-content: center;
+        }
+    }
+
+    .court-number-section {
+        align-items: center;
+        width: 100%;
+        flex-wrap: wrap;
+        flex: 1;
+        // margin-block-start: 8% !important;
+        margin-block-end: 8% !important;
+
+        .court-number-container {
+            margin-block-start: 3% !important;
+            justify-content: center;
+            align-items: center;
+            gap: rem(20px);
+            width: 100%;
+            flex-wrap: wrap;
+            flex: 1;
+
+            .court-number-btn {
+                outline: none;
+                cursor: pointer;
+                padding: rem(8px) rem(16px);
+                border-radius: 4px;
+                border: 0.1px solid $accent5;
+                transition: all 0.2s ease;
+                font-size: calc(1vw + 1vh + 1vmax);
+                font-weight: 400;
+                color: $accent2;
+                text-shadow: 0 1px $font;
+                background-color: transparent;
+
+                &:hover {
+                    background-color: $brand;
+                    color: $header;
+                    border: 1px solid transparent;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-weight: 500;
+                }
+
+                &:active {
+                    background-color: $accent8;
+                    color: $brand;
+                    border: 1px solid $brand;
+                    cursor: pointer;
+                }
+
+                &:focus {
+                    background-color: $accent8;
+                    color: $brand;
+                    border: 1px solid $brand;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .submit-button {
+        min-width: 50%;
+        max-width: 50%;
+        margin: 0 auto;
+        background-color: $brand;
+        color: $header;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: calc(0.8vw + 0.8vh + 1vmax);
+        font-weight: 600;
+        padding: rem(12px) rem(24px);
+        transition: 70ms cubic-bezier(.75, 0, .25, 1);
+
+        &:hover {
+            background-color: $accent8;
+            color: $brand;
+            border: 1px solid $brand;
+            cursor: pointer;
+        }
+    }
 }

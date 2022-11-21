@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { TermsConditionsModal } from '../../components/terms-conditions-modal/terms-conditions-modal.jsx'
@@ -21,6 +21,7 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 // import { prefixer } from 'stylis'
 import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -36,6 +37,20 @@ export const Signup = () => {
     key: 'muirtl',
     // stylisPlugins: [prefixer, rtlPlugin],
   })
+
+  useEffect(() => {
+    if (userService.getLoggedUser() && userService.getLoggedUser().email !== "") {
+      navigate('/')
+    }
+  }, [])
+
+  useEffect(() => {
+    /* global google */
+    if (window.google) {
+      setGoogleAccounts("signupDiv")
+    }
+    dispatch(setLoggedUser())   
+  }, []);
 
   function Copyright(props) {
     return (
@@ -141,6 +156,9 @@ export const Signup = () => {
                 >
                   הרשמה
                 </Button>
+                <div id="signupDiv" className="googleSignin flex flex-column">
+                  </div>
+
                 <Grid container justifyContent="center">
                   <Grid item>
                     כבר רשומים?

@@ -17,6 +17,7 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
+const STORAGE_KEY_LOGGED = 'loggedUser'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -29,18 +30,9 @@ export const Login = () => {
 
 
   useEffect(() => {
-    if (userService.getLoggedUser() && userService.getLoggedUser().email !== "") {
-      navigate('/')
-    }
-  }, [])
-
-  useEffect(() => {
     if (window.google) {
       setGoogleAccounts("loginDiv")
     }
-    setIsLogin(isLogin)
-    dispatch(setLoggedUser())
-   
   }, []);
 
   // Create rtl cache

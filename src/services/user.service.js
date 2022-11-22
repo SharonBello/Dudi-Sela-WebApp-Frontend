@@ -47,6 +47,7 @@ async function authSignout() {
 function _handleLogin(user) {
     const miniUser = { email: user.email, uid: user.uid}
     localStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(miniUser))
+    window.dispatchEvent(new Event("storage"));
 }
 
 function saveLocalUser(user) {
@@ -66,13 +67,6 @@ function handleCredentialResponse(response) {
     signInWithCredential(auth, credential)
         .then((res) => {
             _handleLogin(res.user)
-            if (process.env.NODE_ENV !== 'production') {
-                document.location.reload('http://localhost:3000/signin')
-            }
-            else {
-                document.location.reload('https://dudi-sela-webapp.onrender.com/signin')
-            }
-            
         })
         .catch((error) => {
             const errorCode = error.code;

@@ -20,6 +20,7 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
+const STORAGE_KEY_LOGGED = 'loggedUser'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -36,17 +37,10 @@ export const Signup = () => {
   })
 
   useEffect(() => {
-    if (userService.getLoggedUser() && userService.getLoggedUser().email !== "") {
-      navigate('/')
-    }
-  }, [])
-
-  useEffect(() => {
     /* global google */
     if (window.google) {
       setGoogleAccounts("signupDiv")
     }
-    dispatch(setLoggedUser())
   }, [])
 
   function Copyright(props) {

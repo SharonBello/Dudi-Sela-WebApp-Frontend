@@ -55,8 +55,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const todaysDate = dayjs('2014-08-18T21:11:54')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showFailureAlert, setShowFailureAlert] = useState(false)
+  const [showMessageAlert, setShowMessageAlert] = useState(false)
+  const [messageAlert, setMessageAlert] = useState()
   const [OpenAlert, setOpenAlert] = useState(false)
-
   let uid = useSelector((storeState) => storeState.userModule.uid)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
@@ -125,8 +126,23 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     e.preventDefault()
   }
 
+  const validateForm = (e) => {
+    if (!startHour || !endHour || !courtNumber) {
+      return "נא למלא את כל השדות"
+    }
+    if (startHour >= endHour) {
+      return "שעת הסיום חייבת להיות מאוחרת משעת ההתחלה"
+    }
+    return true
+  }
   const handleSubmit = (e) => {
-    addReservation()
+    if (validateForm() === true) {
+      addReservation()
+    } else {
+      setMessageAlert(validateForm())
+      setShowMessageAlert(true)
+    }
+    
     e.stopPropagation()
     e.preventDefault()
   }
@@ -209,6 +225,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const handleCloseAlert = (event, reason) => {
     setShowSuccessAlert(false)
     setShowFailureAlert(false)
+    setShowMessageAlert(false)
     if (reason === 'clickaway') {
       return;
     }
@@ -268,10 +285,30 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       )
     }
   }
+  const renderMessageAlert = () => {
+    if (showMessageAlert) {
+      return (
+        <Snackbar
+          open={true}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+          action={alertAction}
+        >
+          <Alert
+            severity="error"
+            onClose={handleCloseAlert}
+            sx={{ width: '100%' }}
+          >
+            {messageAlert}</Alert>
+        </Snackbar>
+      )
+    }
+  }
   return (
     <>
       {renderSuccessAlert()}
       {renderFailureAlert()}
+      {renderMessageAlert()}
       <form className="container flex flex-column">
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>

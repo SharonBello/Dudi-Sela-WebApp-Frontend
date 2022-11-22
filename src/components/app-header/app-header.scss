@@ -1,18 +1,34 @@
 .app-header-container {
     min-width: 100vw;
     flex: 1;
-    background-color: $header;
+    // background-color: transparent;
     position: absolute;
     top: 0;
     right: 0;
     z-index: 50;
-
+    
     .header {
         // min-width: 100%;
         flex: 1;
         margin: 0;
         max-width: 100%;
         padding-block: calc(0.4vw + 0.4vh + 0.6vmin);
+        min-width: 100vw;
+        flex: 1;
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 50;
+        @media (min-width: 601px) {
+            background-color: transparent;
+        }
+        @media (max-width: 600px) {
+            background-color: $header;
+        }
+        
+        & .scrolled {
+            background-color: $header;
+        }
 
         & .logo-hamburger-container {
             & .hamburger-icon {

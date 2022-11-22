@@ -1,21 +1,21 @@
 .home {
     min-width: 100%;
 
-    & .hero {
-        height: 70vh;
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-        z-index: 0;
-        // margin: 3% 0;
-        padding: 0;
+    // & .hero {
+    //     height: 70vh;
+    //     width: 100%;
+    //     overflow: hidden;
+    //     position: relative;
+    //     z-index: 0;
+    //     // margin: 3% 0;
+    //     padding: 0;
         
-        @media (max-width: 600px) {
-            min-height: 50vh;
-            width: 100%;
-            background-color: $header;
-        }
-    }
+    //     @media (max-width: 600px) {
+    //         min-height: 50vh;
+    //         width: 100%;
+    //         background-color: $header;
+    //     }
+    // }
     
 
 }

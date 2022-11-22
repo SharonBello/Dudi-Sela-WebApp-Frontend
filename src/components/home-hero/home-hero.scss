@@ -24,7 +24,7 @@
         transform: translateY(-80%);
         text-shadow: 0 -1px 2px rgba(0, 0, 0, .3);
         z-index: 5;
-        
+
         h1 {
             color: $font;
             font-size: rem(50px);
@@ -33,7 +33,7 @@
             max-width: rem(750px);
             margin: 0 auto;
         }
-        
+
         p {
             color: $font;
             font-weight: 500;
@@ -55,14 +55,27 @@
             border: none;
             cursor: pointer;
 
-            &:hover:after {
-                width: 60px;
-                height: 60px;
-                transform: translate(0, -1.2pc);
+            &:hover:after,
+            &:active:after,
+            &:focus:after {
+                width: rem(55px);
+                height: rem(55px);
                 margin-right: 2.5%;
                 background-image: url(https://res.cloudinary.com/primap/image/upload/v1669062893/General/Dudi%20Sela/tennisballInvert_kzkuil.png);
+
+                @media (min-width: 1101px) {
+                    transform: translate(rem(8px), rem(-15px));
+                }
+
+                @media (min-width: 451px) and (max-width: 1100px) {
+                    transform: translate(rem(-4px), rem(-15px));
+                }
+
+                @media (min-width: 320px) and (max-width: 450px) {
+                    transform: translate(rem(-8px), rem(-15px));
+                }
             }
-            
+
             &::after {
                 content: "";
                 background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB3aWR0aD0iNzUycHQiIGhlaWdodD0iNzUycHQiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDc1MiA3NTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiA8cGF0aCBkPSJtMjk1LjQ1IDYwMC45NSAyMjQuOTUtMjI0Ljk1LTIyNC45NS0yMjQuOTUtNjMuODQgNjMuODQgMTYxLjE2IDE2MS4xMS0xNjEuMTYgMTYxLjExeiIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4K");
@@ -72,7 +85,21 @@
                 transition: all .5s ease-in-out;
                 background-size: 100%;
                 filter: invert(1);
-                transform: translate(-1.4pc, 0.4pc) rotate(180deg);
+
+                @media (min-width: 1101px) {
+                    transform: translate(rem(-10px), rem(8px)) rotate(180deg);
+                }
+
+                @media (min-width: 701px) and (max-width: 1100px) {
+                    transform: translate(rem(-10px), rem(5px)) rotate(180deg);
+                }
+                @media (min-width: 551px) and (max-width: 700px) {
+                    transform: translate(rem(-10px), rem(3px)) rotate(180deg);
+                }
+
+                @media (min-width: 320px) and (max-width: 550px) {
+                    transform: translate(rem(-10px), 0) rotate(180deg);
+                }
             }
         }
     }

@@ -15,12 +15,13 @@ export const AppHeader = () => {
   const [isSideMenu, setSideMenu] = useState(false)
   const token = localStorage.getItem('user')
   const { width } = useWindowDimensions()
+  const [scrolled, setScrolled] = useState(false)
 
   const menuRef = useRef(null)
   const profileRef = useRef(null)
 
   let [isActive, setIsActive] = useState(false)
-  let homeClassName = (pathname === '/') ? 'active' : 'link page'
+  let homeHeaderClassName = (pathname === '/') ? 'scroll' : ''
   let classHamburgerMenu = (width < 900) ? 'visible' : 'hidden'
   let classNavList = (width < 600) ? 'hidden' : ''
 
@@ -36,6 +37,20 @@ export const AppHeader = () => {
   useEffect(() => {
     document.addEventListener("click", handleProfileClickOutside)
   }, [showProfileMenu])
+
+  useEffect(() => {
+
+    if (pathname === '/' ) {
+        window.addEventListener("scroll", handleScroll)
+    }
+    return () => {
+        window.removeEventListener("scroll", handleScroll)
+    }
+}, [pathname])
+
+const handleScroll = e => {
+  setScrolled(window.scrollY > 10)
+}
 
   const handleSideClickOutside = (e) => {
     if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
@@ -85,7 +100,7 @@ export const AppHeader = () => {
   }
 
   return (
-    <header className="header container flex align-center">
+    <header className={`${scrolled && pathname === '/'}` ? 'header container flex align-center scrolled' : 'header container flex align-center'}>
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
           {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
@@ -101,11 +116,11 @@ export const AppHeader = () => {
       </article>
       <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
 
-        {(<li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
-        </li>)}
+        {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
+        </li> : <span></span>)}
         
         {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
-        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמן מגרש</NavLink>
+        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
         </li>)}
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>

@@ -52,7 +52,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [courtsData, setCourtsData] = useState()
   const { width } = useWindowDimensions()
   const classes = useStyles()
-  const todaysDate = dayjs('2014-08-18T21:11:54')
+  const todaysDate = dayjs().format('DD/MM/YYYY')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [showFailureAlert, setShowFailureAlert] = useState(false)
   const [showMessageAlert, setShowMessageAlert] = useState(false)
@@ -142,7 +142,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       setMessageAlert(validateForm())
       setShowMessageAlert(true)
     }
-    
+
     e.stopPropagation()
     e.preventDefault()
   }
@@ -159,7 +159,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             value={startHour}
             onChange={(e) => handleStartHourChange(e)}
             label="שעת התחלה"
-            Required
+            required
           >
             {courtsData.start_time.map(option => {
               return (
@@ -185,7 +185,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             id="end-hour-select"
             value={endHour}
             onChange={(e) => handleEndHourChange(e)}
-            Required
+            required
           >
             {courtsData.end_time.map(option => {
               return (
@@ -237,7 +237,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       <IconButton
         size="small"
         aria-label="close"
-        color="inherit"
+        color="#F2F6F7"
         onClick={handleCloseAlert}
       >
         <CloseIcon fontSize="small" />
@@ -253,11 +253,18 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
           autoHideDuration={60000}
           onClose={handleCloseAlert}
           action={alertAction}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <Alert
             severity="success"
             onClose={handleCloseAlert}
-            sx={{ width: '100%' }}
+            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            spacing={5}
+            // margin={5}
+            // color="#C9DB39"
+            // backgroundColor="#1d1d1d"
+            variant="filled"
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
             ההזמנה נקלטה בהצלחה</Alert>
         </Snackbar>
@@ -270,6 +277,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       return (
         <Snackbar
           open={true}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
           action={alertAction}
@@ -277,8 +285,11 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
           <Alert
             severity="error"
             onClose={handleCloseAlert}
-            sx={{ width: '100%' }}
-          // autoHideDuration={6000}
+            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            spacing={5}
+            // margin={5}
+            variant="filled"
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
             ההזמנה נכשלה</Alert>
         </Snackbar>
@@ -290,14 +301,19 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       return (
         <Snackbar
           open={true}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           autoHideDuration={6000}
           onClose={handleCloseAlert}
           action={alertAction}
         >
           <Alert
-            severity="error"
+            severity="info"
             onClose={handleCloseAlert}
-            sx={{ width: '100%' }}
+            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            spacing={5}
+            // margin={5}
+            variant="filled"
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
             {messageAlert}</Alert>
         </Snackbar>
@@ -309,7 +325,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
-      <form className="container flex flex-column">
+      <form className="container flex flex-column" onSubmit={handleSubmit}>
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <div className="form-container flex flex-column" dir="rtl">
@@ -323,15 +339,17 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                   {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                       label="תאריך"
-                      inputFormat="MM/DD/YYYY"
+                      inputFormat="DD/MM/YYYY"
                       value={date}
+                      placeholder={todaysDate}
                       onChange={handleChange}
                       renderInput={(params) => <TextField {...params} />}
-                    /></LocalizationProvider>
-                    : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
+                      /></LocalizationProvider>
+                      : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
                       label="תאריך"
-                      inputFormat="MM/DD/YYYY"
-                      value={todaysDate}
+                      inputFormat="DD/MM/YYYY"
+                      value={date}
+                      placeholder={todaysDate}
                       onChange={handleChange}
                       renderInput={(params) => <TextField {...params} />}
                     />
@@ -348,8 +366,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         <input
           className='submit-button'
           type='submit'
-          value='הזמן מגרש'
-          onClick={handleSubmit}
+          value='הזמנת מגרש'
+          // onClick={handleSubmit}
         />
       </form >
     </>

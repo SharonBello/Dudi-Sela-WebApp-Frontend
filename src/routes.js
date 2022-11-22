@@ -7,7 +7,6 @@ import { NewReservation } from './pages/new-reservation/new-reservation.jsx'
 import { UserReservations } from './pages/user-reservations/user-reservations.jsx'
 import { UserProfile } from './pages/user-profile/user-profile.jsx'
 
-
 const routes = [
     {
         path: '/about',
@@ -37,10 +36,6 @@ const routes = [
         path: '/signup',
         component: <Signup />,
     },
-    // {
-    //     path: '/signout',
-    //     component: <Homepage />,
-    // },
     {
         path: '/',
         component: <Homepage />,

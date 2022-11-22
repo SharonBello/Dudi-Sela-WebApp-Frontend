@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ReservationList } from '../../components/reservation-list/reservation-list.jsx'
 import { reservationService } from '../../services/reservation.service.js'
 
 export const UserReservations = () => {
   let [reservations, setReservations] = useState([])
-  const navigate = useNavigate()
   let uid = useSelector((storeState) => storeState.userModule.uid)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
@@ -16,7 +14,6 @@ export const UserReservations = () => {
 
   const getReservationsData = async (uid) => {
     if (loggedUser || uid) {
-      // uid = loggedUser.data.uid
       let reservations = await reservationService.query(uid)
       setReservations(reservations)
       return reservations

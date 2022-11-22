@@ -66,8 +66,12 @@ function handleCredentialResponse(response) {
     signInWithCredential(auth, credential)
         .then((res) => {
             _handleLogin(res.user)
-            // console.log("🚀 ~ file: user.service.js ~ line 135 ~ .then ~ res.user", res.user)
-            document.location.reload('http://localhost:3000/signin')
+            if (process.env.NODE_ENV !== 'production') {
+                document.location.reload('http://localhost:3000/signin')
+            }
+            else {
+                document.location.reload('https://dudi-sela-webapp.onrender.com/signin')
+            }
             
         })
         .catch((error) => {

@@ -54,7 +54,6 @@ export function addReservation(reservation) {
             dispatch(getActionAddReservation(reservation))
         } catch (err) {
             console.error('Error:', err)
-            // showErrorMsg('Reservation was not added')
         }
         if (subscriber) reservationService.unsubscribe(subscriber)
         subscriber = (ev) => {

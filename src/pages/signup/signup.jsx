@@ -16,12 +16,10 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { userService } from '../../services/user.service.js'
-// import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-// import { prefixer } from 'stylis'
 import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
-import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
+import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -35,7 +33,6 @@ export const Signup = () => {
   // Create rtl cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    // stylisPlugins: [prefixer, rtlPlugin],
   })
 
   useEffect(() => {
@@ -49,8 +46,8 @@ export const Signup = () => {
     if (window.google) {
       setGoogleAccounts("signupDiv")
     }
-    dispatch(setLoggedUser())   
-  }, []);
+    dispatch(setLoggedUser())
+  }, [])
 
   function Copyright(props) {
     return (
@@ -77,15 +74,15 @@ export const Signup = () => {
       password: data.get('password'),
     }
     userService.signup(payload)
-    .then((response) => {
-      dispatch(setUserUid(response.data.uid))
-      dispatch(login(payload))
-      dispatch(setLoggedUser())
-      navigate('/')
-    })
-    .catch((error) => {
-      console.error(error)
-    })
+      .then((response) => {
+        dispatch(setUserUid(response.data.uid))
+        dispatch(login(payload))
+        dispatch(setLoggedUser())
+        navigate('/')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -96,7 +93,7 @@ export const Signup = () => {
             <CssBaseline />
             <Box
               sx={{
-                marginTop: 8,
+                marginTop: 25,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -109,7 +106,7 @@ export const Signup = () => {
                 כיף שבאת!
                 קדימה מתחילים!
               </Typography>
-              <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Box component="form" validate='true' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <TextField
@@ -119,6 +116,7 @@ export const Signup = () => {
                       label="כתובת מייל"
                       name="email"
                       autoComplete="email"
+                      autoFocus
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -132,18 +130,35 @@ export const Signup = () => {
                       autoComplete="new-password"
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sx={{
+                    marginTop: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start'
+                  }}>
                     <FormControlLabel
-                      control={<Checkbox value="allowExtraEmails" color="primary" />}
+                      sx={{
+                        padding: 'unset',
+                        margin: 'unset',
+                      }}
+                      control={
+                        <Checkbox
+                          value="allowExtraEmails"
+                          color="primary"
+                          sx={{
+                            padding: 'unset',
+                            margin: 'unset',
+                          }}
+                        />
+                      }
                     />
                     <Grid item>
                       אני מאשר/ת כי קראתי והנני מסכים/ה
-                      <Button onClick={() => setConditionsModal(!conditionsModal)}>
-                        לתקנון האתר ומדיניות הפרטיות
-                      </Button>
-                      {/* </a> */}
                     </Grid>
                   </Grid>
+                  <Button onClick={() => setConditionsModal(!conditionsModal)}>
+                    לתקנון האתר ומדיניות הפרטיות
+                  </Button>
                   {conditionsModal && <section className="conditions-modal">
                     <TermsConditionsModal conditionsModal={conditionsModal} handleClose={handleClose} />
                   </section>}
@@ -156,13 +171,13 @@ export const Signup = () => {
                 >
                   הרשמה
                 </Button>
-                <div id="signupDiv" className="googleSignin flex flex-column">
-                  </div>
+                <div id="signupDiv" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem'}}>
+                </div>
 
                 <Grid container justifyContent="center">
                   <Grid item>
                     כבר רשומים?
-                    <NavLink to="/signin" variant="body2">
+                    <NavLink to="/signin" style={{textDecoration: 'underline'}}>
                       כניסה
                     </NavLink>
                   </Grid>

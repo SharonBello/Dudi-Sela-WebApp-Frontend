@@ -39,18 +39,17 @@ export const AppHeader = () => {
   }, [showProfileMenu])
 
   useEffect(() => {
-
-    if (pathname === '/' ) {
-        window.addEventListener("scroll", handleScroll)
+    if (pathname === '/') {
+      window.addEventListener("scroll", handleScroll)
     }
     return () => {
-        window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("scroll", handleScroll)
     }
-}, [pathname])
+  }, [pathname])
 
-const handleScroll = e => {
-  setScrolled(window.scrollY > 10)
-}
+  const handleScroll = e => {
+    setScrolled(window.scrollY < 200)
+  }
 
   const handleSideClickOutside = (e) => {
     if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
@@ -100,7 +99,9 @@ const handleScroll = e => {
   }
 
   return (
-    <header className={`${scrolled && pathname === '/'}` ? 'header container flex align-center scrolled' : 'header container flex align-center'}>
+    <header className={`header container flex align-center ${(scrolled && pathname === '/') ? 'scrolled' : ''}`}>
+      {/* // <header className={`${scrolled && (pathname === '/')}` ? 'header container flex align-center scrolled' : 'header container flex align-center regular'}> */}
+      {/* <header className="header container flex align-center"> */}
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
           {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
@@ -118,7 +119,7 @@ const handleScroll = e => {
 
         {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
         </li> : <span></span>)}
-        
+
         {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
         </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
         </li>)}
@@ -140,7 +141,7 @@ const handleScroll = e => {
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li> : <span></span>}
       </ul>
-      
+
     </header>
   )
 }

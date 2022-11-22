@@ -110,7 +110,6 @@ export function setLoggedUser() {
         try {
             let user = await userService.getLoggedUser()
             dispatch({ type: 'SET_LOGGED_USER', user })
-            // dispatch({ type: 'SET_USER_UID', user })
         } catch (err) {
             console.error('Cannot load user', err)
         }

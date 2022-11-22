@@ -10,15 +10,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { reservationService } from '../../services/reservation.service'
@@ -27,7 +24,6 @@ import { MenuItem, Select } from '@mui/material'
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import { prefixer } from 'stylis'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
@@ -78,7 +74,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   // Create rtl cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    stylisPlugins: [prefixer, rtlPlugin],
   })
 
   const getCourtsData = async () => {
@@ -296,6 +291,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       )
     }
   }
+
   const renderMessageAlert = () => {
     if (showMessageAlert) {
       return (
@@ -320,6 +316,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       )
     }
   }
+
   return (
     <>
       {renderSuccessAlert()}
@@ -328,7 +325,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       <form className="container flex flex-column" onSubmit={handleSubmit}>
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
-            <div className="form-container flex flex-column" dir="rtl">
+            <div dir="rtl" className="form-container flex flex-column" >
               <Stack spacing={3}>
                 <section className="hours-container flex">
                   {renderStartHourSelect()}

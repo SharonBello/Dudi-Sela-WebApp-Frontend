@@ -6,6 +6,7 @@ export const setGoogleAccounts = (divId) => {
         client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
         callback: userService.handleCredentialResponse
       })
+
       google.accounts.id.renderButton(document.getElementById(divId), {
         type: "standard",
         theme: "filled_black",
@@ -13,5 +14,4 @@ export const setGoogleAccounts = (divId) => {
         text: "כניסה עם גוגל",
         shape: "rectangular",
       })
-
 }

@@ -6,28 +6,22 @@ import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import { useNavigate, NavLink } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-// import rtlPlugin from 'stylis-plugin-rtl'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-// import { prefixer } from 'stylis'
 import { userService } from '../../services/user.service.js'
-import {PatternSharp} from '@mui/icons-material'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
-// import { UserMessages } from "../../components/user-messages/user-messages.jsx"
 
 export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [isLogin, setIsLogin] = useState(false)
-  const [user, setUser] = useState()
 
   const theme = createTheme({
     direction: 'rtl',
@@ -41,7 +35,6 @@ export const Login = () => {
   }, [])
 
   useEffect(() => {
-    /* global google */
     if (window.google) {
       setGoogleAccounts("loginDiv")
     }
@@ -53,7 +46,6 @@ export const Login = () => {
   // Create rtl cache
   const cacheRtl = createCache({
     key: 'muirtl',
-    // stylisPlugins: [prefixer, rtlPlugin],
   })
 
   function RTL(props) {
@@ -123,13 +115,13 @@ export const Login = () => {
                 <Typography component="h1" variant="h5">
                   כיף שחזרתם!
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+                <Box component="form" validate='true' onSubmit={handleSubmit} sx={{ mt: 3 }}>
                   <TextField
                     margin="normal"
                     required
                     fullWidth
                     id="email"
-                    label="אימייל"
+                    label="כתובת מייל"
                     name="email"
                     autoComplete="email"
                     autoFocus
@@ -150,26 +142,24 @@ export const Login = () => {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    {/* {isLogin ? 'Login' : 'Sign in'} */}
                     כניסה לחשבון שלי
                   </Button>
 
-                  <Grid container>
-                    <Grid item xs>
-                      <NavLink to="/" variant="body2">
+                  <Grid container justifyContent="center">
+                    <Grid item xs justifyContent="center">
+                      <NavLink to="/" variant="body2" style={{ textAlign: 'center', justifyContent: 'center', paddingInlineStart: '35%' }}>
                         שכחתי סיסמה
                       </NavLink>
                     </Grid>
                   </Grid>
 
-                  <div id="loginDiv" className="googleSignin flex flex-column">
+                  <div id="loginDiv" className="googleSignin flex flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem'}}>
                   </div>
 
-                  <Grid container>
+                  <Grid container justifyContent="center">
                     <Grid item>
                       חדשים באתר?
-                      <NavLink to="/signup" variant="body2" onClick={onChangePage}>
-                        {/* {isLogin ? 'Don\'t have an account? Sign Up' : 'Already have an account? Login'} */}
+                      <NavLink to="/signup" variant="body2" onClick={onChangePage} style={{textDecoration: 'underline'}}>
                         הרשמו כאן
                       </NavLink>
                     </Grid>

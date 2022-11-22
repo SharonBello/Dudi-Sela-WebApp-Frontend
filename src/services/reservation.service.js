@@ -13,7 +13,6 @@ export const reservationService = {
 }
 
 function getById(reservationId) {
-    // return storageService.get(STORAGE_KEY, reservationId)
     let reservation = httpService.get(`reservation/${reservationId}`)
     return reservation
 }
@@ -42,7 +41,6 @@ async function addNewReservation(uid, data) {
         throw err
     }
 }
-
 
 function subscribe(listener) {
     reservationChannel.addEventListener('message', listener)

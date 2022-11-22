@@ -6,7 +6,7 @@
     top: 0;
     right: 0;
     z-index: 50;
-    
+
     .header {
         // min-width: 100%;
         flex: 1;
@@ -19,15 +19,18 @@
         top: 0;
         right: 0;
         z-index: 50;
-        @media (min-width: 601px) {
-            background-color: transparent;
-        }
-        @media (max-width: 600px) {
-            background-color: $header;
-        }
-        
+        background-color: $header;
+
+        // @media (max-width: 600px) {
+        //     background-color: $header;
+        // }
+
         & .scrolled {
-            background-color: $header;
+            background-color: transparent;
+
+            // @media (min-width: 601px) {
+            //     background-color: transparent;
+            // }
         }
 
         & .logo-hamburger-container {

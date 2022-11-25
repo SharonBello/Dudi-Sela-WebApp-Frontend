@@ -5,11 +5,10 @@
     position: relative;
     z-index: 0;
     margin: 0 auto;
-    min-height: 80vh;
+    max-height: 80vh;
     
     .video {
-        min-height: 70vh;
-        min-height: 80vh;
+        max-height: 80vh;
         min-width: 100%;
         z-index: 0;
         object-fit: cover;

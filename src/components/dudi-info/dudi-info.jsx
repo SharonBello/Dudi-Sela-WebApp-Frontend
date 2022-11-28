@@ -1,37 +1,64 @@
 import React from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTennisBall } from '@fortawesome/react-fontawesome'
+import { NavLink } from "react-router-dom"
+import { CircleMark } from "../../services/svg.service.js"
 
 export const DudiInfo = () => {
   return (
     <div className="dudi-info-wrapper container">
-      <div className="selling-proposition ">
-        <div className="selling-text">
-          <h2>דודי סלע<br></br>מחבט מספר אחת בישראל</h2>
-          <ul className="ul-selling-points">
-            <li><h6>
-              {/* <FontAwesomeIcon icon={faTennisBall} /> */}
-              <strong>שחקן גביע דייוויס ואלוף ישראל</strong></h6>
-              {/* <p>Find high-quality services at every price point. No hourly rates, just project-based pricing.</p> */}
+      <div className="info-grid">
+        <div className="info-text">
+          <h2 className="flex">דודי סלע
+            <span>
+              מחבט מספר אחת בישראל
+            </span>
+          </h2>
+          <ul className="info-points">
+
+            <li className="flex flex-column">
+              <div className="check-mark flex align-center">
+                <CircleMark />
+                <h6>
+                  <strong>שחקן גביע דייוויס ואלוף ישראל</strong>
+                </h6>
+              </div>
+              <p>שחקן נבחרת ישראל בגביע דייוויס בשנים 2005-2019</p>
+              <p>העפלה לחצי גמר גביע דייוויס בשנת 2009</p>
             </li>
 
-            <li><h6>
-              {/* <FontAwesomeIcon icon={faTennisBall} /> */}
-              <strong>מקום שני עולמי במספר זכיות בטורנירי צ'אלנג'ר</strong></h6>
-              {/* <p>Find the right freelancer to begin working on your project within minutes.</p> */}
+            <li className="flex flex-column">
+              <div className="check-mark flex align-center">
+                <CircleMark />
+                <h6>
+                  <strong>מקום שני עולמי במספר זכיות בטורנירי צ'אלנג'ר</strong></h6>
+              </div>
+              <p>23 תארים בסבב המקצועני ליחידים</p>
+              <p>10 תארי סגן ליחידים</p>
+              <p>2 תארי סגן בסבב ה-ATP</p>
             </li>
 
-            <li><h6>
-              {/* <FontAwesomeIcon icon={faTennisBall} /> */}
-              <strong>שמונה פעמים אלוף ישראל</strong></h6>
-              {/* <p>Always know what you'll pay upfront. Your payment isn't released until you approve the work.</p> */}
+            <li className="flex flex-column">
+              <div className="check-mark flex align-center">
+                <CircleMark />
+                <h6>
+                  <strong>שמונה פעמים אלוף ישראל</strong></h6>
+              </div>
+              <p>תואר אלוף ישראל לבוגרים בשנים 2006, 2009, 2011, 2013–2017</p>
+              <p>מדורג במקום הראשון מ 2016</p>
             </li>
-            <li><h6>
-              {/* <FontAwesomeIcon icon={faTennisBall} /> */}
-              <strong>דירוג שיא - 19</strong></h6>
-              {/* <p>Questions? Our round-the-clock support team is available to help anytime, anywhere.</p> */}
+
+            <li className="flex flex-column">
+              <div className="check-mark flex align-center">
+                <CircleMark />
+                <h6>
+                  <strong>דירוג עולמי - שיא - 29</strong></h6>
+              </div>
+              <p>שלישי בכל הזמנים בין הישראלים בדירוג לגברים יחידים</p>
             </li>
           </ul>
+          <button><NavLink to="/about">
+            למידע נוסף
+          </NavLink>
+          </button>
         </div>
         <div className="dudi-img">
           <img srcSet="https://res.cloudinary.com/primap/image/upload/v1669411761/General/Dudi%20Sela/1380675_10151713936454930_716247100_n_p4lhii.jpg" alt="" />

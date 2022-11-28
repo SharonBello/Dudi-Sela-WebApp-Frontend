@@ -8,8 +8,13 @@
     }
     
     .qa {
-        width: 80%;
+        width: 100%;
         margin-block: 0 5%;
+        
+        @media (min-width: 1100px) {
+            width: 80%;
+
+        }
 
         @mixin states($color: $font) {
             border-color: $accent5;
@@ -47,8 +52,8 @@
                 color: $header;
                 line-height: 1.5;
                 // margin: 10px 0 0;
-                font-size: calc(1rem + 0.8vw);
-                padding: 0 8% 2% 12%;
+                font-size: calc(1rem + 0.5vmin);
+                padding: 0 5% 4% 8%;
                 white-space: pre-wrap;
             }
 
@@ -60,9 +65,9 @@
 
         summary {
             outline: none;
-            font-size: calc(1rem + 1vw);
-            font-weight: 500;
-            padding: 1.5rem;
+            font-size: calc(0.8rem + 0.8vmin);
+            font-weight: 600;
+            padding: 1.5rem 0 1rem 1rem;
             text-indent: 1rem;
 
             &:selection {

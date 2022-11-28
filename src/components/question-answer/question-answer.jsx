@@ -4,95 +4,52 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 
 export const QuestionAnswer = () => {
+
+  let questionAnswer = [
+    {
+      question: "איך מזמינים מגרש?",
+      answer: "1. נרשמים או נכנסים לחשבון: \n2.לוחצים על הזמנת מגרש \n3. בוחרים תאריך ושעה \n4. בוחרים את המגרש הרצוי \n5. לוחצים על הזמנת מגרש \n6. ממלאים את פרטי התשלום \n7. ממתינים לאישור מנהל המגרש \n8. רואים את ההזמנה החדשה בלחיצה על ההזמנות שלי"
+    },
+    {
+      question: "כמה זה עולה?",
+      answer: `מחיר השכרת מגרש הוא 120 שקלים לשעה. \nיש הנחה קבועה למנויי מועדון הספורט`
+    },
+    {
+      question: "איך אפשר לשלם?",
+      answer: `ניתן לשלם בכרטיס אשראי בצורה מאובטחת באתר, דרך פייבוקס בקישור בדף התשלום או ישירות מול מנהל המועדון`
+    },
+    {
+      question: "אילו סוגי מרגשים מוצעים להשכרה?",
+      answer: "ישנם שישה מגרשים טניס בתקינה הגבוהה ביותר בישראל"
+    },
+    {
+      question: "מדיניות ביטולים והחזרים",
+      answer: "ניתן לבטל הזמנת מגרש ולקבל החזר מלא עד כשעתיים לפני מועד ההשכרה. \nבמידה ואינכם יכולים להגיע בזמן שקבעתם ולא ביטלתם בזמן, תחויבו מחיר מלא של השכרת המגרש."
+    },
+    {
+      question: "איך מזמינים אימון אישי",
+      answer: "פשוט ניתן לפנות למנהל המועדון בוואטסאפ"
+    },
+    {
+      question: "איך נרשמים לאקדמיה",
+      answer: "פשוט ניתן לפנות למנהל המועדון בוואטסאפ או לשלוח מייל"
+    },
+  ]
+
   return (
     <>
       <h2>
-        שאלות ותשובות
+        שאלות נפוצות
       </h2>
-      <div className="qa">
-
-        <details className="default square">
-          <summary>איך מזמינים מגרש?<span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p>
-            1. נרשמים או נכנסים לחשבון בלינק הזה:
-            <NavLink to="/signin"> כניסה/הרשמה</NavLink>
-            <br />
-            2. לוחצים על
-            <NavLink to="/user-reservations/new-reservation"> הזמנת מגרש</NavLink>
-            <br />
-            3. בוחרים תאריך ושעה
-            <br />
-            4. בוחרים את המגרש הרצוי
-            <br />
-            5. לוחצים על הזמנת מגרש
-            <br />
-            6. ממלאים את פרטי התשלום
-            <br />
-            7. ממתינים לאישור מנהל המגרש
-            <br />
-            8. רואים את ההזמנה החדשה בלחיצה על
-            <NavLink to="/user-reservations"> ההזמנות שלי</NavLink>
-          </p>
-        </details>
-
-        <details className="primary square">
-          <summary>כמה זה עולה?<span className="open-detail"></span><span className="close-detail"></span></summary>
-          <p>מחיר השכרת מגרש הוא 120 שקלים לשעה.
-            <br />
-            יש הנחה קבועה למנויי מועדון הספורט
-          </p>
-        </details>
-        <details className="success">
-          <summary>איך אפשר לשלם? <span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p className='container'>ניתן לשלם בכרטיס אשראי בצורה מאובטחת באתר,
-            דרך פייבוקס בקישור בדף התשלום
-            או ישירות מול מנהל המועדון
-            <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
-          </p>
-        </details>
-        <details className="success">
-          <summary>אילו סוגי מרגשים מוצעים להשכרה? <span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p className='container'>
-            ישנם שישה מגרשים טניס בתקינה הגבוהה ביותר בישראל
-          </p>
-        </details>
-        <details className="success">
-          <summary>מדיניות ביטולים והחזרים <span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p className='container'>
-            ניתן לבטל הזמנת מגרש ולקבל החזר מלא עד כשעתיים לפני מועד ההשכרה.
-            במידה ואינכם יכולים להגיע בזמן שקבעתם ולא ביטלתם בזמן, תחויבו מחיר מלא של השכרת המגרש.
-          </p>
-        </details>
-        <details className="success">
-          <summary>איך מזמינים אימון אישי<span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p className='container'>
-            פשוט ניתן לפנות למנהל המועדון בוואטסאפ
-            <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
-          </p>
-        </details>
-        <details className="success">
-          <summary>איך נרשמים לאקדמיה<span className="open-detail"></span>
-            <span className="close-detail"></span></summary>
-          <p className='container'>
-            פשוט ניתן לפנות למנהל המועדון בוואטסאפ
-            <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
-              <FontAwesomeIcon icon={faWhatsapp} />
-            </a>
-            <br />
-            או למלא את הפרטים כאן
-            ונחזור אליכם בהקדם
-          </p>
-        </details>
-      </div>
+      <div className="qa container">
+      {questionAnswer.map((qa, index) =>
+        <div className="qa-item" key={index}>
+          <details>
+            <summary>{qa.question}</summary>
+            <p>{qa.answer}</p>
+          </details>
+        </div>)}
+    </div>
     </>
   )
 }

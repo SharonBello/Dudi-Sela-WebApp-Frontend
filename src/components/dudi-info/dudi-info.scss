@@ -1,0 +1,168 @@
+.dudi-info-wrapper {
+    width: 100%;
+    background-color: $header;
+    padding-top: rem(96px);
+    padding-bottom: rem(96px);
+    grid-column: 1/-1;
+
+    .selling-proposition {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        grid-template-areas: "selling-text selling-img";
+        vertical-align: middle;
+        align-items: center;
+    }
+
+    .selling-text {
+        grid-column: 1 / 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: rem(16px);
+        padding: 0;
+        padding-right: 5%;
+        margin: 0;
+        word-break: break-word;
+        line-height: 120%;
+
+        .ul-selling-points {
+            display: flex;
+            flex-direction: column;
+            padding: 0 4% 0 0;
+            gap: 20px;
+        }
+
+        h2 {
+            line-height: 120%;
+            font-size: rem(32px);
+            display: block;
+            margin-block-end: 0.5em;
+            font-weight: bold;
+            color: $font;
+        }
+
+        li {
+            &:last-child {
+                padding-bottom: 0;
+            }
+
+            h6 {
+                display: flex;
+                align-items: flex-start;
+                font-size: rem(18px);
+                color: $font;
+                padding: 0;
+                margin: 0;
+                line-height: 24px;
+
+                .check-icon {
+                    margin-bottom: rem(10px);
+                    margin-right: rem(10px);
+                }
+            }
+
+            & p {
+                color: $font;
+                line-height: 24px;
+                font-size: calc(14px + 0.5vh);
+            }
+
+        }
+    }
+}
+
+@media (min-width: 320px) and (max-width: 744px) {
+    .dudi-info-wrapper .selling-proposition {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-areas: "selling-text";
+        vertical-align: middle;
+        align-items: center;
+        text-align: center;
+    }
+
+    .dudi-info-wrapper .selling-text {
+        padding-right: 0;
+
+        h2 {
+            text-align: center;
+            margin: 0 auto;
+            line-height: calc(1rem + 1vh);
+            font-size: calc(16px + 1vh);
+        }
+
+        li {
+            word-break: normal;
+
+            h6 {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: calc(14px + 0.5vh);
+                color: #404145;
+                padding: 0;
+                margin: 0;
+                margin-right: rem(20px);
+                margin-left: rem(20px);
+                line-height: calc(1rem + 1vh);
+            }
+        }
+
+        p {
+            text-align: center;
+            line-height: calc(1rem + 1vh);
+        }
+    }
+
+    .selling-img {
+        min-height: rem(300px);
+        margin: rem(20px) 0;
+        margin-right: rem(20px);
+        margin-left: rem(20px);
+    }
+}
+
+@media (min-width: 745px) and (max-width: 1024px) {
+    .dudi-info-wrapper .selling-proposition {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-areas: "selling-text";
+        vertical-align: middle;
+        align-items: center;
+    }
+
+    .dudi-info-wrapper .selling-text {
+        padding-right: 0;
+
+        h2 {
+            text-align: center;
+            margin: 0 auto;
+            line-height: calc(1.1rem + 1vh);
+        }
+
+        li {
+            word-break: normal;
+
+            h6 {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: #404145;
+                padding: 0;
+                margin: 0;
+                line-height: calc(1.1rem + 1vh);
+                font-size: calc(14px + 0.8vh);
+            }
+        }
+
+        p {
+            text-align: center;
+            line-height: calc(1rem + 1vh);
+            font-size: calc(14px + 0.5vh);
+        }
+    }
+
+    .selling-img {
+        display: none;
+    }
+}

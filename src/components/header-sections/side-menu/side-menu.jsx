@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom'
 // import { loadGigs, setFilter } from '../../store/actions/gig.actions.js'
 import { useSelector, useDispatch } from 'react-redux'
-import { signout } from '../../store/actions/user.actions.js'
+import { signout } from '../../../store/actions/user.actions.js'
 
 export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout }) => {
   const { loggedUser } = useSelector((storeState) => storeState.userModule)
@@ -40,10 +40,14 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
           {!user &&
             <ul className='user-sign-side-btn clean-list flex flex-column'>
               <li>
-                <button className="open-popup-side-menu" onClick={() => { openLogin() }}>כניסה</button>
+                <a href="/signin" className="open-popup-side-menu">
+                  כניסה
+                </a>
               </li>
               <li>
-                <button className="open-popup-side-menu" onClick={() => { openJoin() }}>הרשמה</button>
+                <a href="/signup" className="open-popup-side-menu">
+                  הרשמה
+                </a>
               </li>
             </ul>}
 

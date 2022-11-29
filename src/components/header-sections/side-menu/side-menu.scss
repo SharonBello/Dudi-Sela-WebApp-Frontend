@@ -1,9 +1,8 @@
 @media (max-width: 900px) {
-
     .side-bar {
         height: 100%;
         background-color: $header;
-        z-index: 20;
+        z-index: 9999;
         width: 60%;
         position: fixed;
         top: 0;
@@ -45,7 +44,7 @@
             & .user-sign-side-btn {
                 margin-block-start: 40px;
                 padding-inline-start: rem(20px);
-                gap: rem(20px);
+                gap: rem(50px);
                 align-items: flex-start;
             }
 

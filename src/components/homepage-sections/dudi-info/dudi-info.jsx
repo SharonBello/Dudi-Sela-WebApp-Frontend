@@ -1,6 +1,6 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import { CircleMark } from "../../services/svg.service.js"
+import { CircleMark } from "../../../services/svg.service.js"
 
 export const DudiInfo = () => {
   return (

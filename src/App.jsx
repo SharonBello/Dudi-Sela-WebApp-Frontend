@@ -1,7 +1,7 @@
 import React from 'react'
 import routes from './routes.js'
 import { Routes, Route } from 'react-router'
-import { AppHeader } from './components/app-header/app-header.jsx'
+import { AppHeader } from './components/header-sections/app-header/app-header.jsx'
 import { AppFooter } from './components/app-footer/app-footer.jsx'
 import { SnackbarProvider } from 'notistack';
 import { useDispatch } from 'react-redux'

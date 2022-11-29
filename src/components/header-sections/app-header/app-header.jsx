@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { signout, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { signout, setLoggedUser, setUserUid } from '../../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
-import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
-import { userService } from '../../services/user.service.js'
+import { useWindowDimensions } from '../../../hooks/useWindowDimensions.jsx'
+import { userService } from '../../../services/user.service.js'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()

@@ -21,11 +21,13 @@
 
 //Components
 @import '../src/components/app-footer/app-footer.scss';
-@import '../src/components/app-header/app-header.scss';
-@import '../src/components/profile-menu/profile-menu.scss';
-@import '../src/components/side-menu/side-menu.scss';
-@import '../src/components/home-hero/home-hero.scss';
+@import '../src/components/header-sections/app-header/app-header.scss';
+@import '../src/components/header-sections/profile-menu/profile-menu.scss';
+@import '../src/components/header-sections/side-menu/side-menu.scss';
+@import '../src/components/homepage-sections/home-hero/home-hero.scss';
 @import '../src/components/reservation-list/reservation-list.scss';
-@import '../src/components/question-answer/question-answer.scss';
-@import '../src/components/testimonials/testimonials.scss';
-@import '../src/components/dudi-info/dudi-info.scss';
+@import '../src/components/homepage-sections/question-answer/question-answer.scss';
+@import '../src/components/homepage-sections/testimonials/testimonials.scss';
+@import '../src/components/homepage-sections/dudi-info/dudi-info.scss';
+@import '../src/components/homepage-sections/coaches/coaches.scss';
+@import '../src/components/homepage-sections/coaches/coaches-preview/coaches-preview.scss';

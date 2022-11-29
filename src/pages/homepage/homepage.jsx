@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import { HomeHero } from '../../components/home-hero/home-hero.jsx'
-import { QuestionAnswer } from '../../components/question-answer/question-answer.jsx'
+import { HomeHero } from '../../components/homepage-sections/home-hero/home-hero.jsx'
+import { QuestionAnswer } from '../../components/homepage-sections/question-answer/question-answer.jsx'
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
-import { Testimonials } from '../../components/testimonials/testimonials.jsx'
-import { DudiInfo } from '../../components/dudi-info/dudi-info.jsx'
+import { Testimonials } from '../../components/homepage-sections/testimonials/testimonials.jsx'
+import { DudiInfo } from '../../components/homepage-sections/dudi-info/dudi-info.jsx'
+import { Coaches } from '../../components/homepage-sections/coaches/coaches.jsx'
 
 export const Homepage = () => {
   const { width } = useWindowDimensions()
@@ -18,6 +19,7 @@ export const Homepage = () => {
       <section className="home-hero">
         <HomeHero />
       </section>
+      <Coaches />
       <DudiInfo />
        <section className="FAO-container container flex flex-column align-center">
       <QuestionAnswer/>

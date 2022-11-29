@@ -1,5 +1,5 @@
 .app-header-container {
-    min-width: 100vw;
+    width: 100vw;
     flex: 1;
     // background-color: transparent;
     position: absolute;
@@ -13,12 +13,12 @@
         margin: 0;
         max-width: 100%;
         padding-block: calc(0.4vw + 0.4vh + 0.6vmin);
-        min-width: 100vw;
+        // min-width: 100vw;
         flex: 1;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 50;
+        // position: fixed;
+        // top: 0;
+        // right: 0;
+        // z-index: 50;
         background-color: $header;
 
         // @media (max-width: 600px) {

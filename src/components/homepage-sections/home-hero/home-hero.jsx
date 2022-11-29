@@ -19,7 +19,7 @@ export const HomeHero = () => {
                 autoPlay={true}
                 muted={true}
                 loop={true}
-                height="80vh"
+                height="70vh"
                 width="100%"
             /> */}
             <img src="https://res.cloudinary.com/primap/image/upload/v1667564825/General/Dudi%20Sela/kirill-zharkiy-ItKtQ-OaIzQ-unsplash_s8fipb.jpg" className="video" alt='' />

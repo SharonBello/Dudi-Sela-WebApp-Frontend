@@ -24,7 +24,7 @@ export const UserReservations = () => {
     <section className="reservations-app-container">
       <div>
         <div className="reservations-preview-main-wrapper container">
-          <div className="reservations-list-container flex flex-column">
+          <div className="reservations-list-container flex-column">
             <ReservationList reservations={reservations} />
           </div>
         </div>

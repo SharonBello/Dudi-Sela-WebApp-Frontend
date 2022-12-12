@@ -41,7 +41,7 @@ export const ReservationList = ({ reservations }) => {
     return (
         <section className="list-of-reservations-container container">
             <div className='reservation-totals flex justify-between'>
-                <div className='reservation-Total-order flex flex-column align-center'>
+                <div className='reservation-Total-order flex-column align-center'>
                     <h2 className='reservation-total-amount'>סיכום הזמנות<br></br>מגרשים</h2>
                     <hr className='gentle-line'></hr>
                     <p className='qty-total-order'>כמות: {qtyTotalReservations}</p>
@@ -49,7 +49,7 @@ export const ReservationList = ({ reservations }) => {
 
                 <hr width="1" size="100"></hr>
 
-                <div className='reservation-Total-order flex flex-column align-center'>
+                <div className='reservation-Total-order flex-column align-center'>
                     <h2 className='reservation-total-amount'>הזמנות שנת<br></br>{year}</h2>
                     <hr className='gentle-line'></hr>
                     <p className='qty-total-order'>כמות: {qtyYearReservations}
@@ -58,7 +58,7 @@ export const ReservationList = ({ reservations }) => {
 
                 <hr width="1" size="100"></hr>
 
-                <div className='reservation-Total-order flex flex-column align-center'>
+                <div className='reservation-Total-order flex-column align-center'>
                     <h2 className='reservation-total-amount'>הזמנות חודש<br></br>{month}</h2>
                     <hr className='gentle-line'></hr>
                     <p className='qty-total-order'>כמות: {qtyMonthlyReservations}</p>

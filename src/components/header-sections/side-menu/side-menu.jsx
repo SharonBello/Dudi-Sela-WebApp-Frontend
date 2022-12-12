@@ -27,7 +27,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
 
   return (
     <div className={`background-backdrop overlay ${menuOpen ? 'visible' : ''}`}>
-      <section className={`side-bar flex flex-column ${className}`} >
+      <section className={`side-bar flex-column ${className}`} >
         <div className="menu-header">
           <div className="logo-sidemenu-container flex">
             <NavLink to="/" className="site-sidemenu-logo">
@@ -38,16 +38,16 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
           </div>
 
           {!user &&
-            <ul className='user-sign-side-btn clean-list flex flex-column'>
+            <ul className='user-sign-side-btn clean-list flex-column'>
               <li>
-                <a href="/signin" className="open-popup-side-menu">
+                <NavLink to="/signin" className="open-popup-side-menu">
                   כניסה
-                </a>
+                </NavLink>
               </li>
               <li>
-                <a href="/signup" className="open-popup-side-menu">
+                <NavLink to="/signup" className="open-popup-side-menu">
                   הרשמה
-                </a>
+                </NavLink>
               </li>
             </ul>}
 
@@ -56,7 +56,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
         </div>
 
         <nav className='menu-nav'>
-          <ul className='side-menu-profile clean-list flex flex-column'>
+          <ul className='side-menu-profile clean-list flex-column'>
             <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
 
             {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}

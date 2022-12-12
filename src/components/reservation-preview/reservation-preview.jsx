@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router"
+import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -67,24 +68,24 @@ export const ReservationPreview = ({ item }) => {
                             <tr className="table-action-cell">
                                 <td className="table-cell-btn">
                                     {isEditable ? <button className="table-btn" onClick={onEditItem}>
-                                        <a href='/user-reservations/edit-reservation/:reservationId'>
+                                        <NavLink to='/user-reservations/edit-reservation/:reservationId'>
                                             <FontAwesomeIcon icon={faPenToSquare} />
-                                        </a>
+                                        </NavLink>
                                     </button> : <button className="table-btn" disabled>
-                                        <a href='/user-reservations/edit-reservation/:reservationId' disabled>
+                                        <NavLink to='/user-reservations/edit-reservation/:reservationId' disabled>
                                             <FontAwesomeIcon icon={faPenToSquare} />
-                                        </a>
+                                        </NavLink>
                                     </button>}
                                 </td>
                                 <td className="table-cell-btn">
                                     {isCancelable ? <button className="table-btn" onClick={onCancelItem}>
-                                        <a href='/user-reservations/'>
+                                        <NavLink to='/user-reservations/'>
                                             <FontAwesomeIcon icon={faTrashAlt} />
-                                        </a>
+                                        </NavLink>
                                     </button> : <button className="table-btn" disabled>
-                                        <a href='/user-reservations/'>
+                                        <NavLink to='/user-reservations/'>
                                             <FontAwesomeIcon icon={faTrashAlt} />
-                                        </a>
+                                        </NavLink>
                                     </button>}
                                 </td>
                             </tr>

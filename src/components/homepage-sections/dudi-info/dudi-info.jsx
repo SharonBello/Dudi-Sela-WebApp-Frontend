@@ -14,7 +14,7 @@ export const DudiInfo = () => {
           </h2>
           <ul className="info-points">
 
-            <li className="flex flex-column">
+            <li className="flex-column">
               <div className="check-mark flex align-center">
                 <CircleMark />
                 <h6>
@@ -25,7 +25,7 @@ export const DudiInfo = () => {
               <p>העפלה לחצי גמר גביע דייוויס בשנת 2009</p>
             </li>
 
-            <li className="flex flex-column">
+            <li className="flex-column">
               <div className="check-mark flex align-center">
                 <CircleMark />
                 <h6>
@@ -36,7 +36,7 @@ export const DudiInfo = () => {
               <p>2 תארי סגן בסבב ה-ATP</p>
             </li>
 
-            <li className="flex flex-column">
+            <li className="flex-column">
               <div className="check-mark flex align-center">
                 <CircleMark />
                 <h6>
@@ -46,7 +46,7 @@ export const DudiInfo = () => {
               <p>מדורג במקום הראשון מ 2016</p>
             </li>
 
-            <li className="flex flex-column">
+            <li className="flex-column">
               <div className="check-mark flex align-center">
                 <CircleMark />
                 <h6>

@@ -17,7 +17,6 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
-const STORAGE_KEY_LOGGED = 'loggedUser'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -89,7 +88,7 @@ export const Login = () => {
   }
 
   return (
-    <main className="login-sign-up-container container flex flex-column">
+    <main className="login-sign-up-container container flex-column">
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
           <div dir="rtl">
@@ -145,7 +144,7 @@ export const Login = () => {
                     </Grid>
                   </Grid>
 
-                  <div id="loginDiv" className="googleSignin flex flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem'}}>
+                  <div id="loginDiv" className="googleSignin flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem'}}>
                   </div>
 
                   <Grid container justifyContent="center">

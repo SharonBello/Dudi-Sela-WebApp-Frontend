@@ -322,10 +322,10 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
-      <form className="container flex flex-column" onSubmit={handleSubmit}>
+      <form className="container flex-column" onSubmit={handleSubmit}>
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
-            <div dir="rtl" className="form-container flex flex-column" >
+            <div dir="rtl" className="form-container flex-column" >
               <Stack spacing={3}>
                 <section className="hours-container flex">
                   {renderStartHourSelect()}
@@ -352,7 +352,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                     />
                     </LocalizationProvider>}
                 </section>
-                <section className="court-number-section flex flex-column">
+                <section className="court-number-section flex-column">
                   <label>מספר מגרש</label>
                   {renderCourtNumberSelect()}
                 </section>

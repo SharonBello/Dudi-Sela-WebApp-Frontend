@@ -1,7 +1,7 @@
 const initialState = {
     users: [],
     uid: null,
-    watchedUser: null,
+    // watchedUser: null,
     loggedUser: null,
 }
 

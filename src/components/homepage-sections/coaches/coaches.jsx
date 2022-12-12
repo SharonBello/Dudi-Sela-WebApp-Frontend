@@ -1,4 +1,5 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
@@ -17,11 +18,11 @@ export const Coaches = ({coaches}) => {
             coach={coach}
           />
         )}
-        <li className="last-li flex flex-column">
+        <li className="last-li flex-column">
           <div>
             <h3>רוצים לקבוע אימון אישי?</h3>
             {!loggedUser ?
-              <a href="/signup" className="open-popup-join">כנסו לחשבון</a> : <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
+              <NavLink to="/signup" className="open-popup-join">כנסו לחשבון</NavLink> : <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
                 שליחת הודעה<FontAwesomeIcon icon={faWhatsapp} />
               </a>}
           </div>

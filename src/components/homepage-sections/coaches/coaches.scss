@@ -1,5 +1,5 @@
 .coaches-container {
-    padding: rem(45px) 0;
+    padding-block: rem(45px);
     position: relative;
     background-color: $background;
 
@@ -16,16 +16,25 @@
         // grid-auto-flow: row dense;
         // grid-auto-columns: minmax(1fr 300px);
         // grid-auto-rows: minmax(275px 1fr);
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+        align-items: center;
+        justify-content: center;
         gap: 15px 15px;
         grid-template-areas:
-            "dudi-sela yoav-ben-zvi yoav-shav"
-            "someone1 someone2 last-li";
+        "dudi-sela yoav-ben-zvi yoav-shav"
+        "someone1 someone2 last-li";
+        
+        @media (min-width: 650px) and (max-width: 90px) {
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+
+            }
 
         li {
             max-width: 100%;
-            aspect-ratio: 1 / 1.4;
+            aspect-ratio: 1 / 1.2 !important;
 
             &.slide {
                 max-width: 100%;
@@ -38,13 +47,21 @@
                 overflow: hidden;
 
                 .coach-legends {
-                    font-size: calc(1rem + 1vw);
+                    // font-size: calc(1rem + 0.8vw);
+                    // font-size: 2.8vw;
                     font-weight: 400;
+                    font-size: clamp(1rem, 1vw, 1.25rem);
                     position: absolute;
                     color: $font;
                     padding: rem(16px);
                     cursor: pointer;
                     min-width: 100%;
+                    
+                    span {
+                        font-size: 1.8vw;
+                        font-size: clamp(0.5rem, 0.8vw, 1rem);
+
+                    }
                 }
 
                 img {
@@ -60,8 +77,6 @@
                 }
             }
         }
-
-
     }
 }
 
@@ -86,7 +101,7 @@
         border: 1px solid transparent;
         border-radius: 4px;
         cursor: pointer;
-        font-size: calc(0.8rem + 0.8vw);
+        // font-size: calc(0.8rem + 0.8vw);
         font-weight: 600;
         padding: rem(12px) rem(24px);
         transition: 70ms cubic-bezier(.75, 0, .25, 1);

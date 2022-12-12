@@ -37,8 +37,11 @@ export const CoachesPreview = (props) => {
         <>
             <li className={`slide ${props.coach.latinName}`}
                 onClick={() => openCoachDetails()}>
-                <p className="coach-legends">{props.coach.name}<br></br>
-                    {props.coach.legends}</p>
+                <p className="coach-legends flex-column">{props.coach.name}
+                    <span>
+                        {props.coach.legends}
+                    </span>
+                </p>
                 <img alt={props.coach.profession} src={props.coach.img} />
             </li>
         </>

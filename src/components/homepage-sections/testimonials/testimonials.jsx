@@ -45,7 +45,7 @@ export const Testimonials = () => {
   return (
     <section className="slider-container container">
       <div className="slider">
-        <div className="slider-content flex flex-column">
+        <div className="slider-content flex-column">
           <blockquote>{slides[currentIndex].quote}
           </blockquote>
 

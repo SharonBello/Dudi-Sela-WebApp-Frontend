@@ -15,7 +15,7 @@ export const AppFooter = () => {
               <li><p>כתובתינו:<br />חיים לבנון 60, תל-אביב</p>
                 נווטו אלינו ב-<a href='https://ul.waze.com/ul?place=ChIJI-no_m9JHRURWDitqXYq95c&ll=32.11617920%2C34.80226590&navigate=yes&utm_campaign=default&utm_source=waze_website&utm_medium=lm_share_location' target="_blank" rel="noreferrer"><FontAwesomeIcon icon={faWaze} /></a>
               </li>
-              <li><NavLink to="/user-reservation/new-reservation">הזמנת מגרשים</NavLink></li>
+              {/* <li><NavLink to="/user-reservation/new-reservation">הזמנת מגרשים</NavLink></li> */}
               <li><NavLink to="/about">על האקדמיה</NavLink></li>
             </ul>
           </div>
@@ -31,7 +31,7 @@ export const AppFooter = () => {
                 </a>
               </li>
               <li>
-                <a href="tel:0523782815" target="_blank" rel="noreferrer">
+                <a href="tel:972523782815" target="_blank" rel="noreferrer">
                   התקשרו אלינו<FontAwesomeIcon icon={faPhone} /></a>
               </li>
 

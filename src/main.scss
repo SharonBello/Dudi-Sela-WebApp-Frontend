@@ -12,6 +12,8 @@
 //Pages
 @import '../src/pages/homepage/homepage.scss';
 @import '../src/pages/about/about.scss';
+@import '../src/pages/learn-tennis/learntennis.scss';
+@import '../src/pages/contact-us/contact-us.scss';
 @import '../src/pages/signup/signup.scss';
 @import '../src/pages/edit-reservation/edit-reservation.scss';
 @import '../src/pages/login/login.scss';
@@ -24,6 +26,7 @@
 @import '../src/components/header-sections/app-header/app-header.scss';
 @import '../src/components/header-sections/profile-menu/profile-menu.scss';
 @import '../src/components/header-sections/side-menu/side-menu.scss';
+@import '../src/components/homepage-sections/childrenpractice/childrenpractice.scss';
 @import '../src/components/homepage-sections/home-hero/home-hero.scss';
 @import '../src/components/reservation-list/reservation-list.scss';
 @import '../src/components/homepage-sections/question-answer/question-answer.scss';

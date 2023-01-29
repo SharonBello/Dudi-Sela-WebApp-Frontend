@@ -117,16 +117,24 @@ export const AppHeader = () => {
       </article>
       <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
 
-        {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
+        {/* {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
         </li> : <span></span>)}
 
         {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
         </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
-        </li>)}
+        </li>)} */}
+
+
+        <li><NavLink to={`/learntennis`} onClick={handleClick} className="link-page">לימוד טניס</NavLink>
+        </li>
+
+        <li><NavLink to={`/contact`} onClick={handleClick} className="link-page">צרו קשר</NavLink>
+        </li>
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
         </li>
 
+{/*
         <li>
           {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
           <div className="avatar-container">
@@ -139,7 +147,8 @@ export const AppHeader = () => {
         </li>
 
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
-        </li> : <span></span>}
+        </li>
+        : <span></span>} */}
       </ul>
 
     </header>

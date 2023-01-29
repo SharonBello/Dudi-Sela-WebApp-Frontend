@@ -57,14 +57,15 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
 
         <nav className='menu-nav'>
           <ul className='side-menu-profile clean-list flex-column'>
-            <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
+          <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
+          <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
 
             {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}
 
-            {loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="sidebar-item">הזמנת מגרש</NavLink></li> : <span></span>}
+            {/* {loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="sidebar-item">הזמנת מגרש</NavLink></li> : <span></span>}
 
             {loggedUser ? <li><NavLink to={'/user-reservations'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
-            </li> : <span></span>}
+            </li> : <span></span>} */}
 
             <li>
               <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" className="sidebar-item">צור קשר

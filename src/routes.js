@@ -6,11 +6,21 @@ import { EditReservation } from './pages/edit-reservation/edit-reservation.jsx'
 import { NewReservation } from './pages/new-reservation/new-reservation.jsx'
 import { UserReservations } from './pages/user-reservations/user-reservations.jsx'
 import { UserProfile } from './pages/user-profile/user-profile.jsx'
+import { LearnTennis } from './pages/learn-tennis/learntennis.jsx'
+import { ContactUs } from './pages/contact-us/contact-us.jsx'
 
 const routes = [
     {
         path: '/about',
-        component: <About />,
+        component: <Homepage />,
+    },
+    {
+        path: '/contact',
+        component: <ContactUs />,
+    },
+    {
+        path: '/learntennis',
+        component: <LearnTennis />,
     },
     {
         path: '/user-reservations/edit-reservation/:reservationId',

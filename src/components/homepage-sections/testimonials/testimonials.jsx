@@ -14,8 +14,8 @@ export const Testimonials = () => {
     {
       elementName: 'personal-training',
       quote: `חווית אימון אישי עם בכירי מאמני ישראל.
-      היו לי כבר הרבה מאוד אימונים אישיים במועדוני טניס אחרים ופשוט אין מה להשוות מבחינה רמה. 
-      התאמת האימון בצורה מושלמת לסגנון של השחקן עם טכניקות מדויקות לתרגול על מנת להשיג תנועה מושלמת ויעילה. לכל מי שרוצה להקפיץ את רמת הטניס שלו, 
+      היו לי כבר הרבה מאוד אימונים אישיים במועדוני טניס אחרים ופשוט אין מה להשוות מבחינה רמה.
+      התאמת האימון בצורה מושלמת לסגנון של השחקן עם טכניקות מדויקות לתרגול על מנת להשיג תנועה מושלמת ויעילה. לכל מי שרוצה להקפיץ את רמת הטניס שלו,
       אני ממליץ בחום לנסות אימונים אישיים`,
       name: '--דור ינאי',
       img: 'https://res.cloudinary.com/primap/image/upload/v1669392548/General/Dudi%20Sela/1_3_tnz7rj.jpg'
@@ -26,12 +26,12 @@ export const Testimonials = () => {
       name: '--שחר כהן',
       img: 'https://res.cloudinary.com/primap/image/upload/v1669388589/General/Dudi%20Sela/pexels-rodnae-productions-8224537_pcqgk5.jpg'
     },
-    {
-      elementName: 'customer',
-      quote: 'תהליך הזמנת המגרשים באתר האקדמיה של דודי סלע נעשה בקלות ובמהירות. המגרשים נקיים, מסודרים ומצויינים ברמה גבוהה מאוד. שירות לקוחות מהיר ואדיב ויש גם הנחה למנויים. מומלץ בחום!',
-      name: '--לוי לוי',
-      img: 'https://res.cloudinary.com/primap/image/upload/v1669400699/General/Dudi%20Sela/pexels-blue-arauz-7386780_e69ymd.jpg'
-    },
+    // {
+    //   elementName: 'customer',
+    //   quote: 'תהליך הזמנת המגרשים באתר האקדמיה של דודי סלע נעשה בקלות ובמהירות. המגרשים נקיים, מסודרים ומצויינים ברמה גבוהה מאוד. שירות לקוחות מהיר ואדיב ויש גם הנחה למנויים. מומלץ בחום!',
+    //   name: '--לוי לוי',
+    //   img: 'https://res.cloudinary.com/primap/image/upload/v1669400699/General/Dudi%20Sela/pexels-blue-arauz-7386780_e69ymd.jpg'
+    // },
 
   ]
 

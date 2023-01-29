@@ -11,24 +11,8 @@ export const CoachesPreview = ({ coach }) => {
         Swal.fire({
             backdrop: 'rgba(0,0,0,0.8)',
             titleText: `${coach.name}`,
-            html: `${coach.description}`,
-            html: '${coach.video ?
-                (<iframe width="400"
-                height="200"
-                src={coach.video}
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer;
-                autoplay;
-                clipboard-write;
-                encrypted-media;
-                gyroscope;
-                picture-in-picture"
-                allowfullscreen>
-                </iframe>) : coach.img}',
-
-
-            imageUrl: `${coach.video ? coach.video : coach.img}`,
+            html: `${coach.quote}`,
+            imageUrl: `${coach.img}`,
             imageWidth: 400,
             footer: `<a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" style='background-color: #C9DB39;
             color: #1d1d1d;

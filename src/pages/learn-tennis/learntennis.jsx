@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 export const LearnTennis = () => {
   return (
-        <div className='learntennis'>
+        <div className={window.innerWidth > 700 ? 'margins-pc' : 'margins-mobile'}>
         <h2>לגדול ולהתפתח באקדמיה</h2>
         <p>
     לגדול ולהתפתח באקדמיה

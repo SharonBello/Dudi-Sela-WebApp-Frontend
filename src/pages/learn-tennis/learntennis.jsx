@@ -18,6 +18,13 @@ export const LearnTennis = () => {
         </p>
 
 
+        <h2 className='competitive-children-section'>קבוצות תחרותיות</h2>
+        <p>
+          <blockquote>בקבוצות התחרותיות באקדמיה מתאמנים בין היתר אלוף ישראל לנוער לגילאי 14, 16, אלופת ישראל לנוער, שחקנים בטופ 200 העולמי לנוער, וגם שחקנים מנבחרת הדיוויס </blockquote>
+
+        </p>
+
+
         <div className='whatsapplink'>
             <NavLink to="/contact">רוצים לגדול אצלנו גם? תוכלו ליצור קשר </NavLink>
         </div>

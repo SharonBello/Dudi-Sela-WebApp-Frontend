@@ -30,9 +30,6 @@ export const Homepage = () => {
         <QuestionAnswer />
       </section> */}
       <Testimonials />
-      <h4 className='competitive-children-section'>
-        <div>בקבוצות התחרותיות באקדמיה מתאמנים בין היתר אלוף ישראל לנוער לגילאי 14, 16, אלופת ישראל לנוער, שחקנים בטופ 200 העולמי לנוער, וגם שחקנים מנבחרת הדיוויס </div>
-      </h4>
     </div >
   )
 }

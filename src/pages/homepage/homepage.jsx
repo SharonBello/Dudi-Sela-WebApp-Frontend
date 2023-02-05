@@ -30,6 +30,7 @@ export const Homepage = () => {
         <QuestionAnswer />
       </section> */}
       <Testimonials />
+
     </div >
   )
 }

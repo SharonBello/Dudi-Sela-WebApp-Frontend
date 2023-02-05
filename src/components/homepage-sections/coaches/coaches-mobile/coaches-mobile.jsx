@@ -47,7 +47,7 @@ export const CoachesMobile = ({ coaches }) => {
     position: "relative",
     height: "100%",
   }
-  
+
   const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",

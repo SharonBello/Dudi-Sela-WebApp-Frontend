@@ -59,6 +59,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
           <ul className='side-menu-profile clean-list flex-column'>
           <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
           <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
+          <li><NavLink to={`/contact`} className="sidebar-item">צרו קשר</NavLink></li>
 
             {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}
 
@@ -67,10 +68,6 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
             {loggedUser ? <li><NavLink to={'/user-reservations'} onClick={handleClick} className="sidebar-item">ההזמנות שלי</NavLink>
             </li> : <span></span>} */}
 
-            <li>
-              <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" className="sidebar-item">צור קשר
-              </a>
-            </li>
             <li>
               {loggedUser ?
                 <NavLink to={'/'} onClick={() => handleSignout()} className="sidebar-item">יציאה</NavLink> : <span></span>}

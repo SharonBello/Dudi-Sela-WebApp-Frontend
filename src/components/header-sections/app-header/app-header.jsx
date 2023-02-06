@@ -128,8 +128,8 @@ export const AppHeader = () => {
         <li><NavLink to={`/learntennis`} onClick={handleClick} className="link-page">לימוד טניס</NavLink>
         </li>
 
-        <li><NavLink to={`/contact`} onClick={handleClick} className="link-page">צרו קשר</NavLink>
-        </li>
+        {/* <li><NavLink to={`/contact`} onClick={handleClick} className="link-page">צרו קשר</NavLink>
+        </li> */}
 
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
         </li>

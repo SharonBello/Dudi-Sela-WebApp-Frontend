@@ -11,7 +11,7 @@ export const CoachesPreview = ({ coach }) => {
         Swal.fire({
             backdrop: 'rgba(0,0,0,0.8)',
             titleText: `${coach.name}`,
-            html: `${coach.quote}`,
+            html: `${coach.description}`,
             imageUrl: `${coach.img}`,
             imageWidth: 400,
             footer: `<a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" style='background-color: #C9DB39;
@@ -54,11 +54,11 @@ export const CoachesPreview = ({ coach }) => {
 
     const renderMedia = () => {
         if (coach.video === "") {
-            return (<img alt={coach.title} src={coach.img} />);
+            return (<figure><img alt={coach.title} src={coach.img} /></figure>);
         }
         if (coach.video !== "") {
             if (hover) {
-                return (<VideoPlayer
+                return (<figure><VideoPlayer
                     className="video"
                     src={coach.video}
                     autoPlay={true}
@@ -68,12 +68,12 @@ export const CoachesPreview = ({ coach }) => {
                     loop={true}
                     maxHeight="100%"
                     maxWidth="100%"
-                    />)
-                }
+                /></figure>)
             }
-            // return (<img alt={coach.title} src={coach.img} />);
-            return (<video  src={coach.video} />);
         }
+        // return (<img alt={coach.title} src={coach.img} />);
+        return (<figure><video src={coach.video} /></figure>);
+    }
 
     return (
         <li
@@ -81,14 +81,16 @@ export const CoachesPreview = ({ coach }) => {
             ref={videoRef}
             onMouseEnter={() => handleMouseEnter()}
             onMouseLeave={() => handleMouseLeave()}
-            className={`slide ${coach.latinName}`}
+            className={`slide ${coach.lastName}`}
             onClick={() => openCoachDetails()}>
-            <p className="coach-legends flex-column">{coach.name}
-                <span>{coach.title}</span>
-                <span>
-                    {coach.legends}
-                </span>
-            </p>
+            <figcaption>
+                <p className="coach-legends flex-column">{coach.name}
+                    <span>{coach.title}</span>
+                    {/* <span> */}
+                    {/* {coach.legends} */}
+                    {/* </span> */}
+                </p>
+            </figcaption>
             {renderMedia()}
         </li>
     )

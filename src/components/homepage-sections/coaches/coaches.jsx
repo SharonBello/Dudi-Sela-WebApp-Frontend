@@ -17,7 +17,7 @@ export const Coaches = ({coaches}) => {
             coach={coach}
           />
         )}
-        <li className="last-li flex-column">
+        {/* <li className="last-li flex-column">
           <div>
             <h3>רוצים לקבוע אימון אישי?</h3>
             {!loggedUser ?
@@ -25,7 +25,7 @@ export const Coaches = ({coaches}) => {
                 שליחת הודעה<FontAwesomeIcon icon={faWhatsapp} />
               </a>}
           </div>
-        </li>
+        </li> */}
       </ul>
     </>
   )

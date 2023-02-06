@@ -13,133 +13,208 @@
     .coaches-list {
         zoom: 1;
         display: grid;
-        // grid-auto-flow: row dense;
-        // grid-auto-columns: minmax(1fr 300px);
-        // grid-auto-rows: minmax(275px 1fr);
+        grid-auto-flow: row dense;
         grid-template-columns: repeat(4, 1fr);
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-
+        grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+        padding-inline: calc(100vw - 98%);
         align-items: center;
         justify-content: center;
-        gap: 15px 15px;
+        gap: calc(1vh + 1vw + 1vmin);
         grid-template-areas:
-            "dudi-sela yoav-ben-zvi yoav-shav"
-            "someone1 someone2 last-li";
+            "sela ben-zvi zirkin werthaimer"
+            "lior asana saphir sipris";
 
-        @media (min-width: 650px) and (max-width: 90px) {
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-
+        @media (min-width:901px) and (max-width: 1200px) {
+            padding-inline: calc(100vw - 100%);
         }
 
-        li {
-            max-width: 100%;
-            aspect-ratio: 1 / 1.2 !important;
+        @media (min-width:721px) and (max-width: 900px) {
+            padding-inline: calc(100vw - 105%);
+        }
 
-            button {
-                width: 100%;
-                aspect-ratio: 1 / 1.2 !important;
+        & .slide {
+            // max-width: 100%;
+            max-height: 100%;
+            aspect-ratio: 1 / 1.4;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            filter: saturate(.8);
+            overflow: hidden;
+            transition: all 0.45s ease;
+            background-color: #fff;
+            color: #fff;
+            // display: inline-block;
+            // margin: 8px;
+            // max-width: 320px;
+            // min-width: 240px;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+            width: 100%;
 
-                &:hover {
-                    max-width: 100%;
-                    max-height: 100%;
-                    aspect-ratio: 1 / 1.2 !important;
-                }
+            // aspect-ratio: 1 / 1.2 !important;
+            &::before,
+            &::after {
+                background-color: #fff;
+                border-top: 32px solid rgba(0, 0, 0, 0.5);
+                border-bottom: 32px solid rgba(0, 0, 0, 0.5);
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                content: '';
+                transition: all 0.3s ease;
+                z-index: 1;
+                opacity: 0;
+                transform: scaleY(2);
             }
 
-            &:hover {
-                max-width: 100%;
-                max-height: 100%;
-                aspect-ratio: 1 / 1.2 !important;
+            &:hover::before,
+            &:hover::after {
+                transform: scale(1);
+                opacity: 1;
             }
 
-            &.slide {
-                max-width: 100%;
-                max-height: 100%;
-                aspect-ratio: 1 / 1.4;
-                cursor: pointer;
+            &:hover > img {
+                opacity: 0.7;
+            }
+
+            &:hover figcaption {
+                opacity: 1;
+            }
+
+            // button {
+            //     width: 100%;
+            //     aspect-ratio: 1 / 1.2 !important;
+            // }
+
+            figcaption {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                align-items: center;
+                z-index: 1;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-end;
-                filter: saturate(.8);
-                overflow: hidden;
+                justify-content: center;
+                line-height: 1.1em;
+                opacity: 0;
+                z-index: 2;
+                transition-delay: 0.1s;
+                font-size: 24px;
+                font-family: sans-serif;
+                font-weight: 400;
+                letter-spacing: 1px;
+                text-transform: uppercase;
 
                 .coach-legends {
-                    // font-size: calc(1rem + 0.8vw);
-                    // font-size: 2.8vw;
+                    font-size: calc(1rem + 0.8vw);
                     font-weight: 400;
-                    font-size: clamp(1rem, 1vw, 1.25rem);
                     position: absolute;
-                    color: $font;
-                    padding: rem(16px);
+                    bottom: 1%;
+                    right: 1%;
+                    color: #fff;
+                    // padding: rem(16px);
                     cursor: pointer;
                     min-width: 100%;
 
                     span {
-                        font-size: 1.8vw;
-                        font-size: clamp(0.5rem, 0.8vw, 1rem);
+                        color: #fff;
+                        font-size: calc(0.6rem + 0.4vw);
+                    }
+                }
+            }
 
+            figure {
+                width: 100%;
+                min-height: 100%;
+                margin-block: unset;
+                margin-inline: unset;
+
+                img {
+                    max-width: 100%;
+                    min-height: 100%;
+                    object-fit: cover;
+                    // vertical-align: top;
+                    // max-width: 100%;
+                    backface-visibility: hidden;
+
+                }
+
+                &:hover {
+                    .coach-legends {
+                        font-size: calc(1rem + 0.8vw);
+                        font-weight: 400;
+                        position: absolute;
+                        color: #fff;
+                        padding: rem(16px);
+                        cursor: pointer;
+                        min-width: 100%;
+
+                        span {
+                            color: #fff;
+                            font-size: calc(0.6rem + 0.4vw);
+                        }
                     }
                 }
 
                 img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-
-                    &:hover {
-                        filter: saturate(1);
-                        transform: scale(1.1);
-                        transition: all 1.3s ease-in-out;
-                    }
+                    filter: saturate(1);
+                    transform: scale(1.1);
+                    transition: all 1.3s ease-in-out;
                 }
             }
         }
     }
 }
 
-.last-li {
-    background-color: $accent4;
-    text-align: center;
-    justify-content: center;
+// .last-li {
+//     background-color: $accent4;
+//     text-align: center;
+//     justify-content: center;
 
-    h3 {
-        font-size: rem(26px);
-        line-height: rem(30px);
-        font-weight: 400;
-        color: $footer;
-        margin-block-end: rem(50px);
-    }
+//     h3 {
+//         font-size: rem(26px);
+//         line-height: rem(30px);
+//         font-weight: 400;
+//         color: $footer;
+//         margin-block-end: rem(50px);
+//     }
 
-    & .open-popup-join {
-        min-width: 30%;
-        margin-left: auto;
-        background-color: $brand;
-        color: $header;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        cursor: pointer;
-        // font-size: calc(0.8rem + 0.8vw);
-        font-weight: 600;
-        padding: rem(12px) rem(24px);
-        transition: 70ms cubic-bezier(.75, 0, .25, 1);
+//     & .open-popup-join {
+//         min-width: 30%;
+//         margin-left: auto;
+//         background-color: $brand;
+//         color: $header;
+//         border: 1px solid transparent;
+//         border-radius: 4px;
+//         cursor: pointer;
+//         // font-size: calc(0.8rem + 0.8vw);
+//         font-weight: 600;
+//         padding: rem(12px) rem(24px);
+//         transition: 70ms cubic-bezier(.75, 0, .25, 1);
 
-        @media (min-width: 320px) and (max-width: 1024px) {
-            max-width: 50%;
-            margin: 0 auto;
-            // margin-right: 0;
-            margin-block: rem(12px) rem(24px);
-        }
+//         @media (min-width: 320px) and (max-width: 1024px) {
+//             max-width: 50%;
+//             margin: 0 auto;
+//             // margin-right: 0;
+//             margin-block: rem(12px) rem(24px);
+//         }
 
-        &:hover {
-            background-color: $accent8;
-            color: $brand;
-            border: 1px solid $brand;
-            cursor: pointer;
-        }
-    }
-}
+//         &:hover {
+//             background-color: $accent8;
+//             color: $brand;
+//             border: 1px solid $brand;
+//             cursor: pointer;
+//         }
+//     }
+// }
 
-.coaches-container .coaches-list li.slide .coach-legends {
-    color: black;
-}
+// .coaches-container .coaches-list li.slide .coach-legends {
+//     color: black;
+// }

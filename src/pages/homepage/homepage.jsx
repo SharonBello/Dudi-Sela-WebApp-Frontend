@@ -8,7 +8,7 @@ import { Coaches } from '../../components/homepage-sections/coaches/coaches.jsx'
 import { CoachesMobile } from '../../components/homepage-sections/coaches/coaches-mobile/coaches-mobile.jsx'
 
 export const Homepage = () => {
-  const { width } = useWindowDimensions()
+  // const { width } = useWindowDimensions()
   let [isActive, setIsActive] = useState(false)
 
   let coaches = [
@@ -16,7 +16,7 @@ export const Homepage = () => {
       img: "https://res.cloudinary.com/primap/image/upload/v1674812443/General/Dudi%20Sela/dudisela_pbrmv6.webp",
       video: "",
       name: 'דודי סלע',
-      latinName: 'dudi-sela',
+      lastName: 'sela',
       title: 'מנהל ומאמן האקדמיה',
       description: 'לשעבר שחקן ATP טופ 30 עם ניסיון של מעל 10 שנים בטופ 100 העולמי. ' +
       'הוביל את נבחרת ישראל בגביע דייויס להופעה היסטורית בחצי הגמר בשנת 2009. ' +
@@ -26,7 +26,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/yoavbenzvi_n3ywhn.webp',
       video: "",
       name: 'יואב בן צבי',
-      latinName: 'yoav-ben-zvi',
+      lastName: 'ben-zvi',
       title: 'מנהל ומאמן האקדמיה',
       description: 'מאמן נבחרת ישראל. שחקן לאומי בכיר לשעבר עם ניסיון של מעל מ-15 שנה כמאמן מקצועי. ' +
       'המאמן הראשי של דודי סלע למעלה משבע שנים בתקופה שבה הדירוג של דודי היה 35 בעולם. ' +
@@ -36,7 +36,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812443/General/Dudi%20Sela/tomerzirkin_mdrfvs.webp',
       video: '',
       name: 'תומר צירקין',
-      latinName: '',
+      lastName: 'zirkin',
       title: '',
       description: 'מאמן טניס תחרותי באקדמיה בעל ניסיון של 6 שנים באימון ' +
                   ' שחקן מקצועי לשעבר בנוער וקצת בבוגרים. ' +
@@ -46,7 +46,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/dorvertherimer_yhiteu.webp',
       video: "",
       name: 'דור ורטהיימר',
-      latinName: '',
+      lastName: 'werthaimer',
       title: '',
       description: 'בן 37, אב לשניים, בעל תואר שני, שחקן מקצוען לשעבר ומאמן טניס עם נסיון של 15 שנים. '
     },
@@ -54,7 +54,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/ronilior_nbrdrv.webp',
       video: "",
       name: 'רוני ליאור',
-      latinName: '',
+      lastName: 'lior',
       title: '',
       description: 'בת 21 מחיפה, הכרתי את הטניס בגיל 8, נמצאת בענף כבר 13 שנים. ' +
                     'שחקנית טניס מקצועי לשעבר בנוער ובבוגרים. ' +
@@ -64,7 +64,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/orasna_lmqbho.webp',
       name: 'אור אסנה',
       video: 'https://res.cloudinary.com/primap/video/upload/v1674812472/General/Dudi%20Sela/orasna_trux9o.mp4',
-      latinName: '',
+      lastName: 'asana',
       title: '',
       description: 'שחקן תחרותי לשעבר יוצא יחידה מובחרת ומאמן 7 שנים מתעסק בטניס לכל הרמות ולכל הגילאים ודוגל בעבודה קשה על המגרש. משפט שמוביל אותי מהיום הראשון שהתחלתי לאמן :"החינוך הוא הדרך, האדם הוא המטרה"'
     },
@@ -72,7 +72,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/roeishafir_p5oool.webp',
       name: 'רועי שפיר',
       video: '',
-      latinName: '',
+      lastName: 'saphir',
       title: '',
       description: 'בוגר מכללת וינגייט תעודת מאמן טניס ' +
                     'שחקן מקצועי לשעבר בנוער וקצת בבוגרים. ' +
@@ -85,7 +85,7 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/yonisipris_p3p8el.webp',
       video: "",
       name: 'יוני סיפריס',
-      latinName: '',
+      lastName: 'sipris',
       title: '',
       description: 'משחק טניס מגיל 6 כולל טניס תחרותי בתחרויות בינלאומיות. ' +
                   'מאמן עם ניסיון של מעל 10 שנים בכל הרמות. '
@@ -95,6 +95,14 @@ export const Homepage = () => {
   //   setIsActive(!isActive)
   // }
 
+  const renderCoaches = () => {
+    if (window.innerWidth < 720) {
+      return <CoachesMobile coaches={coaches}/>;
+    } else {
+      return <Coaches coaches={coaches}/>;
+    }
+  }
+
   return (
     <div className="home">
       <section className="home-hero">
@@ -102,8 +110,7 @@ export const Homepage = () => {
       </section>
       <section className="coaches-container container">
         <h2>נבחרת המאמנים</h2>
-        {(width <= 650) ? <CoachesMobile coaches={coaches}/> : <Coaches coaches={coaches}/>}
-        {/* <Coaches/> */}
+        {renderCoaches()}
       </section>
       <DudiInfo />
       {/* <section className="FAO-container container flex-column align-center">

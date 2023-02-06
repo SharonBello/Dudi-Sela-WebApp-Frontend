@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 
 export const ContactUs = () => {
   return (
-        <div className={window.innerWidth > 700 ? 'margins-pc' : 'margins-mobile'}>
+        <div className={window.innerWidth > 700 ? 'container' : 'container'}>
 
           <section className="top-footer container">
 

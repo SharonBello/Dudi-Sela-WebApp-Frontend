@@ -4,7 +4,6 @@ export const CoachesMobile = ({ coaches }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const counter = useRef(0)
 
-
   const slideStyles = {
     width: "80%",
     aspectRatio: "0.9 / 1",

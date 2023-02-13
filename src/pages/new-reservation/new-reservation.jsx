@@ -109,10 +109,12 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const handleStartHourChange = (e) => {
     setStartHour(e.target.value)
+    setCourtNumber()
   }
 
   const handleEndHourChange = (e) => {
     setEndHour(e.target.value)
+    setCourtNumber()
   }
 
   const handleCourtNumberChange = (e) => {
@@ -122,7 +124,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const validateForm = (e) => {
-    if (!startHour || !endHour || !courtNumber) {
+    if  (!(startHour && endHour && courtNumber)) {
       return "נא למלא את כל השדות"
     }
     if (startHour >= endHour) {
@@ -215,6 +217,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const handleChange = (newValue) => {
     setDate(newValue)
+    setCourtNumber()
   }
 
   const handleCloseAlert = (event, reason) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,20 +10,22 @@ import moment from 'moment'
 moment().format()
 
 export const ReservationPreview = ({ item }) => {
-    let { isCancelable, setIsCancelable } = useState(false)
-    let { isEditable, setIsEditable } = useState(false)
+    const [isCancelable, setIsCancelable] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
+
     const navigate = useNavigate()
+    const NUM_DAYS_CANCEL_REGISTRATION = 1
 
     const getTimeLeft = (item) => {
         const currentDate = moment()
         const future = moment(item.date)
-        const timeLeft = moment(future.diff(currentDate)).format("HH:mm:ss")
+        const timeLeft = future.diff(currentDate, 'days')
         return timeLeft
     }
 
     const getIsCancelable = (item) => {
         const cancelItem = getTimeLeft(item)
-        if (cancelItem > 2) {
+        if (cancelItem > NUM_DAYS_CANCEL_REGISTRATION) {
             setIsCancelable(true)
         }
         else {
@@ -40,7 +42,7 @@ export const ReservationPreview = ({ item }) => {
 
     const getIsEditable = (item) => {
         const editItem = getTimeLeft(item)
-        if (editItem > 2) {
+        if (editItem > NUM_DAYS_CANCEL_REGISTRATION) {
             setIsEditable(true)
         }
         else {
@@ -54,6 +56,11 @@ export const ReservationPreview = ({ item }) => {
             navigate('/reservation/edit')
         }
     }
+
+    useEffect(() => {
+        getIsCancelable(item);
+        getIsEditable(item);
+      }, [getIsCancelable, getIsEditable, item])
 
     return (
         <>

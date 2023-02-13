@@ -26,13 +26,13 @@ export const HomeHero = () => {
             <div className="hero-text">
                 <h1 className="catch-phrase">האקדמיה לטניס<br></br>דודי סלע</h1>
                 <p className="catch-phrase">אימון ברמה אחרת</p>
-{/*
+
                 {!loggedUser ? <button className="open-popup-join">
                     <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page" role="button" tabIndex="0">
                         כניסת משתמשים</NavLink></button> :
                     <button className="open-popup-join">
                         <NavLink to={`/user-reservations/new-reservation`} className="link-page" role="button" tabIndex="0">הזמנת מגרש</NavLink>
-                    </button>} */}
+                    </button>}
             </div>
             <aside className="hero-stats container">
                 <ul className="clean-list flex align-center">

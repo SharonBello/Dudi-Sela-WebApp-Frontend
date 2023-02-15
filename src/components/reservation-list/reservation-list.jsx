@@ -40,7 +40,7 @@ export const ReservationList = ({ reservations }) => {
 
     return (
         <section className="list-of-reservations-container container">
-            <div className='reservation-totals flex justify-between'>
+            {/* <div className='reservation-totals flex justify-between'>
                 <div className='reservation-Total-order flex-column align-center'>
                     <h2 className='reservation-total-amount'>סיכום הזמנות<br></br>מגרשים</h2>
                     <hr className='gentle-line'></hr>
@@ -63,7 +63,7 @@ export const ReservationList = ({ reservations }) => {
                     <hr className='gentle-line'></hr>
                     <p className='qty-total-order'>כמות: {qtyMonthlyReservations}</p>
                 </div>
-            </div>
+            </div> */}
 
             <table className="reservations-list">
                 <thead>

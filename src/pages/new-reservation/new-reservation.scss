@@ -110,4 +110,9 @@ form {
         width: 400px;
         height: 400px;
     }
+
+
+    label[data-shrink=false]+.MuiInputBase-formControl .muirtl-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+        width: 150px;
+    }
 }

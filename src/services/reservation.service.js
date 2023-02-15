@@ -5,11 +5,13 @@ const reservationChannel = new BroadcastChannel('reservationChannel')
 
 export const reservationService = {
     query,
+    queryByDate,
     subscribe,
     unsubscribe,
     getById,
     remove,
     addNewReservation,
+    addNewReservationByDate
 }
 
 function getById(reservationId) {
@@ -27,6 +29,16 @@ async function query(uid) {
     }
 }
 
+async function queryByDate(date) {
+    try {
+        let data = await httpService.get('reservations/reservations/date?date=' + date)
+        let reservations = data.data.reservations
+        return reservations
+    } catch (err) {
+        throw err
+    }
+}
+
 async function remove(reservationId) {
     reservationChannel.postMessage(getActionRemoveReservation(reservationId))
     await httpService.delete(`reservation/${reservationId}`)
@@ -35,6 +47,16 @@ async function remove(reservationId) {
 async function addNewReservation(uid, data) {
     try {
         let res = await httpService.post('reservations/reservations?docId=' + uid, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function addNewReservationByDate(date, data) {
+    try {
+        let res = await httpService.post('reservations/reservations/date?date=' + date, data)
         return res
     }
     catch (err) {

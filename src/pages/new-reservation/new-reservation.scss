@@ -2,11 +2,11 @@ form {
     margin-top: 8rem;
     flex: 1;
     min-width: 100%;
-    
+
     .form-container {
         gap: rem(24px);
         margin-block-start: 10%;
-        
+
         .hours-container {
             max-width: 100%;
             flex-wrap: wrap;
@@ -99,5 +99,15 @@ form {
             border: 1px solid $brand;
             cursor: pointer;
         }
+    }
+
+    .loader {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -50px;
+        width: 400px;
+        height: 400px;
     }
 }

@@ -28,7 +28,8 @@ import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import { Loader } from '../../components/loader.jsx';
+const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -54,6 +55,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState()
   const [OpenAlert, setOpenAlert] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
   let uid = useSelector((storeState) => storeState.userModule.uid)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
@@ -81,6 +84,39 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     return res.data
   }
 
+  const filterCourtsDataByStartHour = async (_startHour) => {
+    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+    // Initialize court numbers
+    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    // Get reserved courts by date
+    const _date = dayjs(date).format('YYYY-MM-DD')
+    let reservations = await reservationService.queryByDate(_date)
+    // Filter coursts data by reserved courts
+    reservations.forEach(reservation => {
+      if (reservation.startHour === _startHour) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
+    setCourtsData(_courtsData);
+  }
+
+  const filterCourtsDataByDate = async (_date) => {
+    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+    // Initialize court numbers
+    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    // Get reserved courts by date
+    let reservations = await reservationService.queryByDate(_date)
+    // Filter coursts data by reserved courts
+    reservations.forEach(reservation => {
+      if (reservation.date === _date) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
+    setCourtsData(_courtsData);
+  }
+
   const addReservation = async () => {
     const _date = dayjs(date).format('YYYY-MM-DD')
     const payload = {
@@ -95,20 +131,26 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     else if (loggedUser || uid) {
       try {
         let res = await reservationService.addNewReservation(uid, payload)
-        if (res.data.result === 0) {
+        let resByDate = await reservationService.addNewReservationByDate(_date, payload)
+
+        if (res.data.result === 0 && resByDate.data.result === 0) {
           setShowSuccessAlert(true)
+          navigate('/user-reservations')
         } else {
           setShowSuccessAlert(false)
         }
       }
       catch (err) {
         setShowFailureAlert(true)
+      } finally {
+        setIsLoading(false)
       }
     }
   }
 
   const handleStartHourChange = (e) => {
     setStartHour(e.target.value)
+    filterCourtsDataByStartHour(e.target.value)
     setCourtNumber()
   }
 
@@ -134,6 +176,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
   const handleSubmit = (e) => {
     if (validateForm() === true) {
+      setIsLoading(true)
       addReservation()
     } else {
       setMessageAlert(validateForm())
@@ -217,7 +260,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const handleChange = (newValue) => {
     setDate(newValue)
-    setCourtNumber()
+    filterCourtsDataByDate(dayjs(newValue).format('YYYY-MM-DD'))
   }
 
   const handleCloseAlert = (event, reason) => {
@@ -320,12 +363,20 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
   }
 
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
+  }
   return (
     <>
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
       <form className="container flex-column" onSubmit={handleSubmit}>
+        {renderIsLoading()}
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <div dir="rtl" className="form-container flex-column" >
@@ -344,6 +395,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                       placeholder={todaysDate}
                       onChange={handleChange}
                       renderInput={(params) => <TextField {...params} />}
+                      minDate={date}
                       /></LocalizationProvider>
                       : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
                       label="תאריך"
@@ -352,6 +404,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                       placeholder={todaysDate}
                       onChange={handleChange}
                       renderInput={(params) => <TextField {...params} />}
+                      minDate={date}
                     />
                     </LocalizationProvider>}
                 </section>
@@ -366,6 +419,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
         <input
           className='submit-button'
           type='submit'
+          disabled={isLoading}
           value='הזמנת מגרש'
           // onClick={handleSubmit}
         />

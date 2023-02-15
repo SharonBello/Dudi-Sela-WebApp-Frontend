@@ -15,8 +15,9 @@ export const UserReservations = () => {
   const getReservationsData = async (uid) => {
     if (loggedUser || uid) {
       let reservations = await reservationService.query(uid)
-      setReservations(reservations)
-      return reservations
+      const _reservations = reservations.reverse()
+      setReservations(_reservations)
+      return _reservations
     }
   }
 

@@ -11,7 +11,9 @@ export const reservationService = {
     getById,
     remove,
     addNewReservation,
-    addNewReservationByDate
+    addNewReservationByDate,
+    deleteReservation,
+    deleteReservationByDate
 }
 
 function getById(reservationId) {
@@ -47,6 +49,26 @@ async function remove(reservationId) {
 async function addNewReservation(uid, data) {
     try {
         let res = await httpService.post('reservations/reservations?docId=' + uid, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function deleteReservation(uid, data) {
+    try {
+        let res = await httpService.delete('reservations/reservations?docId=' + uid, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function deleteReservationByDate(date, data) {
+    try {
+        let res = await httpService.delete('reservations/reservations/bydate?date=' + date, data)
         return res
     }
     catch (err) {

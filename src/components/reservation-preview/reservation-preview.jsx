@@ -3,18 +3,36 @@ import { useNavigate } from "react-router"
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 // import { UserMessages } from "../../components/user-messages/user-messages.jsx"
 import moment from 'moment'
+import { reservationService } from "../../services/reservation.service"
+import { useSelector } from "react-redux"
+import dayjs from "dayjs"
 
 moment().format()
 
 export const ReservationPreview = ({ item }) => {
     const [isCancelable, setIsCancelable] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showFailureAlert, setShowFailureAlert] = useState(false)
 
     const navigate = useNavigate()
     const NUM_DAYS_CANCEL_REGISTRATION = 1
+    let uid = useSelector((storeState) => storeState.userModule.uid)
+    let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const getTimeLeft = (item) => {
         const currentDate = moment()
@@ -30,13 +48,6 @@ export const ReservationPreview = ({ item }) => {
         }
         else {
             setIsCancelable(false)
-        }
-    }
-
-    const onCancelItem = (item) => {
-        getIsCancelable(item)
-        if (isCancelable) {
-            // UserMessages('info')
         }
     }
 
@@ -57,6 +68,125 @@ export const ReservationPreview = ({ item }) => {
         }
     }
 
+    const onDeleteReservation = async () => {
+        setShowDeleteAlert(true)
+    }
+
+    const closeDeleteAlert = () => {
+        setShowDeleteAlert(false);
+    }
+
+    const handleDeleteReservation = async () => {
+        const payload = item
+        if (!loggedUser) {
+            navigate('/signin')
+        }
+        const res = await reservationService.deleteReservation(uid, payload)
+        const resByDate = await reservationService.deleteReservationByDate(item.date, payload)
+        setShowDeleteAlert(false)
+
+        if (res.data.result === 0 && resByDate.data.result === 0) {
+          setShowSuccessAlert(true)
+        } else {
+          setShowSuccessAlert(false)
+        }
+    }
+
+    const handleCloseAlert = (event, reason) => {
+        setShowSuccessAlert(false)
+        setShowFailureAlert(false)
+        navigate('/')
+    }
+
+
+  const alertAction = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="#F2F6F7"
+        onClick={handleCloseAlert}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  )
+
+    const renderSuccessAlert = () => {
+        if (showSuccessAlert) {
+          return (
+            <Snackbar
+              open={true}
+              autoHideDuration={60000}
+              onClose={handleCloseAlert}
+              action={alertAction}
+              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+              <Alert
+                severity="success"
+                onClose={handleCloseAlert}
+                sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                spacing={5}
+                variant="filled"
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              >
+                המגרש בוטל בהצלחה</Alert>
+            </Snackbar>
+          )
+        }
+      }
+
+    const renderFailureAlert = () => {
+        if (showFailureAlert) {
+            return (
+            <Snackbar
+                open={true}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                autoHideDuration={6000}
+                onClose={handleCloseAlert}
+                action={alertAction}
+            >
+                <Alert
+                severity="error"
+                onClose={handleCloseAlert}
+                sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                spacing={5}
+                // margin={5}
+                variant="filled"
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                ביטול המגרש נכשל</Alert>
+            </Snackbar>
+            )
+        }
+    }
+
+    const renderDeleteAlert = () => {
+        return (
+            <Dialog
+                open={showDeleteAlert}
+                onClose={closeDeleteAlert}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                {"ביטול הזמנה"}
+                </DialogTitle>
+                <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                {" האם את/ה בטוח/ה שברצונך לבטל את ההזמנה?"}
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                <Button onClick={closeDeleteAlert}>לא</Button>
+                <Button onClick={handleDeleteReservation} autoFocus>
+                    כן
+                </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+
     useEffect(() => {
         getIsCancelable(item);
         getIsEditable(item);
@@ -64,6 +194,9 @@ export const ReservationPreview = ({ item }) => {
 
     return (
         <>
+            {renderDeleteAlert()}
+            {renderSuccessAlert()}
+            {renderFailureAlert()}
             <tr key={item.id}>
                 <td data-label="תאריך">{item.date}</td>
                 <td data-label="שעת התחלה">{item.startHour}</td>
@@ -73,7 +206,7 @@ export const ReservationPreview = ({ item }) => {
                     <table className="table-actions flex">
                         <tbody>
                             <tr className="table-action-cell">
-                                <td className="table-cell-btn">
+                                {/* <td className="table-cell-btn">
                                     {isEditable ? <button className="table-btn" onClick={onEditItem}>
                                         <NavLink to='/user-reservations/edit-reservation/:reservationId'>
                                             <FontAwesomeIcon icon={faPenToSquare} />
@@ -83,9 +216,9 @@ export const ReservationPreview = ({ item }) => {
                                             <FontAwesomeIcon icon={faPenToSquare} />
                                         </NavLink>
                                     </button>}
-                                </td>
+                                </td> */}
                                 <td className="table-cell-btn">
-                                    {isCancelable ? <button className="table-btn" onClick={onCancelItem}>
+                                    {isCancelable ? <button className="table-btn" onClick={onDeleteReservation}>
                                         <NavLink to='/user-reservations/'>
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </NavLink>

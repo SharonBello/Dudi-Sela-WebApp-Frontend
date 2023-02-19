@@ -135,7 +135,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
         if (res.data.result === 0 && resByDate.data.result === 0) {
           setShowSuccessAlert(true)
-          navigate('/user-reservations')
         } else {
           setShowSuccessAlert(false)
         }
@@ -271,6 +270,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       return;
     }
     setOpenAlert(false);
+    navigate('/user-reservations')
   }
 
   const alertAction = (
@@ -307,7 +307,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            ההזמנה נקלטה בהצלחה</Alert>
+            המגרש הוזמן בהצלחה</Alert>
         </Snackbar>
       )
     }
@@ -332,7 +332,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            ההזמנה נכשלה</Alert>
+            הזמנת המגרש נכשלה</Alert>
         </Snackbar>
       )
     }

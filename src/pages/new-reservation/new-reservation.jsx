@@ -101,6 +101,23 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     setCourtsData(_courtsData);
   }
 
+  const filterCourtsDataByEndHour = async (_endHour) => {
+    const hoursDiff = (_endHour - startHour)
+    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    const _date = dayjs(date).format('YYYY-MM-DD')
+    let reservations = await reservationService.queryByDate(_date)
+    for (let index = 0; index < hoursDiff && hoursDiff > 0; index++) {
+      reservations.forEach(reservation => {
+        if (reservation.startHour === (startHour + index)) {
+          const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+          _courtsData.court_numbers.splice(index, 1);
+        }
+      });
+    }
+    setCourtsData(_courtsData);
+  }
+
   const filterCourtsDataByDate = async (_date) => {
     let _courtsData = JSON.parse(JSON.stringify(courtsData))
     // Initialize court numbers
@@ -155,6 +172,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   const handleEndHourChange = (e) => {
     setEndHour(e.target.value)
+    filterCourtsDataByEndHour(e.target.value)
     setCourtNumber()
   }
 
@@ -267,6 +285,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     setShowFailureAlert(false)
     setShowMessageAlert(false)
     if (reason === 'clickaway') {
+      navigate('/user-reservations')
       return;
     }
     setOpenAlert(false);

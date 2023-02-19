@@ -84,6 +84,14 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     return res.data
   }
 
+  const isIntersected = (reservation, _startHour, _endHour) => {
+    return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within
+    (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
+    (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
+    (_startHour > reservation.startHour && _startHour < reservation.endHour  && _endHour > reservation.endHour) || // intersect right
+    (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
+  }
+
   const filterCourtsDataByStartHour = async (_startHour) => {
     let _courtsData = JSON.parse(JSON.stringify(courtsData))
     // Initialize court numbers
@@ -93,7 +101,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     let reservations = await reservationService.queryByDate(_date)
     // Filter coursts data by reserved courts
     reservations.forEach(reservation => {
-      if (reservation.startHour === _startHour) {
+      if (isIntersected(reservation, _startHour, endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }
@@ -102,21 +110,25 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const filterCourtsDataByEndHour = async (_endHour) => {
-    const hoursDiff = (_endHour - startHour)
     let _courtsData = JSON.parse(JSON.stringify(courtsData))
     _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
     const _date = dayjs(date).format('YYYY-MM-DD')
     let reservations = await reservationService.queryByDate(_date)
-    for (let index = 0; index < hoursDiff && hoursDiff > 0; index++) {
-      reservations.forEach(reservation => {
-        if (reservation.startHour === (startHour + index)) {
-          const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-          _courtsData.court_numbers.splice(index, 1);
-        }
-      });
-    }
+    reservations.forEach(reservation => {
+      if (isIntersected(reservation, startHour, _endHour)) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
     setCourtsData(_courtsData);
   }
+
+        // reservations.forEach(reservation => {
+      //   if (reservation.startHour === (startHour + index)) {
+      //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+      //     _courtsData.court_numbers.splice(index, 1);
+      //   }
+      // });
 
   const filterCourtsDataByDate = async (_date) => {
     let _courtsData = JSON.parse(JSON.stringify(courtsData))

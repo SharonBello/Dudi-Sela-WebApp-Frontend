@@ -15,7 +15,6 @@ export const App = () => {
    const navigate = useNavigate()
 
    window.addEventListener('storage', () => {
-      console.log("change to local storage!");
       dispatch(setLoggedUser())
       navigate('/')
    });
@@ -26,7 +25,7 @@ export const App = () => {
             <header className="app-header-container">
                <AppHeader />
             </header>
-            
+
             <main className="routes-container">
                <Routes>
                   {routes.map(route =>

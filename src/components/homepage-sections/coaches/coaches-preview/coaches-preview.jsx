@@ -3,7 +3,6 @@ import Swal from 'sweetalert2'
 import VideoPlayer from 'react-background-video-player'
 
 export const CoachesPreview = ({ coach }) => {
-    console.log("🚀 ~ file: coaches-preview.jsx:6 ~ CoachesPreview ~ coach", coach)
     const [hover, setHover] = useState(false);
     const videoRef = useRef()
 

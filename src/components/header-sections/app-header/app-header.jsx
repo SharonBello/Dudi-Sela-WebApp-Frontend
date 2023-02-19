@@ -79,7 +79,6 @@ export const AppHeader = () => {
 
   if (loggedUser && !loggedUser.picture) {
     loggedUser.picture = "https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg"
-    console.log("🚀 ~ file: app-header.jsx ~ line 68 ~ AppHeader ~ loggedUser", loggedUser)
   }
 
   const handleClick = () => {
@@ -89,7 +88,6 @@ export const AppHeader = () => {
   const handleSignout = () => {
     userService.authSignout()
       .then((response) => {
-        console.log(response)
         dispatch(setUserUid(null))
         dispatch(signout())
         document.location.href = '/'

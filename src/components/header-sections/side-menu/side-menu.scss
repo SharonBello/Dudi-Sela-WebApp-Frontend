@@ -6,7 +6,6 @@
         width: 60%;
         position: fixed;
         top: 0;
-        //   right: rem(-273px);
         padding-top: 20px;
         z-index: 5000;
         transition: all 1s easeInOut;
@@ -18,7 +17,6 @@
 
         .menu-header {
             padding: rem(20px);
-            // margin-bottom: rem(25px);
 
             & .logo-sidemenu-container {
                 justify-content: space-between;
@@ -51,8 +49,6 @@
             & h3 {
                 color: $brand;
                 padding-inline-start: rem(20px);
-                // margin: rem(10px) 0;
-                // margin-bottom: rem(5px);
                 text-align: right;
                 margin-block-start: 40px;
                 font-size: calc(1vw + 1vh + 1vmin);
@@ -126,6 +122,7 @@
 }
 
 @media (min-width: 901px) {
+
     .side-menu,
     .hamburger-icon .side-bar,
     .hamburger-icon,

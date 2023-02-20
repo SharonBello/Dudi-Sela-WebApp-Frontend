@@ -1,5 +1,4 @@
-import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom'
-// import { loadGigs, setFilter } from '../../store/actions/gig.actions.js'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { signout } from '../../../store/actions/user.actions.js'
 
@@ -57,9 +56,9 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
 
         <nav className='menu-nav'>
           <ul className='side-menu-profile clean-list flex-column'>
-          <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
-          <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
-          <li><NavLink to={`/contact`} className="sidebar-item">צרו קשר</NavLink></li>
+            <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
+            <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
+            <li><NavLink to={`/contact`} className="sidebar-item">צרו קשר</NavLink></li>
 
             {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}
 

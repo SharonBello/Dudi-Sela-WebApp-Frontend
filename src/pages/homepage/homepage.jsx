@@ -113,9 +113,9 @@ export const Homepage = () => {
         {renderCoaches()}
       </section>
       <DudiInfo />
-      {/* <section className="FAO-container container flex-column align-center">
+      <section className="FAO-container container flex-column align-center">
         <QuestionAnswer />
-      </section> */}
+      </section>
       <Testimonials />
     </div >
   )

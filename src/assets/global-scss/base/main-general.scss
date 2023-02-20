@@ -6,21 +6,13 @@
     flex: 1;
     justify-content: center;
     align-items: center;
-    // overflow-y: hidden;
-    // background-color: blue;
 }
 
 .routes-container {
-    // overflow-y: scroll;
-    // background-color: yellow;
     display: flex;
     flex-direction: column;
     min-height: 100%;
     width: 100vw;
     flex: 1;
-    // overflow-y: auto;
     position: relative;
-
-    // margin-block-start: calc(2vh + 2vw + 15vmin);
-    // margin-block-start: 4rem;
 }

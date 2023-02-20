@@ -1,20 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { HomeHero } from '../../components/homepage-sections/home-hero/home-hero.jsx'
 import { QuestionAnswer } from '../../components/homepage-sections/question-answer/question-answer.jsx'
-import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { Testimonials } from '../../components/homepage-sections/testimonials/testimonials.jsx'
 import { DudiInfo } from '../../components/homepage-sections/dudi-info/dudi-info.jsx'
 import { Coaches } from '../../components/homepage-sections/coaches/coaches.jsx'
 import { CoachesMobile } from '../../components/homepage-sections/coaches/coaches-mobile/coaches-mobile.jsx'
 
 export const Homepage = () => {
-  // const { width } = useWindowDimensions()
-  let [isActive, setIsActive] = useState(false)
-
   let coaches = [
     {
       img: "https://res.cloudinary.com/primap/image/upload/v1674812443/General/Dudi%20Sela/dudisela_pbrmv6.webp",
       video: "",
+      embeddedVideo: "",
       name: 'דודי סלע',
       lastName: 'sela',
       title: 'מנהל ומאמן האקדמיה',
@@ -25,6 +22,7 @@ export const Homepage = () => {
     {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/yoavbenzvi_n3ywhn.webp',
       video: "",
+      embeddedVideo: "",
       name: 'יואב בן צבי',
       lastName: 'ben-zvi',
       title: 'מנהל ומאמן האקדמיה',
@@ -34,20 +32,22 @@ export const Homepage = () => {
     },
     {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812443/General/Dudi%20Sela/tomerzirkin_mdrfvs.webp',
-      video: '',
+      video: 'https://youtube.com/shorts/Jujbba2S_Xs',
+      embeddedVideo: 'https://www.youtube.com/embed/Jujbba2S_Xs',
       name: 'תומר צירקין',
       lastName: 'zirkin',
-      title: '',
+      title: 'מאמן',
       description: 'מאמן טניס תחרותי באקדמיה בעל ניסיון של 6 שנים באימון ' +
                   ' שחקן מקצועי לשעבר בנוער וקצת בבוגרים. ' +
                   'אני מאמין שהערכים שקיבלתי במגרש ובבית אלה הערכים שאני מביא איתי למגרש ולשחקנים. כדי להגיע רחוק בטניס תחרותי צריך עקביות לאורך זמן, אמונה וסביבה תומכת '
-    },
+                },
     {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/dorvertherimer_yhiteu.webp',
       video: "",
+      embeddedVideo: "",
       name: 'דור ורטהיימר',
       lastName: 'werthaimer',
-      title: '',
+      title: 'מאמן',
       description: 'בן 37, אב לשניים, בעל תואר שני, שחקן מקצוען לשעבר ומאמן טניס עם נסיון של 15 שנים. '
     },
     {
@@ -55,7 +55,7 @@ export const Homepage = () => {
       video: "",
       name: 'רוני ליאור',
       lastName: 'lior',
-      title: '',
+      title: 'מאמנת',
       description: 'בת 21 מחיפה, הכרתי את הטניס בגיל 8, נמצאת בענף כבר 13 שנים. ' +
                     'שחקנית טניס מקצועי לשעבר בנוער ובבוגרים. ' +
                     'אני מאמינה בעבודה קשה, התמדה, סבלנות וסובלנות, יחס אישי לכל שחקן, השקעה ובעיקר להנות מכל רגע על המגרש '
@@ -64,16 +64,18 @@ export const Homepage = () => {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/orasna_lmqbho.webp',
       name: 'אור אסנה',
       video: 'https://res.cloudinary.com/primap/video/upload/v1674812472/General/Dudi%20Sela/orasna_trux9o.mp4',
+      embeddedVideo: 'https://www.youtube.com/embed/Uu4SWocUuD8',
       lastName: 'asana',
-      title: '',
+      title: 'מאמן',
       description: 'שחקן תחרותי לשעבר יוצא יחידה מובחרת ומאמן 7 שנים מתעסק בטניס לכל הרמות ולכל הגילאים ודוגל בעבודה קשה על המגרש. משפט שמוביל אותי מהיום הראשון שהתחלתי לאמן :"החינוך הוא הדרך, האדם הוא המטרה"'
     },
     {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/roeishafir_p5oool.webp',
       name: 'רועי שפיר',
-      video: '',
+      video: 'https://res.cloudinary.com/primap/video/upload/v1674812471/General/Dudi%20Sela/roeishafir_xrnimj.mp4',
+      embeddedVideo: 'https://www.youtube.com/embed/D7abTe1hRVI',
       lastName: 'saphir',
-      title: '',
+      title: 'מאמן',
       description: 'בוגר מכללת וינגייט תעודת מאמן טניס ' +
                     'שחקן מקצועי לשעבר בנוער וקצת בבוגרים. ' +
                     'ספורטאי מצטיין בצבא כשחקן טניס פעיל. ' +
@@ -84,16 +86,14 @@ export const Homepage = () => {
     {
       img: 'https://res.cloudinary.com/primap/image/upload/v1674812442/General/Dudi%20Sela/yonisipris_p3p8el.webp',
       video: "",
+      embeddedVideo: "",
       name: 'יוני סיפריס',
       lastName: 'sipris',
-      title: '',
+      title: 'מאמן',
       description: 'משחק טניס מגיל 6 כולל טניס תחרותי בתחרויות בינלאומיות. ' +
                   'מאמן עם ניסיון של מעל 10 שנים בכל הרמות. '
     }
   ]
-  // const handleImgClick = () => {
-  //   setIsActive(!isActive)
-  // }
 
   const renderCoaches = () => {
     if (window.innerWidth < 720) {

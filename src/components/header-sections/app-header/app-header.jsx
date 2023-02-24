@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { signout, setLoggedUser, setUserUid } from '../../../store/actions/user.actions.js'
+import { signout, setUserUid } from '../../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions.jsx'
@@ -22,14 +22,9 @@ export const AppHeader = () => {
   const profileRef = useRef(null)
 
   let [isActive, setIsActive] = useState(false)
-  let homeHeaderClassName = (pathname === '/') ? 'scroll' : ''
   let classHamburgerMenu = (width < 900) ? 'visible' : 'hidden'
   let classNavList = (width < 600) ? 'hidden' : ''
 
-  // useEffect(() => {
-  //   dispatch(setLoggedUser)
-
-  // }, [loggedUser])
 
   useEffect(() => {
     document.addEventListener("click", handleSideClickOutside)
@@ -99,8 +94,6 @@ export const AppHeader = () => {
 
   return (
     <header className={`header container flex align-center ${(scrolled && pathname === '/') ? 'scrolled' : ''}`}>
-      {/* // <header className={`${scrolled && (pathname === '/')}` ? 'header container flex align-center scrolled' : 'header container flex align-center regular'}> */}
-      {/* <header className="header container flex align-center"> */}
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
           {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
@@ -145,8 +138,7 @@ export const AppHeader = () => {
         </li>
 
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
-        </li>
-        : <span></span>}
+        </li>: <span></span>}
 
         {(adminUser==="true" ? <li><NavLink to={`/scheduler`} className="link-page">מנהל ההזמנות</NavLink>
         </li> : <span></span>)}

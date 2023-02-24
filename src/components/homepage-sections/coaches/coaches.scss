@@ -16,10 +16,10 @@
         grid-auto-flow: row dense;
         grid-template-columns: repeat(4, 1fr);
         grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
-        padding-inline: calc(100vw - 98%);
+        padding-inline: calc((100vw - 98%) / 2);
         align-items: center;
         justify-content: center;
-        gap: calc(1vh + 1vw + 1vmin);
+        gap: 2vw;
         grid-template-areas:
             "sela ben-zvi zirkin werthaimer"
             "lior asana saphir sipris";
@@ -33,63 +33,41 @@
         }
 
         & .slide {
-            // max-width: 100%;
             max-height: 100%;
             aspect-ratio: 1 / 1.4;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
             filter: saturate(.8);
             overflow: hidden;
             transition: all 0.45s ease;
             background-color: #fff;
             color: #fff;
-            // display: inline-block;
-            // margin: 8px;
-            // max-width: 320px;
-            // min-width: 240px;
             overflow: hidden;
             position: relative;
             text-align: center;
             width: 100%;
 
-            // aspect-ratio: 1 / 1.2 !important;
-            &::before,
-            &::after {
-                background-color: #fff;
-                border-top: 32px solid rgba(0, 0, 0, 0.5);
-                border-bottom: 32px solid rgba(0, 0, 0, 0.5);
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                content: '';
-                transition: all 0.3s ease;
-                z-index: 1;
-                opacity: 0;
-                transform: scaleY(2);
+            &:nth-child(1) img {
+                object-position: 10% 50%;
             }
 
-            &:hover::before,
-            &:hover::after {
-                transform: scale(1);
-                opacity: 1;
+            &:nth-child(3) img {
+                object-position: 85% 50%;
             }
 
-            &:hover > img {
-                opacity: 0.7;
+            &:nth-child(6) img {
+                object-position: 0 50%;
             }
 
-            &:hover figcaption {
-                opacity: 1;
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: all 0.45s ease;
             }
 
-            // button {
-            //     width: 100%;
-            //     aspect-ratio: 1 / 1.2 !important;
-            // }
+            &:hover>img {
+                scale: 1.1;
+            }
 
             figcaption {
                 position: absolute;
@@ -98,30 +76,28 @@
                 left: 0;
                 right: 0;
                 align-items: center;
-                z-index: 1;
+                z-index: 50;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 line-height: 1.1em;
-                opacity: 0;
                 z-index: 2;
                 transition-delay: 0.1s;
-                font-size: 24px;
+                font-size: 1.5rem;
                 font-family: sans-serif;
-                font-weight: 400;
+                font-weight: 500;
                 letter-spacing: 1px;
                 text-transform: uppercase;
 
                 .coach-legends {
                     font-size: calc(1rem + 0.8vw);
-                    font-weight: 400;
+                    font-weight: 500;
                     position: absolute;
                     bottom: 1%;
-                    right: 1%;
                     color: #fff;
-                    // padding: rem(16px);
                     cursor: pointer;
                     min-width: 100%;
+                    text-shadow: 0 0 5px #000000;
 
                     span {
                         color: #fff;
@@ -129,92 +105,6 @@
                     }
                 }
             }
-
-            figure {
-                width: 100%;
-                min-height: 100%;
-                margin-block: unset;
-                margin-inline: unset;
-
-                img {
-                    max-width: 100%;
-                    min-height: 100%;
-                    object-fit: cover;
-                    // vertical-align: top;
-                    // max-width: 100%;
-                    backface-visibility: hidden;
-
-                }
-
-                &:hover {
-                    .coach-legends {
-                        font-size: calc(1rem + 0.8vw);
-                        font-weight: 400;
-                        position: absolute;
-                        color: #fff;
-                        padding: rem(16px);
-                        cursor: pointer;
-                        min-width: 100%;
-
-                        span {
-                            color: #fff;
-                            font-size: calc(0.6rem + 0.4vw);
-                        }
-                    }
-                }
-
-                img {
-                    filter: saturate(1);
-                    transform: scale(1.1);
-                    transition: all 1.3s ease-in-out;
-                }
-            }
         }
     }
 }
-
-// .last-li {
-//     background-color: $accent4;
-//     text-align: center;
-//     justify-content: center;
-
-//     h3 {
-//         font-size: rem(26px);
-//         line-height: rem(30px);
-//         font-weight: 400;
-//         color: $footer;
-//         margin-block-end: rem(50px);
-//     }
-
-//     & .open-popup-join {
-//         min-width: 30%;
-//         margin-left: auto;
-//         background-color: $brand;
-//         color: $header;
-//         border: 1px solid transparent;
-//         border-radius: 4px;
-//         cursor: pointer;
-//         // font-size: calc(0.8rem + 0.8vw);
-//         font-weight: 600;
-//         padding: rem(12px) rem(24px);
-//         transition: 70ms cubic-bezier(.75, 0, .25, 1);
-
-//         @media (min-width: 320px) and (max-width: 1024px) {
-//             max-width: 50%;
-//             margin: 0 auto;
-//             // margin-right: 0;
-//             margin-block: rem(12px) rem(24px);
-//         }
-
-//         &:hover {
-//             background-color: $accent8;
-//             color: $brand;
-//             border: 1px solid $brand;
-//             cursor: pointer;
-//         }
-//     }
-// }
-
-// .coaches-container .coaches-list li.slide .coach-legends {
-//     color: black;
-// }

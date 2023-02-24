@@ -58,7 +58,7 @@ export const AppFooter = () => {
         <ul className="legal-list clean-list flex">
           <li><NavLink to="/">תנאים &amp; הגבלות</NavLink></li>
           <li><NavLink to="/">הצהרת פרטיות</NavLink></li>
-          <li>&copy; 2022 Copyright DudiSelaTennisAcademy Inc.</li>
+          <li>&copy; 2023 Copyright DudiSelaTennisAcademy Inc.</li>
         </ul>
       </section>
     </>

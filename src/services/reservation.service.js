@@ -13,7 +13,9 @@ export const reservationService = {
     addNewReservation,
     addNewReservationByDate,
     deleteReservation,
-    deleteReservationByDate
+    deleteReservationByDate,
+    changeCredit,
+    getCredit
 }
 
 function getById(reservationId) {
@@ -52,6 +54,26 @@ async function addNewReservation(uid, data) {
         return res
     }
     catch (err) {
+        throw err
+    }
+}
+
+async function changeCredit(uid, data) {
+    try {
+        let res = await httpService.post('reservations/usercredit?docId=' + uid, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function getCredit(uid) {
+    try {
+        let data = await httpService.get('reservations/usercredit?docId=' + uid)
+        let user_credit = data.data.user_credit
+        return user_credit
+    } catch (err) {
         throw err
     }
 }

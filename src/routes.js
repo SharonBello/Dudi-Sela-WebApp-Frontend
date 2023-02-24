@@ -52,4 +52,12 @@ const routes = [
     }
 ]
 
+// {
+//     path: '/',
+//     component: <Schedule />,
+// },
+// {
+//     path: '/',
+//     component: <Dashboard />,
+// }
 export default routes

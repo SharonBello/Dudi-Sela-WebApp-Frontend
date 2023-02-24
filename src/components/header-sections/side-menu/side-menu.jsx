@@ -61,7 +61,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
           <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
           <li><NavLink to={`/contact`} className="sidebar-item">צרו קשר</NavLink></li>
 
-            {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">הפרופיל שלי</NavLink></li> : <span></span>}
+            {loggedUser ? <li><NavLink to={`/user-profile`} className="sidebar-item">אזור אישי</NavLink></li> : <span></span>}
 
             {/* {loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="sidebar-item">הזמנת מגרש</NavLink></li> : <span></span>}
 

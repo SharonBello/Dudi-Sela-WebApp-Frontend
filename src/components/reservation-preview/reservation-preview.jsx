@@ -19,6 +19,7 @@ import moment from 'moment'
 import { reservationService } from "../../services/reservation.service"
 import { useSelector } from "react-redux"
 import dayjs from "dayjs"
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 moment().format()
 
@@ -31,7 +32,7 @@ export const ReservationPreview = ({ item }) => {
 
     const navigate = useNavigate()
     const NUM_DAYS_CANCEL_REGISTRATION = 1
-    let uid = useSelector((storeState) => storeState.userModule.uid)
+    let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const getTimeLeft = (item) => {
@@ -77,19 +78,23 @@ export const ReservationPreview = ({ item }) => {
     }
 
     const handleDeleteReservation = async () => {
-        const payload = item
         if (!loggedUser) {
             navigate('/signin')
         }
-        const res = await reservationService.deleteReservation(uid, payload)
-        const resByDate = await reservationService.deleteReservationByDate(item.date, payload)
-        setShowDeleteAlert(false)
+        if (loggedUser) {
+            const payload = item
+            const res = await reservationService.deleteReservation(uid, payload)
+            const resByDate = await reservationService.deleteReservationByDate(item.date, payload)
+            const resCredit = await reservationService.changeCredit(uid, {"userCredit": 1})
+            setShowDeleteAlert(false)
 
-        if (res.data.result === 0 && resByDate.data.result === 0) {
-          setShowSuccessAlert(true)
-        } else {
-          setShowSuccessAlert(false)
+            if (res.data.result === 0 && resByDate.data.result === 0 && resCredit.data.result === 0) {
+            setShowSuccessAlert(true)
+            } else {
+            setShowSuccessAlert(false)
+            }
         }
+
     }
 
     const handleCloseAlert = (event, reason) => {
@@ -130,7 +135,7 @@ export const ReservationPreview = ({ item }) => {
                 variant="filled"
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
               >
-                המגרש בוטל בהצלחה</Alert>
+             המגרש בוטל בהצלחה, הכרטיסייה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
             </Snackbar>
           )
         }

@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ReservationList } from '../../components/reservation-list/reservation-list.jsx'
 import { reservationService } from '../../services/reservation.service.js'
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const UserReservations = () => {
   let [reservations, setReservations] = useState([])
-  let uid = useSelector((storeState) => storeState.userModule.uid)
+  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {

@@ -14,6 +14,7 @@ export const AppHeader = () => {
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
   const token = localStorage.getItem('user')
+  const adminUser = localStorage.getItem('dudisela-admin-user')
   const { width } = useWindowDimensions()
   const [scrolled, setScrolled] = useState(false)
 
@@ -146,6 +147,9 @@ export const AppHeader = () => {
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li>
         : <span></span>}
+
+        {(adminUser==="true" ? <li><NavLink to={`/scheduler`} className="link-page">מנהל ההזמנות</NavLink>
+        </li> : <span></span>)}
       </ul>
 
     </header>

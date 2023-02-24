@@ -19,7 +19,6 @@ export const utilService = {
 }
 
 function setDateTime(userDate) {
-    console.log("🚀 ~ file: util-service.js ~ line 21 ~ setDateTime ~ userDate", userDate)
     let date = new Date(userDate).toLocaleDateString('he-IL', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })
     date = date.replace('T', ' ')
     date = date.replace('Z', ' ')
@@ -102,7 +101,7 @@ function makeLoremSmall(size = 1) {
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive 
+    return Math.floor(Math.random() * (max - min + 1)) + min //The maximum is inclusive and the minimum is inclusive
 }
 
 function padNum(num) {

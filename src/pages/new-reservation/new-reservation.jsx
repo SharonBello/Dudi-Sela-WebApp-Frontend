@@ -29,6 +29,8 @@ import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
+
 const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +59,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [OpenAlert, setOpenAlert] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  let uid = useSelector((storeState) => storeState.userModule.uid)
+  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {

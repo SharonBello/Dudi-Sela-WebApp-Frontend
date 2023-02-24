@@ -3,8 +3,7 @@ import { getAuth, signInWithCredential, GoogleAuthProvider } from "firebase/auth
 import { initializeApp } from 'firebase/app'
 import getFirebaseConfig from '../services/key.service.js'
 
-const STORAGE_KEY_LOGGED_USER = 'loggedUser'
-const STORAGE_KEY_LOGGED = 'loggedUser'
+export const STORAGE_KEY_LOGGED_USER = 'loggedUser'
 
 export const userService = {
     login,
@@ -46,7 +45,7 @@ async function authSignout() {
 
 function _handleLogin(user) {
     const miniUser = { email: user.email, uid: user.uid}
-    localStorage.setItem(STORAGE_KEY_LOGGED, JSON.stringify(miniUser))
+    localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
     window.dispatchEvent(new Event("storage"));
 }
 

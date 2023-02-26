@@ -18,7 +18,6 @@ firebase.js
 .env.test.local
 .env.production.local
 .auth-service.js
-services/key.service.js
 
 npm-debug.log*
 yarn-debug.log*

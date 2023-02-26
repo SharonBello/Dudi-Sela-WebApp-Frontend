@@ -140,7 +140,7 @@ export const AppHeader = () => {
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li>: <span></span>}
 
-        {(adminUser==="true" ? <li><NavLink to={`/scheduler`} className="link-page">מנהל ההזמנות</NavLink>
+        {(adminUser==="true" ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
         </li> : <span></span>)}
       </ul>
 

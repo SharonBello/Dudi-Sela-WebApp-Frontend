@@ -8,7 +8,7 @@ import { UserReservations } from './pages/user-reservations/user-reservations.js
 import { UserProfile } from './pages/user-profile/user-profile.jsx'
 import { LearnTennis } from './pages/learn-tennis/learntennis.jsx'
 import { ContactUs } from './pages/contact-us/contact-us.jsx'
-import { Scheduler } from './pages/scheduler/scheduler.jsx'
+import { ScheduleManager } from './pages/schedule-manager/schedule-manager.jsx'
 
 const routes = [
     {
@@ -48,8 +48,8 @@ const routes = [
         component: <Signup />,
     },
     {
-        path: '/scheduler',
-        component: <Scheduler />,
+        path: '/schedule',
+        component: <ScheduleManager />,
     },
     {
         path: '/',

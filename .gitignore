@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+firebase.js
+
 # misc
 .env
 .DS_Store

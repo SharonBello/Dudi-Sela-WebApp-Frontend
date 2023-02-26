@@ -63,6 +63,7 @@
             }
         }
 
+
         & .nav-list {
             gap: calc(1vw + 1vh + 1vmin);
             font-size: calc(0.6vw + 0.6vh + 0.8vmin);
@@ -112,6 +113,22 @@
                 cursor: pointer;
             }
 
+        }
+
+        @media (max-width: 600px) {
+            max-width: 100%;
+            & .logo-hamburger-container {
+            min-width: 100%;
+            flex: 1;
+            }
+            & .nav-list {
+                display: none;
+            }
+
+            & .logo {
+                min-width: 3em;
+                margin-right: auto;
+            }
         }
     }
 }

@@ -21,6 +21,8 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   max-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   &::-webkit-scrollbar {
     scroll-behavior: smooth;

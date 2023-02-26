@@ -22,7 +22,7 @@
             text-align: center;
         }
     }
-    
+
     .info-text {
         grid-column: 1 / 1;
         display: flex;
@@ -34,34 +34,34 @@
         margin: 0;
         word-break: break-word;
         line-height: 100%;
-        
+
         @media (min-width: 320px) and (max-width: 1024px) {
             padding-right: 0;
         }
-        
+
         h2 {
             font-size: calc(2.5rem + 1vw);
             display: block;
             font-weight: 600;
             color: $font;
-            
+
             @media (min-width: 320px) and (max-width: 1024px) {
                 display: flex;
                 flex-direction: column;
             }
-            
-            
+
+
             span {
                 font-weight: 400;
                 margin-right: 0.5rem;
                 font-size: calc(0.5rem + 1vw);
                 color: $brand;
-                
+
                 @media (min-width: 320px) and (max-width: 1024px) {
                     font-size: calc(1rem + 1vw);
                     margin-right: 0;
                     margin-top: 1.3rem;
-                    
+
                 }
             }
         }
@@ -83,7 +83,7 @@
                 & .check-mark {
                     padding-block-end: rem(5px);
                     margin-inline-start: 4%;
-                    
+
                     @media (min-width: 320px) and (max-width: 1024px) {
                         padding-block-end: rem(2px);
                         flex-direction: column;
@@ -112,6 +112,12 @@
                     @media (min-width: 320px) and (max-width: 1024px) {
                         line-height: rem(22px);
                     }
+
+                    & span {
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        font-weight: 700;
+                    }
                 }
 
                 & p {
@@ -125,11 +131,11 @@
                         line-height: 1rem;
                     }
                 }
-                
+
             }
         }
     }
-    
+
     & button {
         min-width: 30%;
         margin-block-start: rem(16px);
@@ -143,14 +149,14 @@
         font-weight: 600;
         padding: rem(12px) rem(24px);
         transition: 70ms cubic-bezier(.75, 0, .25, 1);
-        
+
         @media (min-width: 320px) and (max-width: 1024px) {
             max-width: 50%;
             margin: 0 auto;
             // margin-right: 0;
             margin-block: rem(12px) rem(24px);
         }
-        
+
         &:hover {
             background-color: $accent8;
             color: $brand;

@@ -7,6 +7,10 @@
     margin: 5rem auto;
     height: 70vh;
 
+    @media (min-width: 451px) and (max-width: 700px) {
+        margin: 3rem auto;
+    }
+
     @media (max-width: 450px) {
         max-height: 50vh;
         margin: unset;

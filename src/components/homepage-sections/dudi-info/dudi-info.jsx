@@ -18,7 +18,7 @@ export const DudiInfo = () => {
               <div className="check-mark flex align-center">
                 <CircleMark />
                 <h6>
-                  <strong>שחקן גביע דייוויס ואלוף ישראל</strong>
+                  <span>שחקן גביע דייוויס ואלוף ישראל</span>
                 </h6>
               </div>
               <p>שחקן נבחרת ישראל בגביע דייוויס בשנים 2005-2019</p>

@@ -1,8 +1,7 @@
 import { httpService } from './http.service.js'
 import { getAuth, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
-import getFirebaseConfig from '../services/key.service.js'
-
+import getFirebaseConfig from './firebase.js';
 export const STORAGE_KEY_LOGGED_USER = 'loggedUser'
 
 export const userService = {
@@ -58,10 +57,11 @@ function getLoggedUser() {
     return JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER))
 }
 
+export const auth = getAuth(initializeApp(getFirebaseConfig()))
+
 function handleCredentialResponse(response) {
     const idToken = response.credential;
     const credential = GoogleAuthProvider.credential(idToken);
-    const auth = getAuth(initializeApp(getFirebaseConfig()))
 
     signInWithCredential(auth, credential)
         .then((res) => {

@@ -1,4 +1,6 @@
 import Axios from 'axios'
+import { auth } from '../services/user.service.js'
+
 
 const BASE_URL = process.env.NODE_ENV === 'production'
     ? '/'
@@ -25,12 +27,23 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data = null) {
     try {
-        const res = await axios({
-            url: `${BASE_URL}${endpoint}`,
-            method,
-            data,
-            params: (method === 'GET') ? data : null
-        })
+        const accessToken = await auth.currentUser.getIdToken()
+
+        let res
+        if (method === 'GET') {
+            res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken } })
+        }
+        if (method === 'POST') {
+            res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken } })
+        }
+        if (method === 'DELETE') {
+            res = await axios.delete(`${BASE_URL}${endpoint}`, {
+                headers: {
+                    'AuthToken': accessToken
+                },
+                data: data
+            });
+        }
         return res
     } catch (err) {
         console.dir(err)

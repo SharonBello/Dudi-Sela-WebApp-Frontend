@@ -14,7 +14,7 @@ export const App = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
-   window.addEventListener('storage', () => {
+   window.addEventListener("storage", () => {
       dispatch(setLoggedUser())
       navigate('/')
    });

@@ -24,7 +24,8 @@
                 border-bottom: 0.1px solid $brand;
 
                 & .site-sidemenu-logo {
-                    max-width: 40%;
+                    max-width: 3rem;
+                    padding-block: 1rem;
                 }
 
                 & h2 {

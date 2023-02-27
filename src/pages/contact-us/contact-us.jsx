@@ -40,17 +40,17 @@ export const ContactUs = () => {
         </div>
         <section className="contact-form-section flex-column">
           <form className="contact-form flex-column">
-            <input type="text" name="name" placeholder="שם מלא" class="inptFld" required />
+            <input type="text" name="name" placeholder="שם מלא" className="inptFld" required />
 
-            <input type="email" name="email" placeholder="כתובת אימייל" class="inptFld" required />
+            <input type="email" name="email" placeholder="כתובת אימייל" className="inptFld" required />
 
-            <input type="tel" name="phone" placeholder="מספר טלפון" class="inptFld" required />
+            <input type="tel" name="phone" placeholder="מספר טלפון" className="inptFld" required />
 
-            <input type="text" name="sub" placeholder="נושא" class="inptFld" required />
+            <input type="text" name="sub" placeholder="נושא" className="inptFld" required />
 
-            <textarea class="inptFld" rows="" cols="" placeholder="ההודעה שלך..." required></textarea>
+            <textarea className="inptFld" rows="" cols="" placeholder="ההודעה שלך..." required></textarea>
 
-          <button type="submit" class="inptBtn">שליחה</button>
+          <button type="submit" className="inptBtn">שליחה</button>
           </form>
         </section>
       </div>

@@ -1,3 +1,28 @@
-.schedule.MuiBox-root {
-    margin-top: 8em;
+.schedule-container {
+    padding-block-start: 15vh;
+    min-width: 100%;
+
+    .schedule-daily-btn,
+    .submit-button {
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 16px 24px;
+        font-size: calc(0.5rem + 0.5vw);
+        background-color: $brand;
+
+        &:hover {
+            background-color: $header;
+            color: #fff;
+        }
+    }
+
+    .submit-button {
+        margin-block-start: 1.5rem;
+    }
+
+    .schedule-header {
+        min-width: 100%;
+    }
+
 }

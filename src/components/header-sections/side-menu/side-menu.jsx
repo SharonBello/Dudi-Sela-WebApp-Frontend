@@ -30,7 +30,7 @@ export const SideMenu = ({ menuOpen, user, closeMenu, handleClick, handleSignout
         <div className="menu-header">
           <div className="logo-sidemenu-container flex">
             <NavLink to="/" className="site-sidemenu-logo">
-              <img src="https://res.cloudinary.com/primap/image/upload/v1667563747/General/Dudi%20Sela/Dudi-Logo_e5zm1a.svg" className="app-logo"
+              <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
                 alt="logo" />
             </NavLink>
             <h2>X</h2>

@@ -5,7 +5,9 @@ import { reservationService } from '../../services/reservation.service.js'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const UserProfile = () => {
-    let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    const uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    const email = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
+
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
     let [userCredit, setuserCredit] = useState()
 
@@ -27,7 +29,9 @@ export const UserProfile = () => {
     <div className='academy-info container flex-column'>
       <Card>
         <article>
-            <label>מספר הזמנות בכרטיסייה:</label>
+              <label>{email}</label>
+              <br />
+              <label>מספר הזיכויים שיש לכרטיסייה:</label>
             <> {userCredit} </>
         </article>
       </Card>

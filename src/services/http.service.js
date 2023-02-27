@@ -27,22 +27,24 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data = null) {
     try {
-        const accessToken = await auth.currentUser.getIdToken()
-
         let res
-        if (method === 'GET') {
-            res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken } })
-        }
-        if (method === 'POST') {
-            res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken } })
-        }
-        if (method === 'DELETE') {
-            res = await axios.delete(`${BASE_URL}${endpoint}`, {
-                headers: {
-                    'AuthToken': accessToken
-                },
-                data: data
-            });
+        if (auth && auth.currentUser) {
+            const accessToken = await auth.currentUser.getIdToken()
+
+            if (method === 'GET') {
+                res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken } })
+            }
+            if (method === 'POST') {
+                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken } })
+            }
+            if (method === 'DELETE') {
+                res = await axios.delete(`${BASE_URL}${endpoint}`, {
+                    headers: {
+                        'AuthToken': accessToken
+                    },
+                    data: data
+                });
+            }
         }
         return res
     } catch (err) {

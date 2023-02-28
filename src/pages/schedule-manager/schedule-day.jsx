@@ -29,94 +29,94 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   const getRows = () => {
     const _rows = [];
     for (let i = 1; i < 7; i++) {
-        _rows.push({
-            id: i,
-            courtNumber: i,
-            sixAM: "",
-            sevenAM: "",
-            eightAM: "",
-            nineAM: "",
-            tenAM: "",
-            elevenAM: "",
-            twelveAM: "",
-            onePM: "",
-            twoPM: "",
-            threePM: "",
-            fourPM: "",
-            fivePM: "",
-            sixPM: "",
-            sevenPM: "",
-            eightPM: "",
-            ninePM: "",
-            tenPM: "",
-            elevenPM: ""
-            })
+      _rows.push({
+        id: i,
+        courtNumber: i,
+        sixAM: "",
+        sevenAM: "",
+        eightAM: "",
+        nineAM: "",
+        tenAM: "",
+        elevenAM: "",
+        twelveAM: "",
+        onePM: "",
+        twoPM: "",
+        threePM: "",
+        fourPM: "",
+        fivePM: "",
+        sixPM: "",
+        sevenPM: "",
+        eightPM: "",
+        ninePM: "",
+        tenPM: "",
+        elevenPM: ""
+      })
     }
     _rows.push({
-        id: 7,
-        courtNumber: "כחול מוזל",
-        sixAM: "",
-        sevenAM: "",
-        eightAM: "",
-        nineAM: "",
-        tenAM: "",
-        elevenAM: "",
-        twelveAM: "",
-        onePM: "",
-        twoPM: "",
-        threePM: "",
-        fourPM: "",
-        fivePM: "",
-        sixPM: "",
-        sevenPM: "",
-        eightPM: "",
-        ninePM: "",
-        tenPM: "",
-        elevenPM: ""
+      id: 7,
+      courtNumber: "כחול מוזל",
+      sixAM: "",
+      sevenAM: "",
+      eightAM: "",
+      nineAM: "",
+      tenAM: "",
+      elevenAM: "",
+      twelveAM: "",
+      onePM: "",
+      twoPM: "",
+      threePM: "",
+      fourPM: "",
+      fivePM: "",
+      sixPM: "",
+      sevenPM: "",
+      eightPM: "",
+      ninePM: "",
+      tenPM: "",
+      elevenPM: ""
     })
     _rows.push({
-        id: 8,
-        courtNumber: "אדום מוזל",
-        sixAM: "",
-        sevenAM: "",
-        eightAM: "",
-        nineAM: "",
-        tenAM: "",
-        elevenAM: "",
-        twelveAM: "",
-        onePM: "",
-        twoPM: "",
-        threePM: "",
-        fourPM: "",
-        fivePM: "",
-        sixPM: "",
-        sevenPM: "",
-        eightPM: "",
-        ninePM: "",
-        tenPM: "",
-        elevenPM: ""
+      id: 8,
+      courtNumber: "אדום מוזל",
+      sixAM: "",
+      sevenAM: "",
+      eightAM: "",
+      nineAM: "",
+      tenAM: "",
+      elevenAM: "",
+      twelveAM: "",
+      onePM: "",
+      twoPM: "",
+      threePM: "",
+      fourPM: "",
+      fivePM: "",
+      sixPM: "",
+      sevenPM: "",
+      eightPM: "",
+      ninePM: "",
+      tenPM: "",
+      elevenPM: ""
     })
     _rows.push({
-        id: 9,
-        courtNumber: "ירוק מוזל",
-        sixAM: "",
-        sevenAM: "",
-        eightAM: "",
-        nineAM: "",
-        tenAM: "",
-        elevenAM: "",
-        twelveAM: "",
-        onePM: "",
-        twoPM: "",
-        threePM: "",
-        fourPM: "",
-        fivePM: "",
-        sixPM: "",
-        sevenPM: "",
-        eightPM: "",
-        ninePM: "",
-        tenPM: "",
-        elevenPM: ""
+      id: 9,
+      courtNumber: "ירוק מוזל",
+      sixAM: "",
+      sevenAM: "",
+      eightAM: "",
+      nineAM: "",
+      tenAM: "",
+      elevenAM: "",
+      twelveAM: "",
+      onePM: "",
+      twoPM: "",
+      threePM: "",
+      fourPM: "",
+      fivePM: "",
+      sixPM: "",
+      sevenPM: "",
+      eightPM: "",
+      ninePM: "",
+      tenPM: "",
+      elevenPM: ""
     })
     return _rows;
   }
@@ -148,10 +148,10 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     return _columns;
   }
   const columns = getColumns();
+
   React.useEffect(() => {
     getInstructors()
   }, [])
-
 
   const handleValueChange = (value) => {
     const idx = rows.findIndex(row => (row.hour === value.hour && row.courtNumber === value.courtNumber))
@@ -185,7 +185,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
       Object.keys(row).forEach(key => {
         if (key !== "id" && key !== "hour" && row[key] !== "") {
           // a week day
-          weekReservations.push({startHour: row["hour"], endHour:row["hour"]+1, courtNumber: row["courtNumber"], date: mDate})
+          weekReservations.push({ startHour: row["hour"], endHour: row["hour"] + 1, courtNumber: row["courtNumber"], date: mDate })
         }
       })
     })
@@ -204,27 +204,24 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     //   // setShowSuccessAlert(false)
     //   console.log("failure")
     // }
-
   }
 
   return (
     <>
-    <Box className="schedule" sx={{ width: '100%', height: 300 }}>
-      <label>{dayOfWeek}, {mDate}</label>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        experimentalFeatures={{ newEditingApi: true }}
-        hideFooter={true}
-      />
-    </Box>
-    <input
-          className='submit-button'
-          type='submit'
-          value='עדכן'
-          onClick={handleSubmit}
+      <Box className="schedule" sx={{ width: '100%', height: 500 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          editMode="row"
+          experimentalFeatures={{ newEditingApi: true }}
+          hideFooter={true}
         />
+      </Box>
+      <button
+        className='submit-button'
+        type='submit'
+        onClick={handleSubmit}
+      >שמירה</button>
     </>
 
   );

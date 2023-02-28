@@ -129,12 +129,14 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
         headerName: col.headerName,
         type: 'singleSelect',
         valueOptions: instructors,
-        width: 100,
+        width: 140,
         editable: true,
         renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
         cellClassName: (params) => {
           if (instructors.includes(params.value)) {
-            return 'reservation-set';
+            return 'reservation-by-instructor';
+          } else if (params.value !== "" && col.headerName !== "מספר מגרש") {
+            return 'reservation-by-user';
           } else {
             return '';
           }
@@ -167,7 +169,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     reservations.forEach(reservation => {
        let _rows = [...rows]
        const startHourTxt = hoursDataArr[reservation.startHour-6]
-      _rows[reservation.courtNumber-1][startHourTxt] = reservation.username
+      _rows[reservation.courtNumber-1][startHourTxt] = reservation.username.split("@")[0]
       setRows(_rows)
     });
   }

@@ -60,6 +60,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+  const email = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {
@@ -154,7 +155,8 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       startHour,
       endHour,
       courtNumber,
-      date: _date
+      date: _date,
+      username: email
     }
     if (!loggedUser) {
       navigate('/signin')

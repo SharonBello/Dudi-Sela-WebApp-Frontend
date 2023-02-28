@@ -16,8 +16,16 @@ CustomTypeEditComponent.propTypes = {
 
 
 export const ScheduleDay = ({mDate, dayOfWeek}) => {
-
+  // const initCells = () => {
+  //   let x = new Array(9);
+  //   for (var i = 0; i < x.length; i++) {
+  //     x[i] = new Array(17);
+  //   }
+  //   return x;
+  // }
   const [instructors, setInstructors] = useState([])
+  // const [cellsColor, setCellsColor] = useState(initCells())
+
   const getRows = () => {
     const _rows = [];
     for (let i = 1; i < 7; i++) {
@@ -113,184 +121,40 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     return _rows;
   }
   const [rows, setRows] = useState(getRows())
-  const columns = [
-    {
-      field: 'courtNumber',
-      headerName: 'מספר מגרש',
-      type: 'string',
-      width: 150,
-      editable: false
-    },
-    {
-      field: 'sixAM',
-      headerName: '6:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'sevenAM',
-      headerName: '7:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'eightAM',
-      headerName: '8:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'nineAM',
-      headerName: '9:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'tenAM',
-      headerName: '10:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'elevenAM',
-      headerName: '11:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'twelveAM',
-      headerName: '12:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'onePM',
-      headerName: '13:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'twoPM',
-      headerName: '14:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'threePM',
-      headerName: '15:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'fourPM',
-      headerName: '16:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'fivePM',
-      headerName: '17:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'sixPM',
-      headerName: '18:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'sevenPM',
-      headerName: '19:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'eightPM',
-      headerName: '20:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'ninePM',
-      headerName: '21:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'tenPM',
-      headerName: '22:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    },
-    {
-      field: 'elevenPM',
-      headerName: '23:00',
-      type: 'singleSelect',
-      valueOptions: instructors,
-      width: 100,
-      editable: true,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-    }
-  ];
+  const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'},{hour: 'sixAM', headerName:'6:00'},{hour: 'sevenAM', headerName:'7:00'},{hour: 'eightAM', headerName:'8:00'},
+  {hour: 'nineAM', headerName:'9:00'},{hour: 'tenAM', headerName:'10:00'},{hour: 'elevenAM', headerName:'1:00'},{hour: 'twelveAM', headerName:'12:00'},{hour: 'onePM', headerName:'13:00'},
+  {hour: 'twoPM', headerName:'14:00'},{hour: 'threePM', headerName:'15:00'},{hour: 'fourPM', headerName:'16:00'},{hour: 'fivePM', headerName:'17:00'},{hour: 'sixPM', headerName:'18:00'},
+  {hour: 'sevenPM', headerName:'19:00'},{hour: 'eightPM', headerName:'20:00'},{hour: 'ninePM', headerName:'21:00'},{hour: 'tenPM', headerName:'22:00'},{hour: 'elevenPM', headerName:'23:00'}]
+  const getColumns = () => {
+    const _columns = [];
+    columnsData.forEach(col => {
+      _columns.push({
+        field: col.hour,
+        headerName: col.headerName,
+        type: 'singleSelect',
+        valueOptions: instructors,
+        width: 100,
+        editable: true,
+        renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
+        cellClassName: (params) => {
+          if (instructors.includes(params.value)) {
+            return 'reservetion-set';
+          } else {
+            return '';
+          }
+        },
+      })
+    });
+    return _columns;
+  }
+  const columns = getColumns();
   React.useEffect(() => {
     getInstructors()
   }, [])
 
 
   const handleValueChange = (value) => {
-    const idx = rows.findIndex(row => row.hour === value.hour)
+    const idx = rows.findIndex(row => (row.hour === value.hour && row.courtNumber === value.courtNumber))
     let _rows = [...rows]
     _rows[idx] = value
     setRows(_rows)

@@ -6,6 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { CustomTypeEditComponent } from '../../data/scheduleData.js';
 import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 CustomTypeEditComponent.propTypes = {
   /**
@@ -16,15 +17,8 @@ CustomTypeEditComponent.propTypes = {
 
 
 export const ScheduleDay = ({mDate, dayOfWeek}) => {
-  // const initCells = () => {
-  //   let x = new Array(9);
-  //   for (var i = 0; i < x.length; i++) {
-  //     x[i] = new Array(17);
-  //   }
-  //   return x;
-  // }
   const [instructors, setInstructors] = useState([])
-  // const [cellsColor, setCellsColor] = useState(initCells())
+  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
 
   const getRows = () => {
     const _rows = [];
@@ -121,6 +115,8 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     return _rows;
   }
   const [rows, setRows] = useState(getRows())
+  const hoursData = {sixAM:6, sevenAM: 7, eightAM: 8, nineAM:9, tenAM:10, elevenAM:11, twelveAM:12, onePM: 13, twoPM: 14, threePM: 15, fourPM: 16, fivePM: 17, sixPM: 18, sevenPM: 19, eightPM: 20, ninePM: 21, tenPM: 22, elevenPM: 23};
+  const hoursDataArr = ['sixAM', 'sevenAM', 'eightAM', 'nineAM', 'tenAM', 'elevenAM', 'twelveAM', 'onePM', 'twoPM', 'threePM', 'fourPM', 'fivePM', 'sixPM', 'sevenPM', 'eightPM', 'ninePM', 'tenPM', 'elevenPM']
   const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'},{hour: 'sixAM', headerName:'6:00'},{hour: 'sevenAM', headerName:'7:00'},{hour: 'eightAM', headerName:'8:00'},
   {hour: 'nineAM', headerName:'9:00'},{hour: 'tenAM', headerName:'10:00'},{hour: 'elevenAM', headerName:'1:00'},{hour: 'twelveAM', headerName:'12:00'},{hour: 'onePM', headerName:'13:00'},
   {hour: 'twoPM', headerName:'14:00'},{hour: 'threePM', headerName:'15:00'},{hour: 'fourPM', headerName:'16:00'},{hour: 'fivePM', headerName:'17:00'},{hour: 'sixPM', headerName:'18:00'},
@@ -138,7 +134,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
         renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
         cellClassName: (params) => {
           if (instructors.includes(params.value)) {
-            return 'reservetion-set';
+            return 'reservation-set';
           } else {
             return '';
           }
@@ -151,6 +147,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   React.useEffect(() => {
     getInstructors()
+    getToadysReservations()
   }, [])
 
   const handleValueChange = (value) => {
@@ -165,45 +162,40 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     setInstructors(instructors)
   }
 
-  const handleSubmit = (e) => {
-    console.log(rows)
-    console.log(columns)
-    addReservations()
+  const getToadysReservations = async () => {
+    let reservations = await reservationService.queryByDate(mDate)
+    reservations.forEach(reservation => {
+       let _rows = [...rows]
+       const startHourTxt = hoursDataArr[reservation.startHour-6]
+      _rows[reservation.courtNumber-1][startHourTxt] = reservation.username
+      setRows(_rows)
+    });
   }
-
-  const addReservations = async () => {
-
-    // loop over reservations for the week, construct weekReservations
-    // weekReservations array of objects, each object is { date: 'YYYY-MM-DD', reservations: [ {
-    //   startHour,
-    //   endHour,
-    //   courtNumber,
-    //   date
-    // }, ... }
-    const weekReservations = []
+  const handleSubmit = async () => {
+    const weeklyRerservations = []
     rows.forEach(row => {
       Object.keys(row).forEach(key => {
-        if (key !== "id" && key !== "hour" && row[key] !== "") {
-          // a week day
-          weekReservations.push({ startHour: row["hour"], endHour: row["hour"] + 1, courtNumber: row["courtNumber"], date: mDate })
+        if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
+          const hour = hoursData[key]
+          weeklyRerservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["courtNumber"], date: mDate })
         }
       })
     })
-    for (let i = 0; i < weekReservations.length; i++) {
-      const payload = weekReservations[i];
-      console.log(payload)
-      // let res = await reservationService.addNewReservation(adminUid, payload)
-      // const _date = dayjs(date).format('YYYY-MM-DD')
-      // let resByDate = await reservationService.addNewReservationByDate(_date, payload)
+    for (let i = 0; i < weeklyRerservations.length; i++) {
+      const payload = weeklyRerservations[i];
+      let resExists = await reservationService.isReservetionExists(uid, payload)
+      if (!resExists.data.isExists) {
+        let res = await reservationService.addNewReservation(uid, payload)
+        let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
+        if (res.data.result === 0 && resByDate.data.result === 0) {
+          console.log("success")
+        } else {
+          console.log("failure")
+        }
 
+      }
     }
-    // if (res.data.result === 0 && resByDate.data.result === 0) {
-    //   // setShowSuccessAlert(true)
-    //   console.log("success")
-    // } else {
-    //   // setShowSuccessAlert(false)
-    //   console.log("failure")
-    // }
+
   }
 
   return (

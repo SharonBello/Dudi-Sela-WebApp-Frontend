@@ -12,26 +12,27 @@ export const ScheduleManager = () => {
   }
 
   const [date, setDate] = useState(getCurrentDate())
+  const [notFormattedDate, setNotFormattedDate] = useState(new Date())
 
   const openTodaysSchedule = () => {
-    console.log("today")
-    setDate(dayjs(new Date()).format('YYYY-MM-DD'))
+    setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
+    setNotFormattedDate(new Date())
   }
   const openNextDaySchedule = () => {
-    console.log("next day")
-    let _date = new Date()
-    _date.setDate(dayjs(date).toDate().getDate() + 1)
+    let _date = notFormattedDate;
+    _date.setDate(_date.getDate() + 1)
+    setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
   }
   const openPreviousDaySchedule = () => {
-    console.log("previous day")
-    let _date = new Date()
-    _date.setDate(dayjs(date).toDate().getDate() - 1)
+    let _date = notFormattedDate;
+    _date.setDate(_date.getDate() - 1)
+    setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
   }
   return (
     <div className="flex-column align-center justify-between container schedule-container">
-      <Typography component="h1" variant="h5">מנהל הזמנות</Typography>
+      <Typography component="h1" variant="h5">האקדמיה לטניס דודי סלע</Typography>
       <Box
         className="flex align-center justify-between schedule-header"
         sx={{
@@ -50,7 +51,10 @@ export const ScheduleManager = () => {
           <button onClick={openTodaysSchedule} className="schedule-daily-btn">היום</button>
           <button onClick={openNextDaySchedule} className="schedule-daily-btn">next day</button>
         </Box>
-        <Typography component="h1" variant="h5">logo</Typography>
+        <Typography component="h6" variant="h6">
+          <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
+              alt="logo" />
+        </Typography>
       </Box>
       <ScheduleDay mDate={date} dayOfWeek={weekDay} />
     </div>

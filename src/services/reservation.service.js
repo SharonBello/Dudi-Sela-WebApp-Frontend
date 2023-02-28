@@ -15,7 +15,8 @@ export const reservationService = {
     deleteReservation,
     deleteReservationByDate,
     changeCredit,
-    getCredit
+    getCredit,
+    isReservetionExists
 }
 
 function getById(reservationId) {
@@ -51,6 +52,16 @@ async function remove(reservationId) {
 async function addNewReservation(uid, data) {
     try {
         let res = await httpService.post('reservations/reservations?docId=' + uid, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function isReservetionExists(uid, data) {
+    try {
+        let res = await httpService.post('reservations/reservation/exists?docId=' + uid, data)
         return res
     }
     catch (err) {

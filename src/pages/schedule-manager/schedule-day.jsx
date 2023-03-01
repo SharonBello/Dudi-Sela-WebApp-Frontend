@@ -121,6 +121,25 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   {hour: 'nineAM', headerName:'9:00'},{hour: 'tenAM', headerName:'10:00'},{hour: 'elevenAM', headerName:'1:00'},{hour: 'twelveAM', headerName:'12:00'},{hour: 'onePM', headerName:'13:00'},
   {hour: 'twoPM', headerName:'14:00'},{hour: 'threePM', headerName:'15:00'},{hour: 'fourPM', headerName:'16:00'},{hour: 'fivePM', headerName:'17:00'},{hour: 'sixPM', headerName:'18:00'},
   {hour: 'sevenPM', headerName:'19:00'},{hour: 'eightPM', headerName:'20:00'},{hour: 'ninePM', headerName:'21:00'},{hour: 'tenPM', headerName:'22:00'},{hour: 'elevenPM', headerName:'23:00'}]
+  const START_HOUR_DAY = 6
+  const scheduleData = {
+    "wednesday": [
+        {
+            "courtNumber": 1,
+            "startHour": 9,
+            "endHour": 10,
+            "username": "דור"
+        },
+        {
+            "courtNumber": 1,
+            "startHour": 10,
+            "endHour": 11,
+            "username": "אקדמיה"
+        }
+    ]
+  }
+  // localStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
+
   const getColumns = () => {
     const _columns = [];
     columnsData.forEach(col => {
@@ -148,9 +167,15 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   const columns = getColumns();
 
   React.useEffect(() => {
+    initSchedule()
     getInstructors()
     getToadysReservations()
-  }, [])
+  }, [mDate])
+
+  const initSchedule = () => {
+    let _rows = getRows()
+    setRows(_rows)
+  }
 
   const handleValueChange = (value) => {
     const idx = rows.findIndex(row => (row.hour === value.hour && row.courtNumber === value.courtNumber))
@@ -166,13 +191,14 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   const getToadysReservations = async () => {
     let reservations = await reservationService.queryByDate(mDate)
+    let _rows = [...rows]
     reservations.forEach(reservation => {
-       let _rows = [...rows]
-       const startHourTxt = hoursDataArr[reservation.startHour-6]
+       const startHourTxt = hoursDataArr[reservation.startHour-START_HOUR_DAY]
       _rows[reservation.courtNumber-1][startHourTxt] = reservation.username.split("@")[0]
-      setRows(_rows)
     });
+    setRows(_rows)
   }
+
   const handleSubmit = async () => {
     const weeklyRerservations = []
     rows.forEach(row => {
@@ -200,6 +226,22 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   }
 
+  const handleImport = async () => {
+    let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
+    let _rows = [...rows]
+    reservations.forEach(item => {
+       const startHourTxt = hoursDataArr[item.startHour-START_HOUR_DAY]
+      _rows[item.courtNumber-1][startHourTxt] = item.username.split("@")[0]
+    });
+    setRows(_rows)
+  }
+  const handleExport = async () => {
+    const scheduleData = JSON.parse(localStorage.getItem("dudi-sela-schedule"))
+    console.log(scheduleData)
+    const res = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
+    console.log(res)
+  }
+
   return (
     <>
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
@@ -211,11 +253,24 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
           hideFooter={true}
         />
       </Box>
+      <div className='flex'>
       <button
         className='submit-button'
         type='submit'
         onClick={handleSubmit}
       >שמירה</button>
+        <button
+        className='submit-button small-margin'
+        type='submit'
+        onClick={handleImport}
+      >ייבוא תוכנית</button>
+      <button
+        className='submit-button small-margin'
+        type='submit'
+        onClick={handleExport}
+      >יצוא תוכנית</button>
+      </div>
+
     </>
 
   );

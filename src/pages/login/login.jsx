@@ -32,6 +32,7 @@ export const Login = () => {
     if (window.google) {
       setGoogleAccounts("loginDiv")
     }
+    // autoLogin()
   }, []);
 
   // Create rtl cache
@@ -68,6 +69,14 @@ export const Login = () => {
         console.error(error)
       })
   }
+
+  // const autoLogin = () => {
+  //   const loginInfo = {
+  //     email: 'doronkabaso22@gmail.com',
+  //     password: 'q1w2e3r4',
+  //   }
+  //   loginUser(loginInfo.email, loginInfo.password)
+  // }
 
   const handleSubmit = (ev) => {
     try {

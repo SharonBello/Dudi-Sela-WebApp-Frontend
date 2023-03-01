@@ -16,7 +16,9 @@ export const reservationService = {
     deleteReservationByDate,
     changeCredit,
     getCredit,
-    isReservetionExists
+    isReservetionExists,
+    queryByWeekDay,
+    postByWeekDay
 }
 
 function getById(reservationId) {
@@ -37,6 +39,26 @@ async function query(uid) {
 async function queryByDate(date) {
     try {
         let data = await httpService.get('reservations/reservations/date?date=' + date)
+        let reservations = data.data.reservations
+        return reservations
+    } catch (err) {
+        throw err
+    }
+}
+
+
+async function postByWeekDay(weekday, data) {
+    try {
+        let res = await httpService.post('reservations/schedule/weekday?weekday=' + weekday, data)
+        return res
+    } catch (err) {
+        throw err
+    }
+}
+
+async function queryByWeekDay(weekday) {
+    try {
+        let data = await httpService.get('reservations/schedule/weekday?weekday=' + weekday)
         let reservations = data.data.reservations
         return reservations
     } catch (err) {

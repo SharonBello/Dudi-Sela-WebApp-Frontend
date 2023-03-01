@@ -126,6 +126,9 @@ export const AppHeader = () => {
         <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
         </li>
 
+        {(adminUser==="true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
+        </li> : <span></span>)}
+
         <li>
           {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
           <div className="avatar-container">
@@ -140,8 +143,6 @@ export const AppHeader = () => {
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
         </li>: <span></span>}
 
-        {(adminUser==="true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
-        </li> : <span></span>)}
       </ul>
 
     </header>

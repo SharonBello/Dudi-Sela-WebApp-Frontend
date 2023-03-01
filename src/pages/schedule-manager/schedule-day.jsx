@@ -18,8 +18,6 @@ CustomTypeEditComponent.propTypes = {
 
 export const ScheduleDay = ({mDate, dayOfWeek}) => {
   const [instructors, setInstructors] = useState([])
-  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-
   const getRows = () => {
     const _rows = [];
     for (let i = 1; i < 7; i++) {
@@ -200,6 +198,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   }
 
   const handleSubmit = async () => {
+    let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     const weeklyRerservations = []
     rows.forEach(row => {
       Object.keys(row).forEach(key => {

@@ -16,7 +16,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
-import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx';
+import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -51,13 +52,19 @@ export const Login = () => {
     }
     userService.login(payload)
       .then((response) => {
-        if (response.data.result === 1) {
+        if (!response.data.uid) {
           dispatch(setUserUid(null))
           // UserMessages('Incorrect email or password', 'error')
           setIsLogin(!isLogin)
           navigate('/signin')
-
         } else {
+          const miniUser = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)) // { email: user.email, uid: user.uid}
+          if (!miniUser) {
+            localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify({"uid":response.data.uid, "email": email}))
+          } else {
+            miniUser["uid"] = response.data.uid
+            localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+          }
           dispatch(setUserUid(response.data.uid))
           setIsLogin(isLogin)
           dispatch(login(payload))

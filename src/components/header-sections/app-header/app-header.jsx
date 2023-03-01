@@ -74,7 +74,7 @@ export const AppHeader = () => {
   }
 
   if (loggedUser && !loggedUser.picture) {
-    loggedUser.picture = "https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg"
+    loggedUser.picture = "src/assets/images/avatar-light.svg"
   }
 
   const handleClick = () => {
@@ -144,7 +144,7 @@ export const AppHeader = () => {
         </li>
 
         {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
-        </li>: <span></span>}
+        </li>: null}
 
       </ul>
 

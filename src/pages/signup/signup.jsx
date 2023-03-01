@@ -20,7 +20,7 @@ import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
-const STORAGE_KEY_LOGGED = 'loggedUser'
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -69,10 +69,19 @@ export const Signup = () => {
     }
     userService.signup(payload)
       .then((response) => {
-        dispatch(setUserUid(response.data.uid))
-        dispatch(login(payload))
-        dispatch(setLoggedUser())
-        navigate('/')
+        if (!response.data.uid) {
+          dispatch(setUserUid(null))
+          navigate('/signin')
+        } else {
+          const miniUser = {"email": payload.email, "uid": response.data.uid}
+          localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+
+          dispatch(setUserUid(response.data.uid))
+          dispatch(login(payload))
+          dispatch(setLoggedUser())
+          navigate('/')
+        }
+
       })
       .catch((error) => {
         console.error(error)

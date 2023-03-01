@@ -9,7 +9,6 @@ export const userService = {
     authSignout,
     signup,
     getLoggedUser,
-    saveLocalUser,
     handleCredentialResponse
 }
 
@@ -43,14 +42,11 @@ async function authSignout() {
 }
 
 function _handleLogin(user) {
-    const miniUser = { email: user.email, uid: user.uid}
-    localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
-    window.dispatchEvent(new Event("storage"));
-}
-
-function saveLocalUser(user) {
-    localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(user))
-    return user
+    if (user.uid) {
+        const miniUser = { email: user.email, uid: user.uid}
+        localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+        window.dispatchEvent(new Event("storage"));
+    }
 }
 
 function getLoggedUser() {

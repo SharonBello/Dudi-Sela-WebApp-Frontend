@@ -7,6 +7,8 @@ import { CustomTypeEditComponent } from '../../data/scheduleData.js';
 import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
+import { Loader } from '../../components/loader.jsx';
+import { getRows, hoursData, hoursDataArr, columnsData } from './schedule-helper.js';
 
 CustomTypeEditComponent.propTypes = {
   /**
@@ -18,125 +20,9 @@ CustomTypeEditComponent.propTypes = {
 
 export const ScheduleDay = ({mDate, dayOfWeek}) => {
   const [instructors, setInstructors] = useState([])
-  const getRows = () => {
-    const _rows = [];
-    for (let i = 1; i < 7; i++) {
-      _rows.push({
-        id: i,
-        courtNumber: i,
-        sixAM: "",
-        sevenAM: "",
-        eightAM: "",
-        nineAM: "",
-        tenAM: "",
-        elevenAM: "",
-        twelveAM: "",
-        onePM: "",
-        twoPM: "",
-        threePM: "",
-        fourPM: "",
-        fivePM: "",
-        sixPM: "",
-        sevenPM: "",
-        eightPM: "",
-        ninePM: "",
-        tenPM: "",
-        elevenPM: ""
-      })
-    }
-    _rows.push({
-      id: 7,
-      courtNumber: "כחול מוזל",
-      sixAM: "",
-      sevenAM: "",
-      eightAM: "",
-      nineAM: "",
-      tenAM: "",
-      elevenAM: "",
-      twelveAM: "",
-      onePM: "",
-      twoPM: "",
-      threePM: "",
-      fourPM: "",
-      fivePM: "",
-      sixPM: "",
-      sevenPM: "",
-      eightPM: "",
-      ninePM: "",
-      tenPM: "",
-      elevenPM: ""
-    })
-    _rows.push({
-      id: 8,
-      courtNumber: "אדום מוזל",
-      sixAM: "",
-      sevenAM: "",
-      eightAM: "",
-      nineAM: "",
-      tenAM: "",
-      elevenAM: "",
-      twelveAM: "",
-      onePM: "",
-      twoPM: "",
-      threePM: "",
-      fourPM: "",
-      fivePM: "",
-      sixPM: "",
-      sevenPM: "",
-      eightPM: "",
-      ninePM: "",
-      tenPM: "",
-      elevenPM: ""
-    })
-    _rows.push({
-      id: 9,
-      courtNumber: "ירוק מוזל",
-      sixAM: "",
-      sevenAM: "",
-      eightAM: "",
-      nineAM: "",
-      tenAM: "",
-      elevenAM: "",
-      twelveAM: "",
-      onePM: "",
-      twoPM: "",
-      threePM: "",
-      fourPM: "",
-      fivePM: "",
-      sixPM: "",
-      sevenPM: "",
-      eightPM: "",
-      ninePM: "",
-      tenPM: "",
-      elevenPM: ""
-    })
-    return _rows;
-  }
+  const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
-  const hoursData = {sixAM:6, sevenAM: 7, eightAM: 8, nineAM:9, tenAM:10, elevenAM:11, twelveAM:12, onePM: 13, twoPM: 14, threePM: 15, fourPM: 16, fivePM: 17, sixPM: 18, sevenPM: 19, eightPM: 20, ninePM: 21, tenPM: 22, elevenPM: 23};
-  const hoursDataArr = ['sixAM', 'sevenAM', 'eightAM', 'nineAM', 'tenAM', 'elevenAM', 'twelveAM', 'onePM', 'twoPM', 'threePM', 'fourPM', 'fivePM', 'sixPM', 'sevenPM', 'eightPM', 'ninePM', 'tenPM', 'elevenPM']
-  const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'},{hour: 'sixAM', headerName:'6:00'},{hour: 'sevenAM', headerName:'7:00'},{hour: 'eightAM', headerName:'8:00'},
-  {hour: 'nineAM', headerName:'9:00'},{hour: 'tenAM', headerName:'10:00'},{hour: 'elevenAM', headerName:'1:00'},{hour: 'twelveAM', headerName:'12:00'},{hour: 'onePM', headerName:'13:00'},
-  {hour: 'twoPM', headerName:'14:00'},{hour: 'threePM', headerName:'15:00'},{hour: 'fourPM', headerName:'16:00'},{hour: 'fivePM', headerName:'17:00'},{hour: 'sixPM', headerName:'18:00'},
-  {hour: 'sevenPM', headerName:'19:00'},{hour: 'eightPM', headerName:'20:00'},{hour: 'ninePM', headerName:'21:00'},{hour: 'tenPM', headerName:'22:00'},{hour: 'elevenPM', headerName:'23:00'}]
   const START_HOUR_DAY = 6
-  const scheduleData = {
-    "wednesday": [
-        {
-            "courtNumber": 1,
-            "startHour": 9,
-            "endHour": 10,
-            "username": "דור"
-        },
-        {
-            "courtNumber": 1,
-            "startHour": 10,
-            "endHour": 11,
-            "username": "אקדמיה"
-        }
-    ]
-  }
-  // localStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
 
   const getColumns = () => {
     const _columns = [];
@@ -198,13 +84,14 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   }
 
   const handleSubmit = async () => {
+    setIsLoading(true)
     let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     const weeklyRerservations = []
     rows.forEach(row => {
       Object.keys(row).forEach(key => {
         if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
           const hour = hoursData[key]
-          weeklyRerservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["courtNumber"], date: mDate })
+          weeklyRerservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
         }
       })
     })
@@ -222,10 +109,11 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
       }
     }
-
+    setIsLoading(false)
   }
 
   const handleImport = async () => {
+    setIsLoading(true)
     let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
     let _rows = [...rows]
     reservations.forEach(item => {
@@ -233,16 +121,28 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
       _rows[item.courtNumber-1][startHourTxt] = item.username.split("@")[0]
     });
     setRows(_rows)
+    setIsLoading(false)
   }
   const handleExport = async () => {
+    setIsLoading(true)
     const scheduleData = JSON.parse(localStorage.getItem("dudi-sela-schedule"))
     console.log(scheduleData)
     const res = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
     console.log(res)
+    setIsLoading(false)
+  }
+
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
   }
 
   return (
     <>
+      {renderIsLoading()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
           rows={rows}

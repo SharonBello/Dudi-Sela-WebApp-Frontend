@@ -129,6 +129,9 @@ export const AppHeader = () => {
         {(adminUser==="true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
         </li> : <span></span>)}
 
+        {(adminUser==="true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
+        </li> : <span></span>)}
+
         <li>
           {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
           <div className="avatar-container">

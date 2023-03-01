@@ -1,15 +1,13 @@
-import * as React from 'react';
-import { useState } from 'react';
-import dayjs from 'dayjs';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { ScheduleDay } from './schedule-day.jsx';
+import * as React from 'react'
+import { useState } from 'react'
+import dayjs from 'dayjs'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import { ScheduleDay } from './schedule-day.jsx'
+import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
 
 export const ScheduleManager = () => {
-  const weekDay = dayjs().format('dddd');
-  const getCurrentDate = () => {
-    return dayjs(new Date()).format('YYYY-MM-DD')
-  }
+  const weekDay = dayjs().format('dddd')
 
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
@@ -19,13 +17,13 @@ export const ScheduleManager = () => {
     setNotFormattedDate(new Date())
   }
   const openNextDaySchedule = () => {
-    let _date = notFormattedDate;
+    let _date = notFormattedDate
     _date.setDate(_date.getDate() + 1)
     setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
   }
   const openPreviousDaySchedule = () => {
-    let _date = notFormattedDate;
+    let _date = notFormattedDate
     _date.setDate(_date.getDate() - 1)
     setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
@@ -39,7 +37,7 @@ export const ScheduleManager = () => {
           marginBlock: 5,
         }}
       >
-        <Typography>{weekDay} {date}</Typography>
+        <Typography>{weekDayInHebrew[weekDay]} {date}</Typography>
         <Box
           sx={{
             display: 'flex',
@@ -59,5 +57,5 @@ export const ScheduleManager = () => {
       <ScheduleDay mDate={date} dayOfWeek={weekDay} />
     </div>
 
-  );
+  )
 }

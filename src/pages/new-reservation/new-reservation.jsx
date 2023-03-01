@@ -58,7 +58,11 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [messageAlert, setMessageAlert] = useState()
   const [OpenAlert, setOpenAlert] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showDuration, setShowDuration] = useState(false)
 
+  const hoursData = ["6 בבוקר", "7 בבוקר","8 בבוקר", "9 בבוקר","10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
+  const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+  const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
@@ -95,7 +99,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
-  const filterCourtsDataByStartHour = async (_startHour) => {
+  const filterCourtsDataByHour = async (_startHour, _endHour) => {
     let _courtsData = JSON.parse(JSON.stringify(courtsData))
     // Initialize court numbers
     _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
@@ -104,34 +108,13 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     let reservations = await reservationService.queryByDate(_date)
     // Filter coursts data by reserved courts
     reservations.forEach(reservation => {
-      if (isIntersected(reservation, _startHour, endHour)) {
+      if (isIntersected(reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }
     });
     setCourtsData(_courtsData);
   }
-
-  const filterCourtsDataByEndHour = async (_endHour) => {
-    let _courtsData = JSON.parse(JSON.stringify(courtsData))
-    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
-    const _date = dayjs(date).format('YYYY-MM-DD')
-    let reservations = await reservationService.queryByDate(_date)
-    reservations.forEach(reservation => {
-      if (isIntersected(reservation, startHour, _endHour)) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
-      }
-    });
-    setCourtsData(_courtsData);
-  }
-
-        // reservations.forEach(reservation => {
-      //   if (reservation.startHour === (startHour + index)) {
-      //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-      //     _courtsData.court_numbers.splice(index, 1);
-      //   }
-      // });
 
   const filterCourtsDataByDate = async (_date) => {
     let _courtsData = JSON.parse(JSON.stringify(courtsData))
@@ -180,16 +163,26 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
   }
 
-  const handleStartHourChange = (e) => {
-    setStartHour(e.target.value)
-    filterCourtsDataByStartHour(e.target.value)
+  const handleStartHourSelect = (e, index) => {
+    setIsLoading(true)
+    e.stopPropagation()
+    e.preventDefault()
+    setStartHour(hoursVals[index])
+    setEndHour(hoursVals[index]+1)
+    filterCourtsDataByHour(hoursVals[index], hoursVals[index]+1)
     setCourtNumber()
+    setIsLoading(false)
+    setShowDuration(true)
   }
 
-  const handleEndHourChange = (e) => {
-    setEndHour(e.target.value)
-    filterCourtsDataByEndHour(e.target.value)
+  const handleDurationChange = (e) => {
+    setIsLoading(true)
+    e.stopPropagation()
+    e.preventDefault()
+    setEndHour(e.target.value+startHour)
+    filterCourtsDataByHour(startHour, e.target.value+startHour)
     setCourtNumber()
+    setIsLoading(false)
   }
 
   const handleCourtNumberChange = (e) => {
@@ -199,9 +192,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const validateForm = (e) => {
-    if  (!(startHour && endHour && courtNumber)) {
-      return "נא למלא את כל השדות"
-    }
+    // if  (!(startHour && courtNumber)) {
+    //   return "נא למלא את כל השדות"
+    // }
     if (startHour >= endHour) {
       return "שעת הסיום חייבת להיות מאוחרת משעת ההתחלה"
     }
@@ -223,44 +216,32 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const renderStartHourSelect = () => {
     if (courtsData) {
       return (
-        <FormControl sx={{ m: 3, minWidth: 150 }}>
-          <InputLabel id="startHour">שעת התחלה</InputLabel>
-
-          <Select
-            labelId="startHour"
-            id="start-hour-select"
-            value={startHour}
-            onChange={(e) => handleStartHourChange(e)}
-            label="שעת התחלה"
-            required
-          >
-            {courtsData.start_time.map(option => {
+        <>
+          <div className="court-number-container flex">
+            {hoursData.map((val, index) => {
               return (
-                <MenuItem key={option} value={option}>
-                  {option}
-                </MenuItem>
+                <button key={val} className="court-number-btn flex" onClick={(e) => handleStartHourSelect(e, index)}>{val}</button>
               )
             })}
-          </Select>
-        </FormControl>
+          </div>
+        </>
       )
     }
   }
 
-  const renderEndHourSelect = () => {
-    if (courtsData) {
+  const handleDurationSelect = () => {
+    if (showDuration && courtsData) {
       return (
         <FormControl sx={{ m: 3, minWidth: 150 }}>
-          <InputLabel id="endHour">שעת סיום</InputLabel>
+          <InputLabel>משך שעות</InputLabel>
           <Select
-            label="שעת סיום"
-            labelId="endHour"
-            id="end-hour-select"
-            value={endHour}
-            onChange={(e) => handleEndHourChange(e)}
+            label="משך שעות"
+            labelId="durationHours"
+            defaultValue="1"
+            onChange={(e) => handleDurationChange(e)}
             required
           >
-            {courtsData.end_time.map(option => {
+            {durationTime.map(option => {
               return (
                 <MenuItem
                   key={option}
@@ -405,6 +386,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       )
     }
   }
+
   return (
     <>
       {renderSuccessAlert()}
@@ -418,7 +400,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
               <Stack spacing={3}>
                 <section className="hours-container flex">
                   {renderStartHourSelect()}
-                  {renderEndHourSelect()}
+                  {handleDurationSelect()}
                 </section>
 
                 <section className="date-container flex">

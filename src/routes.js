@@ -10,6 +10,7 @@ import { LearnTennis } from './pages/learn-tennis/learntennis.jsx'
 import { ContactUs } from './pages/contact-us/contact-us.jsx'
 import { ScheduleDay } from './pages/schedule-manager/schedule-day.jsx'
 import { ScheduleManager } from './pages/schedule-manager/schedule-manager.jsx'
+import { Dashboard } from './pages/dashboard/dashboard.jsx'
 
 const routes = [
     {
@@ -51,6 +52,10 @@ const routes = [
     {
         path: '/schedule',
         component: <ScheduleManager />,
+    },
+    {
+        path: '/dashboard',
+        component: <Dashboard />,
     },
     {
         path: '/',

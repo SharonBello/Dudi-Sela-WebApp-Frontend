@@ -1,4 +1,4 @@
-export default coachesData = [
+const coachesData = [
     {
         img: "https://res.cloudinary.com/primap/image/upload/v1674812443/General/Dudi%20Sela/dudisela_pbrmv6.webp",
         video: "",
@@ -93,4 +93,6 @@ export default coachesData = [
         title: 'מאמן כושר',
         description: ''
     }
-]
+];
+
+export default coachesData;

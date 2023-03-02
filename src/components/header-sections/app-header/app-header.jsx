@@ -13,8 +13,8 @@ export const AppHeader = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const token = sessionStorage.getItem('user')
-  const adminUser = sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
+  const token = localStorage.getItem('user')
+  const adminUser = localStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
   const { width } = useWindowDimensions()
   const [scrolled, setScrolled] = useState(false)
 
@@ -74,7 +74,7 @@ export const AppHeader = () => {
   }
 
   if (loggedUser && !loggedUser.picture) {
-    loggedUser.picture = "https://res.cloudinary.com/primap/image/upload/v1677771861/General/Dudi%20Sela/avatar-light_lxv47k.svg"
+    loggedUser.picture = "https://res.cloudinary.com/primap/image/upload/v1677773927/General/Dudi%20Sela/avatar-light_siimvl.svg"
   }
 
   const handleClick = () => {
@@ -102,7 +102,7 @@ export const AppHeader = () => {
         </div>
         <div className="logo">
           <NavLink to="/" className="site-logo">
-            <img src="https://res.cloudinary.com/primap/image/upload/v1677773927/General/Dudi%20Sela/avatar-light_siimvl.svg" className="app-logo"
+            <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
               alt="logo" />
           </NavLink>
         </div>
@@ -110,7 +110,7 @@ export const AppHeader = () => {
       <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
 
         {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
-        </li> : <span></span>)}
+        </li> : null)}
 
         {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
         </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
@@ -127,10 +127,10 @@ export const AppHeader = () => {
         </li>
 
         {(adminUser==="true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
-        </li> : <span></span>)}
+        </li> : null)}
 
         {(adminUser==="true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
-        </li> : <span></span>)}
+        </li> : null)}
 
         <li>
           {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}

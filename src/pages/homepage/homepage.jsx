@@ -3,12 +3,11 @@ import { HomeHero } from '../../components/homepage-sections/home-hero/home-hero
 import { QuestionAnswer } from '../../components/homepage-sections/question-answer/question-answer.jsx'
 import { Testimonials } from '../../components/homepage-sections/testimonials/testimonials.jsx'
 import { DudiInfo } from '../../components/homepage-sections/dudi-info/dudi-info.jsx'
-import { coachesData } from '../../data/coachesData.js'
+import coachesData  from './coachesData.jsx'
 import { Coaches } from '../../components/homepage-sections/coaches/coaches.jsx'
 import { CoachesMobile } from '../../components/homepage-sections/coaches/coaches-mobile/coaches-mobile.jsx'
 
 export const Homepage = () => {
-
 
   const renderCoaches = () => {
     if (window.innerWidth < 720) {

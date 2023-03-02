@@ -13,8 +13,8 @@ export const AppHeader = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const token = localStorage.getItem('user')
-  const adminUser = localStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
+  const token = sessionStorage.getItem('user')
+  const adminUser = sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
   const { width } = useWindowDimensions()
   const [scrolled, setScrolled] = useState(false)
 
@@ -74,7 +74,7 @@ export const AppHeader = () => {
   }
 
   if (loggedUser && !loggedUser.picture) {
-    loggedUser.picture = "src/assets/images/avatar-light.svg"
+    loggedUser.picture = "https://res.cloudinary.com/primap/image/upload/v1677771861/General/Dudi%20Sela/avatar-light_lxv47k.svg"
   }
 
   const handleClick = () => {
@@ -102,7 +102,7 @@ export const AppHeader = () => {
         </div>
         <div className="logo">
           <NavLink to="/" className="site-logo">
-            <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
+            <img src="https://res.cloudinary.com/primap/image/upload/v1677773927/General/Dudi%20Sela/avatar-light_siimvl.svg" className="app-logo"
               alt="logo" />
           </NavLink>
         </div>

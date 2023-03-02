@@ -7,8 +7,8 @@ import { SnackbarProvider } from 'notistack';
 import { useDispatch } from 'react-redux'
 import { setLoggedUser } from './store/actions/user.actions.js';
 import { useNavigate } from "react-router"
-
 import './main.scss'
+import { useEffect } from 'react'
 
 export const App = () => {
    const dispatch = useDispatch()
@@ -18,6 +18,12 @@ export const App = () => {
       dispatch(setLoggedUser())
       navigate('/')
    });
+
+   useEffect(() => {
+      if (sessionStorage.getItem('loggedUser')) {
+         dispatch(setLoggedUser())
+      }
+   }, [])
 
    return (
       <div className="app-container flex">

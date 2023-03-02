@@ -74,7 +74,7 @@ export const Signup = () => {
           navigate('/signin')
         } else {
           const miniUser = {"email": payload.email, "uid": response.data.uid}
-          localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+          sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
 
           dispatch(setUserUid(response.data.uid))
           dispatch(login(payload))

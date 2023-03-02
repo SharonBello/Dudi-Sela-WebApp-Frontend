@@ -16,7 +16,7 @@ window.userService = userService
 
 async function login(userCred) {
     try {
-        const loggedUser = await httpService.post('auth//signin', userCred)
+        const loggedUser = await httpService.post('auth/signin', userCred)
         if (loggedUser) {
             _handleLogin(userCred)
             return loggedUser
@@ -37,20 +37,20 @@ async function signup(payload) {
 }
 
 async function authSignout() {
-    localStorage.removeItem(STORAGE_KEY_LOGGED_USER)
+    sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
     return await httpService.post('auth/signout')
 }
 
 function _handleLogin(user) {
     if (user.uid) {
         const miniUser = { email: user.email, uid: user.uid}
-        localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+        sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
         window.dispatchEvent(new Event("storage"));
     }
 }
 
 function getLoggedUser() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER))
+    return JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER))
 }
 
 export const auth = getAuth(initializeApp(getFirebaseConfig()))

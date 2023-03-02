@@ -50,7 +50,7 @@ async function ajax(endpoint, method = 'GET', data = null) {
     } catch (err) {
         console.dir(err)
         if (err.response && err.response.status === 401) {
-            localStorage.clear()
+            sessionStorage.clear()
         }
         throw err
     }

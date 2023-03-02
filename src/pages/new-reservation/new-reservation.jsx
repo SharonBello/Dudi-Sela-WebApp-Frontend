@@ -66,13 +66,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const hoursData = ["6 בבוקר", "7 בבוקר","8 בבוקר", "9 בבוקר","10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
-  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-  const email = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
+  let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+  const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
-
-  useEffect(() => {
-    dispatch(setLoggedUser)
-  }, [loggedUser])
 
   useEffect(() => {
     getCourtsData().then(res => {
@@ -92,8 +88,12 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   })
 
   const getCourtsData = async () => {
-    let res = await courtService.getCourts()
-    return res.data
+    try {
+      let res = await courtService.getCourts()
+      return res.data
+    } catch (error) {
+      navigate('/')
+    }
   }
 
   const isIntersected = (reservation, _startHour, _endHour) => {
@@ -135,7 +135,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     // Get reserved courts by date
     const _date = dayjs(date).format('YYYY-MM-DD')
     let reservations = await reservationService.queryByDate(_date)
-    // Filter coursts data by reserved courts
+    // Filter courts data by reserved courts
     reservations.forEach(reservation => {
       if (isIntersected(reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
@@ -149,7 +149,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     let reservations = await reservationService.queryByDate(_date)
-    // Filter coursts data by reserved courts
+    // Filter courts data by reserved courts
     reservations.forEach(reservation => {
       if (reservation.date === _date) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
@@ -256,11 +256,11 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     if (courtsData) {
       return (
         <>
-          <div className="court-number-container flex">
+          <div className="start-hour-container flex">
             {courtsData.start_time.map((val) => {
               const valText = hoursData[val-START_HOUR_DAY]
               return (
-                <button key={val} value={val} className="court-number-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
+                <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
               )
             })}
           </div>

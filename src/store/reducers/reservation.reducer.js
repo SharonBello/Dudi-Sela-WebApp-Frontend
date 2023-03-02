@@ -1,11 +1,10 @@
-const initialState = {   
+const initialState = {
     reservation: null,
     reservations: []
 }
 
 export function reservationReducer(state = initialState, action) {
     let reservations
-
     switch (action.type) {
         case 'SET_RESERVATIONS':
             return { ...state, reservations: action.reservations }

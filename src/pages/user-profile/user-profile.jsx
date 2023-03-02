@@ -5,8 +5,8 @@ import { reservationService } from '../../services/reservation.service.js'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const UserProfile = () => {
-    const uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-    const email = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
+    const uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
 
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
     let [userCredit, setuserCredit] = useState()

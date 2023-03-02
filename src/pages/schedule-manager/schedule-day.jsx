@@ -85,19 +85,19 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-    const weeklyRerservations = []
+    let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    const weeklyReservations = []
     rows.forEach(row => {
       Object.keys(row).forEach(key => {
         if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
           const hour = hoursData[key]
-          weeklyRerservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
+          weeklyReservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
         }
       })
     })
-    for (let i = 0; i < weeklyRerservations.length; i++) {
-      const payload = weeklyRerservations[i];
-      let resExists = await reservationService.isReservetionExists(uid, payload)
+    for (let i = 0; i < weeklyReservations.length; i++) {
+      const payload = weeklyReservations[i];
+      let resExists = await reservationService.isReservationExists(uid, payload)
       if (!resExists.data.isExists) {
         let res = await reservationService.addNewReservation(uid, payload)
         let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
@@ -125,7 +125,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   // }
   const handleExport = async () => {
     setIsLoading(true)
-    const scheduleData = JSON.parse(localStorage.getItem("dudi-sela-schedule"))
+    const scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
     console.log(scheduleData)
     const res = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
     console.log(res)

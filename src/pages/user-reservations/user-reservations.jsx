@@ -6,7 +6,7 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const UserReservations = () => {
   let [reservations, setReservations] = useState([])
-  let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+  let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {

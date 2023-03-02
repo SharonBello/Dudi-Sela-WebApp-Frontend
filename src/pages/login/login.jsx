@@ -28,7 +28,6 @@ export const Login = () => {
     direction: 'rtl',
   })
 
-
   useEffect(() => {
     if (window.google) {
       setGoogleAccounts("loginDiv")
@@ -58,12 +57,12 @@ export const Login = () => {
           setIsLogin(!isLogin)
           navigate('/signin')
         } else {
-          const miniUser = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)) // { email: user.email, uid: user.uid}
+          const miniUser = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)) // { email: user.email, uid: user.uid}
           if (!miniUser) {
-            localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify({"uid":response.data.uid, "email": email}))
+            sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify({ "uid": response.data.uid, "email": email }))
           } else {
             miniUser["uid"] = response.data.uid
-            localStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
+            sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
           }
           dispatch(setUserUid(response.data.uid))
           setIsLogin(isLogin)
@@ -160,13 +159,13 @@ export const Login = () => {
                     </Grid>
                   </Grid>
 
-                  <div id="loginDiv" className="googleSignin flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem'}}>
+                  <div id="loginDiv" className="googleSignin flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem' }}>
                   </div>
 
                   <Grid container justifyContent="center">
                     <Grid item>
                       חדשים באתר?
-                      <NavLink to="/signup" variant="body2" onClick={onChangePage} style={{textDecoration: 'underline'}}>
+                      <NavLink to="/signup" variant="body2" onClick={onChangePage} style={{ textDecoration: 'underline' }}>
                         הרשמו כאן
                       </NavLink>
                     </Grid>

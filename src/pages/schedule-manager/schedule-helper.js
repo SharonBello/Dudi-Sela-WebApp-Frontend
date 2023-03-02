@@ -208,6 +208,6 @@ const scheduleData = {
     ]
   }
 
-if (localStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
-  localStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
+if (sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
+  sessionStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
 }

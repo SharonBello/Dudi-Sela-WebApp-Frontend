@@ -32,7 +32,7 @@ export const ReservationPreview = ({ item, todaysDate }) => {
 
     const navigate = useNavigate()
     const NUM_DAYS_CANCEL_REGISTRATION = 1
-    let uid = JSON.parse(localStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const getTimeLeft = (item) => {
@@ -84,13 +84,13 @@ export const ReservationPreview = ({ item, todaysDate }) => {
             const payload = item
             const res = await reservationService.deleteReservation(uid, payload)
             const resByDate = await reservationService.deleteReservationByDate(item.date, payload)
-            const resCredit = await reservationService.changeCredit(uid, {"userCredit": 1})
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1 })
             setShowDeleteAlert(false)
 
             if (res.data.result === 0 && resByDate.data.result === 0 && resCredit.data.result === 0) {
-            setShowSuccessAlert(true)
+                setShowSuccessAlert(true)
             } else {
-            setShowSuccessAlert(false)
+                setShowSuccessAlert(false)
             }
         }
 
@@ -103,64 +103,64 @@ export const ReservationPreview = ({ item, todaysDate }) => {
     }
 
 
-  const alertAction = (
-    <>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="#F2F6F7"
-        onClick={handleCloseAlert}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </>
-  )
+    const alertAction = (
+        <>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="#F2F6F7"
+                onClick={handleCloseAlert}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </>
+    )
 
     const renderSuccessAlert = () => {
         if (showSuccessAlert) {
-          return (
-            <Snackbar
-              open={true}
-              autoHideDuration={60000}
-              onClose={handleCloseAlert}
-              action={alertAction}
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            >
-              <Alert
-                severity="success"
-                onClose={handleCloseAlert}
-                sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
-                spacing={5}
-                variant="filled"
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              >
-             המגרש בוטל בהצלחה, הכרטיסייה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
-            </Snackbar>
-          )
+            return (
+                <Snackbar
+                    open={true}
+                    autoHideDuration={60000}
+                    onClose={handleCloseAlert}
+                    action={alertAction}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert
+                        severity="success"
+                        onClose={handleCloseAlert}
+                        sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                        spacing={5}
+                        variant="filled"
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        המגרש בוטל בהצלחה, הכרטיסייה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
+                </Snackbar>
+            )
         }
-      }
+    }
 
     const renderFailureAlert = () => {
         if (showFailureAlert) {
             return (
-            <Snackbar
-                open={true}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                autoHideDuration={6000}
-                onClose={handleCloseAlert}
-                action={alertAction}
-            >
-                <Alert
-                severity="error"
-                onClose={handleCloseAlert}
-                sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
-                spacing={5}
-                // margin={5}
-                variant="filled"
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                <Snackbar
+                    open={true}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    action={alertAction}
                 >
-                ביטול המגרש נכשל</Alert>
-            </Snackbar>
+                    <Alert
+                        severity="error"
+                        onClose={handleCloseAlert}
+                        sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                        spacing={5}
+                        // margin={5}
+                        variant="filled"
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        ביטול המגרש נכשל</Alert>
+                </Snackbar>
             )
         }
     }
@@ -174,18 +174,18 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                {"ביטול הזמנה"}
+                    {"ביטול הזמנה"}
                 </DialogTitle>
                 <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                {" האם את/ה בטוח/ה שברצונך לבטל את ההזמנה?"}
-                </DialogContentText>
+                    <DialogContentText id="alert-dialog-description">
+                        {" האם את/ה בטוח/ה שברצונך לבטל את ההזמנה?"}
+                    </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                <Button onClick={closeDeleteAlert}>לא</Button>
-                <Button onClick={handleDeleteReservation} autoFocus>
-                    כן
-                </Button>
+                    <Button onClick={closeDeleteAlert}>לא</Button>
+                    <Button onClick={handleDeleteReservation} autoFocus>
+                        כן
+                    </Button>
                 </DialogActions>
             </Dialog>
         )
@@ -194,7 +194,7 @@ export const ReservationPreview = ({ item, todaysDate }) => {
     useEffect(() => {
         getIsCancelable(item);
         getIsEditable(item);
-      }, [getIsCancelable, getIsEditable, item])
+    }, [getIsCancelable, getIsEditable, item])
 
     return (
         <>

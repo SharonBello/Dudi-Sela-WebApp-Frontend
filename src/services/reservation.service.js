@@ -16,7 +16,7 @@ export const reservationService = {
     deleteReservationByDate,
     changeCredit,
     getCredit,
-    isReservetionExists,
+    isReservationExists: isReservetionExists,
     queryByWeekDay,
     postByWeekDay
 }

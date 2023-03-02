@@ -108,9 +108,93 @@ export const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'
 export const weekDayInHebrew = {'Sunday':"יום ראשון",'Monday':"יום שני",'Tuesday':"יום שלישי",'Wednesday':"יום רביעי",'Thursday':"יום חמישי",'Friday':"יום שישי",'Saturday':"יום שבת"}
 
 const scheduleData = {
-    "wednesday": [
+  "sunday": [
+    {
+        "courtNumber": 1,
+        "startHour": 12,
+        "endHour": 13,
+        "username": "דור"
+    },
+    {
+        "courtNumber": 1,
+        "startHour": 10,
+        "endHour": 11,
+        "username": "אקדמיה"
+    }
+],
+"monday": [
+  {
+      "courtNumber": 2,
+      "startHour": 14,
+      "endHour": 15,
+      "username": "דור"
+  },
+  {
+      "courtNumber": 1,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "אקדמיה"
+  }
+],
+"tuesday": [
+  {
+      "courtNumber": 3,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "דור"
+  },
+  {
+      "courtNumber": 1,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "אקדמיה"
+  }
+],
+"wednesday": [
+  {
+      "courtNumber": 4,
+      "startHour": 9,
+      "endHour": 10,
+      "username": "דור"
+  },
+  {
+      "courtNumber": 1,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "אקדמיה"
+  }
+],
+"thursday": [
+  {
+      "courtNumber": 3,
+      "startHour": 9,
+      "endHour": 10,
+      "username": "דור"
+  },
+  {
+      "courtNumber": 1,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "אקדמיה"
+  }
+  ],
+"friday": [
+  {
+      "courtNumber": 5,
+      "startHour": 9,
+      "endHour": 10,
+      "username": "דור"
+  },
+  {
+      "courtNumber": 1,
+      "startHour": 10,
+      "endHour": 11,
+      "username": "אקדמיה"
+  }
+  ],
+    "saturday": [
         {
-            "courtNumber": 1,
+            "courtNumber": 6,
             "startHour": 9,
             "endHour": 10,
             "username": "דור"
@@ -123,5 +207,7 @@ const scheduleData = {
         }
     ]
   }
-// Uncomment the following to store schedule data into local storage
-// localStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
+
+if (localStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
+  localStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
+}

@@ -7,11 +7,9 @@ import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
 
 export const ScheduleManager = () => {
-  const weekDay = dayjs().format('dddd')
-
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
-
+  const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
   const openTodaysSchedule = () => {
     setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
     setNotFormattedDate(new Date())
@@ -21,12 +19,14 @@ export const ScheduleManager = () => {
     _date.setDate(_date.getDate() + 1)
     setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
+    setWeekDay(dayjs(_date).format('dddd'))
   }
   const openPreviousDaySchedule = () => {
     let _date = notFormattedDate
     _date.setDate(_date.getDate() - 1)
     setNotFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
+    setWeekDay(dayjs(_date).format('dddd'))
   }
   return (
     <div className="flex-column align-center justify-between container schedule-container">

@@ -75,7 +75,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   const getToadysReservations = async () => {
     let reservations = await reservationService.queryByDate(mDate)
-    let _rows = [...rows]
+    let _rows = getRows()
     reservations.forEach(reservation => {
        const startHourTxt = hoursDataArr[reservation.startHour-START_HOUR_DAY]
       _rows[reservation.courtNumber-1][startHourTxt] = reservation.username.split("@")[0]
@@ -112,17 +112,17 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     setIsLoading(false)
   }
 
-  const handleImport = async () => {
-    setIsLoading(true)
-    let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
-    let _rows = [...rows]
-    reservations.forEach(item => {
-       const startHourTxt = hoursDataArr[item.startHour-START_HOUR_DAY]
-      _rows[item.courtNumber-1][startHourTxt] = item.username.split("@")[0]
-    });
-    setRows(_rows)
-    setIsLoading(false)
-  }
+  // const handleImport = async () => {
+  //   setIsLoading(true)
+  //   let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
+  //   let _rows = [...rows]
+  //   reservations.forEach(item => {
+  //      const startHourTxt = hoursDataArr[item.startHour-START_HOUR_DAY]
+  //     _rows[item.courtNumber-1][startHourTxt] = item.username.split("@")[0]
+  //   });
+  //   setRows(_rows)
+  //   setIsLoading(false)
+  // }
   const handleExport = async () => {
     setIsLoading(true)
     const scheduleData = JSON.parse(localStorage.getItem("dudi-sela-schedule"))
@@ -142,7 +142,6 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   return (
     <>
-      {renderIsLoading()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
           rows={rows}
@@ -151,18 +150,21 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />
+        {renderIsLoading()}
+
       </Box>
       <div className='flex'>
       <button
         className='submit-button'
         type='submit'
         onClick={handleSubmit}
+        disabled={isLoading}
       >שמירה</button>
-        <button
+        {/* <button
         className='submit-button small-margin'
         type='submit'
         onClick={handleImport}
-      >ייבוא תוכנית</button>
+      >ייבוא תוכנית</button> */}
       <button
         className='submit-button small-margin'
         type='submit'

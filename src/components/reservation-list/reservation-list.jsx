@@ -2,11 +2,12 @@
 import { ReservationPreview } from '../reservation-preview/reservation-preview.jsx'
 import React, { useState, useEffect } from 'react'
 import { utilService } from '../../services/util-service.js'
+import dayjs from 'dayjs';
 
 export const ReservationList = ({ reservations }) => {
     const year = new Date().getFullYear()
     let month = utilService.getLocalMonthName(new Date())
-
+    const todaysDate = dayjs().format('YYYY-MM-DD')
     const [qtyTotalReservations, setQtyTotalReservations] = useState(0)
     const [qtyMonthlyReservations, setQtyMonthlyReservations] = useState(0)
     const [qtyYearReservations, setQtyYearReservations] = useState(0)
@@ -80,6 +81,7 @@ export const ReservationList = ({ reservations }) => {
                         <ReservationPreview
                         key={item.id}
                         item={item}
+                        todaysDate={todaysDate}
                         />
                         )}
                 </tbody>

@@ -18,7 +18,6 @@ export const UserProfile = () => {
     const getUserCredit = async (uid) => {
         if (loggedUser || uid) {
             let _userCredit = await reservationService.getCredit(uid)
-            console.log(_userCredit)
             setuserCredit(_userCredit)
         }
     }

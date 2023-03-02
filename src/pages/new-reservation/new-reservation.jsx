@@ -30,6 +30,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
+const START_HOUR_DAY = 6
 
 const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
 const useStyles = makeStyles((theme) => ({
@@ -49,10 +50,12 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(new Date())
   const [courtsData, setCourtsData] = useState()
+  const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
   const classes = useStyles()
   const todaysDate = dayjs().format('DD/MM/YYYY')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState()
@@ -73,7 +76,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
 
   useEffect(() => {
     getCourtsData().then(res => {
-      setCourtsData(res)
+      setInitCourtsData(res)
+      filterCourtsDataByCourtNumber(res)
+      // setCourtsData(res)
     })
   }, [])
 
@@ -99,10 +104,34 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
-  const filterCourtsDataByHour = async (_startHour, _endHour) => {
-    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+  const filterCourtsDataByCourtNumber = async (res) => {
+    // if for a given date and start time, all courts are reserved
+    //    splice the start time from the courts data
+    let _courtsData = JSON.parse(JSON.stringify(res))
     // Initialize court numbers
     _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    // Get reserved courts by date
+    const _date = dayjs(date).format('YYYY-MM-DD')
+    let reservations = await reservationService.queryByDate(_date)
+    // Filter coursts data by reserved courts
+    // loop over each time, and find out for e.g. 6am all courts are reserved
+    hoursVals.forEach(hour => {
+      const setCourts = new Set()
+      reservations.forEach(reservation => {
+        if (reservation.startHour === hour) {
+          setCourts.add(reservation.courtNumber)
+        }
+      });
+      if (setCourts.size === 6) {// all courts are reserved
+        // TODO splice the start time
+        _courtsData.start_time.splice(hour-START_HOUR_DAY, 1)
+      }
+    })
+    setCourtsData(_courtsData);
+  }
+
+  const filterCourtsDataByHour = async (_startHour, _endHour) => {
+    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     const _date = dayjs(date).format('YYYY-MM-DD')
     let reservations = await reservationService.queryByDate(_date)
@@ -117,9 +146,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const filterCourtsDataByDate = async (_date) => {
-    let _courtsData = JSON.parse(JSON.stringify(courtsData))
-    // Initialize court numbers
-    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     let reservations = await reservationService.queryByDate(_date)
     // Filter coursts data by reserved courts
@@ -146,10 +173,21 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
     else if (loggedUser || uid) {
       try {
+        let _userCredit = await reservationService.getCredit(uid)
+        const creditNum = payload.endHour - payload.startHour
+        let _successMessage = ""
+        // use credit if exists
+        if ((_userCredit - creditNum) >= 0) {
+          const resCredit = await reservationService.changeCredit(uid, {"userCredit": -creditNum})
+          if (resCredit.data.result === 0) {
+            _successMessage += "ההזמנה זוכתה מהכרטיסייה - "
+          }
+        }
         let res = await reservationService.addNewReservation(uid, payload)
         let resByDate = await reservationService.addNewReservationByDate(_date, payload)
-
         if (res.data.result === 0 && resByDate.data.result === 0) {
+          _successMessage += "המגרש הוזמן בהצלחה"
+          setSuccessMessage(_successMessage)
           setShowSuccessAlert(true)
         } else {
           setShowSuccessAlert(false)
@@ -163,13 +201,14 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
   }
 
-  const handleStartHourSelect = (e, index) => {
+  const handleStartHourSelect = (e) => {
     setIsLoading(true)
     e.stopPropagation()
     e.preventDefault()
-    setStartHour(hoursVals[index])
-    setEndHour(hoursVals[index]+1)
-    filterCourtsDataByHour(hoursVals[index], hoursVals[index]+1)
+    const startHour = parseInt(e.currentTarget.value)
+    setStartHour(startHour)
+    setEndHour(startHour+1)
+    filterCourtsDataByHour(startHour, startHour+1)
     setCourtNumber()
     setIsLoading(false)
     setShowDuration(true)
@@ -218,9 +257,10 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       return (
         <>
           <div className="court-number-container flex">
-            {hoursData.map((val, index) => {
+            {courtsData.start_time.map((val) => {
+              const valText = hoursData[val-START_HOUR_DAY]
               return (
-                <button key={val} className="court-number-btn flex" onClick={(e) => handleStartHourSelect(e, index)}>{val}</button>
+                <button key={val} value={val} className="court-number-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
               )
             })}
           </div>
@@ -323,7 +363,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
-            המגרש הוזמן בהצלחה</Alert>
+            {successMessage}</Alert>
         </Snackbar>
       )
     }

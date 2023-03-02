@@ -23,7 +23,7 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 moment().format()
 
-export const ReservationPreview = ({ item }) => {
+export const ReservationPreview = ({ item, todaysDate }) => {
     const [isCancelable, setIsCancelable] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
@@ -36,9 +36,8 @@ export const ReservationPreview = ({ item }) => {
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const getTimeLeft = (item) => {
-        const currentDate = moment()
-        const future = moment(item.date)
-        const timeLeft = future.diff(currentDate, 'days')
+        const futureDate = dayjs(item.date)
+        const timeLeft = futureDate.diff(todaysDate, 'day')
         return timeLeft
     }
 

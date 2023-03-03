@@ -78,7 +78,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     let _rows = getRows()
     reservations.forEach(reservation => {
        const startHourTxt = hoursDataArr[reservation.startHour-START_HOUR_DAY]
-      _rows[reservation.courtNumber-1][startHourTxt] = reservation.username.split("@")[0]
+      _rows[reservation.courtNumber-1][startHourTxt] = reservation.username //.split("@")[0]
     });
     setRows(_rows)
   }
@@ -97,7 +97,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     })
     for (let i = 0; i < weeklyReservations.length; i++) {
       const payload = weeklyReservations[i];
-      let resExists = await reservationService.isReservationExists(uid, payload)
+      let resExists = await reservationService.isReservetionExists(uid, payload)
       if (!resExists.data.isExists) {
         let res = await reservationService.addNewReservation(uid, payload)
         let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
@@ -112,21 +112,22 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     setIsLoading(false)
   }
 
-  // const handleImport = async () => {
-  //   setIsLoading(true)
-  //   let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
-  //   let _rows = [...rows]
-  //   reservations.forEach(item => {
-  //      const startHourTxt = hoursDataArr[item.startHour-START_HOUR_DAY]
-  //     _rows[item.courtNumber-1][startHourTxt] = item.username.split("@")[0]
-  //   });
-  //   setRows(_rows)
-  //   setIsLoading(false)
-  // }
+  const handleImport = async () => {
+    setIsLoading(true)
+    let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
+    let _rows = [...rows]
+    reservations.forEach(item => {
+       const startHourTxt = hoursDataArr[item.startHour-START_HOUR_DAY]
+      _rows[item.courtNumber-1][startHourTxt] = item.username //.split("@")[0]
+    });
+    setRows(_rows)
+    setIsLoading(false)
+  }
+
   const handleExport = async () => {
     setIsLoading(true)
-    const scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
-    console.log(scheduleData)
+    let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
+    scheduleData = scheduleData[dayOfWeek.toLowerCase()]
     const res = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
     console.log(res)
     setIsLoading(false)
@@ -160,15 +161,17 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
         onClick={handleSubmit}
         disabled={isLoading}
       >שמירה</button>
-        {/* <button
+        <button
         className='submit-button small-margin'
         type='submit'
         onClick={handleImport}
-      >ייבוא תוכנית</button> */}
+        disabled={isLoading}
+      >ייבוא תוכנית</button>
       <button
         className='submit-button small-margin'
         type='submit'
         onClick={handleExport}
+        disabled={isLoading}
       >יצוא תוכנית</button>
       </div>
 

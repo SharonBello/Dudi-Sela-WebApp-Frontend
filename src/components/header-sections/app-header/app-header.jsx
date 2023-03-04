@@ -13,8 +13,7 @@ export const AppHeader = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const token = localStorage.getItem('user')
-  const adminUser = localStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
+  const adminUser = sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
   const { width } = useWindowDimensions()
   const [scrolled, setScrolled] = useState(false)
 

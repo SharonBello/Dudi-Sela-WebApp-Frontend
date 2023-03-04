@@ -107,106 +107,27 @@ export const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'
   {hour: 'sevenPM', headerName:'19:00'},{hour: 'eightPM', headerName:'20:00'},{hour: 'ninePM', headerName:'21:00'},{hour: 'tenPM', headerName:'22:00'},{hour: 'elevenPM', headerName:'23:00'}]
 export const weekDayInHebrew = {'Sunday':"יום ראשון",'Monday':"יום שני",'Tuesday':"יום שלישי",'Wednesday':"יום רביעי",'Thursday':"יום חמישי",'Friday':"יום שישי",'Saturday':"יום שבת"}
 
-const scheduleData = {
-  "sunday": [
-    {
-        "courtNumber": 1,
-        "startHour": 12,
-        "endHour": 13,
-        "username": "דור"
-    },
-    {
-        "courtNumber": 1,
-        "startHour": 10,
-        "endHour": 11,
+const mockScheduleDay = []
+for (let courtNumber = 1; courtNumber < 7; courtNumber++) {
+  for (let startHour = 8; startHour < 22; startHour++) {
+    mockScheduleDay.push({
+        "courtNumber": courtNumber,
+        "startHour": startHour,
+        "endHour": startHour+1,
         "username": "אקדמיה"
-    }
-],
-"monday": [
-  {
-      "courtNumber": 2,
-      "startHour": 14,
-      "endHour": 15,
-      "username": "דור"
-  },
-  {
-      "courtNumber": 1,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "אקדמיה"
+    })
   }
-],
-"tuesday": [
-  {
-      "courtNumber": 3,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "דור"
-  },
-  {
-      "courtNumber": 1,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "אקדמיה"
-  }
-],
-"wednesday": [
-  {
-      "courtNumber": 4,
-      "startHour": 9,
-      "endHour": 10,
-      "username": "דור"
-  },
-  {
-      "courtNumber": 1,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "אקדמיה"
-  }
-],
-"thursday": [
-  {
-      "courtNumber": 3,
-      "startHour": 9,
-      "endHour": 10,
-      "username": "דור"
-  },
-  {
-      "courtNumber": 1,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "אקדמיה"
-  }
-  ],
-"friday": [
-  {
-      "courtNumber": 5,
-      "startHour": 9,
-      "endHour": 10,
-      "username": "דור"
-  },
-  {
-      "courtNumber": 1,
-      "startHour": 10,
-      "endHour": 11,
-      "username": "אקדמיה"
-  }
-  ],
-    "saturday": [
-        {
-            "courtNumber": 6,
-            "startHour": 9,
-            "endHour": 10,
-            "username": "דור"
-        },
-        {
-            "courtNumber": 1,
-            "startHour": 10,
-            "endHour": 11,
-            "username": "אקדמיה"
-        }
-    ]
-  }
+}
+
+const scheduleData = {
+  "sunday": mockScheduleDay,
+  "monday": mockScheduleDay,
+  "tuesday": mockScheduleDay,
+  "wednesday": mockScheduleDay,
+  "thursday": mockScheduleDay,
+  "friday": mockScheduleDay,
+  "saturday":mockScheduleDay
+}
 
 if (sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
   sessionStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))

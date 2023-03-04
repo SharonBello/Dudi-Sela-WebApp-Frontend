@@ -56,6 +56,7 @@ export const NewReservation = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
+  const [reservationsByDate, setReservationsByDate] = useState([])
   const hoursData = ["6 בבוקר", "7 בבוקר","8 בבוקר", "9 בבוקר","10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
@@ -137,13 +138,24 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
+  const areCourtsAvailable = (_startHour, _endHour, _courtsData, _date) => {
+    reservationsByDate.forEach(reservation => {
+      if (isIntersected(reservation, _startHour, _endHour)) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
+    return _courtsData.court_numbers.length > 0;
+  }
+
   const filterCourtsDataByDate = async (_date) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     let reservations = await reservationService.queryByDate(_date)
+    setReservationsByDate(reservations)
     // Filter courts data by reserved courts
     reservations.forEach(reservation => {
-      if (reservation.date === _date) {
+      if (reservation.date === _date && reservation.startHour === startHour) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }
@@ -245,8 +257,12 @@ export const NewReservation = () => {
     }
   }
 
-  const renderStartHourSelect = () => {
+  const renderStartHourSelect =  () => {
     if (courtsData) {
+    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
+    const _date = dayjs(date).format('YYYY-MM-DD')
+    let reservations = [] // await reservationService.queryByDate(_date)
+
       return (
         <>
           <div className="start-hour-container flex">
@@ -257,6 +273,15 @@ export const NewReservation = () => {
                 className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
                  onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
               )
+              // if courts available for startTime (valText), return button
+              let _endHour
+              if (!endHour) {_endHour = val+durationTime[0]}
+              else {_endHour = endHour}
+              if (areCourtsAvailable(val, _endHour, _courtsData, _date)) {
+                return (
+                  <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
+                )
+              }
             })}
           </div>
         </>
@@ -307,7 +332,7 @@ export const NewReservation = () => {
     }
   }
 
-  const handleChange = (newValue) => {
+  const handleDateChange = (newValue) => {
     setDate(newValue)
     filterCourtsDataByDate(dayjs(newValue).format('YYYY-MM-DD'))
   }
@@ -440,18 +465,18 @@ export const NewReservation = () => {
                       inputFormat="DD/MM/YYYY"
                       value={date}
                       placeholder={todaysDate}
-                      onChange={handleChange}
+                      onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
-                      minDate={date}
+                      minDate={todaysDate}
                       /></LocalizationProvider>
                       : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
                       label="תאריך"
                       inputFormat="DD/MM/YYYY"
                       value={date}
                       placeholder={todaysDate}
-                      onChange={handleChange}
+                      onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
-                      minDate={date}
+                      minDate={todaysDate}
                     />
                     </LocalizationProvider>}
                 </section>

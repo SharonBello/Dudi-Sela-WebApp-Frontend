@@ -8,7 +8,7 @@ export const AppFooter = () => {
   const { pathname } = useLocation()
 
   return (
-    pathname !== '/schedule' ? (
+    (pathname !== '/schedule' && pathname !== '/dashboard') ? (
       <>
         <div className="footer-sections">
           <section className="top-footer container">

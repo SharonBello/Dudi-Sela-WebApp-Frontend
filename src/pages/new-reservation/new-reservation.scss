@@ -161,17 +161,6 @@ form {
         }
     }
 
-    .loader {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-top: -50px;
-        margin-left: -50px;
-        width: 400px;
-        height: 400px;
-    }
-
-
     label[data-shrink=false]+.MuiInputBase-formControl .muirtl-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
         width: 150px;
     }

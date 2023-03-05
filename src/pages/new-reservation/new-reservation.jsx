@@ -52,8 +52,32 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [courtsData, setCourtsData] = useState()
   const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
-  const classes = useStyles()
   const todaysDate = dayjs().format('DD/MM/YYYY')
+
+  // let _date = new Date()
+  // _date.setDate(_date.getDate() + 1)
+  // const saturdayDate = moment().add(1,'days'); // dayjs(_date).format('DD/MM/YYYY')
+  // const today = new Date();
+  // let saturdayDate = new Date(today)
+  // saturdayDate.setDate(saturdayDate.getDate() + 1)
+  // const yyyy = saturdayDate.getFullYear();
+  // let mm = saturdayDate.getMonth() + 1; // Months start at 0!
+  // let dd = saturdayDate.getDate();
+  // if (dd < 10) dd = '0' + dd;
+  // if (mm < 10) mm = '0' + mm;
+  // saturdayDate = dd + '/' + mm + '/' + yyyy;
+  // let _date = new Date()
+  // dayjs.extend(weekday)
+  // let idxDay = 0
+  // let temp = dayjs().weekday(idxDay)
+  // while (temp.$d.toString().indexOf('Sat') !== 0) {
+  //   _date.setDate(_date.getDate() + 1)
+  //   idxDay++
+  //   temp = dayjs().weekday(idxDay)
+  // }
+  // const saturdayDate = dayjs(_date).format('DD/MM/YYYY')
+
+
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)
@@ -473,7 +497,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                       placeholder={todaysDate}
                       onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
-                      minDate={todaysDate}
                       /></LocalizationProvider>
                       : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
                       label="תאריך"
@@ -482,7 +505,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
                       placeholder={todaysDate}
                       onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
-                      minDate={todaysDate}
                     />
                     </LocalizationProvider>}
                 </section>

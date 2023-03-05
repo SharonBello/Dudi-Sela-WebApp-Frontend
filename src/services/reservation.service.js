@@ -40,7 +40,12 @@ async function query(uid) {
 async function queryByDate(date) {
     try {
         let data = await httpService.get('reservations/reservations/date?date=' + date)
-        let reservations = data.data.reservations
+        let reservations
+        if (!data) {
+            reservations = []
+        } else {
+            reservations = data.data.reservations
+        }
         return reservations
     } catch (err) {
         throw err

@@ -174,7 +174,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
         type='submit'
         onClick={handleSubmit}
         disabled={isLoading}
-      >שמירה</button>
+      >עדכן</button>
         <button
         className='submit-button small-margin'
         type='submit'

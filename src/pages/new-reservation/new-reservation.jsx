@@ -224,7 +224,7 @@ export const NewReservation = () => {
             setShowSuccessAlert(false)
           }
         } else {
-          setMessageAlert("המגרש לא פנוי להזמנה")
+          setMessageAlert("המגרש כבר לא פנוי להזמנה")
           setShowMessageAlert(true)
         }
       }

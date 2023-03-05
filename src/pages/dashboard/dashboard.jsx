@@ -49,7 +49,7 @@ export const Dashboard = () => {
 
   React.useEffect(() => {
     getInstructors()
-    getToadysReservations()
+    getTodaysReservations()
   }, [])
 
   const getInstructors = async () => {
@@ -57,7 +57,7 @@ export const Dashboard = () => {
     setInstructors(instructors)
   }
 
-  const getToadysReservations = async () => {
+  const getTodaysReservations = async () => {
     let reservations = await reservationService.queryByDate(date)
     let _rows = [...rows]
     reservations.forEach(reservation => {
@@ -69,11 +69,11 @@ export const Dashboard = () => {
 
 
   return (
-    <>
+    <div className='flex-column align-center justify-center container-block dashboard-container'>
     <Typography component="h1" variant="h5">האקדמיה לטניס דודי סלע</Typography>
       <Typography>{weekDayInHebrew[weekDay]} {date}</Typography>
 
-      <Box className="schedule" sx={{ width: '100%', height: 500 }}>
+      <Box className="dashboard" sx={{ width: '100%', height: 500 }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -82,7 +82,7 @@ export const Dashboard = () => {
           hideFooter={true}
         />
       </Box>
-    </>
+    </div>
 
   );
 }

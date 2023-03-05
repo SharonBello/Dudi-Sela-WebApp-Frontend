@@ -92,6 +92,7 @@ export const AppHeader = () => {
   }
 
   return (
+    pathname !== '/dashboard' ? (
     <header className={`header container flex align-center ${(scrolled && pathname === '/') ? 'scrolled' : ''}`}>
       <article className="logo-hamburger-container flex align-center">
         <div className="side-menu">
@@ -148,5 +149,8 @@ export const AppHeader = () => {
       </ul>
 
     </header>
+    ) : (
+      <span></span>
+    )
   )
 }

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { setLoggedUser } from '../../store/actions/user.actions.js'
-
+import { useSelector } from 'react-redux'
 import dayjs from 'dayjs';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -11,18 +9,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { reservationService } from '../../services/reservation.service'
 import { courtService } from '../../services/court.service.js'
 import { MenuItem, Select } from '@mui/material'
 import InputLabel from '@mui/material/InputLabel';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
@@ -30,9 +24,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
-const START_HOUR_DAY = 6
 
-const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -42,8 +34,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const NewReservation = ({ newReservationModal, closeModal }) => {
-  const dispatch = useDispatch()
+export const NewReservation = () => {
+  const START_HOUR_DAY = 6
+  const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
@@ -86,6 +79,7 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   const [OpenAlert, setOpenAlert] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showDuration, setShowDuration] = useState(false)
+  const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
   const hoursData = ["6 בבוקר", "7 בבוקר","8 בבוקר", "9 בבוקר","10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
@@ -98,7 +92,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     getCourtsData().then(res => {
       setInitCourtsData(res)
       filterCourtsDataByCourtNumber(res)
-      // setCourtsData(res)
     })
   }, [])
 
@@ -236,10 +229,11 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
   }
 
-  const handleStartHourSelect = (e) => {
-    setIsLoading(true)
+  const handleStartHourSelect = (e, index) => {
     e.stopPropagation()
     e.preventDefault()
+    setSelectedStartHour(index)
+    setIsLoading(true)
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
     setEndHour(startHour+1)
@@ -250,9 +244,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const handleDurationChange = (e) => {
-    setIsLoading(true)
     e.stopPropagation()
     e.preventDefault()
+    setIsLoading(true)
     setEndHour(e.target.value+startHour)
     filterCourtsDataByHour(startHour, e.target.value+startHour)
     setCourtNumber()
@@ -260,9 +254,9 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
   }
 
   const handleCourtNumberChange = (e) => {
-    setCourtNumber(+e.target.innerHTML)
     e.stopPropagation()
     e.preventDefault()
+    setCourtNumber(+e.target.innerHTML)
   }
 
   const validateForm = (e) => {
@@ -274,7 +268,10 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
     }
     return true
   }
+
   const handleSubmit = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
     if (validateForm() === true) {
       setIsLoading(true)
       addReservation()
@@ -282,9 +279,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       setMessageAlert(validateForm())
       setShowMessageAlert(true)
     }
-
-    e.stopPropagation()
-    e.preventDefault()
   }
 
   const renderStartHourSelect =  () => {
@@ -296,8 +290,13 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
       return (
         <>
           <div className="start-hour-container flex">
-            {courtsData.start_time.map((val) => {
+            {courtsData.start_time.map((val, index) => {
               const valText = hoursData[val-START_HOUR_DAY]
+              return (
+                <button key={val} value={val}
+                className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                 onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
+              )
               // if courts available for startTime (valText), return button
               let _endHour
               if (!endHour) {_endHour = val+durationTime[0]}
@@ -402,9 +401,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             onClose={handleCloseAlert}
             sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
             spacing={5}
-            // margin={5}
-            // color="#C9DB39"
-            // backgroundColor="#1d1d1d"
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
@@ -429,7 +425,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             onClose={handleCloseAlert}
             sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
             spacing={5}
-            // margin={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >
@@ -454,7 +449,6 @@ export const NewReservation = ({ newReservationModal, closeModal }) => {
             onClose={handleCloseAlert}
             sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
             spacing={5}
-            // margin={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
           >

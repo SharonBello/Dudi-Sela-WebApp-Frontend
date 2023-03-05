@@ -53,7 +53,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
   React.useEffect(() => {
     initSchedule()
     getInstructors()
-    getToadysReservations()
+    getTodaysReservations()
   }, [mDate])
 
   const initSchedule = () => {
@@ -73,7 +73,7 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
     setInstructors(instructors)
   }
 
-  const getToadysReservations = async () => {
+  const getTodaysReservations = async () => {
     let reservations = await reservationService.queryByDate(mDate)
     let _rows = getRows()
     reservations.forEach(reservation => {
@@ -150,10 +150,13 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
           editMode="row"
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
+          // autoHeight
         />
         {renderIsLoading()}
-
       </Box>
+
+
+
       <div className='flex'>
       <button
         className='submit-button'

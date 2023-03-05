@@ -126,10 +126,21 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
 
   const handleExport = async () => {
     setIsLoading(true)
-    let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
-    scheduleData = scheduleData[dayOfWeek.toLowerCase()]
-    const res = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
-    console.log(res)
+
+    // let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
+    // scheduleData = scheduleData[dayOfWeek.toLowerCase()]
+    const scheduleData = []
+    rows.forEach(row => {
+      Object.keys(row).forEach(key => {
+        if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
+          const hour = hoursData[key]
+          const username = row[key]
+          scheduleData.push({ startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate, username: username})
+        }
+      })
+    })
+    const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
+    const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
     setIsLoading(false)
   }
 
@@ -169,13 +180,13 @@ export const ScheduleDay = ({mDate, dayOfWeek}) => {
         type='submit'
         onClick={handleImport}
         disabled={isLoading}
-      >ייבוא תוכנית</button>
+      >יבוא תבנית הזמנות</button>
       <button
         className='submit-button small-margin'
         type='submit'
         onClick={handleExport}
         disabled={isLoading}
-      >יצוא תוכנית</button>
+      >יצוא תבנית הזמנות</button>
       </div>
 
     </>

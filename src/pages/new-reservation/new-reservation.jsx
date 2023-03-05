@@ -201,24 +201,31 @@ export const NewReservation = () => {
     }
     else if (loggedUser || uid) {
       try {
-        let _userCredit = await reservationService.getCredit(uid)
-        const creditNum = payload.endHour - payload.startHour
-        let _successMessage = ""
-        // use credit if exists
-        if ((_userCredit - creditNum) >= 0) {
-          const resCredit = await reservationService.changeCredit(uid, {"userCredit": -creditNum})
-          if (resCredit.data.result === 0) {
-            _successMessage += "ההזמנה זוכתה מהכרטיסייה - "
+
+        let resExists = await reservationService.isReservetionExists(uid, payload)
+        if (!resExists.data.isExists) {
+          let _userCredit = await reservationService.getCredit(uid)
+          const creditNum = payload.endHour - payload.startHour
+          let _successMessage = ""
+          // use credit if exists
+          if ((_userCredit - creditNum) >= 0) {
+            const resCredit = await reservationService.changeCredit(uid, {"userCredit": -creditNum})
+            if (resCredit.data.result === 0) {
+              _successMessage += "ההזמנה זוכתה מהכרטיסייה - "
+            }
           }
-        }
-        let res = await reservationService.addNewReservation(uid, payload)
-        let resByDate = await reservationService.addNewReservationByDate(_date, payload)
-        if (res.data.result === 0 && resByDate.data.result === 0) {
-          _successMessage += "המגרש הוזמן בהצלחה"
-          setSuccessMessage(_successMessage)
-          setShowSuccessAlert(true)
+          let res = await reservationService.addNewReservation(uid, payload)
+          let resByDate = await reservationService.addNewReservationByDate(_date, payload)
+          if (res.data.result === 0 && resByDate.data.result === 0) {
+            _successMessage += "המגרש הוזמן בהצלחה"
+            setSuccessMessage(_successMessage)
+            setShowSuccessAlert(true)
+          } else {
+            setShowSuccessAlert(false)
+          }
         } else {
-          setShowSuccessAlert(false)
+          setMessageAlert("המגרש לא פנוי להזמנה")
+          setShowMessageAlert(true)
         }
       }
       catch (err) {

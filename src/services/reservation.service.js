@@ -18,6 +18,7 @@ export const reservationService = {
     getCredit,
     isReservetionExists,
     queryByWeekDay,
+    resetByWeekDay,
     postByWeekDay
 }
 
@@ -50,6 +51,15 @@ async function queryByDate(date) {
 async function postByWeekDay(weekday, data) {
     try {
         let res = await httpService.post('reservations/schedule/weekday?weekday=' + weekday, data)
+        return res
+    } catch (err) {
+        throw err
+    }
+}
+
+async function resetByWeekDay(weekday) {
+    try {
+        let res = await httpService.post('reservations/schedule/reset?weekday=' + weekday)
         return res
     } catch (err) {
         throw err

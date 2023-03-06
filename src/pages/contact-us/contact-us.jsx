@@ -15,7 +15,7 @@ export const ContactUs = () => {
               <a href="mailto:dudiselaacademy@gmail.com">שליחת מייל</a>
             </li>
             <li>
-              <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
+              <a href="https://wa.me/972587040485" target="_blank" rel="noreferrer">
                 שליחת הודעה<FontAwesomeIcon icon={faWhatsapp} />
               </a>
             </li>

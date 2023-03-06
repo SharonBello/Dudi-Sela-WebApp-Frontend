@@ -164,4 +164,10 @@ form {
     label[data-shrink=false]+.MuiInputBase-formControl .muirtl-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
         width: 150px;
     }
+
+    section.date-container.flex {
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+    }
 }

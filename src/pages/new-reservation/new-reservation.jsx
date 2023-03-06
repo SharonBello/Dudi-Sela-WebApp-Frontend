@@ -46,36 +46,12 @@ export const NewReservation = () => {
   const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
   const todaysDate = dayjs().format('DD/MM/YYYY')
-
-  // let _date = new Date()
-  // _date.setDate(_date.getDate() + 1)
-  // const saturdayDate = moment().add(1,'days'); // dayjs(_date).format('DD/MM/YYYY')
-  // const today = new Date();
-  // let saturdayDate = new Date(today)
-  // saturdayDate.setDate(saturdayDate.getDate() + 1)
-  // const yyyy = saturdayDate.getFullYear();
-  // let mm = saturdayDate.getMonth() + 1; // Months start at 0!
-  // let dd = saturdayDate.getDate();
-  // if (dd < 10) dd = '0' + dd;
-  // if (mm < 10) mm = '0' + mm;
-  // saturdayDate = dd + '/' + mm + '/' + yyyy;
-  // let _date = new Date()
-  // dayjs.extend(weekday)
-  // let idxDay = 0
-  // let temp = dayjs().weekday(idxDay)
-  // while (temp.$d.toString().indexOf('Sat') !== 0) {
-  //   _date.setDate(_date.getDate() + 1)
-  //   idxDay++
-  //   temp = dayjs().weekday(idxDay)
-  // }
-  // const saturdayDate = dayjs(_date).format('DD/MM/YYYY')
-
-
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState()
+  const [warningMessage, setWarningMessage] = useState(false)
   const [OpenAlert, setOpenAlert] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showDuration, setShowDuration] = useState(false)
@@ -88,6 +64,12 @@ export const NewReservation = () => {
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
+
+  const getSaturdayDate = () => {
+    return dayjs().day(6)
+  }
+
+  const saturdayDate = getSaturdayDate()
   useEffect(() => {
     getCourtsData().then(res => {
       setInitCourtsData(res)
@@ -364,14 +346,29 @@ export const NewReservation = () => {
   }
 
   const handleDateChange = (newValue) => {
-    setDate(newValue)
-    filterCourtsDataByDate(dayjs(newValue).format('YYYY-MM-DD'))
+    if (validDate(newValue)) {
+      setDate(newValue)
+      filterCourtsDataByDate(dayjs(newValue).format('YYYY-MM-DD'))
+    } else {
+      setWarningMessage(true)
+      setMessageAlert("לא ניתן להזמין מגרש אחרי שבת הקרובה")
+      setShowMessageAlert(true)
+    }
+  }
+
+  const validDate = (newValue) => {
+    const selectedDate = new Date(newValue)
+    return selectedDate <= saturdayDate.toDate()
   }
 
   const handleCloseAlert = (event, reason) => {
     setShowSuccessAlert(false)
     setShowFailureAlert(false)
     setShowMessageAlert(false)
+    if (warningMessage) {
+      setWarningMessage(false)
+      return
+    }
     if (reason === 'clickaway') {
       navigate('/user-reservations')
       return;

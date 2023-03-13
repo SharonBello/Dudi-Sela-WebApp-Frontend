@@ -9,6 +9,13 @@ import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
 // import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -50,11 +57,29 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const { width } = useWindowDimensions()
   const [date, setDate] = useState(() => new Date());
   const todaysDate = dayjs().format('DD/MM/YYYY')
+  const [checked, setChecked] = React.useState(true);
+  const [once, setOnce] = useState('');
+  const [onceAWeek, setOnceAWeek] = useState('');
+  const [onceAMonth, setOnceAMonth] = useState('');
+
+  const handleOccurrence = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    if (e.target.value === 'once') setOnce(e.target.value);
+    if (e.target.value === 'onceAWeek') setOnceAWeek(e.target.value);
+    if (e.target.value === 'onceAMonth') setOnceAMonth(e.target.value);
+  };
 
   const handleScheduleType = (e, newScheduleType) => {
     e.stopPropagation()
     e.preventDefault()
     if (newScheduleType !== null) setScheduleType(newScheduleType);
+  };
+
+  const handleCheckedClass = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setChecked(e.target.checked);
   };
 
   const theme = createTheme({
@@ -226,49 +251,69 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
               </Box>
 
               <Box className="modal-body">
-                <Typography className="modal-body-text">
-                  בחר הזמנה
-                </Typography>
-                <ToggleButtonGroup
-                  value={scheduleType}
-                  exclusive
-                  onChange={handleScheduleType}
-                  className="flex align-center toggle-schedule-type"
-                >
-                  <ToggleButton value="schedule">
-                    <Box className="flex align-center justify-between">
-                      <CalendarMonthIcon />
-                      <Typography>
-                        הזמנה
-                      </Typography>
-                    </Box>
-                  </ToggleButton>
-                  <ToggleButton value="internal-schedule">
-                    <Box className="flex align-center">
-                      <PermContactCalendarIcon />
-                      <Typography>
-                        הזמנה פנימית
-                      </Typography>
-                    </Box>
-                  </ToggleButton>
-                  <ToggleButton value="unavailable">
-                    <Box className="flex align-center">
-                      <EventBusyIcon />
-                      <Typography>
-                        לא זמין
-                      </Typography>
-                    </Box>
-                  </ToggleButton>
-                </ToggleButtonGroup>
+                <Box className="schedule-type-container flex-column">
+                  <Typography className="modal-body-text">
+                    בחר הזמנה
+                  </Typography>
+                  <Box className="toggle-form-container flex align-center justify-between">
+                    <ToggleButtonGroup
+                      value={scheduleType}
+                      exclusive
+                      onChange={handleScheduleType}
+                      className="flex align-center toggle-schedule-type"
+                    >
+                      <ToggleButton value="schedule">
+                        <Box className="flex align-center justify-between">
+                          <CalendarMonthIcon />
+                          <Typography>
+                            הזמנה
+                          </Typography>
+                        </Box>
+                      </ToggleButton>
+                      <ToggleButton value="internal-schedule">
+                        <Box className="flex align-center">
+                          <PermContactCalendarIcon />
+                          <Typography>
+                            הזמנה פנימית
+                          </Typography>
+                        </Box>
+                      </ToggleButton>
+                      <ToggleButton value="unavailable">
+                        <Box className="flex align-center">
+                          <EventBusyIcon />
+                          <Typography>
+                            לא זמין
+                          </Typography>
+                        </Box>
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox
+                          checked={checked}
+                          onChange={(e) => handleCheckedClass(e)}
+                          inputProps={{ 'aria-label': 'controlled' }}
+                          sx={{
+                            color: "#C9DB39",
+                            '&.Mui-checked': {
+                              color: "#C9DB39",
+                            },
+                          }}
+                        />}
+                        label="צרף לחוג" />
+                    </FormGroup>
+                  </Box>
+                </Box>
 
                 <CacheProvider value={cacheRtl}>
                   <ThemeProvider theme={theme}>
                     <div dir="rtl" className="form-container flex align-center" >
-                      <Box className="flex-column">
+                      <Box className="date-time-container flex-column">
                         <Typography className="modal-body-text">
                           בחר זמן רצוי
                         </Typography>
-                        <Box className="flex align-center">
+                        <Box className="date-time-select flex align-center">
                           <section className="date-container flex justify-between align-center">
                             {(width < 600) ?
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -278,7 +323,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                                   // value={date}
                                   placeholder={todaysDate}
                                   onChange={(e) => handleDateChange(e)}
-                                renderInput={(params) => <TextField {...params} />}
+                                  renderInput={(params) => <TextField {...params} />}
                                 />
                               </LocalizationProvider>
                               : <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -292,7 +337,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                                 />
                               </LocalizationProvider>}
                           </section>
-                          <section className="hours-container flex">
+                          <section className="hours-container flex align-center justify-between">
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <Container>
                                 <TimeField
@@ -315,8 +360,36 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                     </div>
                   </ThemeProvider>
                 </CacheProvider>
-              </Box>
 
+                <CacheProvider value={cacheRtl}>
+                  <ThemeProvider theme={theme}>
+                    <div dir="rtl" className="occurrence-container flex align-center" >
+                      <Box className="schedule-occurrence-container flex-column">
+                        <Typography className="modal-body-text">
+                          בחר תדירות
+                        </Typography>
+                        <Box style={{ maxWidth: "10rem" }} className="select-occurrence-container">
+                          <FormControl fullWidth>
+                            <InputLabel id="select-occurrence-label">תדירות</InputLabel>
+                            <Select
+                              labelId="select-occurrence-label"
+                              className="select-occurrence"
+                              value={once}
+                              label="אירוע חד פעמי"
+                              onChange={(e) => handleOccurrence(e)}
+                            >
+                              <MenuItem value={once} className="select-occurrence-item">אירוע חד פעמי</MenuItem>
+                              <MenuItem value={onceAWeek} className="select-occurrence-item">שבועי</MenuItem>
+                              <MenuItem value={onceAMonth} className="select-occurrence-item">חודשי</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </Box>
+                    </div>
+                  </ThemeProvider>
+                </CacheProvider>
+
+              </Box>
             </Container>
           </Box>
         </Modal>

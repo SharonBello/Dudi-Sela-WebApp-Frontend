@@ -54,6 +54,19 @@ button.submit-button.small-margin {
       .modal-body {
         padding: 0.6rem 1rem;
 
+        & .schedule-type-container {
+          width: 100%;
+          flex: 1;
+
+          & .toggle-form-container div:nth-child(2) {
+            margin-right: auto;
+
+            & .MuiFormControlLabel-root {
+              margin: 0;
+            }
+          }
+        }
+
         .modal-body-text {
           text-align: right;
           margin-block: unset;
@@ -90,23 +103,78 @@ button.submit-button.small-margin {
           }
         }
 
-        .date-container {
-          direction: rtl;
-          text-align: right;
-          & div div,
-          & div div button {
-            direction: rtl;
-            text-align: right;
-            display: flex;
-            justify-self: right;
-            justify-content: space-between;
-            flex-direction: row-reverse;
+        .date-time-container {
+          min-width: 100%;
+
+          .date-time-select {
+            min-width: 100%;
+            flex: 1;
+
+            .date-container {
+              direction: rtl;
+              text-align: right;
+
+              & div div,
+              & div div button {
+                direction: rtl;
+                text-align: right;
+                display: flex;
+                justify-self: right;
+                justify-content: space-between;
+                flex-direction: row-reverse;
+              }
+            }
+
+            .hours-container {
+              margin-right: auto;
+
+              & .MuiContainer-root {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-left: 10rem;
+                gap: 1rem;
+              }
+            }
+
+            // .occurrence-container {
+            //   .schedule-occurrence-container {
+            //     .select-occurrence-container {
+            //       .select-occurrence {
+            //         .select-occurrence-item {
+            //             background-color: $header;
+            //             color: $brand;
+            //         }
+            //       }
+            //     }
+            //   }
+            // }
           }
+
+
 
           .date-picker {
             width: 100%;
           }
         }
+      }
+    }
+  }
+}
+
+.MuiMenu-paper {
+  left: 800px;
+
+  & ul {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    & li.Mui-selected {
+      background-color: #fff;
+
+      &:hover {
+        background-color: $header;
+        color: $brand;
       }
     }
   }

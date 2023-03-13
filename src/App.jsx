@@ -23,7 +23,7 @@ export const App = () => {
       if (sessionStorage.getItem('loggedUser')) {
          dispatch(setLoggedUser())
       }
-   }, [])
+   }, [dispatch])
 
    return (
       <div className="app-container flex">

@@ -8,7 +8,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { makeStyles } from '@material-ui/core/styles';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
@@ -24,15 +23,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-  },
-}))
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
@@ -52,7 +42,7 @@ export const NewReservation = () => {
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [messageAlert, setMessageAlert] = useState()
   const [warningMessage, setWarningMessage] = useState(false)
-  const [OpenAlert, setOpenAlert] = useState(false)
+  const [, setOpenAlert] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
@@ -75,7 +65,7 @@ export const NewReservation = () => {
       setInitCourtsData(res)
       filterCourtsDataByCourtNumber(res)
     })
-  }, [])
+  })
 
   const theme = createTheme({
     direction: 'rtl',
@@ -144,16 +134,6 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
-  const areCourtsAvailable = (_startHour, _endHour, _courtsData, _date) => {
-    reservationsByDate.forEach(reservation => {
-      if (isIntersected(reservation, _startHour, _endHour)) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
-      }
-    });
-    return _courtsData.court_numbers.length > 0;
-  }
-
   const filterCourtsDataByDate = async (_date) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
@@ -183,8 +163,7 @@ export const NewReservation = () => {
     }
     else if (loggedUser || uid) {
       try {
-
-        let resExists = await reservationService.isReservetionExists(uid, payload)
+        let resExists = await reservationService.isReservationExists(uid, payload)
         if (!resExists.data.isExists) {
           let _userCredit = await reservationService.getCredit(uid)
           const creditNum = payload.endHour - payload.startHour
@@ -274,7 +253,7 @@ export const NewReservation = () => {
     if (courtsData) {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     const _date = dayjs(date).format('YYYY-MM-DD')
-    let reservations = [] // await reservationService.queryByDate(_date)
+    // let reservations = [] // await reservationService.queryByDate(_date)
 
       return (
         <>
@@ -300,6 +279,16 @@ export const NewReservation = () => {
         </>
       )
     }
+  }
+
+  const areCourtsAvailable = (_startHour, _endHour, _courtsData, _date) => {
+    reservationsByDate.forEach(reservation => {
+      if (isIntersected(reservation, _startHour, _endHour)) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
+    return _courtsData.court_numbers.length > 0;
   }
 
   const handleDurationSelect = () => {

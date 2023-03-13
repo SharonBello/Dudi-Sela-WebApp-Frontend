@@ -1,12 +1,9 @@
 import React from 'react'
-import { ChildrenPractice } from '../../components/homepage-sections/childrenpractice/childrenpractice'
-import { NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { ChildrenPractice } from '../../components/homepage-sections/children-practice/children-practice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 
 export const LearnTennis = () => {
-  const { loggedUser } = useSelector((storeState) => storeState.userModule)
 
   const tennisAcademyInfo = [
     {
@@ -32,7 +29,6 @@ export const LearnTennis = () => {
         </article>
       )}
       <div className='contact-link flex align-center justify-between'>
-        {/* {!loggedUser ? */}
         <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" className="flex align-center open-popup-join">רוצים לגדול איתנו?<FontAwesomeIcon icon={faWhatsapp} /></a>
       </div>
       <div className='slide-images'>

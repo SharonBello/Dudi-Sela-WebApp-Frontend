@@ -30,7 +30,7 @@ export const ChildrenPractice = () => {
       counter.current = counter.current + 1
       setCurrentIndex(counter.current % slides.length)
     }, 10000)
-  }, [])
+  }, [slides.length])
 
   return (
     <section className="slider-container container">

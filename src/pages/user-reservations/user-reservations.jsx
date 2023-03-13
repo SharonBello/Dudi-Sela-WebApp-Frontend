@@ -11,7 +11,7 @@ export const UserReservations = () => {
 
   useEffect(() => {
     getReservationsData(uid)
-  }, [])
+  })
 
   const getReservationsData = async (uid) => {
     if (loggedUser || uid) {

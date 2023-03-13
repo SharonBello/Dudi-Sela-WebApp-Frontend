@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import VideoPlayer from 'react-background-video-player'
 import { useSelector } from 'react-redux'
 
 export const HomeHero = () => {

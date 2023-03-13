@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 
 export const CoachesMobile = ({ coaches }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -58,16 +58,16 @@ export const CoachesMobile = ({ coaches }) => {
     fontSize: "20px",
   }
 
-  useEffect(() => {
-    handleSlideAutoChange()
-  }, [])
-
-  const handleSlideAutoChange = () => {
+  const handleSlideAutoChange = useCallback(() => {
     setInterval(() => {
       counter.current = counter.current + 1
       setCurrentIndex(counter.current % coaches.length)
     }, 20000)
-  }
+  }, [coaches.length])
+
+  useEffect(() => {
+    handleSlideAutoChange()
+  }, [handleSlideAutoChange])
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0

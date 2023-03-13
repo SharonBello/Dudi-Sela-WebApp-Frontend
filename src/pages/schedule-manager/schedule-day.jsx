@@ -1,11 +1,23 @@
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid';
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { TimeField } from '@mui/x-date-pickers/TimeField';
+import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
 import { CustomTypeEditComponent } from '../../data/scheduleData.js';
 import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
@@ -30,12 +42,40 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
+  const [startHour, setStartHour] = useState()
+  const [endHour, setEndHour] = useState()
+  // const [selectedStartHour, setSelectedStartHour] = useState();
   const START_HOUR_DAY = 6
   const [scheduleType, setScheduleType] = React.useState('schedule');
+  const { width } = useWindowDimensions()
+  const [date, setDate] = useState(new Date())
+  const todaysDate = dayjs().format('DD/MM/YYYY')
 
   const handleScheduleType = (e, newScheduleType) => {
+    e.stopPropagation()
+    e.preventDefault()
     if (newScheduleType !== null) setScheduleType(newScheduleType);
   };
+
+  const theme = createTheme({
+    direction: 'rtl',
+  })
+
+  // Create rtl cache
+  const cacheRtl = createCache({
+    key: 'muirtl',
+  })
+
+  const validDate = (newValue) => {
+    const selectedDate = new Date(newValue)
+    return selectedDate
+  }
+
+  const handleDateChange = (newValue) => {
+    if (validDate(newValue)) {
+      setDate(newValue)
+    }
+  }
 
   const getColumns = () => {
     const _columns = [];
@@ -63,11 +103,21 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   const columns = getColumns();
 
-  React.useEffect(() => {
+  const getTodaysReservations = useCallback(async () => {
+    let reservations = await reservationService.queryByDate(mDate)
+    let _rows = getRows()
+    reservations.forEach(reservation => {
+      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+    });
+    setRows(_rows)
+  }, [mDate])
+
+  useEffect(() => {
     initSchedule()
     getInstructors()
     getTodaysReservations()
-  }, [mDate])
+  }, [mDate, getTodaysReservations])
 
   const initSchedule = () => {
     let _rows = getRows()
@@ -94,16 +144,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setInstructors(instructors)
   }
 
-  const getTodaysReservations = async () => {
-    let reservations = await reservationService.queryByDate(mDate)
-    let _rows = getRows()
-    reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-    });
-    setRows(_rows)
-  }
-
   const handleSubmit = async () => {
     setIsLoading(true)
     let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
@@ -118,7 +158,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     })
     for (let i = 0; i < weeklyReservations.length; i++) {
       const payload = weeklyReservations[i];
-      let resExists = await reservationService.isReservetionExists(uid, payload)
+      let resExists = await reservationService.isReservationExists(uid, payload)
       if (!resExists.data.isExists) {
         let res = await reservationService.addNewReservation(uid, payload)
         let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
@@ -159,8 +199,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         }
       })
     })
-    const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
-    const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
+    // const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
+    // const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
     setIsLoading(false)
   }
 
@@ -216,6 +256,62 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                     </Box>
                   </ToggleButton>
                 </ToggleButtonGroup>
+
+                <CacheProvider value={cacheRtl}>
+                  <ThemeProvider theme={theme}>
+                    <div dir="rtl" className="form-container flex-column" >
+                      <Stack spacing={3}>
+                        <section className="hours-container flex">
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <Container>
+                              <TimeField
+                                label='שעת התחלה'
+                                value={startHour}
+                                onChange={(newValue) => setStartHour(newValue)}
+                              />
+                              <TimeField
+                                label='שעת סיום'
+                                value={endHour}
+                                onChange={(newValue) => setEndHour(newValue)}
+                              />
+                            </Container>
+                          </LocalizationProvider>
+                        </section>
+
+                        <section className="date-container flex">
+                          <Box className="flex-column">
+                            <Typography className="modal-body-text">
+                              בחר תאריך
+                            </Typography>
+                            {(width < 600) ?
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <MobileDatePicker
+                                  label="תאריך"
+                                  inputFormat="DD/MM/YYYY"
+                                  value={date}
+                                  placeholder={todaysDate}
+                                  onChange={handleDateChange}
+                                  renderInput={(params) => <TextField {...params} />}
+                                />
+                              </LocalizationProvider>
+                              : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
+                                label="תאריך"
+                                inputFormat="DD/MM/YYYY"
+                                value={date}
+                                placeholder={todaysDate}
+                                onChange={handleDateChange}
+                                renderInput={(params) => <TextField {...params} />}
+                              />
+                              </LocalizationProvider>}
+                          </Box>
+                        </section>
+                        <section className="court-number-section flex-column">
+                          <label>מספר מגרש</label>
+                        </section>
+                      </Stack>
+                    </div>
+                  </ThemeProvider>
+                </CacheProvider>
               </Box>
             </Container>
           </Box>

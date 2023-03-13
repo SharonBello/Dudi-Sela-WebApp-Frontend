@@ -16,7 +16,7 @@ export const reservationService = {
     deleteReservationByDate,
     changeCredit,
     getCredit,
-    isReservetionExists,
+    isReservationExists,
     queryByWeekDay,
     resetByWeekDay,
     postByWeekDay
@@ -96,7 +96,7 @@ async function addNewReservation(uid, data) {
     }
 }
 
-async function isReservetionExists(uid, data) {
+async function isReservationExists(uid, data) {
     try {
         let res = await httpService.post('reservations/reservation/exists?docId=' + uid, data)
         return res

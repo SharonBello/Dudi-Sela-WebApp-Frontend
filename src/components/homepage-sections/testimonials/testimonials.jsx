@@ -40,7 +40,7 @@ export const Testimonials = () => {
       counter.current = counter.current + 1
       setCurrentIndex(counter.current % slides.length)
     }, 20000)
-  }, [])
+  }, [slides.length])
 
   return (
     <section className="slider-container container">

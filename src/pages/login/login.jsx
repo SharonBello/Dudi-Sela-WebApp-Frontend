@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
-import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
@@ -32,17 +31,7 @@ export const Login = () => {
     if (window.google) {
       setGoogleAccounts("loginDiv")
     }
-    // autoLogin()
   }, []);
-
-  // Create rtl cache
-  const cacheRtl = createCache({
-    key: 'muirtl',
-  })
-
-  function RTL(props) {
-    return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>
-  }
 
   const loginUser = (email, password) => {
     const payload = {
@@ -53,7 +42,6 @@ export const Login = () => {
       .then((response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
-          // UserMessages('Incorrect email or password', 'error')
           setIsLogin(!isLogin)
           navigate('/signin')
         } else {
@@ -75,14 +63,6 @@ export const Login = () => {
         console.error(error)
       })
   }
-
-  // const autoLogin = () => {
-  //   const loginInfo = {
-  //     email: 'doronkabaso22@gmail.com',
-  //     password: 'q1w2e3r4',
-  //   }
-  //   loginUser(loginInfo.email, loginInfo.password)
-  // }
 
   const handleSubmit = (ev) => {
     try {

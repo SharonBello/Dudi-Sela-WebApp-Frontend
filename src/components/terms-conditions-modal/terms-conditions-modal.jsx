@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -12,7 +12,7 @@ import createCache from '@emotion/cache'
 
 export const TermsConditionsModal = ({ conditionsModal, handleClose }) => {
   const descriptionElementRef = useRef(null)
-  const [scroll, setScroll] = useState()
+  const [scroll] = useState()
 
   const theme = createTheme({
     direction: 'rtl',

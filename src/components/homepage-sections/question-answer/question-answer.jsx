@@ -1,7 +1,4 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
 
 export const QuestionAnswer = () => {
 
@@ -42,14 +39,14 @@ export const QuestionAnswer = () => {
         שאלות נפוצות
       </h2>
       <div className="qa container">
-      {questionAnswer.map((qa, index) =>
-        <div className="qa-item" key={index}>
-          <details>
-            <summary>{qa.question}</summary>
-            <p>{qa.answer}</p>
-          </details>
-        </div>)}
-    </div>
+        {questionAnswer.map((qa, index) =>
+          <div className="qa-item" key={index}>
+            <details>
+              <summary>{qa.question}</summary>
+              <p>{qa.answer}</p>
+            </details>
+          </div>)}
+      </div>
     </>
   )
 }

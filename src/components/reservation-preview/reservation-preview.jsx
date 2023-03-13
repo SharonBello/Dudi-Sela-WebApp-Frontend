@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { NavLink } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+// import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import Snackbar from '@mui/material/Snackbar'
 import Alert from '@mui/material/Alert'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -14,18 +14,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-// import { UserMessages } from "../../components/user-messages/user-messages.jsx"
-import moment from 'moment'
 import { reservationService } from "../../services/reservation.service"
 import { useSelector } from "react-redux"
 import dayjs from "dayjs"
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
-moment().format()
-
 export const ReservationPreview = ({ item, todaysDate }) => {
     const [isCancelable, setIsCancelable] = useState(false)
-    const [isEditable, setIsEditable] = useState(false)
+    const [setIsEditable] = useState(false)
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showFailureAlert, setShowFailureAlert] = useState(false)
@@ -35,13 +31,13 @@ export const ReservationPreview = ({ item, todaysDate }) => {
     let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
-    const getTimeLeft = (item) => {
+    const getTimeLeft = useCallback((item) => {
         const futureDate = dayjs(item.date)
         const timeLeft = futureDate.diff(todaysDate, 'day')
         return timeLeft
-    }
+    }, [todaysDate])
 
-    const getIsCancelable = (item) => {
+    const getIsCancelable = useCallback((item) => {
         const cancelItem = getTimeLeft(item)
         if (cancelItem > NUM_DAYS_CANCEL_REGISTRATION) {
             setIsCancelable(true)
@@ -49,9 +45,9 @@ export const ReservationPreview = ({ item, todaysDate }) => {
         else {
             setIsCancelable(false)
         }
-    }
+    }, [NUM_DAYS_CANCEL_REGISTRATION, getTimeLeft])
 
-    const getIsEditable = (item) => {
+    const getIsEditable = useCallback((item) => {
         const editItem = getTimeLeft(item)
         if (editItem > NUM_DAYS_CANCEL_REGISTRATION) {
             setIsEditable(true)
@@ -59,14 +55,14 @@ export const ReservationPreview = ({ item, todaysDate }) => {
         else {
             setIsEditable(false)
         }
-    }
+    }, [NUM_DAYS_CANCEL_REGISTRATION, getTimeLeft, setIsEditable])
 
-    const onEditItem = (item) => {
-        getIsEditable(item)
-        if (isEditable) {
-            navigate('/reservation/edit')
-        }
-    }
+    // const onEditItem = (item) => {
+    //     getIsEditable(item)
+    //     if (isEditable) {
+    //         navigate('/reservation/edit')
+    //     }
+    // }
 
     const onDeleteReservation = async () => {
         setShowDeleteAlert(true)
@@ -93,7 +89,6 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                 setShowSuccessAlert(false)
             }
         }
-
     }
 
     const handleCloseAlert = (event, reason) => {

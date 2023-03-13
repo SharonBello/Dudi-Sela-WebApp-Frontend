@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { signout, setUserUid } from '../../../store/actions/user.actions.js'
@@ -24,14 +24,34 @@ export const AppHeader = () => {
   let classHamburgerMenu = (width < 900) ? 'visible' : 'hidden'
   let classNavList = (width < 600) ? 'hidden' : ''
 
+  const onToggleSideMenu = useCallback(() => {
+    let flag = !isSideMenu
+    setSideMenu(flag)
+  }, [isSideMenu])
+
+  const handleScroll = useCallback((e) => {
+    setScrolled(window.scrollY < 200)
+  }, [setScrolled])
+
+  const handleSideClickOutside = useCallback((e) => {
+    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
+  }, [isSideMenu, onToggleSideMenu])
+
+  const onToggleProfileMenu = useCallback((e) => {
+    setShowProfileMenu(!showProfileMenu)
+  }, [showProfileMenu])
+
+  const handleProfileClickOutside = useCallback((e) => {
+    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
+  }, [showProfileMenu, onToggleProfileMenu])
 
   useEffect(() => {
     document.addEventListener("click", handleSideClickOutside)
-  }, [isSideMenu])
+  }, [isSideMenu, handleSideClickOutside])
 
   useEffect(() => {
     document.addEventListener("click", handleProfileClickOutside)
-  }, [showProfileMenu])
+  }, [showProfileMenu, handleProfileClickOutside])
 
   useEffect(() => {
     if (pathname === '/') {
@@ -40,36 +60,15 @@ export const AppHeader = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll)
     }
-  }, [pathname])
-
-  const handleScroll = e => {
-    setScrolled(window.scrollY < 200)
-  }
-
-  const handleSideClickOutside = (e) => {
-    if (menuRef.current && isSideMenu && !menuRef.current.contains(e.target)) onToggleSideMenu()
-  }
-
-  const handleProfileClickOutside = (e) => {
-    if (profileRef.current && showProfileMenu && !profileRef.current.contains(e.target)) onToggleProfileMenu()
-  }
+  }, [pathname, handleScroll])
 
   const onCloseMenu = () => {
     setShowProfileMenu(false)
   }
 
-  const onToggleMenu = (ev) => {
-    ev.stopPropagation()
+  const onToggleMenu = (e) => {
+    e.stopPropagation()
     setShowProfileMenu(!showProfileMenu)
-  }
-
-  const onToggleProfileMenu = (ev) => {
-    setShowProfileMenu(!showProfileMenu)
-  }
-
-  const onToggleSideMenu = () => {
-    let flag = !isSideMenu
-    setSideMenu(flag)
   }
 
   if (loggedUser && !loggedUser.picture) {
@@ -93,62 +92,62 @@ export const AppHeader = () => {
 
   return (
     pathname !== '/dashboard' ? (
-    <header className={`header container flex align-center ${(scrolled && pathname === '/') ? 'scrolled' : ''}`}>
-      <article className="logo-hamburger-container flex align-center">
-        <div className="side-menu">
-          {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
-            {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout} />}
-          </button>}
-        </div>
-        <div className="logo">
-          <NavLink to="/" className="site-logo">
-            <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
-              alt="logo" />
-          </NavLink>
-        </div>
-      </article>
-      <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
-
-        {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
-        </li> : null)}
-
-        {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
-        </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
-        </li>)}
-
-
-        <li><NavLink to={`/learntennis`} onClick={handleClick} className="link-page">לימוד טניס</NavLink>
-        </li>
-
-        <li><NavLink to={`/contact`} onClick={handleClick} className="link-page">צרו קשר</NavLink>
-        </li>
-
-        <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
-        </li>
-
-        {(adminUser==="true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
-        </li> : null)}
-
-        {(adminUser==="true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
-        </li> : null)}
-
-        <li>
-          {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
-          <div className="avatar-container">
-            {loggedUser && <img className="avatar-img" src={`${loggedUser.picture}`} onClick={onToggleMenu} alt="Avatar"></img>}
+      <header className={`header container flex align-center ${(scrolled && pathname === '/') ? 'scrolled' : ''}`}>
+        <article className="logo-hamburger-container flex align-center">
+          <div className="side-menu">
+            {width < 900 && <button ref={menuRef} onClick={onToggleSideMenu} className={`hamburger-icon ${classHamburgerMenu}`}>
+              {isSideMenu && <SideMenu menuOpen={isSideMenu} closeMenu={onToggleSideMenu} user={loggedUser} handleClick={handleClick} handleSignout={handleSignout} />}
+            </button>}
           </div>
-
-          <div className="profile-container" ref={profileRef}>
-            {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} handleSignout={handleSignout} />}
+          <div className="logo">
+            <NavLink to="/" className="site-logo">
+              <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
+                alt="logo" />
+            </NavLink>
           </div>
-        </li>
+        </article>
+        <ul className={`nav-list clean-list flex align-center ${classNavList}`}>
 
-        {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
-        </li>: null}
+          {(loggedUser ? <li><NavLink to={`/user-reservations`} className="link-page">ההזמנות שלי</NavLink>
+          </li> : null)}
 
-      </ul>
+          {(loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="link-page">הזמנת מגרש</NavLink>
+          </li> : <li><NavLink to={'/signin'} onClick={handleClick} className="link-page">הזמנת מגרש</NavLink>
+          </li>)}
 
-    </header>
+
+          <li><NavLink to={`/learntennis`} onClick={handleClick} className="link-page">לימוד טניס</NavLink>
+          </li>
+
+          <li><NavLink to={`/contact`} onClick={handleClick} className="link-page">צרו קשר</NavLink>
+          </li>
+
+          <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
+          </li>
+
+          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
+          </li> : null)}
+
+          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
+          </li> : null)}
+
+          <li>
+            {!loggedUser && <NavLink to='/signin' rel="nofollow" className="open-popup-login link-page">כניסה</NavLink>}
+            <div className="avatar-container">
+              {loggedUser && <img className="avatar-img" src={`${loggedUser.picture}`} onClick={onToggleMenu} alt="Avatar"></img>}
+            </div>
+
+            <div className="profile-container" ref={profileRef}>
+              {showProfileMenu && <ProfileMenu menuOpen={showProfileMenu} user={loggedUser} closeMenu={onCloseMenu} onToggleMenu={onToggleProfileMenu} handleSignout={handleSignout} />}
+            </div>
+          </li>
+
+          {!loggedUser ? <li><NavLink to={`/signup`} onClick={handleClick} className="link-page">הרשמה</NavLink>
+          </li> : null}
+
+        </ul>
+
+      </header>
     ) : (
       <span></span>
     )

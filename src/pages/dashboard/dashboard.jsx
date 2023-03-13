@@ -50,12 +50,12 @@ export const Dashboard = () => {
   React.useEffect(() => {
     getInstructors()
     getTodaysReservations()
-  }, [getTodaysReservations])
+  }, [getTodaysReservations, getInstructors])
 
-  const getInstructors = async () => {
+  const getInstructors = useCallback(async () => {
     let instructors = await instructorService.getInstructors()
     setInstructors(instructors)
-  }
+  }, [setInstructors])
 
   const getTodaysReservations = useCallback(async () => {
     let reservations = await reservationService.queryByDate(date)

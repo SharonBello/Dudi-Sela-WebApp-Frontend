@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid';
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
+// import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -19,7 +19,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { CustomTypeEditComponent } from '../../data/scheduleData.js';
-import { instructorService } from '../../services/instructor.service.js';
+// import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { Loader } from '../../components/loader.jsx';
@@ -38,7 +38,7 @@ CustomTypeEditComponent.propTypes = {
 };
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
-  const [instructors, setInstructors] = useState([])
+  // const [instructors, setInstructors] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
@@ -48,7 +48,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const START_HOUR_DAY = 6
   const [scheduleType, setScheduleType] = React.useState('schedule');
   const { width } = useWindowDimensions()
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(() => new Date());
   const todaysDate = dayjs().format('DD/MM/YYYY')
 
   const handleScheduleType = (e, newScheduleType) => {
@@ -71,10 +71,16 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     return selectedDate
   }
 
-  const handleDateChange = (newValue) => {
+  const handleDateChange = (e, newValue) => {
+    e.stopPropagation()
+    e.preventDefault()
     if (validDate(newValue)) {
       setDate(newValue)
     }
+  }
+
+  const handleEditEvent = () => {
+    setOpenEditEvent(true)
   }
 
   const getColumns = () => {
@@ -84,19 +90,20 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         field: col.hour,
         headerName: col.headerName,
         type: 'singleSelect',
-        valueOptions: instructors,
+        // valueOptions: instructors,
         width: 140,
         editable: true,
-        renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
-        cellClassName: (params) => {
-          if (instructors.includes(params.value)) {
-            return 'reservation-by-instructor';
-          } else if (params.value !== "" && col.headerName !== "מספר מגרש") {
-            return 'reservation-by-user';
-          } else {
-            return '';
-          }
-        },
+        renderEditCell: { handleEditEvent },
+        // renderEditCell: (params) => <CustomTypeEditComponent {...params} handleValueChange={handleValueChange} />,
+        // cellClassName: (params) => {
+        //   if (instructors.includes(params.value)) {
+        //     return 'reservation-by-instructor';
+        //   } else if (params.value !== "" && col.headerName !== "מספר מגרש") {
+        //     return 'reservation-by-user';
+        //   } else {
+        //     return '';
+        //   }
+        // },
       })
     });
     return _columns;
@@ -115,7 +122,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   useEffect(() => {
     initSchedule()
-    getInstructors()
+    // getInstructors()
     getTodaysReservations()
   }, [mDate, getTodaysReservations])
 
@@ -124,25 +131,21 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setRows(_rows)
   }
 
-  const handleValueChange = (value) => {
-    const idx = rows.findIndex(row => (row.hour === value.hour && row.courtNumber === value.courtNumber))
-    let _rows = [...rows]
-    _rows[idx] = value
-    setRows(_rows)
-  }
-
-  const handleEditEvent = () => {
-    setOpenEditEvent(true)
-  }
+  // const handleValueChange = (value) => {
+  //   const idx = rows.findIndex(row => (row.hour === value.hour && row.courtNumber === value.courtNumber))
+  //   let _rows = [...rows]
+  //   _rows[idx] = value
+  //   setRows(_rows)
+  // }
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
   }
 
-  const getInstructors = async () => {
-    let instructors = await instructorService.getInstructors()
-    setInstructors(instructors)
-  }
+  // const getInstructors = async () => {
+  //   let instructors = await instructorService.getInstructors()
+  //   setInstructors(instructors)
+  // }
 
   const handleSubmit = async () => {
     setIsLoading(true)
@@ -221,6 +224,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                   הזמנה חדשה
                 </Typography>
               </Box>
+
               <Box className="modal-body">
                 <Typography className="modal-body-text">
                   בחר הזמנה
@@ -259,60 +263,60 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
                 <CacheProvider value={cacheRtl}>
                   <ThemeProvider theme={theme}>
-                    <div dir="rtl" className="form-container flex-column" >
-                      <Stack spacing={3}>
-                        <section className="hours-container flex">
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <Container>
-                              <TimeField
-                                label='שעת התחלה'
-                                value={startHour}
-                                onChange={(newValue) => setStartHour(newValue)}
-                              />
-                              <TimeField
-                                label='שעת סיום'
-                                value={endHour}
-                                onChange={(newValue) => setEndHour(newValue)}
-                              />
-                            </Container>
-                          </LocalizationProvider>
-                        </section>
-
-                        <section className="date-container flex">
-                          <Box className="flex-column">
-                            <Typography className="modal-body-text">
-                              בחר תאריך
-                            </Typography>
+                    <div dir="rtl" className="form-container flex align-center" >
+                      <Box className="flex-column">
+                        <Typography className="modal-body-text">
+                          בחר זמן רצוי
+                        </Typography>
+                        <Box className="flex align-center">
+                          <section className="date-container flex justify-between align-center">
                             {(width < 600) ?
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <MobileDatePicker
                                   label="תאריך"
                                   inputFormat="DD/MM/YYYY"
-                                  value={date}
+                                  // value={date}
                                   placeholder={todaysDate}
-                                  onChange={handleDateChange}
-                                  renderInput={(params) => <TextField {...params} />}
+                                  onChange={(e) => handleDateChange(e)}
+                                renderInput={(params) => <TextField {...params} />}
                                 />
                               </LocalizationProvider>
-                              : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
-                                label="תאריך"
-                                inputFormat="DD/MM/YYYY"
-                                value={date}
-                                placeholder={todaysDate}
-                                onChange={handleDateChange}
-                                renderInput={(params) => <TextField {...params} />}
-                              />
+                              : <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DesktopDatePicker
+                                  label="תאריך"
+                                  inputFormat="DD/MM/YYYY"
+                                  // value={date}
+                                  placeholder={todaysDate}
+                                  onChange={(e) => handleDateChange(e)}
+                                // renderInput={(params) => <TextField {...params} />}
+                                />
                               </LocalizationProvider>}
-                          </Box>
-                        </section>
-                        <section className="court-number-section flex-column">
-                          <label>מספר מגרש</label>
-                        </section>
-                      </Stack>
+                          </section>
+                          <section className="hours-container flex">
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <Container>
+                                <TimeField
+                                  label='שעת התחלה'
+                                  value={startHour}
+                                  placeholder={startHour}
+                                  onChange={(newValue) => setStartHour(newValue)}
+                                />
+                                <TimeField
+                                  label='שעת סיום'
+                                  value={endHour}
+                                  placeholder={endHour}
+                                  onChange={(newValue) => setEndHour(newValue)}
+                                />
+                              </Container>
+                            </LocalizationProvider>
+                          </section>
+                        </Box>
+                      </Box>
                     </div>
                   </ThemeProvider>
                 </CacheProvider>
               </Box>
+
             </Container>
           </Box>
         </Modal>
@@ -333,7 +337,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       {renderModal()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
-          onCellClick={handleEditEvent}
+          onCellClick={() => handleEditEvent()}
           rows={rows}
           columns={columns}
           editMode="row"

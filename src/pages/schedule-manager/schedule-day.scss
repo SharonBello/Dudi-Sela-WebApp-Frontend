@@ -83,9 +83,28 @@ button.submit-button.small-margin {
               color: $brand;
             }
           }
+
           & .Mui-selected {
             background-color: $header;
             color: $brand;
+          }
+        }
+
+        .date-container {
+          direction: rtl;
+          text-align: right;
+          & div div,
+          & div div button {
+            direction: rtl;
+            text-align: right;
+            display: flex;
+            justify-self: right;
+            justify-content: space-between;
+            flex-direction: row-reverse;
+          }
+
+          .date-picker {
+            width: 100%;
           }
         }
       }

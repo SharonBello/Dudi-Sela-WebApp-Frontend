@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
+import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
@@ -25,6 +26,10 @@ export const Login = () => {
 
   const theme = createTheme({
     direction: 'rtl',
+  })
+
+  const cacheRtl = createCache({
+    key: 'muirtl',
   })
 
   useEffect(() => {

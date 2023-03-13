@@ -1,40 +1,121 @@
 .reservation-by-instructor {
-    background-color: brown;
+  background-color: brown;
 }
 
 .reservation-by-user {
-    background-color: green;
+  background-color: green;
 }
 
 
 button.submit-button.small-margin {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 
-.MuiDataGrid-root.MuiDataGrid-root--densityStandard {
-    direction: ltr !important;
-    transform: rotateY(180deg);
+  .modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: none;
+    box-shadow: 24px;
+    // padding: 16px;
+    max-width: 85vw;
+    min-width: 80vw;
+    max-height: 85vh;
+    min-height: 70vh;
 
-    .MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary {
-      transform: rotateY(180deg);
-      color: #141414 !important;
-    }
+    .modal-content {
+      padding: unset;
+      margin-inline: unset;
+      min-width: 100%;
 
-    .MuiDataGrid-columnHeaderTitle {
-      transform: rotateY(180deg);
-    }
+      .modal-header {
+        padding: 0.6rem 1rem;
+        background-color: $brand;
+        min-width: 100%;
+        min-height: 6vh;
 
-    .MuiDataGrid-cellContent {
-      transform: rotateY(180deg);
-    }
+        #modal-modal-title {
+          background-color: transparent;
+          font-weight: 600;
+        }
+      }
 
-    .MuiDataGrid-footerContainer {
-      transform: rotateY(180deg);
-    }
+      .modal-body {
+        padding: 0.6rem 1rem;
 
-    .MuiButton-startIcon.MuiButton-iconSizeSmall {
-      margin-left: -2px !important;
-      margin-right: 8px !important;
+        .modal-body-text {
+          text-align: right;
+          margin-block: unset;
+          padding-block: 1rem 0.3rem;
+        }
+
+        .toggle-schedule-type {
+          gap: 1rem;
+
+          & button {
+            // border: 1px solid $brand;
+            border-radius: 7px;
+            padding-inline: 0;
+            cursor: pointer;
+
+            & div {
+              gap: 3%;
+              padding-inline: 1rem;
+
+              & p {
+                white-space: nowrap;
+              }
+            }
+
+            &:hover {
+              background-color: $header;
+              color: $brand;
+            }
+          }
+          & .Mui-selected {
+            background-color: $header;
+            color: $brand;
+          }
+        }
+      }
     }
   }
+}
+
+.MuiDataGrid-root.MuiDataGrid-root--densityStandard {
+  direction: ltr !important;
+  transform: rotateY(180deg);
+
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text.MuiButton-textPrimary {
+    transform: rotateY(180deg);
+    color: #141414 !important;
+  }
+
+  .MuiDataGrid-columnHeaderTitle {
+    transform: rotateY(180deg);
+  }
+
+  .MuiDataGrid-cellContent {
+    transform: rotateY(180deg);
+  }
+
+  .MuiDataGrid-footerContainer {
+    transform: rotateY(180deg);
+  }
+
+  .MuiButton-startIcon.MuiButton-iconSizeSmall {
+    margin-left: -2px !important;
+    margin-right: 8px !important;
+  }
+}

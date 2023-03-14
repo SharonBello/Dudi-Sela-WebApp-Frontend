@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
@@ -47,16 +47,6 @@ export const Dashboard = () => {
   }
   const columns = getColumns();
 
-  React.useEffect(() => {
-    getInstructors()
-    getTodaysReservations()
-  }, [getTodaysReservations, getInstructors])
-
-  const getInstructors = useCallback(async () => {
-    let instructors = await instructorService.getInstructors()
-    setInstructors(instructors)
-  }, [setInstructors])
-
   const getTodaysReservations = useCallback(async () => {
     let reservations = await reservationService.queryByDate(date)
     let _rows = [...rows]
@@ -67,6 +57,15 @@ export const Dashboard = () => {
     setRows(_rows)
   }, [date, rows, hoursDataArr])
 
+  const getInstructors = useCallback(async () => {
+    let instructors = await instructorService.getInstructors()
+    setInstructors(instructors)
+  }, [setInstructors])
+
+  useEffect(() => {
+    getInstructors()
+    getTodaysReservations()
+  }, [getTodaysReservations, getInstructors])
 
   return (
     <div className='flex-column align-center justify-center container-block dashboard-container'>

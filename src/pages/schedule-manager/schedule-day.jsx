@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
-import { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs'
 import Box from '@mui/material/Box';
@@ -53,11 +52,11 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [endHour, setEndHour] = useState()
   // const [selectedStartHour, setSelectedStartHour] = useState();
   const START_HOUR_DAY = 6
-  const [scheduleType, setScheduleType] = React.useState('schedule');
+  const [scheduleType, setScheduleType] = useState('schedule');
   const { width } = useWindowDimensions()
   const [date, setDate] = useState(() => new Date());
   const todaysDate = dayjs().format('DD/MM/YYYY')
-  const [checked, setChecked] = React.useState(true);
+  const [checked, setChecked] = useState(true);
   const [once, setOnce] = useState('');
   const [onceAWeek, setOnceAWeek] = useState('');
   const [onceAMonth, setOnceAMonth] = useState('');
@@ -253,7 +252,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
               <Box className="modal-body">
                 <Box className="schedule-type-container flex-column">
                   <Typography className="modal-body-text">
-                    בחר הזמנה
+                    בחירת סוג הזמנה
                   </Typography>
                   <Box className="toggle-form-container flex align-center justify-between">
                     <ToggleButtonGroup
@@ -311,7 +310,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                     <div dir="rtl" className="form-container flex align-center" >
                       <Box className="date-time-container flex-column">
                         <Typography className="modal-body-text">
-                          בחר זמן רצוי
+                          בחירת זמן רצוי
                         </Typography>
                         <Box className="date-time-select flex align-center">
                           <section className="date-container flex justify-between align-center">
@@ -366,7 +365,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
                     <div dir="rtl" className="occurrence-container flex align-center" >
                       <Box className="schedule-occurrence-container flex-column">
                         <Typography className="modal-body-text">
-                          בחר תדירות
+                          בחירת תדירות
                         </Typography>
                         <Box style={{ maxWidth: "10rem" }} className="select-occurrence-container">
                           <FormControl fullWidth>

@@ -31,7 +31,7 @@ export const NewReservation = () => {
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
   const [courtNumber, setCourtNumber] = useState()
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
   const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
@@ -480,7 +480,7 @@ export const NewReservation = () => {
                     <MobileDatePicker
                       label="תאריך"
                       inputFormat="DD/MM/YYYY"
-                      value={date}
+                      // value={date}
                       placeholder={todaysDate}
                       onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
@@ -488,7 +488,7 @@ export const NewReservation = () => {
                       : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
                       label="תאריך"
                       inputFormat="DD/MM/YYYY"
-                      value={date}
+                      // value={date}
                       placeholder={todaysDate}
                       onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}

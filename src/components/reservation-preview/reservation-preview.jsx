@@ -21,7 +21,6 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const ReservationPreview = ({ item, todaysDate }) => {
     const [isCancelable, setIsCancelable] = useState(false)
-    const [setIsEditable] = useState(false)
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showFailureAlert, setShowFailureAlert] = useState(false)
@@ -46,23 +45,6 @@ export const ReservationPreview = ({ item, todaysDate }) => {
             setIsCancelable(false)
         }
     }, [NUM_DAYS_CANCEL_REGISTRATION, getTimeLeft])
-
-    const getIsEditable = useCallback((item) => {
-        const editItem = getTimeLeft(item)
-        if (editItem > NUM_DAYS_CANCEL_REGISTRATION) {
-            setIsEditable(true)
-        }
-        else {
-            setIsEditable(false)
-        }
-    }, [NUM_DAYS_CANCEL_REGISTRATION, getTimeLeft, setIsEditable])
-
-    // const onEditItem = (item) => {
-    //     getIsEditable(item)
-    //     if (isEditable) {
-    //         navigate('/reservation/edit')
-    //     }
-    // }
 
     const onDeleteReservation = async () => {
         setShowDeleteAlert(true)
@@ -188,8 +170,7 @@ export const ReservationPreview = ({ item, todaysDate }) => {
 
     useEffect(() => {
         getIsCancelable(item);
-        getIsEditable(item);
-    }, [getIsCancelable, getIsEditable, item])
+    }, [getIsCancelable, item])
 
     return (
         <>
@@ -205,17 +186,6 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                     <table className="table-actions flex">
                         <tbody>
                             <tr className="table-action-cell">
-                                {/* <td className="table-cell-btn">
-                                    {isEditable ? <button className="table-btn" onClick={onEditItem}>
-                                        <NavLink to='/user-reservations/edit-reservation/:reservationId'>
-                                            <FontAwesomeIcon icon={faPenToSquare} />
-                                        </NavLink>
-                                    </button> : <button className="table-btn" disabled>
-                                        <NavLink to='/user-reservations/edit-reservation/:reservationId' disabled>
-                                            <FontAwesomeIcon icon={faPenToSquare} />
-                                        </NavLink>
-                                    </button>}
-                                </td> */}
                                 <td className="table-cell-btn">
                                     {isCancelable ? <button className="table-btn" onClick={onDeleteReservation}>
                                         <NavLink to='/user-reservations/'>

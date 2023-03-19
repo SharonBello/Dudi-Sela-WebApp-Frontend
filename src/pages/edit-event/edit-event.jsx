@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -12,11 +11,6 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { TimeField } from '@mui/x-date-pickers/TimeField';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
@@ -24,39 +18,22 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { Loader } from '../../components/loader.jsx';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions';
-import dayjs from 'dayjs';
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
+import { EventFrequency } from './event-frequency.jsx';
+import { EventTime } from './event-time.jsx';
 
 export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}) => {
 
-  const [startHour, setStartHour] = useState()
-  const [endHour, setEndHour] = useState()
-  // const [selectedStartHour, setSelectedStartHour] = useState();
   const START_HOUR_DAY = 6
   const [scheduleType, setScheduleType] = useState('schedule');
-  const { width } = useWindowDimensions()
-  const [date, setDate] = useState(() => new Date());
-  const todaysDate = dayjs().format('DD/MM/YYYY')
   const [checked, setChecked] = useState(true);
-  const [once, setOnce] = useState('');
-  const [onceAWeek, setOnceAWeek] = useState('');
-  const [onceAMonth, setOnceAMonth] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleOccurrence = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-    if (e.target.value === 'once') setOnce(e.target.value);
-    if (e.target.value === 'onceAWeek') setOnceAWeek(e.target.value);
-    if (e.target.value === 'onceAMonth') setOnceAMonth(e.target.value);
-  };
 
-  const handleScheduleType = (e, newScheduleType) => {
-    e.stopPropagation()
-    e.preventDefault()
-    if (newScheduleType !== null) setScheduleType(newScheduleType);
+  const handleScheduleType = (scheduleType) => {
+    if (scheduleType !== null) setScheduleType(scheduleType);
   };
 
   const handleCheckedClass = (e) => {
@@ -73,19 +50,6 @@ export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}
   const cacheRtl = createCache({
     key: 'muirtl',
   })
-
-  const validDate = (newValue) => {
-    const selectedDate = new Date(newValue)
-    return selectedDate
-  }
-
-  const handleDateChange = (e, newValue) => {
-    e.stopPropagation()
-    e.preventDefault()
-    if (validDate(newValue)) {
-      setDate(newValue)
-    }
-  }
 
   const renderIsLoading = () => {
     if (isLoading) {
@@ -169,89 +133,8 @@ export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}
                   </Box>
                 </Box>
 
-                <CacheProvider value={cacheRtl}>
-                  <ThemeProvider theme={theme}>
-                    <div dir="rtl" className="form-container flex align-center" >
-                      <Box className="date-time-container flex-column">
-                        <Typography className="modal-body-text">
-                          בחירת זמן רצוי
-                        </Typography>
-                        <Box className="date-time-select flex align-center">
-                          <section className="date-container flex justify-between align-center">
-                            {(width < 600) ?
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <MobileDatePicker
-                                  label="תאריך"
-                                  inputFormat="DD/MM/YYYY"
-                                  // value={date}
-                                  placeholder={todaysDate}
-                                  onChange={(e) => handleDateChange(e)}
-                                  renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>
-                              : <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DesktopDatePicker
-                                  label="תאריך"
-                                  inputFormat="DD/MM/YYYY"
-                                  // value={date}
-                                  placeholder={todaysDate}
-                                  onChange={(e) => handleDateChange(e)}
-                                // renderInput={(params) => <TextField {...params} />}
-                                />
-                              </LocalizationProvider>}
-                          </section>
-                          <section className="hours-container flex align-center justify-between">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <Container>
-                                <TimeField
-                                  label='שעת התחלה'
-                                  value={startHour}
-                                  placeholder={startHour}
-                                  onChange={(newValue) => setStartHour(newValue)}
-                                />
-                                <TimeField
-                                  label='שעת סיום'
-                                  value={endHour}
-                                  placeholder={endHour}
-                                  onChange={(newValue) => setEndHour(newValue)}
-                                />
-                              </Container>
-                            </LocalizationProvider>
-                          </section>
-                        </Box>
-                      </Box>
-                    </div>
-                  </ThemeProvider>
-                </CacheProvider>
-
-                <CacheProvider value={cacheRtl}>
-                  <ThemeProvider theme={theme}>
-                    <div dir="rtl" className="occurrence-container flex align-center" >
-                      <Box className="schedule-occurrence-container flex-column">
-                        <Typography className="modal-body-text">
-                          בחירת תדירות
-                        </Typography>
-                        <Box style={{ maxWidth: "10rem" }} className="select-occurrence-container">
-                          <FormControl fullWidth>
-                            <InputLabel id="select-occurrence-label">תדירות</InputLabel>
-                            <Select
-                              labelId="select-occurrence-label"
-                              className="select-occurrence"
-                              value={once}
-                              label="אירוע חד פעמי"
-                              onChange={(e) => handleOccurrence(e)}
-                            >
-                              <MenuItem value={once} className="select-occurrence-item">אירוע חד פעמי</MenuItem>
-                              <MenuItem value={onceAWeek} className="select-occurrence-item">שבועי</MenuItem>
-                              <MenuItem value={onceAMonth} className="select-occurrence-item">חודשי</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </Box>
-                    </div>
-                  </ThemeProvider>
-                </CacheProvider>
-
+                <EventTime theme={theme} cacheRtl={cacheRtl} />
+                <EventFrequency theme={theme} cacheRtl={cacheRtl} />
               </Box>
             </Container>
           </Box>

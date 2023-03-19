@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { Loader } from '../../components/loader.jsx';

@@ -10,6 +10,8 @@ import createCache from '@emotion/cache'
 import { EventFrequency } from './event-frequency.jsx'
 import { EventTime } from './event-time.jsx'
 import { EventType } from './event-type.jsx'
+import { SelectCourt } from './select-court.jsx'
+import { CourtPrice } from './court-price.jsx'
 
 export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}) => {
 
@@ -40,8 +42,7 @@ export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}
           onClose={closeEditEvent}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-          className="modal-overlay"
-        >
+          className="modal-overlay">
           <Box className="modal-box">
             <Container className="modal-content">
               <Box className="modal-header">
@@ -54,6 +55,9 @@ export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}
                 <EventType />
                 <EventTime theme={theme} cacheRtl={cacheRtl} />
                 <EventFrequency theme={theme} cacheRtl={cacheRtl} />
+                <SelectCourt theme={theme} cacheRtl={cacheRtl} />
+                <CourtPrice  />
+
               </Box>
             </Container>
           </Box>

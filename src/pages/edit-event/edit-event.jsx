@@ -12,8 +12,13 @@ import { EventTime } from './event-time.jsx'
 import { EventType } from './event-type.jsx'
 import { SelectCourt } from './select-court.jsx'
 import { CourtPrice } from './court-price.jsx'
+import { EventTitle } from './event-title.jsx'
+import Divider from '@mui/material/Divider';
+import { ParticipantsList } from './participants-lists.jsx';
+import { InstructorsList } from './instructors-list.jsx'
+import { EventDescription } from './event-description.jsx';
 
-export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}) => {
+export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek }) => {
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -36,32 +41,56 @@ export const EditEventModal = ({openEditEvent, closeEditEvent, mDate, dayOfWeek}
 
   return (
     <>
-        {renderIsLoading()}
-        <Modal
-          open={openEditEvent}
-          onClose={closeEditEvent}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-          className="modal-overlay">
-          <Box className="modal-box">
-            <Container className="modal-content">
-              <Box className="modal-header">
-                <Typography id="modal-modal-title" variant="h6" component="h2">
-                  הזמנה חדשה
+      {renderIsLoading()}
+      <Modal
+        open={openEditEvent}
+        onClose={closeEditEvent}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        className="modal-overlay">
+        <Box className="modal-box">
+          <Container className="modal-content">
+            <Box className="modal-header">
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                הזמנה חדשה
+              </Typography>
+            </Box>
+
+            <Box className="modal-body">
+              <EventType />
+              <EventTime theme={theme} cacheRtl={cacheRtl} />
+              <EventFrequency theme={theme} cacheRtl={cacheRtl} />
+              <Box className="court-details flex-column">
+                <Typography className="modal-body-text">
+                  מגרשים
                 </Typography>
+                <div className="flex align-center" style={{ gap: "0.5rem" }}>
+                  <SelectCourt theme={theme} cacheRtl={cacheRtl} />
+                  <CourtPrice />
+                </div>
               </Box>
-
-              <Box className="modal-body">
-                <EventType />
-                <EventTime theme={theme} cacheRtl={cacheRtl} />
-                <EventFrequency theme={theme} cacheRtl={cacheRtl} />
-                <SelectCourt theme={theme} cacheRtl={cacheRtl} />
-                <CourtPrice  />
-
+              <Box className="flex-row">
+                  <EventDescription />
+                  <EventTitle />
               </Box>
-            </Container>
-          </Box>
-        </Modal>
+              <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
+              <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
+                <InstructorsList />
+                <ParticipantsList />
+              </div>
+              <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
+              <div className='flex align-center justify-between save-cancel-btn-container'>
+                <button className='save-btn'>
+                  שמירה
+                </button>
+                <button className='cancel-btn'>
+                  ביטול
+                </button>
+              </div>
+            </Box>
+          </Container>
+        </Box>
+      </Modal>
     </>
   );
 }

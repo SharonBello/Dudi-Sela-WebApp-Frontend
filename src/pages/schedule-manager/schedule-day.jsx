@@ -8,7 +8,6 @@ import { getRows, hoursData, hoursDataArr, columnsData } from './schedule-helper
 import { EditEventModal } from '../edit-event/edit-event.jsx';
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
-  const [instructors, setInstructors] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
@@ -26,7 +25,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         field: col.hour,
         headerName: col.headerName,
         type: 'singleSelect',
-        // valueOptions: instructors,
         width: 140,
         editable: true,
         renderEditCell: { handleEditEvent },
@@ -46,10 +44,22 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setRows(_rows)
   }, [mDate])
 
+  const getTodaysEvents = useCallback(async () => {
+    // get events using eventsService.getEvents(), and then filter by mDate
+    // let reservations = await reservationService.queryByDate(mDate)
+    // let _rows = getRows()
+    // reservations.forEach(reservation => {
+    //   const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+    //   _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+    // });
+    // setRows(_rows)
+  }, [mDate])
+
   useEffect(() => {
     initSchedule()
-    getTodaysReservations()
-  }, [mDate, getTodaysReservations])
+    // getTodaysReservations()
+    getTodaysEvents()
+  }, [mDate, getTodaysEvents])
 
   const initSchedule = () => {
     let _rows = getRows()

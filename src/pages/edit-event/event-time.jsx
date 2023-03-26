@@ -14,22 +14,12 @@ import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 
-export const EventTime = ({theme, cacheRtl }) => {
+export const EventTime = ({theme, cacheRtl, startHour, setStartHour, endHour, setEndHour, date, setDate }) => {
   const { width } = useWindowDimensions()
-  const [date, setDate] = useState(() => new Date());
-  const [startHour, setStartHour] = useState()
-  const [endHour, setEndHour] = useState()
   const todaysDate = dayjs().format('DD/MM/YYYY')
 
-  const validDate = (newValue) => {
-    const selectedDate = new Date(newValue)
-    return selectedDate
-  }
-
   const handleDateChange = (dateChanged) => {
-    if (validDate(dateChanged)) {
-        setDate(dateChanged)
-    }
+    setDate(dayjs(new Date(dateChanged)).format('YYYY-MM-DD'))
   }
 
   return (
@@ -67,12 +57,26 @@ export const EventTime = ({theme, cacheRtl }) => {
                 <section className="hours-container flex align-center justify-between">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <Container>
-                    <TimeField
+                    <TextField
+                        label='שעת התחלה'
+                        type="time"
+                        value={startHour}
+                        placeholder={startHour}
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        minutesStep={60}
+                        onChange={(newValue) => setStartHour(newValue)}
+                        minTime={dayjs().set('hour', 8)}
+                        maxTime={dayjs().set('hour', 17)}
+                    />
+                    {/* <TimeField
                         label='שעת התחלה'
                         value={startHour}
                         placeholder={startHour}
+                        minutesStep={60}
                         onChange={(newValue) => setStartHour(newValue)}
-                    />
+                    /> */}
                     <TimeField
                         label='שעת סיום'
                         value={endHour}

@@ -11,9 +11,7 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export const EventType = () => {
-  const [scheduleType, setScheduleType] = useState('schedule');
-  const [checked, setChecked] = useState(true);
+export const EventType = ({scheduleType, setScheduleType, shouldJoinClass, setShouldJoinClass}) => {
 
   const handleScheduleType = (scheduleType) => {
     if (scheduleType !== null) setScheduleType(scheduleType);
@@ -22,7 +20,7 @@ export const EventType = () => {
   const handleCheckedClass = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setChecked(e.target.checked);
+    setShouldJoinClass(e.target.checked);
   };
 
   return (
@@ -45,7 +43,7 @@ export const EventType = () => {
                 </Typography>
             </Box>
             </ToggleButton>
-            <ToggleButton value="internal-schedule">
+            <ToggleButton value="internalSchedule">
             <Box className="flex align-center">
                 <PermContactCalendarIcon />
                 <Typography>
@@ -66,7 +64,7 @@ export const EventType = () => {
         <FormGroup>
             <FormControlLabel
             control={<Checkbox
-                checked={checked}
+                checked={shouldJoinClass}
                 onChange={(e) => handleCheckedClass(e)}
                 inputProps={{ 'aria-label': 'controlled' }}
                 sx={{

@@ -11,17 +11,16 @@ import MenuList from '@mui/material/MenuList';
 
 const options = ['הוספת משתתפים'];
 
-export const ParticipantsList = () => {
+export const ParticipantsList = ({participantIndices, setParticipantIndices}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
-        console.info(`You clicked ${options[selectedIndex]}`);
+        // console.info(`You clicked ${options[participantIndices]}`);
     };
 
     const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index);
+        setParticipantIndices(participantIndices.push(index));
         setOpen(false);
     };
 
@@ -39,7 +38,7 @@ export const ParticipantsList = () => {
     return (
         <>
             <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+                <Button onClick={handleClick}>{options[participantIndices]}</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -76,7 +75,7 @@ export const ParticipantsList = () => {
                                         <MenuItem
                                             key={option}
                                             disabled={index === 2}
-                                            selected={index === selectedIndex}
+                                            selected={index === participantIndices}
                                             onClick={(event) => handleMenuItemClick(event, index)}
                                         >
                                             {option}

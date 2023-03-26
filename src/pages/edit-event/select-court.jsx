@@ -9,16 +9,15 @@ import Select from '@mui/material/Select';
 import { ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 
-export const SelectCourt = ({ theme, cacheRtl }) => {
-
-  const [courntNumber, setCourntNumber] = useState(6);
+export const SelectCourt = ({ theme, cacheRtl, courtNumbers, setCourtNumbers }) => {
 
   const handleCourtSelection = (e) => {
     e.stopPropagation()
     e.preventDefault()
+    setCourtNumbers(courtNumbers.push(...e.target.value))
   };
 
-  // TODO: replace the select with a modal and allow choosing more than one court
+  // TODO: add multiple selection to the select input
   return (
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
@@ -30,18 +29,20 @@ export const SelectCourt = ({ theme, cacheRtl }) => {
                 labelId="select-court-label"
                 sx={{ minWidth: "10rem", padding: "8.5px 14px !important" }}
                 className="select-occurrence"
-                value={courntNumber}
+                multiple
+                // value={courtNumbers}
                 label="מגרש"
-                onChange={(e) => handleCourtSelection(e)}>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 1</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 2</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 3</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 4</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 5</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">מגרש 6</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">כחול מוזל</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">אדום מוזל</MenuItem>
-                <MenuItem value={1} className="select-occurrence-item">ירוק מוזל</MenuItem>
+                onChange={(e) => handleCourtSelection(e)}
+                value={[]}>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 1</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 2</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 3</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 4</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 5</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">מגרש 6</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">כחול מוזל</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">אדום מוזל</MenuItem>
+                <MenuItem value={[0]} className="select-occurrence-item">ירוק מוזל</MenuItem>
               </Select>
             </FormControl>
           </Box>

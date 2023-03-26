@@ -30,7 +30,7 @@ export const NewReservation = () => {
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
-  const [courtNumber, setCourtNumber] = useState()
+  const [courtNumber, setCourtNumbers] = useState()
   const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
   const [initCourtsData, setInitCourtsData] = useState()
@@ -206,7 +206,7 @@ export const NewReservation = () => {
     setStartHour(startHour)
     setEndHour(startHour+1)
     filterCourtsDataByHour(startHour, startHour+1)
-    setCourtNumber()
+    setCourtNumbers()
     setIsLoading(false)
     setShowDuration(true)
   }
@@ -217,14 +217,14 @@ export const NewReservation = () => {
     setIsLoading(true)
     setEndHour(e.target.value+startHour)
     filterCourtsDataByHour(startHour, e.target.value+startHour)
-    setCourtNumber()
+    setCourtNumbers()
     setIsLoading(false)
   }
 
   const handleCourtNumberChange = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setCourtNumber(+e.target.innerHTML)
+    setCourtNumbers(+e.target.innerHTML)
   }
 
   const validateForm = (e) => {

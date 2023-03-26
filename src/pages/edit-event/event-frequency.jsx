@@ -8,19 +8,17 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
+import { FREQUENCY_TYPES } from '../../pages/edit-event/event';
 
-export const EventFrequency = ({theme, cacheRtl}) => {
-
-  const [once, setOnce] = useState('');
-  const [onceAWeek, setOnceAWeek] = useState('');
-  const [onceAMonth, setOnceAMonth] = useState('')
+export const EventFrequency = ({theme, cacheRtl, frequency, setFrequency}) => {
 
   const handleOccurrence = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    if (e.target.value === 'once') setOnce(e.target.value);
-    if (e.target.value === 'onceAWeek') setOnceAWeek(e.target.value);
-    if (e.target.value === 'onceAMonth') setOnceAMonth(e.target.value);
+    //TODO: replace following frequency to ENUM
+    if (e.target.value === 'once') setFrequency(0);
+    if (e.target.value === 'onceAWeek') setFrequency(1);
+    if (e.target.value === 'onceAMonth') setFrequency(2);
   };
 
   return (
@@ -37,13 +35,13 @@ export const EventFrequency = ({theme, cacheRtl}) => {
                     <Select
                         labelId="select-occurrence-label"
                         className="select-occurrence"
-                        value={once}
+                        value={FREQUENCY_TYPES.Once}
                         label="אירוע חד פעמי"
                         onChange={(e) => handleOccurrence(e)}
                     >
-                        <MenuItem value={once} className="select-occurrence-item">אירוע חד פעמי</MenuItem>
-                        <MenuItem value={onceAWeek} className="select-occurrence-item">שבועי</MenuItem>
-                        <MenuItem value={onceAMonth} className="select-occurrence-item">חודשי</MenuItem>
+                        <MenuItem value={FREQUENCY_TYPES.Once} className="select-occurrence-item">אירוע חד פעמי</MenuItem>
+                        <MenuItem value={FREQUENCY_TYPES.OnceAWeek} className="select-occurrence-item">שבועי</MenuItem>
+                        <MenuItem value={FREQUENCY_TYPES.OnceAMonth} className="select-occurrence-item">חודשי</MenuItem>
                     </Select>
                     </FormControl>
                 </Box>

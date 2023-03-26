@@ -11,17 +11,16 @@ import MenuList from '@mui/material/MenuList';
 
 const options = ['הוספת מדריכים'];
 
-export const InstructorsList = () => {
+export const InstructorsList = ({instructorIndices, setInstructorIndices}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
 
     const handleClick = () => {
-        console.info(`You clicked ${options[selectedIndex]}`);
+        console.info(`You clicked ${options[instructorIndices]}`);
     };
 
     const handleMenuItemClick = (event, index) => {
-        setSelectedIndex(index);
+        setInstructorIndices(instructorIndices.push(index));
         setOpen(false);
     };
 
@@ -39,7 +38,7 @@ export const InstructorsList = () => {
     return (
         <>
             <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                <Button onClick={handleClick}>{options[selectedIndex]}</Button>
+                <Button onClick={handleClick}>{options[instructorIndices]}</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -76,7 +75,7 @@ export const InstructorsList = () => {
                                         <MenuItem
                                             key={option}
                                             disabled={index === 2}
-                                            selected={index === selectedIndex}
+                                            selected={index === instructorIndices}
                                             onClick={(event) => handleMenuItemClick(event, index)}
                                         >
                                             {option}

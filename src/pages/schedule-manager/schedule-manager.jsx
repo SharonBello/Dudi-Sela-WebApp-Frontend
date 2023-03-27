@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
+import SideDrawer from "./side-drawer.jsx"
+
 
 export const ScheduleManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -28,8 +30,32 @@ export const ScheduleManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
+  const openClubDetails = (e, index) => {
+    console.log(index);
+  }
+  const openClubSettings = (e, index) => {
+    console.log(index);
+  }
+  const openClubHours = (e, index) => {
+    console.log(index);
+  }
+  const openMembersCard = (e, index) => {
+    console.log(index);
+  }
+  const openUsersPerimission = (e, index) => {
+    console.log(index);
+  }
+  const openSalesDetails = (e, index) => {
+    console.log(index);
+  }
+  const clubOptions = ['מועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'כרטיסיות', 'משתמשים והרשאות', 'נתוני מכירות'];
+  const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openMembersCard, openUsersPerimission, openSalesDetails ];
+
   return (
     <div className="flex-column align-center justify-between container schedule-container">
+      <article className="side-drawer flex">
+        <SideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} openClubDetails={openClubDetails} openClubSettings={openClubSettings} openClubHours={openClubHours} openMembersCard={openMembersCard} openUsersPerimission={openUsersPerimission} openSalesDetails={openSalesDetails} />
+      </article>
       <Typography component="h1" variant="h5">האקדמיה לטניס דודי סלע</Typography>
       <Box
         className="flex align-center justify-between schedule-header"

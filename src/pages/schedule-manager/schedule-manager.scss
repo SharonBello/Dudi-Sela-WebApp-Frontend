@@ -1,6 +1,11 @@
 .schedule-container {
     padding-block-start: 15vh;
     min-width: 100%;
+    flex: 1;
+
+    .side-drawer {
+        margin-left: auto;
+    }
 
     .schedule-daily-btn,
     .submit-button {

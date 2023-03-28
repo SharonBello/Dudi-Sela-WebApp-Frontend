@@ -11,7 +11,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function SideDrawer({clubOptions, optionFuncs, openClubDetails, openClubSettings, openClubHours, openMembersCard, openUsersPerimission, openSalesDetails }) {
+export default function MainSideDrawer({mainOptions, mainFuncs}) {
   const [state, setState] = useState({right: false
   });
 
@@ -39,8 +39,8 @@ export default function SideDrawer({clubOptions, optionFuncs, openClubDetails, o
       </List>
       <Divider />
       <List>
-        {clubOptions.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, index)}>
+        {mainOptions.map((text, index) => (
+          <ListItem key={text} disablePadding onClick={(e) => mainFuncs[index](e, index)}>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}

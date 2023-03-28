@@ -1,0 +1,57 @@
+import React, {useState} from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
+
+  const list = () => (
+    <Box
+      sx={{ width: 'auto' }}
+      role="presentation"
+      onClick={() => setShowClubDetails(false)}
+      onKeyDown={() => setShowClubDetails(false)}
+    >
+      <List>
+        {['האקדמיה של דודי סלע'].map((text, index) => (
+          <ListItem key={text}>
+              <ListItemText primary={text} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {clubOptions.map((text, index) => (
+          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, index)}>
+            <ListItemButton>
+              <ListItemIcon>
+              <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <>
+          {/* <Box className="flex align-right justify-between">
+                <GridMenuIcon onClick={toggleDrawer('right', true)}/>
+          </Box> */}
+          <Drawer
+            anchor='right'
+            open={showClubDetails}
+            onClose={() => setShowClubDetails(false)}
+          >
+            {list('right')}
+          </Drawer>
+    </>
+  );
+}

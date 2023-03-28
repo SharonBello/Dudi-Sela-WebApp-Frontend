@@ -6,7 +6,7 @@ import { UserReservations } from './pages/user-reservations/user-reservations.js
 import { UserProfile } from './pages/user-profile/user-profile.jsx'
 import { LearnTennis } from './pages/learn-tennis/learn-tennis.jsx'
 import { ContactUs } from './pages/contact-us/contact-us.jsx'
-import { ScheduleManager } from './pages/schedule-manager/schedule-manager.jsx'
+import { ClubManager } from './pages/schedule-manager/club-manager.jsx'
 import { Dashboard } from './pages/dashboard/dashboard.jsx'
 
 const routes = [
@@ -43,8 +43,8 @@ const routes = [
         component: <Signup />,
     },
     {
-        path: '/schedule',
-        component: <ScheduleManager />,
+        path: '/manager',
+        component: <ClubManager />,
     },
     {
         path: '/dashboard',

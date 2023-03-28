@@ -56,7 +56,7 @@ export default function MainSideDrawer({mainOptions, mainFuncs}) {
   return (
     <>
           <Box className="flex align-right justify-between">
-                <GridMenuIcon onClick={toggleDrawer('right', true)}/>
+                <GridMenuIcon id="toggle-main-drawer" onClick={toggleDrawer('right', true)}/>
           </Box>
           <Drawer
             anchor='right'

@@ -7,9 +7,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { GridMenuIcon } from '@mui/x-data-grid';
 
 export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
-
+  const openMainDrawer = () => {
+    const clickEvent = new MouseEvent("click", {
+      "view": window,
+      "bubbles": true,
+      "cancelable": false
+    });
+    const el = document.getElementById("toggle-main-drawer")
+    el.dispatchEvent(clickEvent);
+  }
   const list = () => (
     <Box
       sx={{ width: 'auto' }}
@@ -20,6 +29,9 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
       <List>
         {['האקדמיה של דודי סלע'].map((text, index) => (
           <ListItem key={text}>
+              <Box className="flex align-right justify-between">
+                <GridMenuIcon onClick={() => openMainDrawer()}/>
+              </Box>
               <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -42,16 +54,13 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
 
   return (
     <>
-          {/* <Box className="flex align-right justify-between">
-                <GridMenuIcon onClick={toggleDrawer('right', true)}/>
-          </Box> */}
-          <Drawer
-            anchor='right'
-            open={showClubDetails}
-            onClose={() => setShowClubDetails(false)}
-          >
-            {list('right')}
-          </Drawer>
+      <Drawer
+        anchor='right'
+        open={showClubDetails}
+        onClose={() => setShowClubDetails(false)}
+      >
+        {list('right')}
+      </Drawer>
     </>
   );
 }

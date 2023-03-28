@@ -73,12 +73,10 @@ export const ClubManager = () => {
   const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openMembersCard, openUsersPerimission, openSalesDetails ];
   const mainOptions = ['מנהל ההזמנות', 'מועדון', 'חוגים', 'נתוני מכירות', 'שפה', 'יציאה']
   const openCalendar = (e, index) => {
-    console.log(index);
     setShowScheduleManager(true)
     setShowClubInfo(false)
   }
   const openClubData = (e, index) => {
-    console.log(index);
     setShowClubDetails(true)
   }
   const openClubClasses = (e, index) => {

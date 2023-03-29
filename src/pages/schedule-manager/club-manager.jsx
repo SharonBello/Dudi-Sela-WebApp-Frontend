@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
@@ -7,6 +9,8 @@ import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
 import ClubSideDrawer from "./club-side-drawer.jsx"
 import MainSideDrawer from "./main-side-drawer.jsx"
+import { signout, setUserUid } from '../..//store/actions/user.actions.js'
+import { PAGES_IDX } from './pages-idx.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -16,6 +20,8 @@ export const ClubManager = () => {
   const [showScheduleManager, setShowScheduleManager] = useState(true)
   const [showClubInfo, setShowClubInfo] = useState(false)
   const [clubInfoIdx, setClubInfoIdx] = useState()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const openTodaysSchedule = () => {
     setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
@@ -76,7 +82,7 @@ export const ClubManager = () => {
                         'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
                         'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
   const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission ];
-  const mainOptions = ['מנהל ההזמנות', 'מועדון', 'חוגים', 'שפה', 'נתוני מכירות', 'יציאה']
+  const mainOptions = ['מנהל ההזמנות', 'המועדון', 'חוגים', 'שפה', 'נתוני מכירות', 'יציאה']
 
   const openCalendar = (e, index) => {
     setShowScheduleManager(true)
@@ -95,6 +101,9 @@ export const ClubManager = () => {
   }
   const logout = (e, index) => {
     console.log(index);
+    dispatch(setUserUid(null))
+    dispatch(signout())
+    navigate('/')
   }
   const mainFuncs = [ openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
   const renderClubSideDrawer = () => {
@@ -105,24 +114,24 @@ export const ClubManager = () => {
   const renderClubInfo = () => {
     if (showClubInfo) {
       switch (clubInfoIdx) {
-        case 0:
+        case PAGES_IDX.AboutClub:
           // TODO render the component page for club details
           return <div>על המועדון</div>
-        case 1:
+        case PAGES_IDX.ClubSettings:
           return <div>הגדרות מועדון</div>
-        case 2:
+        case PAGES_IDX.WorkHours:
           return <div>שעות פעילות</div>
-        case 3:
+        case PAGES_IDX.CourtsManager:
           return <div>ניהול מגרשים</div>
-        case 4:
+        case PAGES_IDX.SalesDetails:
           return <div>נתוני מכירות</div>
-        case 5:
+        case PAGES_IDX.PunchCards:
           return <div>כרטיסיות</div>
-        case 6:
+        case PAGES_IDX.UsersPerimssion:
           return <div>משתמשים והרשאות</div>
-        case 7:
+        case PAGES_IDX.ClubClasses:
           return <div>חוגים</div>
-              default:
+        default:
           break;
       }
     }
@@ -160,7 +169,7 @@ export const ClubManager = () => {
     }
   }
   return (
-    <div className="flex-column align-center justify-between container schedule-container">
+    <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
         {renderClubSideDrawer()}
         <MainSideDrawer mainOptions={mainOptions} mainFuncs={mainFuncs} />

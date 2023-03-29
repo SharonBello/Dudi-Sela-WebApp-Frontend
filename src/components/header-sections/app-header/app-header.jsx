@@ -86,7 +86,6 @@ export const AppHeader = () => {
         dispatch(signout())
         document.location.href = '/'
         userService.authSignout();
-        //TODO show notification user sign out
       })
   }
 
@@ -125,7 +124,7 @@ export const AppHeader = () => {
           <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
           </li>
 
-          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/schedule`} className="link-page">מנהל ההזמנות</NavLink>
+          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
           </li> : null)}
 
           {(adminUser === "true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>

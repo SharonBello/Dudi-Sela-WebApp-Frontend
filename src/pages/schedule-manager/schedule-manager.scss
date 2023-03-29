@@ -43,3 +43,14 @@ img.drawer-icon {
     height: 30px;
     width: 30px;
 }
+
+.modal-overlay {
+    .modal-body.modal-language {
+        min-width: 30vw;
+    }
+}
+
+
+.modal-overlay .modal-box.modal-language  {
+    min-width: 40vw !important;
+}

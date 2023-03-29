@@ -11,12 +11,14 @@ import ClubSideDrawer from "./club-side-drawer.jsx"
 import MainSideDrawer from "./main-side-drawer.jsx"
 import { signout, setUserUid } from '../..//store/actions/user.actions.js'
 import { PAGES_IDX } from './pages-idx.jsx'
+import { ChooseLanguage } from './choose-language.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
   const [showClubDetails, setShowClubDetails] = useState(false)
+  const [isHebrewLang, setIsHebrewLang] = useState(true)
   const [showScheduleManager, setShowScheduleManager] = useState(true)
   const [showClubInfo, setShowClubInfo] = useState(false)
   const [clubInfoIdx, setClubInfoIdx] = useState()
@@ -74,8 +76,8 @@ export const ClubManager = () => {
     toggleScheduleVsClubInfo(false, true)
   }
   //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
-  const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות',  'כרטיסיות', 'משתמשים והרשאות'];
-  const optionIcons = ['https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
+  const clubOptions = [ 'על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות',  'כרטיסיות', 'משתמשים והרשאות'];
+  const optionIcons = [ 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
                         'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
                         'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
                         'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
@@ -96,8 +98,8 @@ export const ClubManager = () => {
     toggleScheduleVsClubInfo(false, true)
   }
   const openLocalization = (e, index) => {
-    console.log(index);
-    // TODO create a modal with two options hebrew and english
+    setClubInfoIdx(8)
+    toggleScheduleVsClubInfo(false, true)
   }
   const logout = (e, index) => {
     console.log(index);
@@ -111,6 +113,10 @@ export const ClubManager = () => {
       return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
     }
   }
+  const closeChooseLang = () => {
+    toggleScheduleVsClubInfo(true, false)
+  }
+
   const renderClubInfo = () => {
     if (showClubInfo) {
       switch (clubInfoIdx) {
@@ -131,7 +137,9 @@ export const ClubManager = () => {
           return <div>משתמשים והרשאות</div>
         case PAGES_IDX.ClubClasses:
           return <div>חוגים</div>
-        default:
+        case PAGES_IDX.ChooseLanguage:
+          return <ChooseLanguage isHebrewLang={isHebrewLang} setIsHebrewLang={setIsHebrewLang} closeChooseLang={closeChooseLang} />
+              default:
           break;
       }
     }

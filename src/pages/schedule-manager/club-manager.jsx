@@ -68,10 +68,16 @@ export const ClubManager = () => {
     toggleScheduleVsClubInfo(false, true)
   }
   //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
-  const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'כרטיסיות', 'משתמשים והרשאות', 'נתוני מכירות'];
-  const optionIcons = ['tennis', 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg']
-  const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openMembersCard, openUsersPerimission, openSalesDetails ];
-  const mainOptions = ['מנהל ההזמנות', 'מועדון', 'חוגים', 'נתוני מכירות', 'שפה', 'יציאה']
+  const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות',  'כרטיסיות', 'משתמשים והרשאות'];
+  const optionIcons = ['https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
+                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
+                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
+                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
+                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
+                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
+  const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission ];
+  const mainOptions = ['מנהל ההזמנות', 'מועדון', 'חוגים', 'שפה', 'נתוני מכירות', 'יציאה']
+
   const openCalendar = (e, index) => {
     setShowScheduleManager(true)
     setShowClubInfo(false)
@@ -80,15 +86,17 @@ export const ClubManager = () => {
     setShowClubDetails(true)
   }
   const openClubClasses = (e, index) => {
-    console.log(index);
+    setClubInfoIdx(7)
+    toggleScheduleVsClubInfo(false, true)
   }
   const openLocalization = (e, index) => {
     console.log(index);
+    // TODO create a modal with two options hebrew and english
   }
   const logout = (e, index) => {
     console.log(index);
   }
-  const mainFuncs = [ openCalendar, openClubData, openClubClasses, openSalesDetails, openLocalization, logout]
+  const mainFuncs = [ openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
   const renderClubSideDrawer = () => {
     if (showClubDetails) {
       return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
@@ -107,12 +115,14 @@ export const ClubManager = () => {
         case 3:
           return <div>ניהול מגרשים</div>
         case 4:
-          return <div>כרטיסיות</div>
-        case 5:
-          return <div>משתמשים והרשאות</div>
-        case 6:
           return <div>נתוני מכירות</div>
-        default:
+        case 5:
+          return <div>כרטיסיות</div>
+        case 6:
+          return <div>משתמשים והרשאות</div>
+        case 7:
+          return <div>חוגים</div>
+              default:
           break;
       }
     }
@@ -126,8 +136,7 @@ export const ClubManager = () => {
             className="flex align-center justify-between schedule-header"
             sx={{
               marginBlock: 5,
-            }}
-          >
+            }}>
             <Typography>{weekDayInHebrew[weekDay]} {date}</Typography>
             <Box
               sx={{

@@ -12,14 +12,6 @@ import MainSideDrawer from "./main-side-drawer.jsx"
 import { signout, setUserUid } from '../..//store/actions/user.actions.js'
 import { PAGES_IDX } from './pages-idx.jsx'
 import { ChooseLanguage } from './choose-language.jsx'
-import { UsersPermission } from '../club-manager/users-permission.jsx'
-import { ClubClasses } from '../club-manager/club-classes.jsx'
-import { ClubDetails } from '../club-manager/club-details.jsx'
-import { ClubSettings } from '../club-manager/club-settings.jsx'
-import { WorkHours } from '../club-manager/work-hours.jsx'
-import { PunchCards } from '../club-manager/punch-cards.jsx'
-import { CourtsManager } from '../club-manager/courts-manager.jsx'
-import { SalesDetails } from '../club-manager/sales-details.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -130,21 +122,21 @@ export const ClubManager = () => {
       switch (clubInfoIdx) {
         case PAGES_IDX.AboutClub:
           // TODO render the component page for club details
-          return <ClubDetails />
+          return <div>על המועדון</div>
         case PAGES_IDX.ClubSettings:
-          return <ClubSettings />
+          return <div>הגדרות מועדון</div>
         case PAGES_IDX.WorkHours:
-          return <WorkHours />
+          return <div>שעות פעילות</div>
         case PAGES_IDX.CourtsManager:
-          return <CourtsManager />
+          return <div>ניהול מגרשים</div>
         case PAGES_IDX.SalesDetails:
-          return <SalesDetails />
+          return <div>נתוני מכירות</div>
         case PAGES_IDX.PunchCards:
-          return <PunchCards />
+          return <div>כרטיסיות</div>
         case PAGES_IDX.UsersPerimssion:
-          return <UsersPermission />
+          return <div>משתמשים והרשאות</div>
         case PAGES_IDX.ClubClasses:
-          return <ClubClasses />
+          return <div>חוגים</div>
         case PAGES_IDX.ChooseLanguage:
           return <ChooseLanguage isHebrewLang={isHebrewLang} setIsHebrewLang={setIsHebrewLang} closeChooseLang={closeChooseLang} />
               default:

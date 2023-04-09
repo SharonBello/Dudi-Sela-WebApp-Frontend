@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CustomDivider from '../shared-components/custom-divider';
-import { TextBox } from '../shared-components/text-box';
 import { SaveButton } from '../shared-components/save-button';
 import { SelectMenu } from '../shared-components/select-menu'
 
@@ -14,10 +15,10 @@ export const ClubHours = ({ }) => {
   const getHours = () => {
     const hours = []
     for (let i = 0; i <= 24; i++) {
-      if (i<10) {
-        hours.push("0"+i+":00")
+      if (i < 10) {
+        hours.push("0" + i + ":00")
       } else {
-        hours.push(i+":00")
+        hours.push(i + ":00")
       }
     }
     return hours
@@ -29,8 +30,27 @@ export const ClubHours = ({ }) => {
     e.preventDefault()
   }
   const initWorkHours = () => {
-    const hours = {days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours:{startHour:"06:00", endHour:"24:00"}}
-    // setWorkHours(workHours.)
+    const hours1 = { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } }
+    const hours2 = { days: ["שישי"], hours: { startHour: "06:00", endHour: "23:00" } }
+    const hours3 = { days: ["שבת"], hours: { startHour: "06:00", endHour: "23:00" } }
+    setWorkHours([hours1, hours2, hours3])
+  }
+  useEffect(() => {
+    initWorkHours()
+  }, [])
+  const renderWorkHours = () => {
+    return (
+      workHours.map((wrkHrs) => {
+
+        return <Box className="club-hr">
+          <p>{wrkHrs.days.join(", ")}</p>
+          <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValues={setFromHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValues={setTillHour} />
+          <SaveButton onClick={handleSave} />
+          <FontAwesomeIcon icon={faTrashAlt} />
+        </Box>
+      })
+    )
   }
   return (
     <Box className="club-box">
@@ -44,10 +64,10 @@ export const ClubHours = ({ }) => {
         <SelectMenu inputLabel="ימים" values={workDays} setValues={setWorkDays} />
         <SelectMenu inputLabel="משעה" values={fromHour} setValues={setFromHour} />
         <SelectMenu inputLabel="עד שעה" values={tillHour} setValues={setTillHour} />
-        <SaveButton onClick={handleSave}/>
+        <SaveButton onClick={handleSave} />
         <CustomDivider />
         <div>שעות פעילות</div>
-
+        {renderWorkHours()}
 
       </Container>
     </Box>

@@ -16,7 +16,7 @@ import { UsersPermission } from '../club-manager/users-permission.jsx'
 import { ClubClasses } from '../club-manager/club-classes.jsx'
 import { ClubDetails } from '../club-manager/club-details.jsx'
 import { ClubSettings } from '../club-manager/club-settings.jsx'
-import { WorkHours } from '../club-manager/work-hours.jsx'
+import { ClubHours } from '../club-manager/club-hours.jsx'
 import { PunchCards } from '../club-manager/punch-cards.jsx'
 import { CourtsManager } from '../club-manager/courts-manager.jsx'
 import { SalesDetails } from '../club-manager/sales-details.jsx'
@@ -133,8 +133,8 @@ export const ClubManager = () => {
           return <ClubDetails />
         case PAGES_IDX.ClubSettings:
           return <ClubSettings />
-        case PAGES_IDX.WorkHours:
-          return <WorkHours />
+        case PAGES_IDX.ClubHours:
+          return <ClubHours />
         case PAGES_IDX.CourtsManager:
           return <CourtsManager />
         case PAGES_IDX.SalesDetails:

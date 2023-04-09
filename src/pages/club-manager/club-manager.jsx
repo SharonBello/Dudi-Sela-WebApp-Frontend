@@ -125,7 +125,7 @@ export const ClubManager = () => {
           return <div>על המועדון</div>
         case PAGES_IDX.ClubSettings:
           return <div>הגדרות מועדון</div>
-        case PAGES_IDX.WorkHours:
+        case PAGES_IDX.ClubHours:
           return <div>שעות פעילות</div>
         case PAGES_IDX.CourtsManager:
           return <div>ניהול מגרשים</div>

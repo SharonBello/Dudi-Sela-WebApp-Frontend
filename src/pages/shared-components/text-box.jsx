@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export const TextBox = ({ label, isRequired=false, type="text", placeholder="", defaultValue="", value, setValue, boxSx={'& > :not(style)': { m: 1, width: '25ch' }} }) => {
+export const TextBox = ({ label, disabled=false, isRequired=false, type="text", placeholder="", defaultValue="", value, setValue, boxSx={'& > :not(style)': { m: 2, width: '50ch' }} }) => {
 
     return (
         <Box component="form" sx={boxSx} autoComplete="off">
@@ -16,6 +16,7 @@ export const TextBox = ({ label, isRequired=false, type="text", placeholder="", 
                 variant="outlined"
                 onChange={setValue}
                 value={value}
+                disabled={disabled}
             />
         </Box>
     );

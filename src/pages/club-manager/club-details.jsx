@@ -3,10 +3,11 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider';
+import CustomDivider from '../shared-components/custom-divider';
 import { TextBox } from '../shared-components/text-box';
 import { SaveButton } from '../shared-components/save-button';
 import { FacilityServices } from './facility-services';
+import UploadButton from '../shared-components/upload-button';
 
 export const ClubDetails = ({}) => {
 
@@ -41,7 +42,7 @@ export const ClubDetails = ({}) => {
             <Box className="club-header">
             <Typography id="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
             </Box>
-            <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
+            <CustomDivider />
 
             <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
             <TextBox label="שם המועדון" value={clubName} setValue={setClubName} />
@@ -52,13 +53,13 @@ export const ClubDetails = ({}) => {
             <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
             <TextBox label="טלפון" value={phone} setValue={setPhone} />
 
-            <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices}/>
+            <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} />
             <TextBox label="פייסבוק" value={facebook} setValue={setFacebook} />
             <TextBox label="אינסטגרם" value={instegram} setValue={setInstegram} />
             <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />
             <TextBox label="מידע נוסף באנגלית" value={moreDetailsInEng} setValue={setMoreDetailsInEng} />
 
-
+            <UploadButton />
             <SaveButton onClick={handleSave}/>
         </Container>
     </Box>

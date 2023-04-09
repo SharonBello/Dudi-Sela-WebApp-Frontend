@@ -4,21 +4,22 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-export const SwitchInput = ({ label, isRequired, defaultValue, value, setValue }) => {
+export const SwitchInput = ({ label, disabled=false, isRequired=false, value, setValue }) => {
 
     return (
         <FormControl component="fieldset" variant="standard">
-            <FormLabel component="legend">{label}</FormLabel>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={false}
-                            onChange={setValue}
-                            name={value}
-                        />
-                    }
-                    label={label}
-                />
+            <FormControlLabel
+                control={
+                    <Switch
+                        checked={value}
+                        onChange={setValue}
+                        name={value}
+                        disabled={disabled}
+                        isRequired={isRequired}
+                    />
+                }
+                label={label}
+            />
         </FormControl>
     );
 }

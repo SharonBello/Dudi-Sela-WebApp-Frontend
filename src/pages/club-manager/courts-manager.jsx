@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CustomDivider from '../shared-components/custom-divider';
@@ -7,33 +9,21 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
 import { TextBox } from '../shared-components/text-box';
 import { SelectMenu } from '../shared-components/select-menu'
+import { SaveButton } from '../shared-components/save-button';
+import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from './club-helper'
 
 export const CourtsManager = ({ }) => {
-  const [courts, setCourts] = useState(["מגרש 1", "מגרש 2", "מגרש 3", "מגרש 4", "מגרש 5", "מגרש 6", "כחול מוזל", "אדום מוזל", "ירוק מוזל"]);
-  const [courtTypes, setCourtTypes] = useState(["טניס", "פאדל", "פיקלבול"]);
+  const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtTypeForm, setShowCourtTypeForm] = useState(false)
   // const [showAllCourts, setShowAllCourts] = useState(false)
-  //{title: "מגרשים", subtitle: "כל המגרשים"},
-  const courtActions = [{title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick:() => {setShowAddCourtForm(true);setShowCourtTypeForm(false);}}, {title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick:() => {setShowAddCourtForm(false);setShowCourtTypeForm(true);}}];
+  const courtActions = [{title: "מגרשים", subtitle: "כל המגרשים", onClick:() => {setShowAddCourtForm(false);setShowCourtTypeForm(false);}}, {title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick:() => {setShowAddCourtForm(true);setShowCourtTypeForm(false);}}, {title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick:() => {setShowAddCourtForm(false);setShowCourtTypeForm(true);}}];
   const [courtName, setCourtName] = useState();
-  const getHours = () => {
-    const hours = []
-    for (let i = 0; i <= 24; i++) {
-      if (i < 10) {
-        hours.push("0" + i + ":00")
-      } else {
-        hours.push(i + ":00")
-      }
-    }
-    return hours
-  }
-  const [fromHour, setFromHour] = useState(getHours());
-  const [tillHour, setTillHour] = useState(getHours());
-
+  const [constraintsData, setConstraintsData] = useState(DemoConstraintsData)
+  const [newConstraint, setNewConstraint] = useState(EmptyConstraint)
   const renderCourts = () => {
     return (
-      courts.map((court) => {
+      CourtNames.map((court) => {
         return <Box className="club-court">
           <div variant="contained" component="label">
             {court}
@@ -55,6 +45,21 @@ export const CourtsManager = ({ }) => {
   const saveCourt = () => {
     console.log("save court")
   }
+  const addNewConstraint = (values, key, innerkey) => {
+    console.log(values, key, innerkey)
+    const mData = JSON.parse(JSON.stringify(newConstraint))
+    innerkey ? mData[key][innerkey] = values : mData[key] = values
+    setNewConstraint(mData)
+  }
+  const handleSetConstraints = (values, index, key, innerkey) => {
+    const mData = JSON.parse(JSON.stringify(constraintsData))
+    innerkey ? mData[index][key][innerkey] = values : mData[index][key] = values
+    setConstraintsData(mData)
+  }
+  const handleSave = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+  }
   const renderAddCourtForm = () => {
     return (
       <div>
@@ -65,23 +70,39 @@ export const CourtsManager = ({ }) => {
       </div>
     )
   }
-  const renderCourtTypeForm = () => {
-    const hours1 = { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } }
-
+  const renderNewConstraint = () => {
     return (
       <>
-
-          <h1>אילוץ חדש</h1>
-          <h1>אילוצי מחירים</h1>
-          <Box className="club-hr">
-          {/* <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="בחר ימים" values={fromHour} setValue={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="סוג חבר" values={memberTypes} setValue={setMemberType} />
-          <SaveButton onClick={handleSave} />
-          <FontAwesomeIcon icon={faTrashAlt} /> */}
-        </Box>
+      {/* TODO replace following */}
+        {/* <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => addNewConstraint(values, "days")} /> */}
+        <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.fromHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "fromHour")} />
+        <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.tillHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "tillHour")} />
+        <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.hours.tillHour} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
+        <TextBox label="מחיר" defaultValue={newConstraint.price} placeholder="מחיר" setValue={(value) => addNewConstraint(value, "price")} />
+        <SaveButton onClick={handleSave} />
       </>
+    )
+  }
+  const renderCourtTypeForm = () => {
+    return (
+      <>
+          <h3>אילוץ חדש</h3>
+          {renderNewConstraint()}
+          <h3>אילוצי מחירים</h3>
+          {constraintsData.map((datum, index) =>
+          <Box>
+            <p>{constraintsData[0].days.join(", ")}</p>
+            <SelectMenu multiple={true} defaultValue={constraintsData[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, index, "days")} />
+            <SelectMenu defaultValue={constraintsData[index].hours.fromHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "fromHour")} />
+            <SelectMenu defaultValue={constraintsData[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "tillHour")} />
+            <SelectMenu defaultValue={constraintsData[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleSetConstraints(values, index, "memberType")} />
+            <TextBox label="מחיר" value={constraintsData[index].price} setValue={(value) => handleSetConstraints(value, index, "price")} />
+            <SaveButton onClick={handleSave} />
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </Box>
+          )}
+      </>
+
     )
   }
   return (

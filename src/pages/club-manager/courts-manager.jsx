@@ -60,7 +60,7 @@ export const CourtsManager = ({ }) => {
       <div>
         הוסף מגרש
         <TextBox label="שם" value={courtName} setValue={setCourtName} />
-        <SelectMenu inputLabel="סוג מגרש" values={courtTypes} setValues={setCourtTypes} />
+        <SelectMenu inputLabel="סוג מגרש" values={courtTypes} setValue={setCourtTypes} />
         <Button variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
       </div>
     )
@@ -74,10 +74,10 @@ export const CourtsManager = ({ }) => {
           <h1>אילוץ חדש</h1>
           <h1>אילוצי מחירים</h1>
           <Box className="club-hr">
-          {/* <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="בחר ימים" values={fromHour} setValues={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="משעה" values={fromHour} setValues={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValues={setTillHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="סוג חבר" values={memberTypes} setValues={setMemberType} />
+          {/* <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="בחר ימים" values={fromHour} setValue={setFromHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="סוג חבר" values={memberTypes} setValue={setMemberType} />
           <SaveButton onClick={handleSave} />
           <FontAwesomeIcon icon={faTrashAlt} /> */}
         </Box>

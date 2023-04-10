@@ -44,8 +44,8 @@ export const ClubHours = ({ }) => {
 
         return <Box className="club-hr">
           <p>{wrkHrs.days.join(", ")}</p>
-          <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValues={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValues={setTillHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
+          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
           <SaveButton onClick={handleSave} />
           <FontAwesomeIcon icon={faTrashAlt} />
         </Box>
@@ -61,9 +61,9 @@ export const ClubHours = ({ }) => {
         <CustomDivider />
         <p>השעות בהן לקוחות יכולים להזמין מגרשים. זמנים אשר מחוץ לשעות הפעילות יסומנו ברקע אפור ולא ניתן יהיה להזמין בשעות אלו דרך האפליקציה</p>
         <div>הוסף שעות פעילות</div>
-        <SelectMenu inputLabel="ימים" values={workDays} setValues={setWorkDays} />
-        <SelectMenu inputLabel="משעה" values={fromHour} setValues={setFromHour} />
-        <SelectMenu inputLabel="עד שעה" values={tillHour} setValues={setTillHour} />
+        <SelectMenu inputLabel="ימים" values={workDays} setValue={setWorkDays} />
+        <SelectMenu inputLabel="משעה" values={fromHour} setValue={setFromHour} />
+        <SelectMenu inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
         <SaveButton onClick={handleSave} />
         <CustomDivider />
         <div>שעות פעילות</div>

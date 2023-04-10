@@ -23,8 +23,6 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
     <Box
       sx={{ width: 'auto' }}
       role="presentation"
-      onClick={() => setShowClubDetails(false)}
-      onKeyDown={() => setShowClubDetails(false)}
     >
       <List>
         {['האקדמיה של דודי סלע'].map((text, index) => (
@@ -56,6 +54,7 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
     <>
       <Drawer
         anchor='right'
+        variant='permanent'
         open={showClubDetails}
         onClose={() => setShowClubDetails(false)}
       >

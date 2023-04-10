@@ -5,25 +5,26 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
-export const SelectMenu = ({ inputLabel = "", multiple=false, isRequired = false, placeholder = undefined, defaultValue = undefined, values, setValues }) => {
+export const SelectMenu = ({ inputLabel = "", multiple=false, isRequired = false, placeholder = undefined, defaultValue = undefined, values, setValue }) => {
 
-    const [value, setValue] = useState(defaultValue)
+    const [val, setVal] = useState(defaultValue)
     const handleChange = (event) => {
+        setVal(event.target.value);
         setValue(event.target.value);
     };
     useEffect(() => {
-        setValue(defaultValue)
+        setVal(defaultValue)
     }, [])
     return (
         <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>{inputLabel}</InputLabel>
             <Select
-                defaultValue={value}
+                defaultValue={val}
                 label={inputLabel}
                 onChange={handleChange}
                 multiple={multiple}>
-                {values.map((val, valIdx) => (
-                    <MenuItem key={valIdx} value={val}>{val}
+                {values.map((v, valIdx) => (
+                    <MenuItem key={valIdx} value={v}>{v}
                     </MenuItem>
                 ))}
 

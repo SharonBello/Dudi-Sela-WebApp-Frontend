@@ -10,27 +10,33 @@ import { DemoPunchCards } from './club-helper';
 export const PunchCards = ({}) => {
   const [showModalCreate, setShowModalCreate] = useState(false);
   const [showPunchCard, setShowPunchCard] = useState(false);
-  // const [showPunchCard, setShowPunchCard] = useState(false);
+  const [selectedPunchCard, setSelectedPunchCard] = useState(false);
 
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard />
+        <CreatePunchCard setShowModalCreate={setShowModalCreate}/>
       )
     }
   }
   const handleShowPunchCard = (e, card) => {
     console.log(e, card)
-
+    setSelectedPunchCard(card)
+    setShowPunchCard(true)
   }
   const renderPunchCards = () => {
     return (
       DemoPunchCards.map((card)=> <button onClick={(e) => handleShowPunchCard(e, card)}>
-        <h2>{card.cardType}</h2>
+        <h2>{card.cardName}</h2>
         <div>כמות קרדיט: {card.creditAmount}</div>
         <div>מחיר: {card.price}</div>
       </button>
       )
+    )
+  }
+  const renderModalPunchCard = () => {
+    return (
+      <></>
     )
   }
 
@@ -48,6 +54,7 @@ export const PunchCards = ({}) => {
           <CustomDivider />
           <h2>סוגי כרטיסיות</h2>
           {renderPunchCards()}
+          {renderModalPunchCard()}
         </Container>
     </Box>
   )

@@ -6,13 +6,10 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { TextBox } from '../shared-components/text-box';
 
-export const CreatePunchCard = ({setShowModalCreate}) => {
-    const [cardName, setCardName] = useState("")
+export const CreatePunchCard = ({showModalCreate, closePunchCard, setShowModalCreate}) => {
+    const [cardName, setCardName] = useState("ee")
     const [clubMail, setClubMail] = useState("dudiselaacademy@gmail.com");
 
-    const closePunchCard = () => {
-        console.log("close")
-    }
     const handleSave = (e) => {
         e.stopPropagation()
         e.preventDefault()
@@ -22,7 +19,8 @@ export const CreatePunchCard = ({setShowModalCreate}) => {
         setShowModalCreate(false)
     }
     return (
-        <Modal open={true}
+        <Modal
+            open={showModalCreate}
             onClose={closePunchCard}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
@@ -34,11 +32,8 @@ export const CreatePunchCard = ({setShowModalCreate}) => {
                         כרטיסייה חדשה
                     </Typography>
                     </Box>
-
                     <Box className="modal-body">
                     <TextBox label="שם הכרטיסייה" value={cardName} setValue={setCardName} />
-                    <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
-
                     <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                     <div className='flex align-center justify-between save-cancel-btn-container'>
                         <button onClick={handleSave} className='save-btn'>

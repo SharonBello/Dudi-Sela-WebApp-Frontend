@@ -14,7 +14,7 @@ export const TextBox = ({ label, disabled=false, isRequired=false, type="text", 
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 variant="outlined"
-                onChange={setValue}
+                onChange={(e) => setValue(e.currentTarget.value)}
                 value={value}
                 disabled={disabled}
             />

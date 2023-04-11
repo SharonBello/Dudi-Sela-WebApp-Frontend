@@ -12,10 +12,14 @@ export const PunchCards = ({}) => {
   const [showPunchCard, setShowPunchCard] = useState(false);
   const [selectedPunchCard, setSelectedPunchCard] = useState(false);
 
+  const closePunchCard = () => {
+    console.log("close")
+  }
+
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard setShowModalCreate={setShowModalCreate}/>
+        <CreatePunchCard showModalCreate={showModalCreate} closePunchCard={closePunchCard} setShowModalCreate={setShowModalCreate}/>
       )
     }
   }

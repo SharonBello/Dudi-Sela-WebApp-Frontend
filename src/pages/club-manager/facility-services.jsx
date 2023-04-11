@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { CustomCheckbox } from '../shared-components/check-box';
 
 export const FacilityServices = ({facilityServices, setFacilityServices}) => {
-
 
     const handleOnChange = (e, key) => {
         const mServices = JSON.parse(JSON.stringify(facilityServices));
@@ -12,7 +11,7 @@ export const FacilityServices = ({facilityServices, setFacilityServices}) => {
 
     return (
         <>
-            <CustomCheckbox label="קפיטריה" value={facilityServices.cafiteria} setValue={(e) => handleOnChange(e, "cafiteria")} />
+            <CustomCheckbox label="קפיטריה" value={facilityServices.cafeteria} setValue={(e) => handleOnChange(e, "cafeteria")} />
             <CustomCheckbox label="חניה" value={facilityServices.parking} setValue={(e) => handleOnChange(e, "parking")} />
             <CustomCheckbox label="מים קרים" value={facilityServices.coldWater} setValue={(e) => handleOnChange(e, "coldWater")} />
             <CustomCheckbox label="תאורת לד" value={facilityServices.ledLight} setValue={(e) => handleOnChange(e, "ledLight")} />
@@ -23,7 +22,5 @@ export const FacilityServices = ({facilityServices, setFacilityServices}) => {
             <CustomCheckbox label="מקלחת" value={facilityServices.shower} setValue={(e) => handleOnChange(e, "shower")} />
 
         </>
-
     )
-
 }

@@ -5,7 +5,7 @@ export const PAGES_IDX = {
     CourtsManager: 3,
     SalesDetails: 4,
     PunchCards: 5,
-    UsersPerimssion: 6,
+    UsersPermission: 6,
     ClubClasses: 7,
     ChooseLanguage: 8
 }

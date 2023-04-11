@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -9,7 +9,7 @@ import { SaveButton } from '../shared-components/save-button';
 import { FacilityServices } from './facility-services';
 import UploadButton from '../shared-components/upload-button';
 
-export const ClubDetails = ({}) => {
+export const AboutClub = ({}) => {
 
   const [clubName, setClubName] = useState("האקדמיה של דודי סלע");
   const [clubMail, setClubMail] = useState("dudiselaacademy@gmail.com");
@@ -22,7 +22,7 @@ export const ClubDetails = ({}) => {
   const [facebook, setFacebook] = useState("");
   const [moreDetails, setMoreDetails] = useState('מרכז הטניס באוניברסיטת תל אביב ממוקם בלב העיר .ומנוהל על ידי דודי סלע ויואב בן צבי מאמן נבחרת ישראל.במתקן 9 מגרשי טניס ותאורת LED ,אקדמיה מתקדמת לטניס , חוגי טניס ,מלתחות , חניה  ועוד.לכל בעיה יש לפנות ליואב מנהל המועדון בטלפון 052-3782815שימו לב מגרשי הטניס אדום, כחול,ירוק קצרים מהסטנדרט מהקו האחורי ועד הגדר .');
   const [moreDetailsInEng, setMoreDetailsInEng] = useState("The tennis center at Tel Aviv University is located in the heart of the city. And is managed by Dudi Sela and Yoav Ben Zvi, the coach of the Israel national team. The facility has 9 tennis courts and LED lighting, an advanced academy for tennis, tennis clubs, changing rooms, parking and more. For any problem, please contact the club manager, Yoav, at 052-3782815 Notice the red, blue, and green tennis courts are shorter than standard from the back line to the fence.");
-  const [facilityServices, setFacilityServices] = useState({cafiteria: true, coldWater: true, disabledPeople: false, ledLight: true, parking: true, store: false, shower: true, stringing: true, practiceWall: true});
+  const [facilityServices, setFacilityServices] = useState({cafeteria: true, coldWater: true, disabledPeople: false, ledLight: true, parking: true, store: false, shower: true, stringing: true, practiceWall: true});
 
   const handleSave = (e) => {
     e.stopPropagation()

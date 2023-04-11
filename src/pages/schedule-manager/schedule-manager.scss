@@ -54,3 +54,7 @@ img.drawer-icon {
 .modal-overlay .modal-box.modal-language  {
     min-width: 40vw !important;
 }
+
+.toggle-primary-drawer, .toggle-secondary-drawer {
+    cursor: pointer;
+}

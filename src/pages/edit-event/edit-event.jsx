@@ -67,7 +67,7 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
       courtNumbers
     }
   }
-  const editEventObj: EVENT = useRef(initEvent())
+  const editEventObj = useRef(initEvent())
   const navigate = useNavigate()
 
 
@@ -127,18 +127,18 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
     }
     else if (loggedUser || uid) {
       try {
-          // validate that event of same date/time doesnt exist
-          // let resExists = await eventService.isEventExists(uid, payload)
-          // if (!resExists.data.isExists) {
-          let res = await eventService.addNewEvent(payload)
-          console.log(res.data.result)
-          // if (res.data.result === 0) {
-          //   _successMessage += "הארוע נשמר בהצלחה"
-          //   setSuccessMessage(_successMessage)
-          //   setShowSuccessAlert(true)
-          // } else {
-          //   setShowSuccessAlert(false)
-          // }
+        // validate that event of same date/time doesnt exist
+        // let resExists = await eventService.isEventExists(uid, payload)
+        // if (!resExists.data.isExists) {
+        let res = await eventService.addNewEvent(payload)
+        console.log(res.data.result)
+        // if (res.data.result === 0) {
+        //   _successMessage += "הארוע נשמר בהצלחה"
+        //   setSuccessMessage(_successMessage)
+        //   setShowSuccessAlert(true)
+        // } else {
+        //   setShowSuccessAlert(false)
+        // }
       }
       catch (err) {
         console.log(err)
@@ -198,7 +198,15 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
           <Alert
             severity="info"
             onClose={handleCloseAlert}
-            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            sx={{
+              minWidth: '100%',
+              color: '#1d1d1d',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '10px',
+              backgroundColor: '#50D4F2'
+            }}
             spacing={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -236,12 +244,12 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
                   <SelectCourt theme={theme} cacheRtl={cacheRtl} courtNumbers={courtNumbers} setCourtNumbers={setCourtNumbers} />
-                  <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus}/>
+                  <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus} />
                 </div>
               </Box>
               <Box className="flex-row">
-                  <EventDescription description={description} setDescription={setDescription} />
-                  <EventTitle title={title} setTitle={setTitle}/>
+                <EventDescription description={description} setDescription={setDescription} />
+                <EventTitle title={title} setTitle={setTitle} />
               </Box>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>

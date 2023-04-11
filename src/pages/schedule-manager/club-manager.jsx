@@ -84,14 +84,14 @@ export const ClubManager = () => {
     toggleScheduleVsClubInfo(false, true)
   }
   //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
-  const clubOptions = [ 'על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות',  'כרטיסיות', 'משתמשים והרשאות'];
-  const optionIcons = [ 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
-  const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission ];
+  const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות', 'כרטיסיות', 'משתמשים והרשאות'];
+  const optionIcons = ['https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
+    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
+    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
+    'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
+    'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
+    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
+  const optionFuncs = [openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission];
   const mainOptions = ['מנהל ההזמנות', 'המועדון', 'חוגים', 'שפה', 'נתוני מכירות', 'יציאה']
 
   const openCalendar = (e, index) => {
@@ -115,7 +115,7 @@ export const ClubManager = () => {
     dispatch(signout())
     navigate('/')
   }
-  const mainFuncs = [ openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
+  const mainFuncs = [openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
   const renderClubSideDrawer = () => {
     if (showClubDetails) {
       return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
@@ -147,7 +147,7 @@ export const ClubManager = () => {
           return <ClubClasses />
         case PAGES_IDX.ChooseLanguage:
           return <ChooseLanguage isHebrewLang={isHebrewLang} setIsHebrewLang={setIsHebrewLang} closeChooseLang={closeChooseLang} />
-              default:
+        default:
           break;
       }
     }
@@ -156,29 +156,21 @@ export const ClubManager = () => {
     if (showScheduleManager) {
       return (
         <>
-          <Typography component="h1" variant="h5">האקדמיה לטניס דודי סלע</Typography>
-          <Box
-            className="flex align-center justify-between schedule-header"
-            sx={{
-              marginBlock: 5,
-            }}>
-            <Typography>{weekDayInHebrew[weekDay]} {date}</Typography>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-              }}
-            >
-              <button onClick={openPreviousDaySchedule} className="schedule-daily-btn">previous day</button>
-              <button onClick={openTodaysSchedule} className="schedule-daily-btn">היום</button>
-              <button onClick={openNextDaySchedule} className="schedule-daily-btn">next day</button>
-            </Box>
-            <Typography component="h6" variant="h6">
+          <Typography component="h1" variant="h5" style={{ width: "100%", textAlign: "center" }}>האקדמיה לטניס דודי סלע</Typography>
+          <ul className="flex align-center justify-between clean-list schedule-header" style={{ marginBlock: "2rem", width: "100%", flex: 1 }}>
+            <li style={{ width: "20%" }}><Typography>{weekDayInHebrew[weekDay]} {date}</Typography></li>
+            <li>
+              <ul className='clean-list flex align-center justify-center' style={{ gap: "1rem" }}>
+                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule}/>אתמול</li>
+                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule}/>היום</li>
+                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule}/>מחר</li>
+              </ul>
+            </li>
+            <li className="flex" style={{ width: "20%", justifyContent: "end" }}>
               <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
-                  alt="logo" />
-            </Typography>
-          </Box>
+                alt="logo" />
+            </li>
+          </ul>
           <ScheduleDay mDate={date} dayOfWeek={weekDay} />
         </>
       )

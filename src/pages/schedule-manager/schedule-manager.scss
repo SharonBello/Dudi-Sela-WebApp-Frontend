@@ -1,5 +1,5 @@
 .schedule-container {
-    padding-block-start: 10vh;
+    padding-block: 5vh 5vh;
     min-width: 100%;
     flex: 1;
 
@@ -12,13 +12,25 @@
         border: none;
         outline: none;
         cursor: pointer;
-        padding: 16px 24px;
-        font-size: calc(0.5rem + 0.5vw);
+        padding: 0.8rem 1.4rem;
+        border-radius: 4px;
         background-color: $brand;
+        min-width: fit-content;
+        text-align: center;
+        font-size: calc(0.8rem + 0.4vw);
+        white-space: nowrap;
 
         &:hover {
             background-color: $header;
-            color: #fff;
+            color: $brand;
+        }
+
+        & button {
+            border: none;
+            outline: none;
+            padding: 0;
+            cursor: pointer;
+            background-color: transparent;
         }
     }
 
@@ -29,12 +41,13 @@
     .schedule-header {
         min-width: 100%;
     }
+
     img.app-logo {
         height: 50px;
         width: 50px;
     }
 
-    .schedule  {
+    .schedule {
         overflow-x: hidden;
     }
 }
@@ -51,6 +64,6 @@ img.drawer-icon {
 }
 
 
-.modal-overlay .modal-box.modal-language  {
+.modal-overlay .modal-box.modal-language {
     min-width: 40vw !important;
 }

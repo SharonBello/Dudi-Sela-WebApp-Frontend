@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -73,8 +72,7 @@ export const CourtsManager = ({ }) => {
   const renderNewConstraint = () => {
     return (
       <>
-      {/* TODO replace following */}
-        {/* <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => addNewConstraint(values, "days")} /> */}
+        <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, "days")} />
         <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.fromHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "fromHour")} />
         <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.tillHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "tillHour")} />
         <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.hours.tillHour} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
@@ -88,6 +86,7 @@ export const CourtsManager = ({ }) => {
       <>
           <h3>אילוץ חדש</h3>
           {renderNewConstraint()}
+          <CustomDivider />
           <h3>אילוצי מחירים</h3>
           {constraintsData.map((datum, index) =>
           <Box>

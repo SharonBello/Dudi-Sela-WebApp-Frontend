@@ -24,10 +24,9 @@ export const ClubManager = () => {
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
   const [showClubDetails, setShowClubDetails] = useState(false)
-  const [isHebrewLang, setIsHebrewLang] = useState(true)
   const [showScheduleManager, setShowScheduleManager] = useState(true)
-  const [showClubInfo, setShowClubInfo] = useState(false)
-  const [clubInfoIdx, setClubInfoIdx] = useState()
+  const [showClubComponent, setShowClubComponent] = useState(false)
+  const [secondaryDrawerTitle, setSecondaryDrawerTitle] = useState()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -49,40 +48,40 @@ export const ClubManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
-  const toggleScheduleVsClubInfo = (showManager, showClubInfo) => {
-    setShowScheduleManager(showManager)
-    setShowClubInfo(showClubInfo)
+  const toggleScheduleVsClubInfo = (isShowScheduleManager, isShowClubComponent) => {
+    setShowScheduleManager(isShowScheduleManager)
+    setShowClubComponent(isShowClubComponent)
   }
   const openClubDetails = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openClubSettings = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openClubHours = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openCourtsManager = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openMembersCard = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openUsersPerimission = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openSalesDetails = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   const openClubClasses = (e, title) => {
-    setClubInfoIdx(title)
+    setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
   //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
@@ -98,7 +97,7 @@ export const ClubManager = () => {
 
   const openCalendar = (e, index) => {
     setShowScheduleManager(true)
-    setShowClubInfo(false)
+    setShowClubComponent(false)
   }
   const openClubData = (e, index) => {
     setShowClubDetails(true)
@@ -117,8 +116,8 @@ export const ClubManager = () => {
   }
 
   const renderClubInfo = () => {
-    if (showClubInfo) {
-      switch (clubInfoIdx) {
+    if (showClubComponent) {
+      switch (secondaryDrawerTitle) {
         case 'על המועדון':
           // TODO render the component page for club details
           return <ClubDetails />

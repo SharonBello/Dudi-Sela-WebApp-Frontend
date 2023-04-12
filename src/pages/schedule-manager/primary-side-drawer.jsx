@@ -11,7 +11,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function PrimarySideDrawer({ mainOptions, mainFuncs }) {
+export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
   const [state, setState] = useState({
     right: false
   });
@@ -40,13 +40,13 @@ export default function PrimarySideDrawer({ mainOptions, mainFuncs }) {
       </List>
       <Divider />
       <List>
-        {mainOptions.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={(e) => mainFuncs[index](e, index)}>
+        {primaryDrawerList.map((item, index) => (
+          <ListItem key={index} disablePadding onClick={() => mainFuncs[index]()}>
             <ListItemButton>
               <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
         ))}

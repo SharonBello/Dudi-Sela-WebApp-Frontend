@@ -18,6 +18,7 @@ import { ClubHours } from '../club-manager/club-hours.jsx'
 import { PunchCards } from '../club-manager/punch-cards.jsx'
 import { CourtsManager } from '../club-manager/courts-manager.jsx'
 import { SalesDetails } from '../club-manager/sales-details.jsx'
+import { primaryDrawerList, secondaryDrawerList } from '../club-manager/club-helper.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -52,65 +53,28 @@ export const ClubManager = () => {
     setShowScheduleManager(isShowScheduleManager)
     setShowClubComponent(isShowClubComponent)
   }
-  const openClubDetails = (title) => {
+  const openClubComponent = (e, title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openClubSettings = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openClubHours = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openCourtsManager = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openMembersCard = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openUserPermissions = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openSalesDetails = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openClubClasses = (title) => {
-    setSecondaryDrawerTitle(title)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות', 'כרטיסיות', 'משתמשים והרשאות', 'חוגים'];
-  const optionIcons = ['https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
-    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
-    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
-    'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
-    'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
-    'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
-  const optionFuncs = [openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUserPermissions, openClubClasses];
   const mainOptions = ['מנהל ההזמנות', 'המועדון', 'נתוני מכירות', 'יציאה']
 
-  const openCalendar = (e, index) => {
+  const openCalendar = () => {
     setShowScheduleManager(true)
     setShowClubComponent(false)
   }
-  const openClubData = (e, index) => {
+  const openClubData = () => {
     setShowClubDetails(true)
   }
-  const logout = (e, index) => {
-    console.log(index);
+  const logout = () => {
     dispatch(setUserUid(null))
     dispatch(signout())
     navigate('/')
   }
-  const mainFuncs = [openCalendar, openClubData, openSalesDetails, logout]
+  const mainFuncs = [openCalendar, openClubData, logout]
   const renderSecondarySideDrawer = () => {
     if (showClubDetails) {
-      return <SecondarySideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
+      return <SecondarySideDrawer secondaryDrawerList={secondaryDrawerList} openClubComponent={openClubComponent} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
     }
   }
 
@@ -175,7 +139,7 @@ export const ClubManager = () => {
     <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
         {renderSecondarySideDrawer()}
-        <PrimarySideDrawer mainOptions={mainOptions} mainFuncs={mainFuncs} />
+        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />
       </article>
       {renderScheduleManager()}
       {renderClubInfo()}

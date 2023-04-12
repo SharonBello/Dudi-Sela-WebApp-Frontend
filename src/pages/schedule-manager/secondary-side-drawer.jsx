@@ -16,7 +16,7 @@ export default function SecondarySideDrawer({ secondaryDrawerList, openClubCompo
       "bubbles": true,
       "cancelable": false
     });
-    const el = document.getElementById("toggle-main-drawer")
+    const el = document.getElementById("toggle-primary-drawer")
     el.dispatchEvent(clickEvent);
   }
   const list = () => (

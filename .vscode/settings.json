@@ -92,4 +92,5 @@
     "debug.console.fontSize": 18,
     "markdown.preview.fontSize": 18,
     "interactiveSession.editor.fontSize": 18,
+    "editor.wordWrapColumn": 200,
 }

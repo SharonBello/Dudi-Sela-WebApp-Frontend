@@ -10,7 +10,6 @@ import { FacilityServices } from './facility-services';
 import UploadButton from '../shared-components/upload-button';
 
 export const AboutClub = () => {
-
   const [clubName, setClubName] = useState("האקדמיה של דודי סלע");
   const [clubMail, setClubMail] = useState("dudiselaacademy@gmail.com");
   const [clubNameEng, setClubNameEng] = useState("Dudi Sela Tennis Academy");
@@ -38,30 +37,32 @@ export const AboutClub = () => {
 
   return (
     <Box className="club-box">
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
+      <div className="grid-club-component container">
+        {/* <Box className="club-header"> */}
+        <Typography id="club-title" className="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
+        {/* </Box> */}
+        <CustomDivider className="grid-divider" />
+
+        <Box className="main-component-fields-container">
+          <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
+          <TextBox label="שם המועדון" value={clubName} setValue={setClubName} />
+          <TextBox label="שם המועדון באנגלית" value={clubNameEng} setValue={setClubNameEng} />
+          <TextBox label="עיר" value={city} setValue={setCity} />
+          <TextBox label="כתובת" value={address} setValue={setAddress} />
+          <TextBox label="שם העיר באנגלית" value={cityInEng} setValue={setCityInEng} />
+          <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
+          <TextBox label="טלפון" value={phone} setValue={setPhone} />
+          <Box><FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} /></Box>
+          <TextBox label="פייסבוק" value={facebook} setValue={setFacebook} />
+          <TextBox label="אינסטגרם" value={instagram} setValue={setInstagram} />
+          <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />
+          <TextBox label="מידע נוסף באנגלית" value={moreDetailsInEng} setValue={setMoreDetailsInEng} />
         </Box>
-        <CustomDivider />
-
-        <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
-        <TextBox label="שם המועדון" value={clubName} setValue={setClubName} />
-        <TextBox label="שם המועדון באנגלית" value={clubNameEng} setValue={setClubNameEng} />
-        <TextBox label="עיר" value={city} setValue={setCity} />
-        <TextBox label="כתובת" value={address} setValue={setAddress} />
-        <TextBox label="שם העיר באנגלית" value={cityInEng} setValue={setCityInEng} />
-        <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
-        <TextBox label="טלפון" value={phone} setValue={setPhone} />
-
-        <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} />
-        <TextBox label="פייסבוק" value={facebook} setValue={setFacebook} />
-        <TextBox label="אינסטגרם" value={instagram} setValue={setInstagram} />
-        <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />
-        <TextBox label="מידע נוסף באנגלית" value={moreDetailsInEng} setValue={setMoreDetailsInEng} />
-
-        <UploadButton />
-        <SaveButton onClick={handleSave} />
-      </Container>
+        <Box className="btn-club-components-container flex align-center">
+          <UploadButton />
+          <SaveButton onClick={handleSave} />
+        </Box>
+      </div>
     </Box>
   )
 }

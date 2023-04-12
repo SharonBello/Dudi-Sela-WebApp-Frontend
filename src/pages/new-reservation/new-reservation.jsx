@@ -47,13 +47,12 @@ export const NewReservation = () => {
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
-  const hoursData = ["6 בבוקר", "7 בבוקר","8 בבוקר", "9 בבוקר","10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
+  const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
-
 
   const getSaturdayDate = () => {
     return dayjs().day(6)
@@ -87,10 +86,10 @@ export const NewReservation = () => {
 
   const isIntersected = (reservation, _startHour, _endHour) => {
     return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within
-    (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
-    (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
-    (_startHour > reservation.startHour && _startHour < reservation.endHour  && _endHour > reservation.endHour) || // intersect right
-    (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
+      (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
+      (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
+      (_startHour > reservation.startHour && _startHour < reservation.endHour && _endHour > reservation.endHour) || // intersect right
+      (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
   const filterCourtsDataByCourtNumber = async (res) => {
@@ -102,7 +101,7 @@ export const NewReservation = () => {
     // Get reserved courts by date
     const _date = dayjs(date).format('YYYY-MM-DD')
     let reservations = await reservationService.queryByDate(_date)
-    // Filter coursts data by reserved courts
+    // Filter courts data by reserved courts
     // loop over each time, and find out for e.g. 6am all courts are reserved
     hoursVals.forEach(hour => {
       const setCourts = new Set()
@@ -113,7 +112,7 @@ export const NewReservation = () => {
       });
       if (setCourts.size === 6) {// all courts are reserved
         // TODO splice the start time
-        _courtsData.start_time.splice(hour-START_HOUR_DAY, 1)
+        _courtsData.start_time.splice(hour - START_HOUR_DAY, 1)
       }
     })
     setCourtsData(_courtsData);
@@ -170,7 +169,7 @@ export const NewReservation = () => {
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, {"userCredit": -creditNum})
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
@@ -204,8 +203,8 @@ export const NewReservation = () => {
     setIsLoading(true)
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
-    setEndHour(startHour+1)
-    filterCourtsDataByHour(startHour, startHour+1)
+    setEndHour(startHour + 1)
+    filterCourtsDataByHour(startHour, startHour + 1)
     setCourtNumbers()
     setIsLoading(false)
     setShowDuration(true)
@@ -215,8 +214,8 @@ export const NewReservation = () => {
     e.stopPropagation()
     e.preventDefault()
     setIsLoading(true)
-    setEndHour(e.target.value+startHour)
-    filterCourtsDataByHour(startHour, e.target.value+startHour)
+    setEndHour(e.target.value + startHour)
+    filterCourtsDataByHour(startHour, e.target.value + startHour)
     setCourtNumbers()
     setIsLoading(false)
   }
@@ -249,32 +248,41 @@ export const NewReservation = () => {
     }
   }
 
-  const renderStartHourSelect =  () => {
-    if (courtsData) {
+  const renderEndHourSelect = () => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     const _date = dayjs(date).format('YYYY-MM-DD')
-    // let reservations = [] // await reservationService.queryByDate(_date)
+    // if courts available for startTime (valText), return button
+    let _endHour
+    courtsData.start_time.map(val => {
+      const valText = hoursData[val - START_HOUR_DAY]
+      if (!endHour) {
+        _endHour = val + durationTime[0]
+      }
+      else { _endHour = endHour }
+      if (areCourtsAvailable(val, _endHour, _courtsData, _date)) {
+        return (
+          <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
+        )
+      }
+      return null
+    })
+  }
+
+  const renderStartHourSelect = () => {
+    if (courtsData) {
+      // let reservations = [] // await reservationService.queryByDate(_date)
 
       return (
         <>
           <div className="start-hour-container flex">
             {courtsData.start_time.map((val, index) => {
-              const valText = hoursData[val-START_HOUR_DAY]
+              const valText = hoursData[val - START_HOUR_DAY]
               return (
-                <button key={val} value={val}
-                className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
-                 onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
+                <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                  onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
               )
-              // if courts available for startTime (valText), return button
-              let _endHour
-              if (!endHour) {_endHour = val+durationTime[0]}
-              else {_endHour = endHour}
-              if (areCourtsAvailable(val, _endHour, _courtsData, _date)) {
-                return (
-                  <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
-                )
-              }
             })}
+            {renderEndHourSelect()}
           </div>
         </>
       )
@@ -288,7 +296,7 @@ export const NewReservation = () => {
         _courtsData.court_numbers.splice(index, 1);
       }
     });
-    return _courtsData.court_numbers.length > 0;
+    return (_courtsData.court_numbers.length > 0);
   }
 
   const handleDurationSelect = () => {
@@ -392,7 +400,15 @@ export const NewReservation = () => {
           <Alert
             severity="success"
             onClose={handleCloseAlert}
-            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            sx={{
+              minWidth: '100%',
+              color: '#1d1d1d',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '10px',
+              backgroundColor: '#C9DB39'
+            }}
             spacing={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -440,7 +456,15 @@ export const NewReservation = () => {
           <Alert
             severity="info"
             onClose={handleCloseAlert}
-            sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+            sx={{
+              minWidth: '100%',
+              color: '#fff',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '10px',
+              backgroundColor: '#dc0000'
+            }}
             spacing={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -464,52 +488,50 @@ export const NewReservation = () => {
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
-      <form className="container flex-column" onSubmit={handleSubmit}>
+      <form dir="rtl" className="container flex-column form-container" onSubmit={handleSubmit}>
         {renderIsLoading()}
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
-            <div dir="rtl" className="form-container flex-column" >
-              <Stack spacing={3}>
-                <section className="hours-container flex">
-                  {renderStartHourSelect()}
-                  {handleDurationSelect()}
-                </section>
-
-                <section className="date-container flex">
-                  {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
+            <Stack spacing={4} sx={{ display: "flex-column", alignItems: "center", justifyContent: "justify-between", gap: "1.5rem" }}>
+              <section className="date-container flex">
+                {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <MobileDatePicker
+                    label="תאריך"
+                    inputFormat="DD/MM/YYYY"
+                    placeholder={todaysDate}
+                    onChange={handleDateChange}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+                  : <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DesktopDatePicker
                       label="תאריך"
                       inputFormat="DD/MM/YYYY"
-                      // value={date}
-                      placeholder={todaysDate}
-                      onChange={handleDateChange}
-                      renderInput={(params) => <TextField {...params} />}
-                      /></LocalizationProvider>
-                      : <LocalizationProvider dateAdapter={AdapterDayjs}><DesktopDatePicker
-                      label="תאריך"
-                      inputFormat="DD/MM/YYYY"
-                      // value={date}
                       placeholder={todaysDate}
                       onChange={handleDateChange}
                       renderInput={(params) => <TextField {...params} />}
                     />
-                    </LocalizationProvider>}
-                </section>
-                <section className="court-number-section flex-column">
-                  <label>מספר מגרש</label>
-                  {renderCourtNumberSelect()}
-                </section>
-              </Stack>
-            </div>
+                  </LocalizationProvider>}
+              </section>
+              <section className="hours-container flex-column align-center justify-between">
+                {renderStartHourSelect()}
+                {handleDurationSelect()}
+              </section>
+              <section className="court-number-section flex-column">
+                <label>מספר מגרש</label>
+                {renderCourtNumberSelect()}
+              </section>
+              <input
+                className='submit-button'
+                type='submit'
+                disabled={isLoading}
+                value='הזמנת מגרש'
+              // onClick={handleSubmit}
+              />
+            </Stack>
+
           </ThemeProvider>
         </CacheProvider>
-        <input
-          className='submit-button'
-          type='submit'
-          disabled={isLoading}
-          value='הזמנת מגרש'
-          // onClick={handleSubmit}
-        />
       </form >
     </>
   )

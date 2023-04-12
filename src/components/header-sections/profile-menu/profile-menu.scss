@@ -13,55 +13,56 @@
         margin-top: 12px;
         min-width: 180px;
         padding: rem(10px);
-  
+
         ul {
             gap: rem(8px);
             align-items: flex-start;
             min-width: 100%;
-            
+
             li {
                 // padding: 5px 0;
                 width: 100%;
-                font-size: calc(1vw + 1vh + 0.8vmin);
+                font-size: calc(0.8vw + 0.8vh + 0.8vmin);
                 cursor: pointer;
-                
+
                 &:hover {
                     background-color: $brand;
                     cursor: pointer;
                 }
-                
+
                 a {
                     padding: 5px 15px;
                     color: $accent4;
+                    white-space: nowrap;
                     cursor: pointer;
-                    
+
                     &:hover {
                         color: $accent2;
                     }
-                    
+
                     & :active {
                         color: $brand;
                     }
-                    
+
                     & :visited {
                         color: $accent5;
                     }
 
                     &:nth-of-type(4) {
                         padding-bottom: rem(15px);
-    
+
                         &:hover {
                             color: $header;
                         }
                     }
                 }
-                
+
                 &.signout {
                     width: 100%;
                     border-top: 1px solid $accent5;
                     cursor: pointer;
                     padding: 10px 0;
-                    
+
                     &:hover {
                         color: $header !important;
                     }

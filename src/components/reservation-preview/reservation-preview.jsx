@@ -106,7 +106,15 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                     <Alert
                         severity="success"
                         onClose={handleCloseAlert}
-                        sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                        sx={{
+                            minWidth: '100%',
+                            color: '#1d1d1d',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: '10px',
+                            backgroundColor: '#C9DB39'
+                        }}
                         spacing={5}
                         variant="filled"
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
@@ -130,7 +138,15 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                     <Alert
                         severity="error"
                         onClose={handleCloseAlert}
-                        sx={{ minWidth: '100%', color: '#1d1d1d', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px' }}
+                        sx={{
+                            minWidth: '100%',
+                            color: '#fff',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: '10px',
+                            backgroundColor: '#dc0000'
+                        }}
                         spacing={5}
                         // margin={5}
                         variant="filled"

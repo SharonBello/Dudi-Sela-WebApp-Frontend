@@ -7,9 +7,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { GridMenuIcon } from '@mui/x-data-grid';
 
 export default function SecondarySideDrawer({ secondaryDrawerList, openClubComponent, showSecondaryDrawer, setShowSecondaryDrawer }) {
+  const clubNames = ['האקדמיה של דודי סלע']
   const openMainDrawer = () => {
     const clickEvent = new MouseEvent("click", {
       "view": window,
@@ -21,16 +21,19 @@ export default function SecondarySideDrawer({ secondaryDrawerList, openClubCompo
   }
   const list = () => (
     <Box
-      sx={{ width: 'auto' }}
+      sx={{ width: '30vw' }}
       role="presentation"
     >
       <List>
-        {['האקדמיה של דודי סלע'].map((text, index) => (
-          <ListItem key={text}>
-            <Box className="flex align-right justify-between">
-              <GridMenuIcon onClick={() => openMainDrawer()} />
+        {clubNames.map((name, index) => (
+          <ListItem key={index}>
+            <Box className="flex align-center">
+              <button onClick={() => openMainDrawer()} className='drawer-back-btn'>
+                <img src="https://res.cloudinary.com/primap/image/upload/v1681249188/arrow-back_ax3ffu.svg" alt='back' />
+              </button>
+              {/* <GridMenuIcon onClick={() => openMainDrawer()} /> */}
             </Box>
-            <ListItemText primary={text} />
+            <ListItemText primary={name} className='drawer-club-name' />
           </ListItem>
         ))}
       </List>
@@ -42,7 +45,7 @@ export default function SecondarySideDrawer({ secondaryDrawerList, openClubCompo
               <ListItemIcon>
                 <img alt={item.title} src={item.icon} className="drawer-icon" />
               </ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemText primary={item.title} className='secondary-drawer-list-title' />
             </ListItemButton>
           </ListItem>
         ))}

@@ -115,7 +115,6 @@ export const CourtsManager = () => {
         {renderCourtActions()}
         {showAddCourtForm && renderAddCourtForm()}
         {showCourtTypeForm && renderCourtTypeForm()}
-
       </Container>
     </Box>
   )

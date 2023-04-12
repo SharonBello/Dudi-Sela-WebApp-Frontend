@@ -5,13 +5,11 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
 export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
+  const clubNames = ['האקדמיה של דודי סלע']
   const [state, setState] = useState({
     right: false
   });
@@ -26,15 +24,18 @@ export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : "28vw" }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['האקדמיה של דודי סלע'].map((text, index) => (
-          <ListItem key={text}>
-            <ListItemText primary={text} />
+        {clubNames.map((name, index) => (
+          <ListItem key={index}>
+            <Box className="flex align-center">
+              <GridMenuIcon onClick={() => toggleDrawer(!state)} className='drawer-back-btn' />
+            </Box>
+            <ListItemText primary={name} className='drawer-club-name' />
           </ListItem>
         ))}
       </List>
@@ -43,10 +44,8 @@ export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
         {primaryDrawerList.map((item, index) => (
           <ListItem key={index} disablePadding onClick={() => mainFuncs[index]()}>
             <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={item.title} />
+              <img src={item.icon} alt={item.title} className="drawer-icon" />
+              <ListItemText primary={item.title} className='primary-drawer-list-title' />
             </ListItemButton>
           </ListItem>
         ))}

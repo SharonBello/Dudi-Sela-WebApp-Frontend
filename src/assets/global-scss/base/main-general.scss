@@ -16,3 +16,19 @@
     flex: 1;
     position: relative;
 }
+
+.swal2-container {
+    overflow: hidden;
+}
+
+.swal2-container.swal2-center>.swal2-popup {
+    align-self: unset;
+}
+.swal2-popup {
+    max-height: 90vh;
+    min-height: 85vh;
+}
+
+.swal2-container.swal2-top {
+    display: unset;
+}

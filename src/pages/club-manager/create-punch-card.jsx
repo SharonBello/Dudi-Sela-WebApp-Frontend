@@ -75,5 +75,3 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, setShowModalC
         </Modal>
     )
 }
-
-

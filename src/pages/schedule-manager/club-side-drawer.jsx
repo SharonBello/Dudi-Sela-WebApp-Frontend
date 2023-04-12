@@ -37,7 +37,7 @@ export default function ClubSideDrawer({ clubOptions, optionFuncs, optionIcons, 
       <Divider />
       <List>
         {clubOptions.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, index)}>
+          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, clubOptions[index])}>
             <ListItemButton>
               <ListItemIcon>
                 <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />
@@ -54,7 +54,6 @@ export default function ClubSideDrawer({ clubOptions, optionFuncs, optionIcons, 
     <>
       <Drawer
         anchor='right'
-        variant='permanent'
         open={showClubDetails}
         onClose={() => setShowClubDetails(false)}
       >

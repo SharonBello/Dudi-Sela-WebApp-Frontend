@@ -51,7 +51,7 @@ export const PunchCards = () => {
         </Box>
         <CustomDivider />
         <button onClick={() => setShowModalCreate(true)}>
-          <h2>צור כרטיסייה</h2>
+          <h2>צור כרטיסיה</h2>
         </button>
         {renderModalCreate()}
         <CustomDivider />

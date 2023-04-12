@@ -28,7 +28,7 @@ export const UserProfile = () => {
         <article>
               <label>{email}</label>
               <br />
-              <label>מספר הזיכויים שיש לכרטיסייה:</label>
+              <label>מספר הזיכויים שיש לכרטיסיה:</label>
             <> {userCredit} </>
         </article>
     </div >

@@ -24,7 +24,7 @@ export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
-  const [showClubDetails, setShowClubDetails] = useState(false)
+  const [showSecondaryDrawer, setShowSecondaryDrawer] = useState(false)
   const [showScheduleManager, setShowScheduleManager] = useState(true)
   const [showClubComponent, setShowClubComponent] = useState(false)
   const [secondaryDrawerTitle, setSecondaryDrawerTitle] = useState()
@@ -35,6 +35,7 @@ export const ClubManager = () => {
     setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
     setNotFormattedDate(new Date())
   }
+
   const openNextDaySchedule = () => {
     let _date = notFormattedDate
     _date.setDate(_date.getDate() + 1)
@@ -42,6 +43,7 @@ export const ClubManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
+
   const openPreviousDaySchedule = () => {
     let _date = notFormattedDate
     _date.setDate(_date.getDate() - 1)
@@ -49,40 +51,44 @@ export const ClubManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
+
   const toggleScheduleVsClubInfo = (isShowScheduleManager, isShowClubComponent) => {
     setShowScheduleManager(isShowScheduleManager)
     setShowClubComponent(isShowClubComponent)
   }
+
   const openClubComponent = (e, title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const mainOptions = ['מנהל ההזמנות', 'המועדון', 'נתוני מכירות', 'יציאה']
 
-  const openCalendar = () => {
+  const openScheduleManager = () => {
     setShowScheduleManager(true)
     setShowClubComponent(false)
   }
-  const openClubData = () => {
-    setShowClubDetails(true)
+
+  const openSecondaryDrawer = () => {
+    setShowSecondaryDrawer(true)
   }
+
   const logout = () => {
     dispatch(setUserUid(null))
     dispatch(signout())
-    navigate('/')
+    navigate('/homepage')
   }
-  const mainFuncs = [openCalendar, openClubData, logout]
+
+  const mainFuncs = [openScheduleManager, openSecondaryDrawer, logout]
+
   const renderSecondarySideDrawer = () => {
-    if (showClubDetails) {
-      return <SecondarySideDrawer secondaryDrawerList={secondaryDrawerList} openClubComponent={openClubComponent} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
+    if (showSecondaryDrawer) {
+      return <SecondarySideDrawer secondaryDrawerList={secondaryDrawerList} openClubComponent={openClubComponent} showSecondaryDrawer={showSecondaryDrawer} setShowSecondaryDrawer={setShowSecondaryDrawer} />
     }
   }
 
-  const renderClubInfo = () => {
+  const renderClubComponent = () => {
     if (showClubComponent) {
       switch (secondaryDrawerTitle) {
         case 'על המועדון':
-          // TODO render the component page for club details
           return <ClubDetails />
         case 'הגדרות מועדון':
           return <ClubSettings />
@@ -103,6 +109,7 @@ export const ClubManager = () => {
       }
     }
   }
+
   const renderScheduleManager = () => {
     if (showScheduleManager) {
       return (
@@ -135,6 +142,7 @@ export const ClubManager = () => {
       )
     }
   }
+
   return (
     <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
@@ -142,7 +150,7 @@ export const ClubManager = () => {
         <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />
       </article>
       {renderScheduleManager()}
-      {renderClubInfo()}
+      {renderClubComponent()}
     </div>
 
   )

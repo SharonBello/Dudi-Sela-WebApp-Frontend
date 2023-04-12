@@ -1,5 +1,5 @@
 .list-of-reservations-container {
-    padding-block: 10rem;
+    padding-block: 5vh;
     min-height: calc(100vh - 75px);
     width: 100%;
 
@@ -37,6 +37,11 @@
             color: #fff;
             display: table-cell;
             padding: .5em 1em;
+
+            &:first-child {
+                cursor: pointer;
+                pointer-events: all;
+            }
         }
     }
 

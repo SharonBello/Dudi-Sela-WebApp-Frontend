@@ -7,6 +7,9 @@ import { SnackbarProvider } from 'notistack';
 import { useDispatch } from 'react-redux'
 import { setLoggedUser } from './store/actions/user.actions.js';
 import { useNavigate } from "react-router"
+import Fab from '@mui/material/Fab';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import ScrollTop from './components/scroll-top.jsx'
 import './main.scss'
 import { useEffect } from 'react'
 
@@ -28,7 +31,7 @@ export const App = () => {
    return (
       <div className="app-container flex">
          <SnackbarProvider maxSnack={3}>
-            <header className="app-header-container">
+            <header id="back-to-top-anchor" className="app-header-container">
                <AppHeader />
             </header>
 
@@ -41,7 +44,11 @@ export const App = () => {
                         path={route.path} />)}
                </Routes>
             </main>
-
+            <ScrollTop>
+               <Fab color="secondary" size="small" aria-label="scroll back to top">
+                  <KeyboardArrowUpIcon />
+               </Fab>
+            </ScrollTop>
             <footer className="app-footer-container">
                <AppFooter />
             </footer>

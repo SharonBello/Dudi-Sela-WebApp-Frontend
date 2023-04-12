@@ -29,7 +29,7 @@ export const ReservationList = ({ reservations }) => {
             // Decide either currentUsers sorted by ascending or descending order
             sorting.ascending ? sortedCurrentReservations : sortedCurrentReservations.reverse()
         );
-    }, [sorting]);
+    }, [sorting, currentReservations]);
 
     return (
         <section className="list-of-reservations-container">

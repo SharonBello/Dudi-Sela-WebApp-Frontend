@@ -37,7 +37,7 @@ export default function SecondarySideDrawer({ clubOptions, optionFuncs, optionIc
       <Divider />
       <List>
         {clubOptions.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, clubOptions[index])}>
+          <ListItem key={text} disablePadding onClick={() => optionFuncs[index](clubOptions[index])}>
             <ListItemButton>
               <ListItemIcon>
                 <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />

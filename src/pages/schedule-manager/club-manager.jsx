@@ -52,39 +52,38 @@ export const ClubManager = () => {
     setShowScheduleManager(isShowScheduleManager)
     setShowClubComponent(isShowClubComponent)
   }
-  const openClubDetails = (e, title) => {
+  const openClubDetails = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openClubSettings = (e, title) => {
+  const openClubSettings = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openClubHours = (e, title) => {
+  const openClubHours = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openCourtsManager = (e, title) => {
+  const openCourtsManager = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openMembersCard = (e, title) => {
+  const openMembersCard = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openUsersPerimission = (e, title) => {
+  const openUserPermissions = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openSalesDetails = (e, title) => {
+  const openSalesDetails = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  const openClubClasses = (e, title) => {
+  const openClubClasses = (title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
   }
-  //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
   const clubOptions = ['על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות', 'כרטיסיות', 'משתמשים והרשאות', 'חוגים'];
   const optionIcons = ['https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
     'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
@@ -92,7 +91,7 @@ export const ClubManager = () => {
     'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
     'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
     'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
-  const optionFuncs = [openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission, openClubClasses];
+  const optionFuncs = [openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUserPermissions, openClubClasses];
   const mainOptions = ['מנהל ההזמנות', 'המועדון', 'נתוני מכירות', 'יציאה']
 
   const openCalendar = (e, index) => {

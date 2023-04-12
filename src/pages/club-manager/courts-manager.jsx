@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
@@ -11,12 +11,12 @@ import { SelectMenu } from '../shared-components/select-menu'
 import { SaveButton } from '../shared-components/save-button';
 import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from './club-helper'
 
-export const CourtsManager = ({ }) => {
+export const CourtsManager = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtTypeForm, setShowCourtTypeForm] = useState(false)
   // const [showAllCourts, setShowAllCourts] = useState(false)
-  const courtActions = [{title: "מגרשים", subtitle: "כל המגרשים", onClick:() => {setShowAddCourtForm(false);setShowCourtTypeForm(false);}}, {title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick:() => {setShowAddCourtForm(true);setShowCourtTypeForm(false);}}, {title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick:() => {setShowAddCourtForm(false);setShowCourtTypeForm(true);}}];
+  const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtTypeForm(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(true); } }];
   const [courtName, setCourtName] = useState();
   const [constraintsData, setConstraintsData] = useState(DemoConstraintsData)
   const [newConstraint, setNewConstraint] = useState(EmptyConstraint)
@@ -84,11 +84,11 @@ export const CourtsManager = ({ }) => {
   const renderCourtTypeForm = () => {
     return (
       <>
-          <h3>אילוץ חדש</h3>
-          {renderNewConstraint()}
-          <CustomDivider />
-          <h3>אילוצי מחירים</h3>
-          {constraintsData.map((datum, index) =>
+        <h3>אילוץ חדש</h3>
+        {renderNewConstraint()}
+        <CustomDivider />
+        <h3>אילוצי מחירים</h3>
+        {constraintsData.map((datum, index) =>
           <Box>
             <p>{constraintsData[0].days.join(", ")}</p>
             <SelectMenu multiple={true} defaultValue={constraintsData[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, index, "days")} />
@@ -99,7 +99,7 @@ export const CourtsManager = ({ }) => {
             <SaveButton onClick={handleSave} />
             <FontAwesomeIcon icon={faTrashAlt} />
           </Box>
-          )}
+        )}
       </>
 
     )

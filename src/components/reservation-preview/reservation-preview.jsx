@@ -119,7 +119,7 @@ export const ReservationPreview = ({ item, todaysDate }) => {
                         variant="filled"
                         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                     >
-                        המגרש בוטל בהצלחה, הכרטיסייה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
+                        המגרש בוטל בהצלחה, הכרטיסיה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
                 </Snackbar>
             )
         }

@@ -178,7 +178,7 @@ export const NewReservation = () => {
           if ((_userCredit - creditNum) >= 0) {
             const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
             if (resCredit.data.result === 0) {
-              _successMessage += "ההזמנה זוכתה מהכרטיסייה - "
+              _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
           }
           let res = await reservationService.addNewReservation(uid, payload)

@@ -34,15 +34,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   const columns = getColumns();
 
-  const getTodaysReservations = useCallback(async () => {
-    let reservations = await reservationService.queryByDate(mDate)
-    let _rows = getRows()
-    reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-    });
-    setRows(_rows)
-  }, [mDate])
+  // const getTodaysReservations = useCallback(async () => {
+  //   let reservations = await reservationService.queryByDate(mDate)
+  //   let _rows = getRows()
+  //   reservations.forEach(reservation => {
+  //     const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+  //     _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+  //   });
+  //   setRows(_rows)
+  // }, [mDate])
 
   const getTodaysEvents = useCallback(async () => {
     // get events using eventsService.getEvents(), and then filter by mDate
@@ -53,7 +53,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     //   _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
     // });
     // setRows(_rows)
-  }, [mDate])
+  }, [])
 
   useEffect(() => {
     initSchedule()

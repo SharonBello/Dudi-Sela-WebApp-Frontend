@@ -1,27 +1,88 @@
 export const WeekDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"]
+
 export const CourtNames = ["מגרש 1", "מגרש 2", "מגרש 3", "מגרש 4", "מגרש 5", "מגרש 6", "כחול מוזל", "אדום מוזל", "ירוק מוזל"]
+
 export const TypeGames = ["טניס", "פאדל", "פיקלבול", "טניס חימר", "כדורסל", "כדורגל", "טניס קשה מקורה", "מגרש טניס מוזל", "טניס חופים", "דשא סינטטי"]
+
 export const MemberTypes = ["כל החברים", "מנהל", "סטודנט\חייל", "מאמן", "מנויים"]
+
 export const DayHours = () => {
-    const hours = []
-    for (let i = 0; i <= 24; i++) {
-      if (i < 10) {
-        hours.push("0" + i + ":00")
-      } else {
-        hours.push(i + ":00")
-      }
+  const hours = []
+  for (let i = 0; i <= 24; i++) {
+    if (i < 10) {
+      hours.push("0" + i + ":00")
+    } else {
+      hours.push(i + ":00")
     }
-    return hours
+  }
+  return hours
 }
+
 export const DemoWorkHours = (setWorkHours) => {
-    const hours1 = { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } }
-    const hours2 = { days: ["שישי"], hours: { startHour: "06:00", endHour: "23:00" } }
-    const hours3 = { days: ["שבת"], hours: { startHour: "06:00", endHour: "23:00" } }
-    setWorkHours([hours1, hours2, hours3])
+  const hours1 = { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } }
+  const hours2 = { days: ["שישי"], hours: { startHour: "06:00", endHour: "23:00" } }
+  const hours3 = { days: ["שבת"], hours: { startHour: "06:00", endHour: "23:00" } }
+  setWorkHours([hours1, hours2, hours3])
 }
+
 export const DemoConstraintsData = [{ days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" }, memberType: MemberTypes[0], price: 80 },
 { days: ["שישי", "שבת"], hours: { startHour: "06:00", endHour: "21:00" }, memberType: MemberTypes[0], price: 80 },
 { days: ["שישי", "שבת"], hours: { startHour: "21:00", endHour: "23:00" }, memberType: MemberTypes[1], price: 60 }]
 export const EmptyConstraint = { days: [], hours: { startHour: "", endHour: "" }, memberType: "", price: "" }
-export const DemoPunchCards = [{cardName: "בוקר אטרקטיבי", isMember: false, creditAmount: 11, eachCreditInMinutes:60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 550, showForSale: true, validFor: 'פתוח לכולם', additionalDetails:'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: {days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" }}},
-{cardName: "סופר דיל 10 + 1", isMember: false, creditAmount: 11, eachCreditInMinutes:60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 700, showForSale: true, validFor: 'פתוח לכולם', additionalDetails:'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: {days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "07:00", endHour: "24:00" }}}]
+
+export const DemoPunchCards = [{ cardName: "בוקר אטרקטיבי", isMember: false, creditAmount: 11, creditInMinutes: 60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 550, showForSale: true, validFor: 'פתוח לכולם', additionalDetails: 'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } } },
+{ cardName: "סופר דיל 10 + 1", isMember: false, creditAmount: 11, creditInMinutes: 60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 700, showForSale: true, validFor: 'פתוח לכולם', additionalDetails: 'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "07:00", endHour: "24:00" } } }]
+
+export const primaryDrawerList = [
+  {
+    title: 'מנהל ההזמנות',
+    className: 'schedule-manager',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg'
+  },
+  {
+    title: 'המועדון',
+    className: 'secondary-drawer',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg'
+  },
+  {
+    title: 'יציאה',
+    className: 'log-out',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1681245384/sign-out-icon_negt9b.svg'
+  }
+]
+
+export const secondaryDrawerList = [
+  {
+    title: 'על המועדון',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg'
+  },
+  {
+    title: 'הגדרות מועדון',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg'
+  },
+  {
+    title: 'שעות פעילות',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg'
+  },
+  {
+    title: 'ניהול מגרשים',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg'
+  },
+  {
+    title: 'נתוני מכירות',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg'
+  },
+  {
+    title: 'כרטיסיות',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg'
+  },
+  {
+    title: 'משתמשים והרשאות',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg'
+  },
+  {
+    title: 'חוגים',
+    className: 'club-classes',
+    icon: 'https://res.cloudinary.com/primap/image/upload/v1681245209/classes-icon_lje2ds.svg'
+  },
+]

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
+export default function SecondarySideDrawer({ secondaryDrawerList, openClubComponent, showSecondaryDrawer, setShowSecondaryDrawer }) {
   const openMainDrawer = () => {
     const clickEvent = new MouseEvent("click", {
       "view": window,
@@ -27,22 +27,22 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
       <List>
         {['האקדמיה של דודי סלע'].map((text, index) => (
           <ListItem key={text}>
-              <Box className="flex align-right justify-between">
-                <GridMenuIcon onClick={() => openMainDrawer()}/>
-              </Box>
-              <ListItemText primary={text} />
+            <Box className="flex align-right justify-between">
+              <GridMenuIcon onClick={() => openMainDrawer()} />
+            </Box>
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {clubOptions.map((text, index) => (
-          <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, index)}>
+        {secondaryDrawerList.map((item, index) => (
+          <ListItem key={index} disablePadding onClick={(e) => openClubComponent(e, item.title)}>
             <ListItemButton>
               <ListItemIcon>
-              <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />
+                <img alt={item.title} src={item.icon} className="drawer-icon" />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -54,9 +54,8 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
     <>
       <Drawer
         anchor='right'
-        variant='permanent'
-        open={showClubDetails}
-        onClose={() => setShowClubDetails(false)}
+        open={showSecondaryDrawer}
+        onClose={() => setShowSecondaryDrawer(false)}
       >
         {list('right')}
       </Drawer>

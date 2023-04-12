@@ -41,12 +41,11 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
   const [title, setTitle] = useState("")
   const [scheduleType, setScheduleType] = useState(SCHEDULE_TYPE.Schedule);
   const [shouldJoinClass, setShouldJoinClass] = useState(false);
-  const [instructorIndices, setInstructorIndices] = React.useState([]);
-  const [participantIndices, setPartipantIndices] = React.useState([]);
+  const [instructorIndices, setInstructorIndices] = useState([]);
+  const [participantIndices, setPartipantIndices] = useState([]);
   const [courtNumbers, setCourtNumbers] = useState([]);
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
-
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
 

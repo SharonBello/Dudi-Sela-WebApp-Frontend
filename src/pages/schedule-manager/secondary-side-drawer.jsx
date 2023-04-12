@@ -8,45 +8,44 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-export default function SecondarySideDrawer({ secondaryDrawerList, setShowSecondaryDrawer, showSecondaryDrawer }) {
-  const clubNames = ['האקדמיה של דודי סלע'];
-
-  const openPrimaryDrawer = () => {
-    setShowSecondaryDrawer(false);
+export default function SecondarySideDrawer({ secondaryDrawerList, openClubComponent, showSecondaryDrawer, setShowSecondaryDrawer }) {
+  const clubNames = ['האקדמיה של דודי סלע']
+  const openMainDrawer = () => {
     const clickEvent = new MouseEvent("click", {
       "view": window,
       "bubbles": true,
       "cancelable": false
     });
-    const el = document.getElementById("toggle-primary-drawer")
+    const el = document.getElementById("toggle-main-drawer")
     el.dispatchEvent(clickEvent);
   }
-
-
   const list = () => (
     <Box
       sx={{ width: '30vw' }}
       role="presentation"
     >
       <List>
-        {clubNames.map((clubName) => (
-          <ListItem key={clubName} className="flex align-right justify-between" style={{ gap: "1.5rem" }}>
-            <Box className='toggle-secondary-drawer'>
-              <img src='https://res.cloudinary.com/primap/image/upload/v1681249188/arrow-back_ax3ffu.svg' alt="arrow-left" onClick={() => openPrimaryDrawer()} style={{ maxWidth: "1.3rem" }} />
+        {clubNames.map((name, index) => (
+          <ListItem key={index}>
+            <Box className="flex align-center">
+              <button onClick={() => openMainDrawer()} className='drawer-back-btn'>
+                <img src="https://res.cloudinary.com/primap/image/upload/v1681249188/arrow-back_ax3ffu.svg" alt='back' />
+              </button>
+              {/* <GridMenuIcon onClick={() => openMainDrawer()} /> */}
             </Box>
-            <ListItemText primary={clubName} className='drawer-club-name' style={{ textAlign: 'right', whiteSpace: "nowrap" }} />
+            <ListItemText primary={name} className='drawer-club-name' />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {secondaryDrawerList.map(listItem => (
-          <ListItem key={listItem.text} disablePadding onClick={(e) => listItem.onClick(e)}>
+        {secondaryDrawerList.map((item, index) => (
+          <ListItem key={index} disablePadding onClick={(e) => openClubComponent(e, item.title)}>
             <ListItemButton>
               <ListItemIcon>
-                <img src={listItem.icon} alt={`${listItem.text}`} className='drawer-icon' />
+                <img alt={item.title} src={item.icon} className="drawer-icon" />
               </ListItemIcon>
-              <ListItemText primary={listItem.text} className='drawer-list-text' style={{ textAlign: 'right' }} />
+              <ListItemText primary={item.title} className='secondary-drawer-list-title' />
             </ListItemButton>
           </ListItem>
         ))}
@@ -58,7 +57,6 @@ export default function SecondarySideDrawer({ secondaryDrawerList, setShowSecond
     <>
       <Drawer
         anchor='right'
-        variant='permanent'
         open={showSecondaryDrawer}
         onClose={() => setShowSecondaryDrawer(false)}
       >

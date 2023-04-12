@@ -18,7 +18,7 @@ export const PunchCards = () => {
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard showModalCreate={showModalCreate} closePunchCard={closePunchCard} setShowModalCreate={setShowModalCreate}/>
+        <CreatePunchCard showModalCreate={showModalCreate} closePunchCard={closePunchCard} setShowModalCreate={setShowModalCreate} />
       )
     }
   }
@@ -29,7 +29,7 @@ export const PunchCards = () => {
   }
   const renderPunchCards = () => {
     return (
-      DemoPunchCards.map((card)=> <button onClick={(e) => handleShowPunchCard(e, card)}>
+      DemoPunchCards.map((card) => <button onClick={(e) => handleShowPunchCard(e, card)}>
         <h2>{card.cardName}</h2>
         <div>כמות קרדיט: {card.creditAmount}</div>
         <div>מחיר: {card.price}</div>
@@ -45,20 +45,20 @@ export const PunchCards = () => {
 
   return (
     <Box className="club-box">
-        <Container className="club-content">
-          <Box className="club-header">
-            <Typography id="club-title" variant="h6" component="h2">כרטיסיות</Typography>
-          </Box>
-          <CustomDivider />
-          <button onClick={() => setShowModalCreate(true)}>
-            <h2>צור כרטיסייה</h2>
-          </button>
-          {renderModalCreate()}
-          <CustomDivider />
-          <h2>סוגי כרטיסיות</h2>
-          {renderPunchCards()}
-          {renderModalPunchCard()}
-        </Container>
+      <Container className="club-content">
+        <Box className="club-header">
+          <Typography id="club-title" variant="h6" component="h2">כרטיסיות</Typography>
+        </Box>
+        <CustomDivider />
+        <button onClick={() => setShowModalCreate(true)}>
+          <h2>צור כרטיסיה</h2>
+        </button>
+        {renderModalCreate()}
+        <CustomDivider />
+        <h2>סוגי כרטיסיות</h2>
+        {renderPunchCards()}
+        {renderModalPunchCard()}
+      </Container>
     </Box>
   )
 }

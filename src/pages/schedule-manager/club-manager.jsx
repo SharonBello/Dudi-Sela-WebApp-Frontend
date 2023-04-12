@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
 import SecondarySideDrawer from "./secondary-side-drawer.jsx"
@@ -18,26 +17,16 @@ import { ClubHours } from '../club-manager/club-hours.jsx'
 import { PunchCards } from '../club-manager/punch-cards.jsx'
 import { CourtsManager } from '../club-manager/courts-manager.jsx'
 import { SalesDetails } from '../club-manager/sales-details.jsx'
-import { Homepage } from '../homepage/homepage.jsx'
+import { primaryDrawerList, secondaryDrawerList } from '../club-manager/club-helper.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
-  const [showScheduleManager, setShowScheduleManager] = useState(true)
-  const [showPrimaryDrawer, setShowPrimaryDrawer] = useState(false)
   const [showSecondaryDrawer, setShowSecondaryDrawer] = useState(false)
-  const [showClubClasses, setShowClubClasses] = useState(false)
-  const [, setShowSalesDetails] = useState(false)
-  const [, setShowAboutClub] = useState(false)
-  const [, setShowClubSetting] = useState(false)
-  const [, setShowClubHours] = useState(false)
-  const [, setShowCourtsManager] = useState(false)
-  const [, setShowMembersCard] = useState(false)
-  const [, setShowUserPermissions] = useState(false)
-  // const [isHebrewLang, setIsHebrewLang] = useState(true)
-  // const [showClubInfo, setShowClubInfo] = useState(false)
-  // const [clubInfoIdx, setClubInfoIdx] = useState()
+  const [showScheduleManager, setShowScheduleManager] = useState(true)
+  const [showClubComponent, setShowClubComponent] = useState(false)
+  const [secondaryDrawerTitle, setSecondaryDrawerTitle] = useState()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -62,98 +51,58 @@ export const ClubManager = () => {
     setWeekDay(dayjs(_date).format('dddd'))
   }
 
-  const toggleDrawers = (isShowPrimary, isShowSecondary) => {
-    setShowPrimaryDrawer(isShowPrimary)
-    setShowSecondaryDrawer(isShowSecondary)
+  const toggleScheduleVsClubInfo = (isShowScheduleManager, isShowClubComponent) => {
+    setShowScheduleManager(isShowScheduleManager)
+    setShowClubComponent(isShowClubComponent)
   }
 
-  const openSecondaryDrawer = (e) => {
-    e.stopPropagation()
-    setShowSecondaryDrawer(true)
-    setShowPrimaryDrawer(!showPrimaryDrawer)
-    // toggleDrawers(false, true)
+  const openClubComponent = (e, title) => {
+    setSecondaryDrawerTitle(title)
+    toggleScheduleVsClubInfo(false, true)
   }
 
-  const openScheduleManager = (e) => {
-    e.stopPropagation()
+  const openScheduleManager = () => {
     setShowScheduleManager(true)
-    toggleDrawers(false, false)
-    return (<ScheduleDay />)
+    setShowClubComponent(false)
   }
 
-  const openClubClasses = (e) => {
-    e.stopPropagation()
-    setShowClubClasses(true)
-    toggleDrawers(false, true)
-    if (showClubClasses) return (<ClubClasses />)
+  const openSecondaryDrawer = () => {
+    setShowSecondaryDrawer(true)
   }
 
-  const openSalesDetails = (e) => {
-    e.stopPropagation()
-    console.log('openSalesDetails - e.target.value', e.target)
-    setShowSalesDetails(true)
-    toggleDrawers(false, false)
-    if (e.target.value === 'salesDetails') return (<SalesDetails />)
-  }
-
-  const logout = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const logout = () => {
     dispatch(setUserUid(null))
     dispatch(signout())
-    navigate('/')
-    toggleDrawers(false, false)
+    navigate('/homepage')
   }
-  const mainFuncs = [openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
-  const renderClubSideDrawer = () => {
-    if (showClubDetails) {
-      return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
+
+  const mainFuncs = [openScheduleManager, openSecondaryDrawer, logout]
+
+  const renderSecondarySideDrawer = () => {
+    if (showSecondaryDrawer) {
+      return <SecondarySideDrawer secondaryDrawerList={secondaryDrawerList} openClubComponent={openClubComponent} showSecondaryDrawer={showSecondaryDrawer} setShowSecondaryDrawer={setShowSecondaryDrawer} />
     }
-
-    console.warn(`No component found for className: ${className}`);
   }
 
-  // const openDrawerComponent = (e, className, component) => {
-  //   e.stopPropagation()
-  //   console.log('openSalesDetails - e.target', e.target)
-  //   console.log('openSalesDetails - e.target.value', e.target.value)
-  //   console.log("🚀 ~ file: club-manager.jsx:71 ~ openDrawerComponent ~ className:", className)
-  //   console.log("🚀 ~ file: club-manager.jsx:71 ~ openDrawerComponent ~ component:", component)
-  // }
-
-  const openDrawerComponent = (className) => {
-    const primaryDrawerItem = primaryDrawerList.find((item) => item.className === className);
-
-    if (primaryDrawerItem) {
-      // Render the corresponding component based on the matching className
-      return primaryDrawerItem.onClick();
-    }
-
-    console.warn(`No component found for className: ${className}`);
-  }
-
-  const renderClubInfo = () => {
-    if (showClubInfo) {
-      switch (clubInfoIdx) {
-        case PAGES_IDX.AboutClub:
-          // TODO render the component page for club details
-          return <ClubDetails />
-        case PAGES_IDX.ClubSettings:
+  const renderClubComponent = () => {
+    if (showClubComponent) {
+      switch (secondaryDrawerTitle) {
+        case 'על המועדון':
+          return <AboutClub />
+        case 'הגדרות מועדון':
           return <ClubSettings />
-        case PAGES_IDX.ClubHours:
+        case 'שעות פעילות':
           return <ClubHours />
-        case PAGES_IDX.CourtsManager:
+        case 'ניהול מגרשים':
           return <CourtsManager />
-        case PAGES_IDX.SalesDetails:
+        case 'נתוני מכירות':
           return <SalesDetails />
-        case PAGES_IDX.PunchCards:
+        case 'כרטיסיות':
           return <PunchCards />
-        case PAGES_IDX.UsersPerimssion:
+        case 'משתמשים והרשאות':
           return <UsersPermission />
-        case PAGES_IDX.ClubClasses:
+        case 'חוגים':
           return <ClubClasses />
-        case PAGES_IDX.ChooseLanguage:
-          return <ChooseLanguage isHebrewLang={isHebrewLang} setIsHebrewLang={setIsHebrewLang} closeChooseLang={closeChooseLang} />
         default:
           break;
       }
@@ -169,9 +118,9 @@ export const ClubManager = () => {
             <li style={{ width: "20%" }}><Typography>{weekDayInHebrew[weekDay]} {date}</Typography></li>
             <li>
               <ul className='clean-list flex align-center justify-center' style={{ gap: "1rem" }}>
-                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule}/>אתמול</li>
-                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule}/>היום</li>
-                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule}/>מחר</li>
+                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule} />אתמול</li>
+                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule} />היום</li>
+                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule} />מחר</li>
               </ul>
             </li>
             <li className="flex" style={{ width: "20%", justifyContent: "end" }}>
@@ -189,10 +138,10 @@ export const ClubManager = () => {
     <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
         {renderSecondarySideDrawer()}
-        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} setShowPrimaryDrawer={setShowPrimaryDrawer} openDrawerComponent={openDrawerComponent} />
+        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />
       </article>
       {renderScheduleManager()}
-      {/* {renderClubInfo()} */}
+      {renderClubComponent()}
     </div>
   )
 }

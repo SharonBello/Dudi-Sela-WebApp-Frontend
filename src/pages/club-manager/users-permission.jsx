@@ -6,9 +6,9 @@ export const UsersPermission = () => {
 
   return (
     <Box className="club-box">
-        <Container className="club-content">
-            <div>users permission</div>
-        </Container>
+      <Container className="club-content">
+        <div>users permission</div>
+      </Container>
     </Box>
   )
 }

@@ -6,9 +6,9 @@ export const SalesDetails = () => {
 
   return (
     <Box className="club-box">
-        <Container className="club-content">
-            <div>sales details</div>
-        </Container>
+      <Container className="club-content">
+        <div>sales details</div>
+      </Container>
     </Box>
   )
 }

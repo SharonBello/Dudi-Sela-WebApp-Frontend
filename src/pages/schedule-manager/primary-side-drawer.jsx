@@ -5,55 +5,47 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function PrimarySideDrawer({ primaryDrawerList, setShowPrimaryDrawer, openDrawerComponent }) {
-  const [state, setState] = useState({ right: false });
-  const clubNames = ['האקדמיה של דודי סלע'];
+export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
+  const clubNames = ['האקדמיה של דודי סלע']
+  const [state, setState] = useState({
+    right: false
+  });
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
+
     setState({ ...state, [anchor]: open });
   };
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : '30vw', paddingInline: '1vw' }}
-      role='presentation'
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : "28vw" }}
+      role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {clubNames.map((clubName) => (
-          <ListItem key={clubName} className="flex align-right justify-between" style={{ gap: "1.5rem" }}>
-            <Box>
-              <GridMenuIcon onClick={() => setShowPrimaryDrawer(false)} className='toggle-primary-drawer' />
+        {clubNames.map((name, index) => (
+          <ListItem key={index}>
+            <Box className="flex align-center">
+              <GridMenuIcon onClick={() => toggleDrawer(!state)} className='drawer-back-btn' />
             </Box>
-            <ListItemText primary={clubName} className='drawer-club-name' style={{ textAlign: 'right', whiteSpace: "nowrap" }} />
+            <ListItemText primary={name} className='drawer-club-name' />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {primaryDrawerList.map(listItem => (
-          <ListItem
-            key={listItem.text}
-            role='button'
-            disablePadding
-            onClick={() => openDrawerComponent(listItem.className)}
-          >
-            <ListItemButton className={listItem.className}>
-              <ListItemIcon>
-                <img src={listItem.icon} alt={`${listItem.text}`} className='drawer-icon' />
-              </ListItemIcon>
-              <span
-                className={listItem.className}
-                style={{ textAlign: 'right' }}
-              >{listItem.text}</span>
+        {primaryDrawerList.map((item, index) => (
+          <ListItem key={index} disablePadding onClick={() => mainFuncs[index]()}>
+            <ListItemButton>
+              <img src={item.icon} alt={item.title} className="drawer-icon" />
+              <ListItemText primary={item.title} className='primary-drawer-list-title' />
             </ListItemButton>
           </ListItem>
         ))}
@@ -63,8 +55,8 @@ export default function PrimarySideDrawer({ primaryDrawerList, setShowPrimaryDra
 
   return (
     <>
-      <Box className='flex align-right justify-between'>
-        <GridMenuIcon id='toggle-primary-drawer' className='toggle-primary-drawer' onClick={toggleDrawer('right', true)} />
+      <Box className="flex align-right justify-between">
+        <GridMenuIcon id="toggle-main-drawer" onClick={toggleDrawer('right', true)} />
       </Box>
       <Drawer
         anchor='right'

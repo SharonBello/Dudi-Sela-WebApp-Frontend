@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
-const ClubClasses = () => {
+export const ClubClasses = () => {
 
   return (
     <Box className="club-box">
@@ -12,5 +12,3 @@ const ClubClasses = () => {
     </Box>
   )
 }
-
-export default ClubClasses;

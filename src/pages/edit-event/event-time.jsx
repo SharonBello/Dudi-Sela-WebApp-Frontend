@@ -13,82 +13,82 @@ import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
 
-export const EventTime = ({theme, cacheRtl, startHour, setStartHour, endHour, setEndHour, date, setDate }) => {
-  const { width } = useWindowDimensions()
-  const todaysDate = dayjs().format('DD/MM/YYYY')
+export const EventTime = ({ theme, cacheRtl, startHour, setStartHour, endHour, setEndHour, date, setDate }) => {
+    const { width } = useWindowDimensions()
+    const todaysDate = dayjs().format('DD/MM/YYYY')
 
-  const handleDateChange = (dateChanged) => {
-    setDate(dayjs(new Date(dateChanged)).format('YYYY-MM-DD'))
-  }
+    const handleDateChange = (dateChanged) => {
+        setDate(dayjs(new Date(dateChanged)).format('YYYY-MM-DD'))
+    }
 
-  return (
-    <CacheProvider value={cacheRtl}>
-        <ThemeProvider theme={theme}>
-        <div dir="rtl" className="form-container flex align-center" >
-            <Box className="date-time-container flex-column">
-            <Typography className="modal-body-text">
-                בחירת זמן רצוי
-            </Typography>
-            <Box className="date-time-select flex align-center">
-                <section className="date-container flex justify-between align-center">
-                {(width < 600) ?
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        label="תאריך"
-                        inputFormat="DD/MM/YYYY"
-                        // value={date}
-                        placeholder={todaysDate}
-                        onChange={handleDateChange}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                    </LocalizationProvider>
-                    : <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DesktopDatePicker
-                        label="תאריך"
-                        inputFormat="DD/MM/YYYY"
-                        // value={date}
-                        placeholder={todaysDate}
-                        onChange={handleDateChange}
-                    // renderInput={(params) => <TextField {...params} />}
-                    />
-                    </LocalizationProvider>}
-                </section>
-                <section className="hours-container flex align-center justify-between">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Container>
-                    <TextField
-                        label='שעת התחלה'
-                        type="time"
-                        value={startHour}
-                        placeholder={startHour}
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        minutesStep={60}
-                        onChange={(newValue) => setStartHour(newValue)}
-                        minTime={dayjs().set('hour', 8)}
-                        maxTime={dayjs().set('hour', 17)}
-                    />
-                    {/* <TimeField
+    return (
+        <CacheProvider value={cacheRtl}>
+            <ThemeProvider theme={theme}>
+                <div dir="rtl" className="form-container flex align-center" >
+                    <Box className="date-time-container flex-column">
+                        <Typography className="modal-body-text">
+                            בחירת זמן רצוי
+                        </Typography>
+                        <Box className="date-time-select flex align-center">
+                            <section className="date-container flex justify-between align-center">
+                                {(width < 600) ?
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <MobileDatePicker
+                                            label="תאריך"
+                                            inputFormat="DD/MM/YYYY"
+                                            // value={date}
+                                            placeholder={todaysDate}
+                                            onChange={handleDateChange}
+                                            renderInput={(params) => <TextField {...params} />}
+                                        />
+                                    </LocalizationProvider>
+                                    : <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <DesktopDatePicker
+                                            label="תאריך"
+                                            inputFormat="DD/MM/YYYY"
+                                            // value={date}
+                                            placeholder={todaysDate}
+                                            onChange={handleDateChange}
+                                        // renderInput={(params) => <TextField {...params} />}
+                                        />
+                                    </LocalizationProvider>}
+                            </section>
+                            <section className="hours-container flex align-center justify-between">
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <Container>
+                                        <TextField
+                                            label='שעת התחלה'
+                                            type="time"
+                                            value={startHour}
+                                            placeholder={startHour}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            minutesStep={60}
+                                            onChange={(newValue) => setStartHour(newValue)}
+                                            minTime={dayjs().set('hour', 8)}
+                                            maxTime={dayjs().set('hour', 17)}
+                                        />
+                                        {/* <TimeField
                         label='שעת התחלה'
                         value={startHour}
                         placeholder={startHour}
                         minutesStep={60}
                         onChange={(newValue) => setStartHour(newValue)}
                     /> */}
-                    <TimeField
-                        label='שעת סיום'
-                        value={endHour}
-                        placeholder={endHour}
-                        onChange={(newValue) => setEndHour(newValue)}
-                    />
-                    </Container>
-                </LocalizationProvider>
-                </section>
-            </Box>
-            </Box>
-        </div>
-        </ThemeProvider>
-    </CacheProvider>
-  )
+                                        <TimeField
+                                            label='שעת סיום'
+                                            value={endHour}
+                                            placeholder={endHour}
+                                            onChange={(newValue) => setEndHour(newValue)}
+                                        />
+                                    </Container>
+                                </LocalizationProvider>
+                            </section>
+                        </Box>
+                    </Box>
+                </div>
+            </ThemeProvider>
+        </CacheProvider>
+    )
 }

@@ -6,8 +6,6 @@ import Typography from '@mui/material/Typography'
 import CustomDivider from '../shared-components/custom-divider';
 import { TextBox } from '../shared-components/text-box';
 import { SaveButton } from '../shared-components/save-button';
-// import { FacilityServices } from './facility-services';
-// import UploadButton from '../shared-components/upload-button';
 import { SwitchInput } from '../shared-components/switch-input';
 
 export const ClubSettings = () => {
@@ -41,7 +39,10 @@ export const ClubSettings = () => {
         <Box className="club-header">
           <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
         </Box>
+
+
         <Typography id="club-title" variant="h6" component="h2"></Typography>
+
         <CustomDivider />
         <TextBox label="זמן בשעות שניתן לבטל לפני מועד הזמנת המגרש" value={hrBeforeCancel} setValue={setHrBeforeCancel} />
         <TextBox label="הזמן הקצר ביותר להזמנה בדקות" disabled={true} value={minPerReservation} setValue={setMinPerReservation} />
@@ -54,6 +55,7 @@ export const ClubSettings = () => {
         <SwitchInput label="מועדון לחברים בלבד" value={memberOnlyClub} setValue={setMemberOnlyClub} />
         <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" value={addPartnersToAll} setValue={setAddPartnersToAll} />
         <SaveButton onClick={handleSave} />
+
       </Container>
     </Box>
   )

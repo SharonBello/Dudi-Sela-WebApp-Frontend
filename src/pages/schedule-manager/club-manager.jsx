@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
-import ClubSideDrawer from "./club-side-drawer.jsx"
-import MainSideDrawer from "./main-side-drawer.jsx"
+import SecondarySideDrawer from "./secondary-side-drawer.jsx"
+import PrimarySideDrawer from "./primary-side-drawer.jsx"
 import { signout, setUserUid } from '../..//store/actions/user.actions.js'
 import { UsersPermission } from '../club-manager/users-permission.jsx'
 import { ClubClasses } from '../club-manager/club-classes.jsx'
@@ -110,9 +110,9 @@ export const ClubManager = () => {
     navigate('/')
   }
   const mainFuncs = [openCalendar, openClubData, openSalesDetails, logout]
-  const renderClubSideDrawer = () => {
+  const renderSecondarySideDrawer = () => {
     if (showClubDetails) {
-      return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
+      return <SecondarySideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
     }
   }
 
@@ -176,8 +176,8 @@ export const ClubManager = () => {
   return (
     <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
-        {renderClubSideDrawer()}
-        <MainSideDrawer mainOptions={mainOptions} mainFuncs={mainFuncs} />
+        {renderSecondarySideDrawer()}
+        <PrimarySideDrawer mainOptions={mainOptions} mainFuncs={mainFuncs} />
       </article>
       {renderScheduleManager()}
       {renderClubInfo()}

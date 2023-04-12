@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -11,8 +11,9 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function MainSideDrawer({mainOptions, mainFuncs}) {
-  const [state, setState] = useState({right: false
+export default function PrimarySideDrawer({ mainOptions, mainFuncs }) {
+  const [state, setState] = useState({
+    right: false
   });
 
   const toggleDrawer = (anchor, open) => (event) => {
@@ -33,7 +34,7 @@ export default function MainSideDrawer({mainOptions, mainFuncs}) {
       <List>
         {['האקדמיה של דודי סלע'].map((text, index) => (
           <ListItem key={text}>
-              <ListItemText primary={text} />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
@@ -55,16 +56,16 @@ export default function MainSideDrawer({mainOptions, mainFuncs}) {
 
   return (
     <>
-          <Box className="flex align-right justify-between">
-                <GridMenuIcon id="toggle-main-drawer" onClick={toggleDrawer('right', true)}/>
-          </Box>
-          <Drawer
-            anchor='right'
-            open={state['right']}
-            onClose={toggleDrawer('right', false)}
-          >
-            {list('right')}
-          </Drawer>
+      <Box className="flex align-right justify-between">
+        <GridMenuIcon id="toggle-main-drawer" onClick={toggleDrawer('right', true)} />
+      </Box>
+      <Drawer
+        anchor='right'
+        open={state['right']}
+        onClose={toggleDrawer('right', false)}
+      >
+        {list('right')}
+      </Drawer>
     </>
   );
 }

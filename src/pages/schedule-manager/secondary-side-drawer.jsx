@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function ClubSideDrawer({ clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
+export default function SecondarySideDrawer({ clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
   const openMainDrawer = () => {
     const clickEvent = new MouseEvent("click", {
       "view": window,

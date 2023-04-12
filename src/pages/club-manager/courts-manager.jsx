@@ -11,7 +11,7 @@ import { SelectMenu } from '../shared-components/select-menu'
 import { SaveButton } from '../shared-components/save-button';
 import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from './club-helper'
 
-export const CourtsManager = ({ }) => {
+export const CourtsManager = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtTypeForm, setShowCourtTypeForm] = useState(false)

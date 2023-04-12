@@ -9,7 +9,7 @@ import { SaveButton } from '../shared-components/save-button';
 import { FacilityServices } from './facility-services';
 import UploadButton from '../shared-components/upload-button';
 
-export const AboutClub = ({}) => {
+export const AboutClub = () => {
 
   const [clubName, setClubName] = useState("האקדמיה של דודי סלע");
   const [clubMail, setClubMail] = useState("dudiselaacademy@gmail.com");

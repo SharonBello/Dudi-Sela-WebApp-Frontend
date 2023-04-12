@@ -1,11 +1,9 @@
 import React from 'react';
-import { useState } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
 
 export const CourtPrice = ({price, setPrice, paidStatus, setPaidStatus}) => {
 

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
 import { Loader } from '../../components/loader.jsx';
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { createTheme } from '@mui/material/styles'
 import createCache from '@emotion/cache'
 import { EventFrequency } from './event-frequency.jsx'
 import { EventTime } from './event-time.jsx'
@@ -19,7 +19,7 @@ import Divider from '@mui/material/Divider';
 import { ParticipantsList } from './participants-lists.jsx';
 import { InstructorsList } from './instructors-list.jsx'
 import { EventDescription } from './event-description.jsx';
-import { EVENT, FREQUENCY_TYPES, SCHEDULE_TYPE, PAID_STATUS } from './event';
+import { FREQUENCY_TYPES, SCHEDULE_TYPE, PAID_STATUS } from './event';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { eventService } from '../../services/event.service'
 import Snackbar from '@mui/material/Snackbar'
@@ -67,7 +67,7 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
       courtNumbers
     }
   }
-  const editEventObj: EVENT = useRef(initEvent())
+  const editEventObj = useRef(initEvent())
   const navigate = useNavigate()
 
 

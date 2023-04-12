@@ -10,7 +10,7 @@ import { SaveButton } from '../shared-components/save-button';
 import { SelectMenu } from '../shared-components/select-menu'
 import { WeekDays, DayHours, DemoWorkHours } from './club-helper'
 
-export const ClubHours = ({ }) => {
+export const ClubHours = () => {
   const [workDays, setWorkDays] = useState(WeekDays);
   const [workHours, setWorkHours] = useState([]);
   const [fromHour, setFromHour] = useState(DayHours());

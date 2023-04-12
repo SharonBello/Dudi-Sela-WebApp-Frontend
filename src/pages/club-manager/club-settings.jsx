@@ -10,7 +10,7 @@ import { SaveButton } from '../shared-components/save-button';
 // import UploadButton from '../shared-components/upload-button';
 import { SwitchInput } from '../shared-components/switch-input';
 
-export const ClubSettings = ({ }) => {
+export const ClubSettings = () => {
   const [hrBeforeCancel, setHrBeforeCancel] = useState(6);
   const [minPerReservation, setMinPerReservation] = useState(60);
   const [daysReservedBefore, setDaysReservedBefore] = useState(2);

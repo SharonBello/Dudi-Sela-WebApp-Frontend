@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -7,29 +7,37 @@ import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import { ScheduleDay } from './schedule-day.jsx'
 import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
-import ClubSideDrawer from "./club-side-drawer.jsx"
-import MainSideDrawer from "./main-side-drawer.jsx"
+import SecondarySideDrawer from "./secondary-side-drawer.jsx"
+import PrimarySideDrawer from "./primary-side-drawer.jsx"
 import { signout, setUserUid } from '../..//store/actions/user.actions.js'
-import { PAGES_IDX } from './pages-idx.jsx'
-import { ChooseLanguage } from './choose-language.jsx'
 import { UsersPermission } from '../club-manager/users-permission.jsx'
 import { ClubClasses } from '../club-manager/club-classes.jsx'
-import { ClubDetails } from '../club-manager/club-details.jsx'
+import { AboutClub } from '../club-manager/about-club.jsx'
 import { ClubSettings } from '../club-manager/club-settings.jsx'
 import { ClubHours } from '../club-manager/club-hours.jsx'
 import { PunchCards } from '../club-manager/punch-cards.jsx'
 import { CourtsManager } from '../club-manager/courts-manager.jsx'
 import { SalesDetails } from '../club-manager/sales-details.jsx'
+import { Homepage } from '../homepage/homepage.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
   const [notFormattedDate, setNotFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
-  const [showClubDetails, setShowClubDetails] = useState(false)
-  const [isHebrewLang, setIsHebrewLang] = useState(true)
   const [showScheduleManager, setShowScheduleManager] = useState(true)
-  const [showClubInfo, setShowClubInfo] = useState(false)
-  const [clubInfoIdx, setClubInfoIdx] = useState()
+  const [showPrimaryDrawer, setShowPrimaryDrawer] = useState(false)
+  const [showSecondaryDrawer, setShowSecondaryDrawer] = useState(false)
+  const [showClubClasses, setShowClubClasses] = useState(false)
+  const [, setShowSalesDetails] = useState(false)
+  const [, setShowAboutClub] = useState(false)
+  const [, setShowClubSetting] = useState(false)
+  const [, setShowClubHours] = useState(false)
+  const [, setShowCourtsManager] = useState(false)
+  const [, setShowMembersCard] = useState(false)
+  const [, setShowUserPermissions] = useState(false)
+  // const [isHebrewLang, setIsHebrewLang] = useState(true)
+  // const [showClubInfo, setShowClubInfo] = useState(false)
+  // const [clubInfoIdx, setClubInfoIdx] = useState()
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -37,6 +45,7 @@ export const ClubManager = () => {
     setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
     setNotFormattedDate(new Date())
   }
+
   const openNextDaySchedule = () => {
     let _date = notFormattedDate
     _date.setDate(_date.getDate() + 1)
@@ -44,6 +53,7 @@ export const ClubManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
+
   const openPreviousDaySchedule = () => {
     let _date = notFormattedDate
     _date.setDate(_date.getDate() - 1)
@@ -51,107 +61,197 @@ export const ClubManager = () => {
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
-  const toggleScheduleVsClubInfo = (showManager, showClubInfo) => {
-    setShowScheduleManager(showManager)
-    setShowClubInfo(showClubInfo)
-  }
-  const openClubDetails = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openClubSettings = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openClubHours = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openCourtsManager = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openMembersCard = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openUsersPerimission = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const openSalesDetails = (e, index) => {
-    setClubInfoIdx(index)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  //ניהול מגרשים אופציה שנייה - https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/court-management_lj7jqo.svg
-  const clubOptions = [ 'על המועדון', 'הגדרות מועדון', 'שעות פעילות', 'ניהול מגרשים', 'נתוני מכירות',  'כרטיסיות', 'משתמשים והרשאות'];
-  const optionIcons = [ 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
-                        'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg', 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg']
-  const optionFuncs = [ openClubDetails, openClubSettings, openClubHours, openCourtsManager, openSalesDetails, openMembersCard, openUsersPerimission ];
-  const mainOptions = ['מנהל ההזמנות', 'המועדון', 'חוגים', 'שפה', 'נתוני מכירות', 'יציאה']
 
-  const openCalendar = (e, index) => {
+  const toggleDrawers = (isShowPrimary, isShowSecondary) => {
+    setShowPrimaryDrawer(isShowPrimary)
+    setShowSecondaryDrawer(isShowSecondary)
+  }
+
+  const openSecondaryDrawer = (e) => {
+    e.stopPropagation()
+    setShowSecondaryDrawer(true)
+    setShowPrimaryDrawer(!showPrimaryDrawer)
+    // toggleDrawers(false, true)
+  }
+
+  const openScheduleManager = (e) => {
+    e.stopPropagation()
     setShowScheduleManager(true)
-    setShowClubInfo(false)
+    toggleDrawers(false, false)
+    return (<ScheduleDay />)
   }
-  const openClubData = (e, index) => {
-    setShowClubDetails(true)
+
+  const openClubClasses = (e) => {
+    e.stopPropagation()
+    setShowClubClasses(true)
+    toggleDrawers(false, true)
+    if (showClubClasses) return (<ClubClasses />)
   }
-  const openClubClasses = (e, index) => {
-    setClubInfoIdx(7)
-    toggleScheduleVsClubInfo(false, true)
+
+  const openSalesDetails = (e) => {
+    e.stopPropagation()
+    console.log('openSalesDetails - e.target.value', e.target)
+    setShowSalesDetails(true)
+    toggleDrawers(false, false)
+    if (e.target.value === 'salesDetails') return (<SalesDetails />)
   }
-  const openLocalization = (e, index) => {
-    setClubInfoIdx(8)
-    toggleScheduleVsClubInfo(false, true)
-  }
-  const logout = (e, index) => {
-    console.log(index);
+
+  const logout = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
     dispatch(setUserUid(null))
     dispatch(signout())
     navigate('/')
-  }
-  const mainFuncs = [ openCalendar, openClubData, openClubClasses, openLocalization, openSalesDetails, logout]
-  const renderClubSideDrawer = () => {
-    if (showClubDetails) {
-      return <ClubSideDrawer clubOptions={clubOptions} optionFuncs={optionFuncs} optionIcons={optionIcons} showClubDetails={showClubDetails} setShowClubDetails={setShowClubDetails} />
-    }
-  }
-  const closeChooseLang = () => {
-    toggleScheduleVsClubInfo(true, false)
+    toggleDrawers(false, false)
   }
 
-  const renderClubInfo = () => {
-    if (showClubInfo) {
-      switch (clubInfoIdx) {
-        case PAGES_IDX.AboutClub:
-          // TODO render the component page for club details
-          return <ClubDetails />
-        case PAGES_IDX.ClubSettings:
-          return <ClubSettings />
-        case PAGES_IDX.ClubHours:
-          return <ClubHours />
-        case PAGES_IDX.CourtsManager:
-          return <CourtsManager />
-        case PAGES_IDX.SalesDetails:
-          return <SalesDetails />
-        case PAGES_IDX.PunchCards:
-          return <PunchCards />
-        case PAGES_IDX.UsersPerimssion:
-          return <UsersPermission />
-        case PAGES_IDX.ClubClasses:
-          return <ClubClasses />
-        case PAGES_IDX.ChooseLanguage:
-          return <ChooseLanguage isHebrewLang={isHebrewLang} setIsHebrewLang={setIsHebrewLang} closeChooseLang={closeChooseLang} />
-              default:
-          break;
-      }
+  const openClubSetting = (e) => {
+    e.stopPropagation()
+    setShowClubSetting(true)
+    toggleDrawers(false, false)
+    return (<ClubSettings />)
+  }
+
+  const openAboutClub = (e) => {
+    e.stopPropagation()
+    setShowAboutClub(true)
+    toggleDrawers(false, false)
+    return (<AboutClub />)
+  }
+
+  const openClubHours = (e) => {
+    e.stopPropagation()
+    setShowClubHours(true)
+    toggleDrawers(false, false)
+    return (<ClubHours />)
+  }
+
+  const openCourtsManager = (e) => {
+    e.stopPropagation()
+    setShowCourtsManager(true)
+    toggleDrawers(false, false)
+    return (<CourtsManager />)
+  }
+
+  const openMembersCard = (e) => {
+    e.stopPropagation()
+    setShowMembersCard(true)
+    toggleDrawers(false, false)
+    return (<PunchCards />)
+  }
+
+  const openUserPermissions = (e) => {
+    e.stopPropagation()
+    setShowUserPermissions(true)
+    toggleDrawers(false, false)
+    return (<UsersPermission />)
+  }
+
+  // const openDrawerComponent = (e, className, component) => {
+  //   e.stopPropagation()
+  //   console.log('openSalesDetails - e.target', e.target)
+  //   console.log('openSalesDetails - e.target.value', e.target.value)
+  //   console.log("🚀 ~ file: club-manager.jsx:71 ~ openDrawerComponent ~ className:", className)
+  //   console.log("🚀 ~ file: club-manager.jsx:71 ~ openDrawerComponent ~ component:", component)
+  // }
+
+  const openDrawerComponent = (className) => {
+    const primaryDrawerItem = primaryDrawerList.find((item) => item.className === className);
+
+    if (primaryDrawerItem) {
+      // Render the corresponding component based on the matching className
+      return primaryDrawerItem.onClick();
+    }
+
+    console.warn(`No component found for className: ${className}`);
+  }
+
+  const primaryDrawerList = [
+    {
+      text: 'מנהל ההזמנות',
+      className: 'schedule-manager',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
+      onClick: openScheduleManager,
+      component: <ScheduleDay />,
+    },
+    {
+      text: 'המועדון',
+      className: 'secondary-drawer',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
+      onClick: openSecondaryDrawer,
+      component: <secondaryDrawerList />,
+    },
+    {
+      text: 'חוגים',
+      className: 'club-classes',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1681245209/classes-icon_lje2ds.svg',
+      onClick: openClubClasses,
+      component: <ClubClasses />,
+    },
+    {
+      text: 'נתוני מכירות',
+      className: 'sales-details',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
+      onClick: openSalesDetails,
+      component: <SalesDetails />,
+    },
+    {
+      text: 'יציאה',
+      className: 'log-out',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1681245384/sign-out-icon_negt9b.svg',
+      onClick: logout,
+      component: <Homepage />,
+    }
+  ]
+
+  const secondaryDrawerList = [
+    {
+      text: 'על המועדון',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/tennis_a5iwfs.svg',
+      onClick: openAboutClub,
+    },
+    {
+      text: 'הגדרות מועדון',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/club-setting_kpkhkk.svg',
+      onClick: openClubSetting,
+    },
+    {
+      text: 'שעות פעילות',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/hours_d6kik7.svg',
+      onClick: openClubHours,
+    },
+    {
+      text: 'ניהול מגרשים',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg',
+      onClick: openCourtsManager,
+    },
+    {
+      text: 'נתוני מכירות',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg',
+      onClick: openSalesDetails,
+    },
+    {
+      text: 'כרטיסיות',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg',
+      onClick: openMembersCard,
+    },
+    {
+      text: 'משתמשים והרשאות',
+      icon: 'https://res.cloudinary.com/primap/image/upload/v1679990471/General/Dudi%20Sela/Icons/user-perm_qhbx53.svg',
+      onClick: openUserPermissions,
+    }
+  ]
+
+  const renderSecondarySideDrawer = () => {
+    if (showSecondaryDrawer) {
+      return <SecondarySideDrawer
+        secondaryDrawerList={secondaryDrawerList}
+        showSecondaryDrawer={showSecondaryDrawer}
+        setShowSecondaryDrawer={setShowSecondaryDrawer}
+      />
     }
   }
+
   const renderScheduleManager = () => {
     if (showScheduleManager) {
       return (
@@ -176,7 +276,7 @@ export const ClubManager = () => {
             </Box>
             <Typography component="h6" variant="h6">
               <img src="https://res.cloudinary.com/primap/image/upload/v1677420672/General/Dudi%20Sela/DudiLogo_wdbxir.svg" className="app-logo"
-                  alt="logo" />
+                alt="logo" />
             </Typography>
           </Box>
           <ScheduleDay mDate={date} dayOfWeek={weekDay} />
@@ -184,15 +284,15 @@ export const ClubManager = () => {
       )
     }
   }
+
   return (
     <div className="flex-column align-center container schedule-container">
       <article className="side-drawer flex">
-        {renderClubSideDrawer()}
-        <MainSideDrawer mainOptions={mainOptions} mainFuncs={mainFuncs} />
+        {renderSecondarySideDrawer()}
+        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} setShowPrimaryDrawer={setShowPrimaryDrawer} openDrawerComponent={openDrawerComponent} />
       </article>
       {renderScheduleManager()}
-      {renderClubInfo()}
+      {/* {renderClubInfo()} */}
     </div>
-
   )
 }

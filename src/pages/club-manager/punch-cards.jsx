@@ -2,15 +2,14 @@ import { useState } from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CustomDivider from '../shared-components/custom-divider';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
 import { CreatePunchCard } from './create-punch-card';
 import { DemoPunchCards } from './club-helper';
 
-export const PunchCards = ({}) => {
+export const PunchCards = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
-  const [showPunchCard, setShowPunchCard] = useState(false);
-  const [selectedPunchCard, setSelectedPunchCard] = useState(false);
+  const [, setShowPunchCard] = useState(false);
+  const [, setSelectedPunchCard] = useState(false);
 
   const closePunchCard = () => {
     console.log("close")

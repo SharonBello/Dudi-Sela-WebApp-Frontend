@@ -14,7 +14,7 @@ export const SelectMenu = ({ inputLabel = "", multiple=false, isRequired = false
     };
     useEffect(() => {
         setVal(defaultValue)
-    }, [])
+    }, [defaultValue])
     return (
         <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>{inputLabel}</InputLabel>

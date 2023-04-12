@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
-export const SelectMenu = ({ inputLabel = "", multiple=false, isRequired = false, placeholder = undefined, defaultValue = undefined, values, setValue }) => {
+export const SelectMenu = ({ inputLabel = "", multiple = false, isRequired = false, placeholder = undefined, defaultValue = undefined, values, setValue }) => {
 
     const [val, setVal] = useState(defaultValue)
     const handleChange = (event) => {
@@ -14,7 +14,7 @@ export const SelectMenu = ({ inputLabel = "", multiple=false, isRequired = false
     };
     useEffect(() => {
         setVal(defaultValue)
-    }, [])
+    }, [defaultValue])
     return (
         <FormControl sx={{ m: 1, minWidth: 120 }}>
             <InputLabel>{inputLabel}</InputLabel>

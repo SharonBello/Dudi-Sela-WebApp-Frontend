@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { GridMenuIcon } from '@mui/x-data-grid';
 
-export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
+export default function ClubSideDrawer({ clubOptions, optionFuncs, optionIcons, showClubDetails, setShowClubDetails }) {
   const openMainDrawer = () => {
     const clickEvent = new MouseEvent("click", {
       "view": window,
@@ -27,10 +27,10 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
       <List>
         {['האקדמיה של דודי סלע'].map((text, index) => (
           <ListItem key={text}>
-              <Box className="flex align-right justify-between">
-                <GridMenuIcon onClick={() => openMainDrawer()}/>
-              </Box>
-              <ListItemText primary={text} />
+            <Box className="flex align-right justify-between">
+              <GridMenuIcon onClick={() => openMainDrawer()} />
+            </Box>
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
@@ -40,7 +40,7 @@ export default function ClubSideDrawer({clubOptions, optionFuncs, optionIcons, s
           <ListItem key={text} disablePadding onClick={(e) => optionFuncs[index](e, index)}>
             <ListItemButton>
               <ListItemIcon>
-              <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />
+                <img alt={optionIcons[index]} src={optionIcons[index]} className="drawer-icon" />
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>

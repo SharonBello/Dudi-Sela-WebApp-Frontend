@@ -20,38 +20,58 @@ export const ClubHours = () => {
   useEffect(() => {
     DemoWorkHours(setWorkHours)
   }, [])
-  const renderWorkHours = () => {
-    return (
-      workHours.map((wrkHrs) => {
 
-        return <Box className="club-hr">
-          <p>{wrkHrs.days.join(", ")}</p>
-          <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-          <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
-          <SaveButton onClick={handleSave} />
-          <FontAwesomeIcon icon={faTrashAlt} />
-        </Box>
-      })
-    )
-  }
+  // const renderWorkHours = () => {
+  //   return (
+  //     workHours.map((wrkHrs) => {
+
+  //       return <Box className="club-hr">
+  //         <p>{wrkHrs.days.join(", ")}</p>
+  //         <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
+  //         <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
+  //         <SaveButton onClick={handleSave} />
+  //         <FontAwesomeIcon icon={faTrashAlt} />
+  //       </Box>
+  //     })
+  //   )
+  // }
+
   return (
-    <Box className="club-box container">
-      <div className="grid-club-component">
+    <Box className="club-hours-box container">
+      <div className="grid-club-hours-component flex-column">
         <Typography id="club-title" variant="h6" component="h2">שעות פעילות</Typography>
         <CustomDivider className="grid-divider" />
-        <Box className="main-component-fields-container">
-
-          <p>השעות בהן לקוחות יכולים להזמין מגרשים. זמנים אשר מחוץ לשעות הפעילות יסומנו ברקע אפור ולא ניתן יהיה להזמין בשעות אלו דרך האפליקציה</p>
-          <div>הוסף שעות פעילות</div>
+        <Box className="club-hours-instructions">
+          <p>השעות בהן לקוחות יכולים להזמין מגרשים. זמנים אשר מחוץ לשעות הפעילות יסומנו ברקע אפור ולא ניתן יהיה להזמין בשעות אלו דרך האפליקציה<br />
+            <span>הוסף שעות פעילות:</span>
+          </p>
+        </Box>
+        <CustomDivider className="grid-divider" />
+        <Box className="club-hours-fields-container flex justify-between">
           <SelectMenu inputLabel="ימים" values={workDays} setValue={setWorkDays} />
           <SelectMenu inputLabel="משעה" values={fromHour} setValue={setFromHour} />
           <SelectMenu inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
           <SaveButton onClick={handleSave} />
-          <CustomDivider />
-          <div>שעות פעילות</div>
-          {renderWorkHours()}
         </Box>
-
+        <div>שעות פעילות</div>
+        <CustomDivider className="grid-divider" />
+        <div className="club-hr flex-column">
+          {workHours.map((wrkHrs) => (
+            <div className="form-fields flex-column">
+              <p>{wrkHrs.days.join(", ")}</p>
+              <div className="select-fields flex justify-between">
+                <div>
+                  <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
+                  <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
+                </div>
+                <div className="club-hours-actions flex align-center">
+                  <SaveButton onClick={handleSave} />
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </Box>
   )

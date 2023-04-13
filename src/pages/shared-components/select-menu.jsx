@@ -27,7 +27,6 @@ export const SelectMenu = ({ inputLabel = "", multiple = false, isRequired = fal
                     <MenuItem key={valIdx} value={v}>{v}
                     </MenuItem>
                 ))}
-
             </Select>
         </FormControl>
     );

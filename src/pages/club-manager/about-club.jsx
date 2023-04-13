@@ -36,11 +36,9 @@ export const AboutClub = () => {
   }
 
   return (
-    <Box className="club-box">
-      <div className="grid-club-component container">
-        {/* <Box className="club-header"> */}
+    <Box className="club-box container">
+      <div className="grid-club-component">
         <Typography id="club-title" className="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
-        {/* </Box> */}
         <CustomDivider className="grid-divider" />
 
         <Box className="main-component-fields-container">

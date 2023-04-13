@@ -1,13 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
-import CustomDivider from '../shared-components/custom-divider';
-import { TextBox } from '../shared-components/text-box';
-import { SaveButton } from '../shared-components/save-button';
-import { FacilityServices } from './facility-services';
-import UploadButton from '../shared-components/upload-button';
+import CustomDivider from '../../../../shared-components/custom-divider';
+import { TextBox } from '../../../../shared-components/text-box';
+import { SaveButton } from '../../../../shared-components/save-button';
+import { FacilityServices } from '../facility-services/facility-services';
+import UploadButton from '../../../../shared-components/upload-button';
 
 export const AboutClub = () => {
   const [clubName, setClubName] = useState("האקדמיה של דודי סלע");

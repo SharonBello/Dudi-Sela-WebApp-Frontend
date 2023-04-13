@@ -6,7 +6,7 @@ import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import dayjs from 'dayjs';
 import { Typography } from '@mui/material';
-import { getCurrentDate, getRows } from '../schedule-manager/schedule-helper.js';
+import { getCurrentDate, getRows } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
 export const Dashboard = () => {
   const weekDay = dayjs().format('dddd');

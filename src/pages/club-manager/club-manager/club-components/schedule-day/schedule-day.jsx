@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
-import { reservationService } from '../../services/reservation.service.js';
-import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
-import { Loader } from '../../components/loader.jsx';
-import { getRows, hoursData, hoursDataArr, columnsData } from './schedule-helper.js';
-import { EditEventModal } from '../edit-event/edit-event.jsx';
+import { reservationService } from '../../../../../services/reservation.service.js';
+import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js';
+import { Loader } from '../../../../../components/loader.jsx';
+import { getRows, hoursData, hoursDataArr, columnsData } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
+import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [isLoading, setIsLoading] = useState(false)

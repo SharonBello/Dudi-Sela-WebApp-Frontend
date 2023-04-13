@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 export const UsersPermission = () => {
 
   return (
-    <Box className="club-box">
+    <Box className="club-box container">
       <Container className="club-content">
         <div>users permission</div>
       </Container>

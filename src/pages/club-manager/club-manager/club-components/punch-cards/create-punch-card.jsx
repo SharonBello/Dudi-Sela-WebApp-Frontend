@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
-import { TextBox } from '../shared-components/text-box';
-import { SwitchInput } from '../shared-components/switch-input';
-import { SelectMenu } from '../shared-components/select-menu'
-import { MemberTypes } from './club-helper'
+import { TextBox } from '../../../../shared-components/text-box';
+import { SwitchInput } from '../../../../shared-components/switch-input';
+import { SelectMenu } from '../../../../shared-components/select-menu'
+import { MemberTypes } from '../../club-helper'
 
 export const CreatePunchCard = ({ showModalCreate, closePunchCard, setShowModalCreate }) => {
     const [cardName, setCardName] = useState()

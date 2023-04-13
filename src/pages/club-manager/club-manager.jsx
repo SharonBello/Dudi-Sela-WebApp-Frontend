@@ -1,23 +1,22 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import Typography from '@mui/material/Typography'
-import { ScheduleDay } from './schedule-day.jsx'
-import { getCurrentDate, weekDayInHebrew } from './schedule-helper.js'
-import SecondarySideDrawer from "./secondary-side-drawer.jsx"
-import PrimarySideDrawer from "./primary-side-drawer.jsx"
-import { signout, setUserUid } from '../..//store/actions/user.actions.js'
-import { UsersPermission } from '../club-manager/users-permission.jsx'
-import { ClubClasses } from '../club-manager/club-classes.jsx'
-import { AboutClub } from '../club-manager/about-club.jsx'
-import { ClubSettings } from '../club-manager/club-settings.jsx'
-import { ClubHours } from '../club-manager/club-hours.jsx'
-import { PunchCards } from '../club-manager/punch-cards.jsx'
-import { CourtsManager } from '../club-manager/courts-manager.jsx'
-import { SalesDetails } from '../club-manager/sales-details.jsx'
-import { primaryDrawerList, secondaryDrawerList } from '../club-manager/club-helper.jsx'
+import { ScheduleDay } from './club-manager/club-components/schedule-day/schedule-day.jsx'
+import { getCurrentDate, weekDayInHebrew } from './club-manager/club-components/schedule-day/schedule-helper.js'
+import SecondarySideDrawer from './drawers-manager/secondary-side-drawer/secondary-side-drawer.jsx'
+import PrimarySideDrawer from "./drawers-manager/primary-drawer/primary-side-drawer.jsx"
+import { signout, setUserUid } from '../../store/actions/user.actions.js'
+import { UsersPermission } from './club-manager/club-components/users-permission/users-permission.jsx'
+import { ClubClasses } from './club-manager/club-components/club-classes/club-classes.jsx'
+import { AboutClub } from './club-manager/club-components/about-club/about-club.jsx'
+import { ClubSettings } from './club-manager/club-components/club-settings/club-settings.jsx'
+import { ClubHours } from './club-manager/club-components/club-hours/club-hours.jsx'
+import { PunchCards } from './club-manager/club-components/punch-cards/punch-cards.jsx'
+import { CourtsManager } from './club-manager/club-components/courts-manager/courts-manager.jsx'
+import { SalesDetails } from './club-manager/club-components/sales-details/sales-details.jsx'
+import { primaryDrawerList, secondaryDrawerList } from './club-manager/club-helper.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())

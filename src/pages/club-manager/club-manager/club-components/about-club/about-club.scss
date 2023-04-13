@@ -1,0 +1,100 @@
+.club-box {
+  width: 100%;
+
+  .grid-club-component {
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 3% auto 1fr 5%;
+    // grid-template-columns: 90%;
+    width: 100%;
+    grid-template-areas: "club-title" "grid-divider" "main-component-fields-container" "btn-club-components-container";
+    grid-gap: 1rem;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .main-component-fields-container {
+    grid-area: main-component-fields-container;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+
+    @media (max-width: 650px) {
+      grid-template-columns: 1fr;
+    }
+
+    .text-field-box {
+      width: 100%;
+      min-width: 100%;
+      align-self: baseline;
+    }
+
+    .MuiFormControl-root {
+      margin-inline: unset !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      & > label {
+        left: unset !important;
+        right: 1.5rem !important;
+        transform-origin: top right !important;
+        margin-left: unset !important;
+
+        // @media (min-width: 1160px) {
+        //   right: 4rem !important;
+        // }
+        @media (min-width: 900px) and (max-width: 1159px) {
+          // right: 3rem !important;
+        }
+      }
+
+      & .MuiOutlinedInput-notchedOutline {
+        text-align: right !important;
+      }
+
+      div {
+        min-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .btn-club-components-container {
+    gap: 1rem;
+    .component-save-btn,
+    .upload-btn {
+      width: 8rem;
+      // width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      background-color: #c9db39;
+      color: #1d1d1d;
+      font-weight: 400;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      padding-block: 0.6rem;
+      &:hover {
+        background-color: #1d1d1d;
+        color: #c9db39;
+      }
+    }
+
+    .upload-btn {
+      font-size: 1rem;
+      padding-block: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+}

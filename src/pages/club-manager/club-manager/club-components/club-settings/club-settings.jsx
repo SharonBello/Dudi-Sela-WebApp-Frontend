@@ -1,12 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
-import CustomDivider from '../shared-components/custom-divider';
-import { TextBox } from '../shared-components/text-box';
-import { SaveButton } from '../shared-components/save-button';
-import { SwitchInput } from '../shared-components/switch-input';
+import CustomDivider from '../../../../shared-components/custom-divider';
+import { TextBox } from '../../../../shared-components/text-box';
+import { SaveButton } from '../../../../shared-components/save-button';
+import { SwitchInput } from '../../../../shared-components/switch-input';
 
 export const ClubSettings = () => {
   const [hrBeforeCancel, setHrBeforeCancel] = useState(6);
@@ -34,7 +33,7 @@ export const ClubSettings = () => {
   }
 
   return (
-    <Box className="club-box">
+    <Box className="club-box container">
       <Container className="club-content">
         <Box className="club-header">
           <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>

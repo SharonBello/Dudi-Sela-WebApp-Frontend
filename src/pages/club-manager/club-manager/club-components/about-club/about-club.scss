@@ -67,6 +67,7 @@
   }
 
   .btn-club-components-container {
+    grid-area: btn-club-components-container;
     gap: 1rem;
     .component-save-btn,
     .upload-btn {

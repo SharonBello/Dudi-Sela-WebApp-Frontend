@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
 import CustomDivider from '../../../../shared-components/custom-divider';
 import { TextBox } from '../../../../shared-components/text-box';
@@ -33,29 +32,28 @@ export const ClubSettings = () => {
   }
 
   return (
-    <Box className="club-box container">
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
+    <Box className="club-setting-box container">
+      <div className="club-setting-content">
+        <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
+        <CustomDivider className="grid-divider" />
+        <Box className="main-component-club-setting-fields">
+          <TextBox label="זמן בשעות שניתן לבטל לפני מועד הזמנת המגרש" value={hrBeforeCancel} setValue={setHrBeforeCancel} />
+          <TextBox label="הזמן הקצר ביותר להזמנה בדקות" disabled={true} value={minPerReservation} setValue={setMinPerReservation} />
+          <TextBox label="כמה ימים קדימה אפשר להזמין מראש" disabled={true} value={daysReservedBefore} setValue={setDaysReservedBefore} />
+          <TextBox label="מספר טלפון לעדכון ההזמנה" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
+          <TextBox label="days in advance" value={daysInAdvance} setValue={setDaysInAdvance} />
+          <TextBox label="cut off days" value={cutOffDays} setValue={setCutOffDays} />
+          <TextBox label="מרווחי זמן" value={timeIntervals} setValue={setTimeIntervals} />
+          <Box className="switch-input-container">
+            <SwitchInput label="פתוח להזמנות ברשת" value={onlineReserve} setValue={setOnlineReserve} />
+            <SwitchInput label="מועדון לחברים בלבד" value={memberOnlyClub} setValue={setMemberOnlyClub} />
+            <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" value={addPartnersToAll} setValue={setAddPartnersToAll} />
+          </Box>
         </Box>
-
-
-        <Typography id="club-title" variant="h6" component="h2"></Typography>
-
-        <CustomDivider />
-        <TextBox label="זמן בשעות שניתן לבטל לפני מועד הזמנת המגרש" value={hrBeforeCancel} setValue={setHrBeforeCancel} />
-        <TextBox label="הזמן הקצר ביותר להזמנה בדקות" disabled={true} value={minPerReservation} setValue={setMinPerReservation} />
-        <TextBox label="כמה ימים קדימה אפשר להזמין מראש" disabled={true} value={daysReservedBefore} setValue={setDaysReservedBefore} />
-        <TextBox label="מספר טלפון לעדכון ההזמנה" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
-        <TextBox label="days in advance" value={daysInAdvance} setValue={setDaysInAdvance} />
-        <TextBox label="cut off days" value={cutOffDays} setValue={setCutOffDays} />
-        <TextBox label="מרווחי זמן" value={timeIntervals} setValue={setTimeIntervals} />
-        <SwitchInput label="פתוח להזמנות ברשת" value={onlineReserve} setValue={setOnlineReserve} />
-        <SwitchInput label="מועדון לחברים בלבד" value={memberOnlyClub} setValue={setMemberOnlyClub} />
-        <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" value={addPartnersToAll} setValue={setAddPartnersToAll} />
-        <SaveButton onClick={handleSave} />
-
-      </Container>
+        <Box className="btn-club-setting-components-container flex align-center">
+          <SaveButton onClick={handleSave} />
+        </Box>
+      </div>
     </Box>
   )
 }

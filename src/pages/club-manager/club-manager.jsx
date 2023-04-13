@@ -134,7 +134,7 @@ export const ClubManager = () => {
   }
 
   return (
-    <div className="flex-column align-center container schedule-container">
+    <div className="flex-column align-center container">
       <article className="side-drawer flex">
         {renderSecondarySideDrawer()}
         <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />

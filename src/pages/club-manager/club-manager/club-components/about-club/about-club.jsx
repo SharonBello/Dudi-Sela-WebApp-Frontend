@@ -48,7 +48,9 @@ export const AboutClub = () => {
           <TextBox label="שם העיר באנגלית" value={cityInEng} setValue={setCityInEng} />
           <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
           <TextBox label="טלפון" value={phone} setValue={setPhone} />
-          <Box><FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} /></Box>
+          <Box>
+            <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} />
+          </Box>
           <TextBox label="פייסבוק" value={facebook} setValue={setFacebook} />
           <TextBox label="אינסטגרם" value={instagram} setValue={setInstagram} />
           <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />

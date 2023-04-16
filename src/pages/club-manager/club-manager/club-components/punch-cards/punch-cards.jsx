@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import CustomDivider from '../shared-components/custom-divider';
+import CustomDivider from '../../../../shared-components/custom-divider';
 import Typography from '@mui/material/Typography'
 import { CreatePunchCard } from './create-punch-card';
-import { DemoPunchCards } from './club-helper';
+import { DemoPunchCards } from '../../club-helper';
 
 export const PunchCards = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
@@ -44,7 +44,7 @@ export const PunchCards = () => {
   }
 
   return (
-    <Box className="club-box">
+    <Box className="club-box container">
       <Container className="club-content">
         <Box className="club-header">
           <Typography id="club-title" variant="h6" component="h2">כרטיסיות</Typography>

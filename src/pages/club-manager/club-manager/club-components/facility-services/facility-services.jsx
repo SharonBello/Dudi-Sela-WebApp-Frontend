@@ -1,7 +1,7 @@
 import React from 'react';
-import { CustomCheckbox } from '../shared-components/check-box';
+import { CustomCheckbox } from '../../../../shared-components/check-box';
 
-export const FacilityServices = ({facilityServices, setFacilityServices}) => {
+export const FacilityServices = ({ facilityServices, setFacilityServices }) => {
 
     const handleOnChange = (e, key) => {
         const mServices = JSON.parse(JSON.stringify(facilityServices));

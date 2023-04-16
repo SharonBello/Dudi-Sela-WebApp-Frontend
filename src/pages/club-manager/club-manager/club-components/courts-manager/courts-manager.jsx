@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import CustomDivider from '../shared-components/custom-divider';
+import CustomDivider from '../../../../shared-components/custom-divider';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography'
-import { TextBox } from '../shared-components/text-box';
-import { SelectMenu } from '../shared-components/select-menu'
-import { SaveButton } from '../shared-components/save-button';
-import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from './club-helper'
+import { TextBox } from '../../../../shared-components/text-box';
+import { SelectMenu } from '../../../../shared-components/select-menu'
+import { SaveButton } from '../../../../shared-components/save-button';
+import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from '../../club-helper'
 
 export const CourtsManager = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
@@ -105,7 +105,7 @@ export const CourtsManager = () => {
     )
   }
   return (
-    <Box className="club-box">
+    <Box className="club-box container">
       <Container className="club-content">
         <Box className="club-header">
           <Typography id="club-title" variant="h6" component="h2">ניהול מגרשים</Typography>

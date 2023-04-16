@@ -1,13 +1,11 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography'
-import CustomDivider from '../shared-components/custom-divider';
-import { TextBox } from '../shared-components/text-box';
-import { SaveButton } from '../shared-components/save-button';
-import { FacilityServices } from './facility-services';
-import UploadButton from '../shared-components/upload-button';
+import CustomDivider from '../../../../shared-components/custom-divider';
+import { TextBox } from '../../../../shared-components/text-box';
+import { SaveButton } from '../../../../shared-components/save-button';
+import { FacilityServices } from '../facility-services/facility-services';
+import UploadButton from '../../../../shared-components/upload-button';
 
 export const AboutClub = () => {
   const [clubName, setClubName] = useState("האקדמיה של דודי סלע");
@@ -36,11 +34,9 @@ export const AboutClub = () => {
   }
 
   return (
-    <Box className="club-box">
-      <div className="grid-club-component container">
-        {/* <Box className="club-header"> */}
+    <Box className="club-box container">
+      <div className="grid-club-component">
         <Typography id="club-title" className="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
-        {/* </Box> */}
         <CustomDivider className="grid-divider" />
 
         <Box className="main-component-fields-container">
@@ -52,7 +48,9 @@ export const AboutClub = () => {
           <TextBox label="שם העיר באנגלית" value={cityInEng} setValue={setCityInEng} />
           <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
           <TextBox label="טלפון" value={phone} setValue={setPhone} />
-          <Box><FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} /></Box>
+          <Box>
+            <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} />
+          </Box>
           <TextBox label="פייסבוק" value={facebook} setValue={setFacebook} />
           <TextBox label="אינסטגרם" value={instagram} setValue={setInstagram} />
           <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />

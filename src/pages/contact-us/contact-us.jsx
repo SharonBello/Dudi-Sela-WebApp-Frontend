@@ -38,21 +38,6 @@ export const ContactUs = () => {
                 אינסטגרם<FontAwesomeIcon icon={faInstagram} /></a></li>
           </ul>
         </div>
-        <section className="contact-form-section flex-column">
-          <form className="contact-form flex-column">
-            <input type="text" name="name" placeholder="שם מלא" className="inptFld" required />
-
-            <input type="email" name="email" placeholder="כתובת אימייל" className="inptFld" required />
-
-            <input type="tel" name="phone" placeholder="מספר טלפון" className="inptFld" required />
-
-            <input type="text" name="sub" placeholder="נושא" className="inptFld" required />
-
-            <textarea className="inptFld" rows="" cols="" placeholder="ההודעה שלך..." required></textarea>
-
-          <button type="submit" className="inptBtn">שליחה</button>
-          </form>
-        </section>
       </div>
     </section >
   )

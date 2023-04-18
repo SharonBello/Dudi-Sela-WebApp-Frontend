@@ -86,3 +86,7 @@ export const secondaryDrawerList = [
     icon: 'https://res.cloudinary.com/primap/image/upload/v1681245209/classes-icon_lje2ds.svg'
   },
 ]
+
+export const DemoClubUsers = [{ fullName: "יואב בן צבי", phoneNumber: "+972523782815", mailAddress: "", permission: MemberTypes[1], validTill: true},
+{ fullName: "גיל מזור", phoneNumber: "+972546217777", mailAddress: "", permission: MemberTypes[1], validTill: true},
+{ fullName: "שרון בלו", phoneNumber: "+972544767146", mailAddress: "sharonbello@hotmail.com", permission: MemberTypes[0], validTill: false}]

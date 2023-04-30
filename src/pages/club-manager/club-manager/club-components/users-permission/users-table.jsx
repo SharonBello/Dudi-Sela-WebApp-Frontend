@@ -29,17 +29,17 @@ import { DemoClubUsers } from '../../club-helper'
 import { SaveButton } from '../../../../shared-components/save-button';
 import { PersonalDetails } from './personal-details';
 
-function createData(fullName, phoneNumber, mail, permission, validTill) {
+function createData(fullName, primaryPhone, mail, permission, validTill) {
   return {
     fullName,
-    phoneNumber,
+    primaryPhone,
     mail,
     permission,
     validTill,
   };
 }
 
-const rows = DemoClubUsers.map( (user) => createData(user.fullName, user.phoneNumber, user.mailAddress, user.permission, user.validTill));
+const rows = DemoClubUsers.map( (user) => createData(user.fullName, user.primaryPhone, user.mailAddress, user.permission, user.validTill));
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -81,7 +81,7 @@ const headCells = [
     label: 'שם מלא',
   },
   {
-    id: 'phoneNumber',
+    id: 'primaryPhone',
     numeric: true,
     disablePadding: false,
     label: 'טלפון',
@@ -107,7 +107,7 @@ const headCells = [
 ];
 
 const DEFAULT_ORDER = 'asc';
-const DEFAULT_ORDER_BY = 'phoneNumber';
+const DEFAULT_ORDER_BY = 'primaryPhone';
 const DEFAULT_ROWS_PER_PAGE = 5;
 
 function EnhancedTableHead(props) {
@@ -228,7 +228,8 @@ EnhancedTableToolbar.propTypes = {
 export default function UsersTable() {
   const [order, setOrder] = useState(DEFAULT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
-  const [selected, setSelected] = useState([]);
+  const [selectedAll, setSelectedAll] = useState([]);
+  const [selectedUser, setSelectedUser] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [visibleRows, setVisibleRows] = useState(null);
@@ -272,30 +273,16 @@ export default function UsersTable() {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.fullName);
-      setSelected(newSelected);
+      setSelectedAll(newSelected);
       return;
     }
-    setSelected([]);
+    setSelectedAll([]);
   };
 
-  const handleClick = (event, fullName) => {
-    const selectedIndex = selected.indexOf(fullName);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, fullName);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-
-    setSelected(newSelected);
+  const handleClick = (event, index) => {
+    // TODO replace with the user from DemoClubUsers
+    const mUser = DemoClubUsers.filter(user => user.mail === visibleRows[index].mail)
+    setSelectedUser(mUser);
   };
 
   const handleChangePage = useCallback(
@@ -345,7 +332,7 @@ export default function UsersTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (fullName) => selected.indexOf(fullName) !== -1;
+  const isSelected = (fullName) => selectedUser.fullName === fullName;
 
   const onDeletePerimission = () => {
     console.log("onDeletePerimission");
@@ -355,8 +342,8 @@ export default function UsersTable() {
     console.log("onSavePerimission");
   }
 
-  const onOpenPersonalDetails = () => {
-    console.log("open modal with user personal details");
+  const onOpenPersonalDetails = (editMode) => {
+    console.log("open modal with user personal details ", selectedUser);
     setShowUserDetails(true)
   }
 
@@ -366,7 +353,7 @@ export default function UsersTable() {
   const renderModal = () => {
     if (showUserDetails) {
       return (
-        <PersonalDetails user={selected} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
+        <PersonalDetails user={selectedUser} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
       )
     }
   }
@@ -376,7 +363,7 @@ export default function UsersTable() {
         {renderModal()}
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selectedAll.length} />
                 <TableContainer>
                 <Table
                     sx={{ minWidth: 750 }}
@@ -384,7 +371,7 @@ export default function UsersTable() {
                     size={dense ? 'small' : 'medium'}
                 >
                     <EnhancedTableHead
-                    numSelected={selected.length}
+                    numSelected={selectedAll.length}
                     order={order}
                     orderBy={orderBy}
                     onSelectAllClick={handleSelectAllClick}
@@ -400,7 +387,7 @@ export default function UsersTable() {
                             return (
                             <TableRow
                                 hover
-                                onClick={(event) => handleClick(event, row.fullName)}
+                                onClick={(event) => handleClick(event, index)}
                                 role="checkbox"
                                 aria-checked={isItemSelected}
                                 tabIndex={-1}
@@ -425,7 +412,7 @@ export default function UsersTable() {
                                 >
                                 {row.fullName}
                                 </TableCell>
-                                <TableCell align="right">{row.phoneNumber}</TableCell>
+                                <TableCell align="right">{row.primaryPhone}</TableCell>
                                 <TableCell align="right">{row.mail}</TableCell>
                                 <TableCell align="right">{row.permission}</TableCell>
                                 <TableCell align="right">{row.validTill}</TableCell>

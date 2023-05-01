@@ -1,0 +1,66 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.user-details-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: none;
+    box-shadow: 24px;
+    // padding: 16px;
+    max-width: 85vw;
+    min-width: 80vw;
+    max-height: 85vh;
+    min-height: 70vh;
+    padding-block: 1rem;
+
+    .grid-club-component {
+        margin: 0 auto;
+        display: grid;
+        grid-template-rows: 3% auto 1fr 5%;
+        grid-template-columns: 1fr;
+        width: 100%;
+        min-height: 100%;
+        grid-template-areas: "club-title" "grid-divider" "main-component-fields-container" "btn-club-components-container";
+        grid-gap: 1rem;
+        align-items: center;
+        justify-items: center;
+
+        .modal-content {
+            padding: unset;
+            margin-inline: unset;
+            min-width: 100%;
+
+            .modal-header {
+                padding: 0.6rem 1rem;
+                background-color: $brand;
+                min-width: 100%;
+                min-height: 6vh;
+
+                #modal-modal-title {
+                    background-color: transparent;
+                    font-weight: 600;
+                }
+            }
+
+            .modal-body {
+                padding: 0.6rem 1rem;
+
+                .modal-body-text {
+                    text-align: right;
+                    margin-block: unset;
+                    padding-block: 1rem 0.3rem;
+                }
+            }
+        }
+    }
+}

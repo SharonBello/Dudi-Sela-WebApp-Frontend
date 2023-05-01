@@ -280,8 +280,7 @@ export default function UsersTable() {
   };
 
   const handleClick = (event, index) => {
-    // TODO replace with the user from DemoClubUsers
-    const mUser = DemoClubUsers.filter(user => user.mail === visibleRows[index].mail)
+    const mUser = DemoClubUsers.filter(user => user.primaryPhone === visibleRows[index].primaryPhone)
     setSelectedUser(mUser);
   };
 
@@ -353,7 +352,7 @@ export default function UsersTable() {
   const renderModal = () => {
     if (showUserDetails) {
       return (
-        <PersonalDetails user={selectedUser} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
+        <PersonalDetails user={selectedUser[0]} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
       )
     }
   }

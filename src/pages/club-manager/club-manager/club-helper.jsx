@@ -93,11 +93,11 @@ export const DemoClubUsers = [
     additionalPhone: "97223123312", city: "Tel Aviv", fullAddress: "hashmonaim", clientComments: "", isInstructor: true, instructorDetails: "test2"
   },
   { fullName: "גיל מזור", permission: MemberTypes[1], validTill: true, firstName: "גיל", dateOfBirth: "16/12/1985",
-  lastName: "מזור", nickname: "test", id: "1234234234", primaryPhone: "97234234234", contactPhone: "97223423423", mailAddress: "asdfsd@gmail.com",
+  lastName: "מזור", nickname: "test", id: "1234234231", primaryPhone: "97234234231", contactPhone: "97223423423", mailAddress: "asdfsd@gmail.com",
   additionalPhone: "97223123312", city: "Tel Aviv", fullAddress: "hashmonaim", clientComments: "", isInstructor: true, instructorDetails: "test2"
 },
 { fullName: "שרון בלו", permission: MemberTypes[1], validTill: true, firstName: "שרון", dateOfBirth: "16/12/1985",
-    lastName: "בלו", nickname: "test", id: "1234234234", primaryPhone: "97234234234", contactPhone: "97223423423", mailAddress: "asdfsd@gmail.com",
+    lastName: "בלו", nickname: "test", id: "1234234232", primaryPhone: "97234234232", contactPhone: "97223423423", mailAddress: "asdfsd@gmail.com",
     additionalPhone: "97223123312", city: "Tel Aviv", fullAddress: "hashmonaim", clientComments: "", isInstructor: true, instructorDetails: "test2"
 }
 ]

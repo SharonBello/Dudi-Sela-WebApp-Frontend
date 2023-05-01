@@ -58,6 +58,7 @@ export const ClubManager = () => {
   const openClubComponent = (e, title) => {
     setSecondaryDrawerTitle(title)
     toggleScheduleVsClubInfo(false, true)
+    setShowSecondaryDrawer(false)
   }
 
   const openScheduleManager = () => {

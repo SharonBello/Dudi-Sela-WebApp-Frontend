@@ -101,3 +101,8 @@ export const DemoClubUsers = [
     additionalPhone: "97223123312", city: "Tel Aviv", fullAddress: "hashmonaim", clientComments: "", isInstructor: true, instructorDetails: "test2"
 }
 ]
+
+export const DemoClubCourses = [
+  { title: "אוניברסיטה", type: "tennis", instructorName: "רוני ליאור", description: "כדור מלא ילדים X"},
+  { title: "ילדים", type: "tennis", instructorName: "דורון", description: "כדור מלא ילדים"}
+]

@@ -45,7 +45,7 @@ export const ClubClasses = () => {
         </button>
         {renderModalCreate()}
         <CustomDivider />
-        <h2>סוגי כרטיסיות</h2>
+        <h2>סוגי החוגים</h2>
         {renderClubCourses()}
       </Container>
     </Box>

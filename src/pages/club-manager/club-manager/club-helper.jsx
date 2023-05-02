@@ -68,10 +68,10 @@ export const secondaryDrawerList = [
     title: 'ניהול מגרשים',
     icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/court-management2_fm4mkt.svg'
   },
-  {
-    title: 'נתוני מכירות',
-    icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg'
-  },
+  // {
+  //   title: 'נתוני מכירות',
+  //   icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg'
+  // },
   {
     title: 'כרטיסיות',
     icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg'
@@ -106,3 +106,5 @@ export const DemoClubCourses = [
   { title: "אוניברסיטה", type: "tennis", instructorName: "רוני ליאור", description: "כדור מלא ילדים X"},
   { title: "ילדים", type: "tennis", instructorName: "דורון", description: "כדור מלא ילדים"}
 ]
+
+export const DemoInstructors = ["תומר צירקין","אור","יואב בן צבי","יוני","דודי סלע"]

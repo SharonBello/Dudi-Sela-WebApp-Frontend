@@ -5,11 +5,14 @@ import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import { TextBox } from '../../../../shared-components/text-box';
+import { SelectMenu } from '../../../../shared-components/select-menu'
+import { DemoInstructors } from '../../club-helper'
 
 export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModalCreate }) => {
     const [description, setDescription] = useState()
     const [instructorName, setInstructorName] = useState()
     const [courseDescription, setCourseDescription] = useState()
+    const [instructor, setInstructor] = useState()
 
     const handleSave = (e) => {
         e.stopPropagation()
@@ -19,6 +22,12 @@ export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModa
     const handleClose = () => {
         setShowModalCreate(false)
     }
+
+    // const getInstructors = useCallback(async () => {
+    //     let instructors = await instructorService.getInstructors()
+    //     setInstructors(instructors)
+    //   }, [setInstructors])
+
     return (
         <Modal
             open={showModalCreate}
@@ -35,7 +44,7 @@ export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModa
                     </Box>
                     <Box className="modal-body">
                         <TextBox label="כותרת הקורס" value={description} setValue={setDescription} />
-                        <TextBox label="שם המדריך" value={instructorName} setValue={setInstructorName} />
+                        <SelectMenu inputLabel="שם המדריך" values={DemoInstructors} setValue={setInstructorName} />
                         <TextBox label="תיאור הקורס" value={courseDescription} setValue={setCourseDescription} />
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>

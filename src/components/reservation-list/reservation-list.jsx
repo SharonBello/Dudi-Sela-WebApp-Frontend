@@ -4,7 +4,6 @@ import { ReservationPreview } from '../reservation-preview/reservation-preview.j
 import dayjs from 'dayjs';
 
 export const ReservationList = ({ reservations }) => {
-    console.log("🚀 ~ file: reservation-list.jsx:7 ~ ReservationList ~ reservations:", reservations)
     const todaysDate = dayjs().format('YYYY-MM-DD')
     const [sorting, setSorting] = useState({ field: 'date', ascending: false })
     const [currentReservations, setCurrentReservations] = useState(reservations)

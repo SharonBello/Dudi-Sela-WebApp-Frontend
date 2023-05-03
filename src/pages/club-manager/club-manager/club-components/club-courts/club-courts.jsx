@@ -92,7 +92,7 @@ export const ClubCourts = () => {
   const handleSave = async (e) => {
     e.stopPropagation()
     e.preventDefault()
-    if (newConstraint.days.length>0 && newConstraint.price.trim() !=="" ) {
+    if (newConstraint.days.length>0) {
       let res = await courtService.addPriceConstraint(newConstraint)
       console.log(res.data.result)
     }

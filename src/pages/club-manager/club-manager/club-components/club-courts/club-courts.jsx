@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
@@ -9,9 +10,10 @@ import Typography from '@mui/material/Typography'
 import { TextBox } from '../../../../shared-components/text-box';
 import { SelectMenu } from '../../../../shared-components/select-menu'
 import { SaveButton } from '../../../../shared-components/save-button';
-import { WeekDays, DayHours, CourtNames, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from '../../club-helper'
+import { WeekDays, DayHours, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from '../../club-helper'
+import { courtService } from '../../../../../services/court.service'
 
-export const CourtsManager = () => {
+export const ClubCourts = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtTypeForm, setShowCourtTypeForm] = useState(false)
@@ -20,16 +22,34 @@ export const CourtsManager = () => {
   const [courtName, setCourtName] = useState();
   const [constraintsData, setConstraintsData] = useState(DemoConstraintsData)
   const [newConstraint, setNewConstraint] = useState(EmptyConstraint)
+  const [courtNames, setCourtNames] = useState([])
+
+  const navigate = useNavigate()
+  useEffect(() => {
+    getClubCourts().then(res => {
+      setCourtNames(res)
+    })
+  })
+  const getClubCourts = async () => {
+    try {
+      let res = await courtService.getClubCourts()
+      return res.data.courts
+    } catch (error) {
+      navigate('/')
+    }
+  }
   const renderCourts = () => {
-    return (
-      CourtNames.map((court) => {
-        return <Box className="club-court">
-          <div variant="contained" component="label">
-            {court}
-          </div>
-        </Box>
-      })
-    )
+    if (courtNames.length > 0) {
+      return (
+        courtNames.map((court) => {
+          return <Box className="club-court">
+            <div variant="contained" component="label">
+              {court}
+            </div>
+          </Box>
+        })
+      )
+    }
   }
   const renderCourtActions = () => {
     return (
@@ -41,8 +61,11 @@ export const CourtsManager = () => {
       })
     )
   }
-  const saveCourt = () => {
-    console.log("save court")
+  const saveCourt = async () => {
+    if (courtName.trim() !== "") {
+      let res = await courtService.addClubCourt(courtName)
+      console.log(res.data.result)
+    }
   }
   const addNewConstraint = (values, key, innerkey) => {
     console.log(values, key, innerkey)

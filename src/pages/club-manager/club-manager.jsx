@@ -14,7 +14,7 @@ import { AboutClub } from './club-manager/club-components/about-club/about-club.
 import { ClubSettings } from './club-manager/club-components/club-settings/club-settings.jsx'
 import { ClubHours } from './club-manager/club-components/club-hours/club-hours.jsx'
 import { PunchCards } from './club-manager/club-components/punch-cards/punch-cards.jsx'
-import { CourtsManager } from './club-manager/club-components/courts-manager/courts-manager.jsx'
+import { ClubCourts } from './club-manager/club-components/club-courts/club-courts.jsx'
 import { SalesDetails } from './club-manager/club-components/sales-details/sales-details.jsx'
 import { primaryDrawerList, secondaryDrawerList } from './club-manager/club-helper.jsx'
 
@@ -94,7 +94,7 @@ export const ClubManager = () => {
         case 'שעות פעילות':
           return <ClubHours />
         case 'ניהול מגרשים':
-          return <CourtsManager />
+          return <ClubCourts />
         case 'נתוני מכירות':
           return <SalesDetails />
         case 'כרטיסיות':

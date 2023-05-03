@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 export const TextBox = ({ label, disabled = false, isRequired = false, type = "text", placeholder = "", defaultValue = "", value = "", setValue }) => {

@@ -28,7 +28,7 @@ export const DemoWorkHours = (setWorkHours) => {
 export const DemoConstraintsData = [{ days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" }, memberType: MemberTypes[0], price: 80 },
 { days: ["שישי", "שבת"], hours: { startHour: "06:00", endHour: "21:00" }, memberType: MemberTypes[0], price: 80 },
 { days: ["שישי", "שבת"], hours: { startHour: "21:00", endHour: "23:00" }, memberType: MemberTypes[1], price: 60 }]
-export const EmptyConstraint = { days: [], hours: { startHour: "", endHour: "" }, memberType: "", price: "" }
+export const EmptyConstraint = { days: [], hours: { startHour: '06:00', endHour: '23:00' }, memberType: MemberTypes[0], price: 0 }
 
 export const DemoPunchCards = [{ cardName: "בוקר אטרקטיבי", isMember: false, creditAmount: 11, creditInMinutes: 60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 550, showForSale: true, validFor: 'פתוח לכולם', additionalDetails: 'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "06:00", endHour: "24:00" } } },
 { cardName: "סופר דיל 10 + 1", isMember: false, creditAmount: 11, creditInMinutes: 60, dueNumDays: 365, blockOnDate: 'ללא הגבלה', price: 700, showForSale: true, validFor: 'פתוח לכולם', additionalDetails: 'כרטיסיית יום סופר משתלמת לשימוש בכל ימות השבוע פרט לשישישבת.בתוקף לשנה מיום הרכישה.מאמנים לא יורשו לעלות למגרש עם שימוש בכרטיסיה זו .', validDateTime: { days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי"], hours: { startHour: "07:00", endHour: "24:00" } } }]

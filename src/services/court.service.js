@@ -3,7 +3,9 @@ import { httpService } from './http.service.js'
 export const courtService = {
     getCourts,
     getClubCourts,
-    addClubCourt
+    addClubCourt,
+    addPriceConstraint,
+    getPriceConstraints
 }
 
 async function getCourts() {
@@ -36,3 +38,24 @@ async function addClubCourt(data) {
         throw err
     }
 }
+
+async function addPriceConstraint(data) {
+    try {
+        let res = await httpService.post('courts/clubcourts/addPriceConstraint', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function getPriceConstraints() {
+    try {
+        let res = await httpService.get('courts/priceconstraints')
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 import { TextBox } from '../../../../shared-components/text-box';
 import { SelectMenu } from '../../../../shared-components/select-menu'
 import { SaveButton } from '../../../../shared-components/save-button';
-import { WeekDays, DayHours, TypeGames, MemberTypes, DemoConstraintsData, EmptyConstraint } from '../../club-helper'
+import { WeekDays, DayHours, TypeGames, MemberTypes, EmptyConstraint } from '../../club-helper'
 import { courtService } from '../../../../../services/court.service'
 
 export const ClubCourts = () => {
@@ -21,14 +21,17 @@ export const ClubCourts = () => {
   const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtTypeForm(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(true); } }];
   const [courtName, setCourtName] = useState();
   const [courtType, setCourtType] = useState("טניס");
-  const [constraintsData, setConstraintsData] = useState(DemoConstraintsData)
-  const [newConstraint, setNewConstraint] = useState(EmptyConstraint)
+  const [priceConstraints, setPriceConstraints] = useState([])
+  const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(EmptyConstraint)))
   const [courtData, setCourtData] = useState([])
 
   const navigate = useNavigate()
   useEffect(() => {
     getClubCourts().then(res => {
       setCourtData(res)
+    })
+    getPriceConstraints().then(res => {
+      setPriceConstraints(res)
     })
   })
   const getClubCourts = async () => {
@@ -39,11 +42,19 @@ export const ClubCourts = () => {
       navigate('/')
     }
   }
+  const getPriceConstraints = async () => {
+    try {
+      let res = await courtService.getPriceConstraints()
+      return res.data.constraints
+    } catch (error) {
+      navigate('/')
+    }
+  }
   const renderCourts = () => {
     if (courtData.length > 0) {
       return (
         courtData.map((court) => {
-          return <Box className="club-court">
+          return <Box key={court.name} className="club-court">
             <div variant="contained" component="label">
               {court.name} - {court.type}
             </div>
@@ -69,19 +80,22 @@ export const ClubCourts = () => {
     }
   }
   const addNewConstraint = (values, key, innerkey) => {
-    console.log(values, key, innerkey)
     const mData = JSON.parse(JSON.stringify(newConstraint))
     innerkey ? mData[key][innerkey] = values : mData[key] = values
     setNewConstraint(mData)
   }
   const handleSetConstraints = (values, index, key, innerkey) => {
-    const mData = JSON.parse(JSON.stringify(constraintsData))
+    const mData = JSON.parse(JSON.stringify(priceConstraints))
     innerkey ? mData[index][key][innerkey] = values : mData[index][key] = values
-    setConstraintsData(mData)
+    setPriceConstraints(mData)
   }
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.stopPropagation()
     e.preventDefault()
+    if (newConstraint.days.length>0 && newConstraint.price.trim() !=="" ) {
+      let res = await courtService.addPriceConstraint(newConstraint)
+      console.log(res.data.result)
+    }
   }
   const renderAddCourtForm = () => {
     return (
@@ -96,12 +110,12 @@ export const ClubCourts = () => {
   const renderNewConstraint = () => {
     return (
       <>
-        <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, "days")} />
-        <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.fromHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "fromHour")} />
-        <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.tillHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "tillHour")} />
-        <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.hours.tillHour} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
-        <TextBox label="מחיר" defaultValue={newConstraint.price} placeholder="מחיר" setValue={(value) => addNewConstraint(value, "price")} />
-        <SaveButton onClick={handleSave} />
+        <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => addNewConstraint(values, "days")} />
+        <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.startHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "fromHour")} />
+        <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.endHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "tillHour")} />
+        <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.memberType} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
+        <TextBox label="מחיר" type="number" value={newConstraint.price} defaultValue={newConstraint.price} setValue={(value) => addNewConstraint(value, "price")} />
+        <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
       </>
     )
   }
@@ -112,14 +126,14 @@ export const ClubCourts = () => {
         {renderNewConstraint()}
         <CustomDivider />
         <h3>אילוצי מחירים</h3>
-        {constraintsData.map((datum, index) =>
+        {priceConstraints.map((datum, index) =>
           <Box>
-            <p>{constraintsData[0].days.join(", ")}</p>
-            <SelectMenu multiple={true} defaultValue={constraintsData[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, index, "days")} />
-            <SelectMenu defaultValue={constraintsData[index].hours.fromHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "fromHour")} />
-            <SelectMenu defaultValue={constraintsData[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "tillHour")} />
-            <SelectMenu defaultValue={constraintsData[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleSetConstraints(values, index, "memberType")} />
-            <TextBox label="מחיר" value={constraintsData[index].price} setValue={(value) => handleSetConstraints(value, index, "price")} />
+            <p>{priceConstraints[0].days.join(", ")}</p>
+            <SelectMenu multiple={true} defaultValue={priceConstraints[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, index, "days")} />
+            <SelectMenu defaultValue={priceConstraints[index].hours.fromHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "fromHour")} />
+            <SelectMenu defaultValue={priceConstraints[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "tillHour")} />
+            <SelectMenu defaultValue={priceConstraints[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleSetConstraints(values, index, "memberType")} />
+            <TextBox label="מחיר" type="number" value={priceConstraints[index].price} setValue={(value) => handleSetConstraints(value, index, "price")} />
             <SaveButton onClick={handleSave} />
             <FontAwesomeIcon icon={faTrashAlt} />
           </Box>

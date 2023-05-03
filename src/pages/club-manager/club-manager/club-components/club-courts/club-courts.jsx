@@ -20,14 +20,15 @@ export const ClubCourts = () => {
   // const [showAllCourts, setShowAllCourts] = useState(false)
   const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtTypeForm(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(true); } }];
   const [courtName, setCourtName] = useState();
+  const [courtType, setCourtType] = useState("טניס");
   const [constraintsData, setConstraintsData] = useState(DemoConstraintsData)
   const [newConstraint, setNewConstraint] = useState(EmptyConstraint)
-  const [courtNames, setCourtNames] = useState([])
+  const [courtData, setCourtData] = useState([])
 
   const navigate = useNavigate()
   useEffect(() => {
     getClubCourts().then(res => {
-      setCourtNames(res)
+      setCourtData(res)
     })
   })
   const getClubCourts = async () => {
@@ -39,12 +40,12 @@ export const ClubCourts = () => {
     }
   }
   const renderCourts = () => {
-    if (courtNames.length > 0) {
+    if (courtData.length > 0) {
       return (
-        courtNames.map((court) => {
+        courtData.map((court) => {
           return <Box className="club-court">
             <div variant="contained" component="label">
-              {court}
+              {court.name} - {court.type}
             </div>
           </Box>
         })
@@ -63,7 +64,7 @@ export const ClubCourts = () => {
   }
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
-      let res = await courtService.addClubCourt(courtName)
+      let res = await courtService.addClubCourt({"name": courtName, "type": courtType})
       console.log(res.data.result)
     }
   }
@@ -87,7 +88,7 @@ export const ClubCourts = () => {
       <div>
         הוסף מגרש
         <TextBox label="שם" value={courtName} setValue={setCourtName} />
-        <SelectMenu inputLabel="סוג מגרש" values={courtTypes} setValue={setCourtTypes} />
+        <SelectMenu inputLabel="סוג מגרש" defaultValue={courtType} values={courtTypes} setValue={setCourtType} />
         <Button variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
       </div>
     )

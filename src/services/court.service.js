@@ -29,7 +29,7 @@ async function getClubCourts() {
 
 async function addClubCourt(data) {
     try {
-        let res = await httpService.post('courts/clubcourts/addClubCourt', {"courtName": data})
+        let res = await httpService.post('courts/clubcourts/addClubCourt', data)
         return res
     }
     catch (err) {

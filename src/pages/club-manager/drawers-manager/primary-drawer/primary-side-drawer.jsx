@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -21,6 +21,11 @@ export default function PrimarySideDrawer({ primaryDrawerList, mainFuncs }) {
 
     setState({ ...state, [anchor]: open });
   };
+
+  // TODO: uncomment following
+  useEffect(()=> {
+    mainFuncs[1]()
+  }, []);
 
   const list = (anchor) => (
     <Box

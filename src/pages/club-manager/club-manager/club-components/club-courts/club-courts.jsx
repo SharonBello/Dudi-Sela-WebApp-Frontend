@@ -16,12 +16,13 @@ import { courtService } from '../../../../../services/court.service'
 export const ClubCourts = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
-  const [showCourtTypeForm, setShowCourtTypeForm] = useState(false)
+  const [showCourtConstraints, setShowCourtConstraints] = useState(false)
   // const [showAllCourts, setShowAllCourts] = useState(false)
-  const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtTypeForm(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtTypeForm(true); } }];
+  const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtConstraints(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(true); } }];
   const [courtName, setCourtName] = useState();
   const [courtType, setCourtType] = useState("טניס");
   const [priceConstraints, setPriceConstraints] = useState([])
+  const [editPriceConstraints, setEditPriceConstraints] = useState([])
   const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(EmptyConstraint)))
   const [courtData, setCourtData] = useState([])
 
@@ -32,20 +33,26 @@ export const ClubCourts = () => {
     })
     getPriceConstraints().then(res => {
       setPriceConstraints(res)
+      if (editPriceConstraints.length === 0) {
+        setEditPriceConstraints(res)
+      }
     })
   })
+
   const getClubCourts = async () => {
     try {
+      //TODO: set isLoading to true
       let res = await courtService.getClubCourts()
-      return res.data.courts
+      return res.data.club_courts
     } catch (error) {
       navigate('/')
     }
   }
   const getPriceConstraints = async () => {
     try {
+      //TODO: set isLoading to true
       let res = await courtService.getPriceConstraints()
-      return res.data.constraints
+      return res.data.price_constraints
     } catch (error) {
       navigate('/')
     }
@@ -75,6 +82,7 @@ export const ClubCourts = () => {
   }
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
+      //TODO: set isLoading to true
       let res = await courtService.addClubCourt({"name": courtName, "type": courtType})
       console.log(res.data.result)
     }
@@ -84,18 +92,42 @@ export const ClubCourts = () => {
     innerkey ? mData[key][innerkey] = values : mData[key] = values
     setNewConstraint(mData)
   }
-  const handleSetConstraints = (values, index, key, innerkey) => {
-    const mData = JSON.parse(JSON.stringify(priceConstraints))
-    innerkey ? mData[index][key][innerkey] = values : mData[index][key] = values
-    setPriceConstraints(mData)
+  const handleEditConstraint = (value, index, key, innerkey) => {
+    const mData = JSON.parse(JSON.stringify(editPriceConstraints))
+    innerkey ? mData[index][key][innerkey] = value : mData[index][key] = value
+    setEditPriceConstraints(JSON.parse(JSON.stringify(mData)))
   }
-  const handleSave = async (e) => {
+  const saveConstraint = async (e) => {
     e.stopPropagation()
-    e.preventDefault()
     if (newConstraint.days.length>0) {
+      //TODO: set isLoading to true
       let res = await courtService.addPriceConstraint(newConstraint)
-      console.log(res.data.result)
+      if (res.data.result === 0) {
+        priceConstraintsFromDb()
+      }
     }
+  }
+  const editConstraint = async (e, constraint) => {
+    e.stopPropagation()
+    //TODO: set isLoading to true
+    let res = await courtService.editPriceConstraint(constraint)
+    if (res.data.result === 0) {
+      priceConstraintsFromDb()
+    }
+  }
+  const deleteConstraint = async (e, index) => {
+    //TODO: set isLoading to true
+    let res = await courtService.deletePriceConstraint(priceConstraints[index])
+    if (res.data.result === 0) {
+      priceConstraintsFromDb()
+    }
+  }
+  const priceConstraintsFromDb = () => {
+    getPriceConstraints().then(res => {
+      setPriceConstraints(res)
+      setEditPriceConstraints(res)
+      //TODO: set isLoading to false
+    })
   }
   const renderAddCourtForm = () => {
     return (
@@ -111,35 +143,41 @@ export const ClubCourts = () => {
     return (
       <>
         <SelectMenu multiple={true} defaultValue={newConstraint.days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => addNewConstraint(values, "days")} />
-        <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.startHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "fromHour")} />
-        <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.endHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "tillHour")} />
+        <SelectMenu inputLabel="משעה" defaultValue={newConstraint.hours.startHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "startHour")} />
+        <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.endHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "endHour")} />
         <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.memberType} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
         <TextBox label="מחיר" type="number" value={newConstraint.price} defaultValue={newConstraint.price} setValue={(value) => addNewConstraint(value, "price")} />
-        <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
+        <Button variant="contained" component="label" onClick={(e) => saveConstraint(e)}>שמור</Button>
       </>
     )
   }
-  const renderCourtTypeForm = () => {
+  const renderConstraintsPanel = () => {
     return (
       <>
         <h3>אילוץ חדש</h3>
         {renderNewConstraint()}
         <CustomDivider />
         <h3>אילוצי מחירים</h3>
-        {priceConstraints.map((datum, index) =>
+        {renderConstraints()}
+      </>
+    )
+  }
+  const renderConstraints = () => {
+    return (
+      <>
+      {editPriceConstraints && editPriceConstraints.length>0 && editPriceConstraints.map((datum, index) =>
           <Box>
-            <p>{priceConstraints[0].days.join(", ")}</p>
-            <SelectMenu multiple={true} defaultValue={priceConstraints[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleSetConstraints(values, index, "days")} />
-            <SelectMenu defaultValue={priceConstraints[index].hours.fromHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "fromHour")} />
-            <SelectMenu defaultValue={priceConstraints[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleSetConstraints(values, index, "hours", "tillHour")} />
-            <SelectMenu defaultValue={priceConstraints[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleSetConstraints(values, index, "memberType")} />
-            <TextBox label="מחיר" type="number" value={priceConstraints[index].price} setValue={(value) => handleSetConstraints(value, index, "price")} />
-            <SaveButton onClick={handleSave} />
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <p>{editPriceConstraints[index].days.join(", ")}</p>
+            <SelectMenu multiple={true} defaultValue={editPriceConstraints[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleEditConstraint(values, index, "days")} />
+            <SelectMenu defaultValue={editPriceConstraints[index].hours.startHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleEditConstraint(values, index, "hours", "startHour")} />
+            <SelectMenu defaultValue={editPriceConstraints[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleEditConstraint(values, index, "hours", "endHour")} />
+            <SelectMenu defaultValue={editPriceConstraints[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleEditConstraint(values, index, "memberType")} />
+            <TextBox label="מחיר" type="number" value={editPriceConstraints[index].price} setValue={(value) => handleEditConstraint(value, index, "price")} />
+            <Button variant="contained" component="label" onClick={(e) => editConstraint(e, editPriceConstraints[index])} className="component-save-btn">ערוך</Button>
+            <FontAwesomeIcon onClick={(e) => deleteConstraint(e, index)} icon={faTrashAlt} />
           </Box>
         )}
       </>
-
     )
   }
   return (
@@ -152,7 +190,7 @@ export const ClubCourts = () => {
         {renderCourts()}
         {renderCourtActions()}
         {showAddCourtForm && renderAddCourtForm()}
-        {showCourtTypeForm && renderCourtTypeForm()}
+        {showCourtConstraints && renderConstraintsPanel()}
       </Container>
     </Box>
   )

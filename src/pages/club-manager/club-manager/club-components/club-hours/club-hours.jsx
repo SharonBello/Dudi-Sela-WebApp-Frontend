@@ -21,21 +21,6 @@ export const ClubHours = () => {
     DemoWorkHours(setWorkHours)
   }, [])
 
-  // const renderWorkHours = () => {
-  //   return (
-  //     workHours.map((wrkHrs) => {
-
-  //       return <Box className="club-hr">
-  //         <p>{wrkHrs.days.join(", ")}</p>
-  //         <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-  //         <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
-  //         <SaveButton onClick={handleSave} />
-  //         <FontAwesomeIcon icon={faTrashAlt} />
-  //       </Box>
-  //     })
-  //   )
-  // }
-
   return (
     <Box className="club-hours-box container">
       <div className="grid-club-hours-component flex-column">

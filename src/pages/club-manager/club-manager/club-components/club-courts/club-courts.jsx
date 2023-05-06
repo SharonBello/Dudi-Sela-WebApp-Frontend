@@ -12,6 +12,7 @@ import { SelectMenu } from '../../../../shared-components/select-menu'
 import { SaveButton } from '../../../../shared-components/save-button';
 import { WeekDays, DayHours, TypeGames, MemberTypes, EmptyConstraint } from '../../club-helper'
 import { courtService } from '../../../../../services/court.service'
+import { Loader } from '../../../../../components/loader.jsx';
 
 export const ClubCourts = () => {
   const [courtTypes, setCourtTypes] = useState(TypeGames);
@@ -25,24 +26,28 @@ export const ClubCourts = () => {
   const [editPriceConstraints, setEditPriceConstraints] = useState([])
   const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(EmptyConstraint)))
   const [courtData, setCourtData] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
-  useEffect(() => {
-    getClubCourts().then(res => {
-      setCourtData(res)
-    })
-    getPriceConstraints().then(res => {
-      setPriceConstraints(res)
-      if (editPriceConstraints.length === 0) {
-        setEditPriceConstraints(res)
-      }
-    })
-  })
 
+  useEffect(()=> {
+    if (courtData.length === 0) {
+      getClubCourts().then(res => {
+        setCourtData(res)
+      })
+    }
+    if (editPriceConstraints.length === 0) {
+      getPriceConstraints().then(res => {
+        setPriceConstraints(res)
+        setEditPriceConstraints(res)
+      })
+    }
+  }, [])
   const getClubCourts = async () => {
     try {
-      //TODO: set isLoading to true
+      setIsLoading(true)
       let res = await courtService.getClubCourts()
+      setIsLoading(false)
       return res.data.club_courts
     } catch (error) {
       navigate('/')
@@ -50,8 +55,9 @@ export const ClubCourts = () => {
   }
   const getPriceConstraints = async () => {
     try {
-      //TODO: set isLoading to true
+      setIsLoading(true)
       let res = await courtService.getPriceConstraints()
+      setIsLoading(false)
       return res.data.price_constraints
     } catch (error) {
       navigate('/')
@@ -82,26 +88,38 @@ export const ClubCourts = () => {
   }
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
-      //TODO: set isLoading to true
+      setIsLoading(true)
       let res = await courtService.addClubCourt({"name": courtName, "type": courtType})
+      setIsLoading(false)
       console.log(res.data.result)
     }
   }
-  const addNewConstraint = (values, key, innerkey) => {
-    const mData = JSON.parse(JSON.stringify(newConstraint))
-    innerkey ? mData[key][innerkey] = values : mData[key] = values
-    setNewConstraint(mData)
+  const validatePriceConstraint = (value, key) => {
+    return !(key === 'price' && value<0)
+  }
+  const addNewConstraint = (value, key, innerkey) => {
+    if (validatePriceConstraint(value, key)) {
+      const mData = JSON.parse(JSON.stringify(newConstraint))
+      innerkey ? mData[key][innerkey] = value : mData[key] = value
+      setNewConstraint(mData)
+    }
   }
   const handleEditConstraint = (value, index, key, innerkey) => {
-    const mData = JSON.parse(JSON.stringify(editPriceConstraints))
-    innerkey ? mData[index][key][innerkey] = value : mData[index][key] = value
-    setEditPriceConstraints(JSON.parse(JSON.stringify(mData)))
+    if (validatePriceConstraint(value, key)) {
+      const mData = JSON.parse(JSON.stringify(editPriceConstraints))
+      innerkey ? mData[index][key][innerkey] = value : mData[index][key] = value
+      setEditPriceConstraints(JSON.parse(JSON.stringify(mData)))
+    }
   }
+  // const validateTimeConstraint = (constraint) => {
+  //   return (constraint.hours.endHour.split(":")[0]>constraint.hours.startHour.split(":")[0])
+  // }
   const saveConstraint = async (e) => {
     e.stopPropagation()
     if (newConstraint.days.length>0) {
-      //TODO: set isLoading to true
+      setIsLoading(true)
       let res = await courtService.addPriceConstraint(newConstraint)
+      setIsLoading(false)
       if (res.data.result === 0) {
         priceConstraintsFromDb()
       }
@@ -109,15 +127,17 @@ export const ClubCourts = () => {
   }
   const editConstraint = async (e, constraint) => {
     e.stopPropagation()
-    //TODO: set isLoading to true
+    setIsLoading(true)
     let res = await courtService.editPriceConstraint(constraint)
+    setIsLoading(false)
     if (res.data.result === 0) {
       priceConstraintsFromDb()
     }
   }
   const deleteConstraint = async (e, index) => {
-    //TODO: set isLoading to true
+    setIsLoading(true)
     let res = await courtService.deletePriceConstraint(priceConstraints[index])
+    setIsLoading(false)
     if (res.data.result === 0) {
       priceConstraintsFromDb()
     }
@@ -126,8 +146,14 @@ export const ClubCourts = () => {
     getPriceConstraints().then(res => {
       setPriceConstraints(res)
       setEditPriceConstraints(res)
-      //TODO: set isLoading to false
     })
+  }
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
   }
   const renderAddCourtForm = () => {
     return (
@@ -135,7 +161,7 @@ export const ClubCourts = () => {
         הוסף מגרש
         <TextBox label="שם" value={courtName} setValue={setCourtName} />
         <SelectMenu inputLabel="סוג מגרש" defaultValue={courtType} values={courtTypes} setValue={setCourtType} />
-        <Button variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
+        <Button disabled={isLoading} variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
       </div>
     )
   }
@@ -147,7 +173,7 @@ export const ClubCourts = () => {
         <SelectMenu inputLabel="עד שעה" defaultValue={newConstraint.hours.endHour} values={DayHours()} setValue={(values) => addNewConstraint(values, "hours", "endHour")} />
         <SelectMenu inputLabel="סוג חבר" defaultValue={newConstraint.memberType} values={MemberTypes} setValue={(values) => addNewConstraint(values, "memberType")} />
         <TextBox label="מחיר" type="number" value={newConstraint.price} defaultValue={newConstraint.price} setValue={(value) => addNewConstraint(value, "price")} />
-        <Button variant="contained" component="label" onClick={(e) => saveConstraint(e)}>שמור</Button>
+        <Button disabled={isLoading} variant="contained" component="label" onClick={(e) => saveConstraint(e)}>שמור</Button>
       </>
     )
   }
@@ -173,7 +199,7 @@ export const ClubCourts = () => {
             <SelectMenu defaultValue={editPriceConstraints[index].hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleEditConstraint(values, index, "hours", "endHour")} />
             <SelectMenu defaultValue={editPriceConstraints[index].memberType} inputLabel="סוג חבר" values={MemberTypes} setValue={(values) => handleEditConstraint(values, index, "memberType")} />
             <TextBox label="מחיר" type="number" value={editPriceConstraints[index].price} setValue={(value) => handleEditConstraint(value, index, "price")} />
-            <Button variant="contained" component="label" onClick={(e) => editConstraint(e, editPriceConstraints[index])} className="component-save-btn">ערוך</Button>
+            <Button disabled={isLoading} variant="contained" component="label" onClick={(e) => editConstraint(e, editPriceConstraints[index])} className="component-save-btn">שמור</Button>
             <FontAwesomeIcon onClick={(e) => deleteConstraint(e, index)} icon={faTrashAlt} />
           </Box>
         )}
@@ -191,6 +217,7 @@ export const ClubCourts = () => {
         {renderCourtActions()}
         {showAddCourtForm && renderAddCourtForm()}
         {showCourtConstraints && renderConstraintsPanel()}
+        {renderIsLoading()}
       </Container>
     </Box>
   )

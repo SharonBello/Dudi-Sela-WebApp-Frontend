@@ -11,6 +11,7 @@ import { AddClubHours } from './add-club-hours'
 import { ClubHoursList } from './club-hours-list'
 import { courtService } from '../../../../../services/court.service'
 import { useNavigate } from 'react-router-dom'
+import { Loader } from '../../../../../components/loader.jsx';
 
 export const ClubHours = () => {
   const [workDays, setWorkDays] = useState(WeekDays);
@@ -18,6 +19,7 @@ export const ClubHours = () => {
   const [fromHour, setFromHour] = useState(DayHours());
   const [tillHour, setTillHour] = useState(DayHours());
   const [clubHoursList, setClubHoursList] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(()=> {
@@ -31,19 +33,19 @@ export const ClubHours = () => {
 
   const handleSaveClubHours = async (e, clubHours) => {
     if (clubHours.days.length > 0) {
-      // setIsLoading(true)
+      setIsLoading(true)
       let res = await courtService.addClubHours(clubHours)
       getClubHours().then(res => {
         setClubHoursList(res)
-        // setIsLoading(false)
+        setIsLoading(false)
       })
     }
   }
   const getClubHours = async () => {
     try {
-      // setIsLoading(true)
+      setIsLoading(true)
       let res = await courtService.getClubHours()
-      // setIsLoading(false)
+      setIsLoading(false)
       return res.data.club_hours
     } catch (error) {
       navigate('/')
@@ -57,12 +59,12 @@ export const ClubHours = () => {
     // }
   // }
   const handleDeleteClubHour = async(e, index) => {
-    // setIsLoading(true)
+    setIsLoading(true)
     let res = await courtService.deleteClubHours(clubHoursList[index])
     // setIsLoading(false)
     getClubHours().then(res => {
       setClubHoursList(res)
-      // setIsLoading(false)
+      setIsLoading(false)
     })
   }
   const handleEditClubHours = async (e, clubHours) => {
@@ -74,6 +76,13 @@ export const ClubHours = () => {
   const renderClubHours = () => {
     if (clubHoursList.length > 0) {
       return (<ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>)
+    }
+  }
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
     }
   }
   return (
@@ -91,6 +100,7 @@ export const ClubHours = () => {
         <div>שעות פעילות</div>
         <CustomDivider className="grid-divider" />
         {renderClubHours()}
+        {renderIsLoading()}
       </div>
     </Box>
   )

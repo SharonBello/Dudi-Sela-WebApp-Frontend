@@ -52,7 +52,7 @@ export const ClubClasses = () => {
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreateClubCourse showModalCreate={showModalCreate} closeClubCourse={closeClubCourse} setShowModalCreate={setShowModalCreate} handleSave={handleSave}/>
+        <CreateClubCourse showModalCreate={showModalCreate} closeClubCourse={closeClubCourse} setShowModalCreate={setShowModalCreate} handleSave={handleSave} />
       )
     }
   }

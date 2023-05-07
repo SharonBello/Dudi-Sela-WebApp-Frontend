@@ -7,7 +7,7 @@ export const instructorService = {
 async function getInstructors() {
     try {
         let res = await httpService.get('instructors/instructors')
-        return res.data.names;
+        return res.data.tennis_instructors;
     }
     catch (err) {
         throw err

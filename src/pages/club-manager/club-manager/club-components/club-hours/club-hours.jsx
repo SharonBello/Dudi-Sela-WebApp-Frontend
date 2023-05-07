@@ -7,6 +7,8 @@ import CustomDivider from '../../../../shared-components/custom-divider';
 import { SaveButton } from '../../../../shared-components/save-button';
 import { SelectMenu } from '../../../../shared-components/select-menu'
 import { WeekDays, DayHours, DemoWorkHours } from '../../club-helper'
+import { AddClubHours } from './add-club-hours'
+import { ClubHoursList } from './club-hours-list'
 
 export const ClubHours = () => {
   const [workDays, setWorkDays] = useState(WeekDays);
@@ -21,6 +23,12 @@ export const ClubHours = () => {
     DemoWorkHours(setWorkHours)
   }, [])
 
+  const renderAddClubHours = () => {
+    return (<AddClubHours />)
+  }
+  const renderClubHours = () => {
+    return (<ClubHoursList />)
+  }
   return (
     <Box className="club-hours-box container">
       <div className="grid-club-hours-component flex-column">
@@ -32,31 +40,10 @@ export const ClubHours = () => {
           </p>
         </Box>
         <CustomDivider className="grid-divider" />
-        <Box className="club-hours-fields-container flex justify-between">
-          <SelectMenu inputLabel="ימים" values={workDays} setValue={setWorkDays} />
-          <SelectMenu inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-          <SelectMenu inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
-          <SaveButton onClick={handleSave} />
-        </Box>
+        {renderAddClubHours()}
         <div>שעות פעילות</div>
         <CustomDivider className="grid-divider" />
-        <div className="club-hr flex-column">
-          {workHours.map((wrkHrs) => (
-            <div className="form-fields flex-column">
-              <p>{wrkHrs.days.join(", ")}</p>
-              <div className="select-fields flex justify-between">
-                <div>
-                  <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-                  <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
-                </div>
-                <div className="club-hours-actions flex align-center">
-                  <SaveButton onClick={handleSave} />
-                  <FontAwesomeIcon icon={faTrashAlt} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        {renderClubHours()}
       </div>
     </Box>
   )

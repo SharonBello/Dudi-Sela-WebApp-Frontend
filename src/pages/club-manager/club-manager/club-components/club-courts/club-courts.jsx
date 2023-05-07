@@ -26,7 +26,6 @@ export const ClubCourts = () => {
   const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(EmptyConstraint)))
   const [courtData, setCourtData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-
   const navigate = useNavigate()
 
   useEffect(()=> {

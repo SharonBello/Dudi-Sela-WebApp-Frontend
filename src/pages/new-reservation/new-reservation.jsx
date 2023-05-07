@@ -26,7 +26,8 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
-  const COURTS_NUMBERS = [1, 2, 3, 4, 5, 6]
+  // TODO: GET COURT NUMBERS FROM BACKEND
+  const COURTS_NUMBERS = [1, 2]
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
@@ -97,6 +98,7 @@ export const NewReservation = () => {
     //    splice the start time from the courts data
     let _courtsData = JSON.parse(JSON.stringify(res))
     // Initialize court numbers
+    // TODO: GET COURT NUMBERS FROM BACKEND
     _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
     // Get reserved courts by date
     const _date = dayjs(date).format('YYYY-MM-DD')

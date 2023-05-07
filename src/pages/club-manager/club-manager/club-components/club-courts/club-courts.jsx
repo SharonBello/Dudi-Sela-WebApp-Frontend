@@ -15,7 +15,6 @@ import { courtService } from '../../../../../services/court.service'
 import { Loader } from '../../../../../components/loader.jsx';
 
 export const ClubCourts = () => {
-  const [courtTypes, setCourtTypes] = useState(TypeGames);
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtConstraints, setShowCourtConstraints] = useState(false)
   // const [showAllCourts, setShowAllCourts] = useState(false)
@@ -90,6 +89,9 @@ export const ClubCourts = () => {
     if (courtName.trim() !== "") {
       setIsLoading(true)
       let res = await courtService.addClubCourt({"name": courtName, "type": courtType})
+      getClubCourts().then(res => {
+        setCourtData(res)
+      })
       setIsLoading(false)
       console.log(res.data.result)
     }
@@ -160,7 +162,7 @@ export const ClubCourts = () => {
       <div>
         הוסף מגרש
         <TextBox label="שם" value={courtName} setValue={setCourtName} />
-        <SelectMenu inputLabel="סוג מגרש" defaultValue={courtType} values={courtTypes} setValue={setCourtType} />
+        <SelectMenu inputLabel="סוג מגרש" defaultValue={courtType} values={TypeGames} setValue={setCourtType} />
         <Button disabled={isLoading} variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
       </div>
     )

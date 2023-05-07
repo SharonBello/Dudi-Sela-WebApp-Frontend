@@ -8,7 +8,9 @@ export const courtService = {
     editPriceConstraint,
     getPriceConstraints,
     getPunchCards,
+    getClubClasses,
     addPunchCard,
+    addClubClass,
     getClubHours,
     addClubHours,
     deleteClubHours,
@@ -69,9 +71,29 @@ async function getPunchCards() {
     }
 }
 
+async function getClubClasses() {
+    try {
+        let res = await httpService.get('courts/clubclasses')
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
 async function addPunchCard(data) {
     try {
         let res = await httpService.post('courts/punchcards/addPunchCard', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function addClubClass(data) {
+    try {
+        let res = await httpService.post('courts/clubclasses/addClubClass', data)
         return res
     }
     catch (err) {

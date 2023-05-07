@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 import { TextBox } from '../../../../shared-components/text-box';
 import { SelectMenu } from '../../../../shared-components/select-menu'
 import { SaveButton } from '../../../../shared-components/save-button';
-import { WeekDays, DayHours, TypeGames, MemberTypes, EmptyConstraint } from '../../club-helper'
+import { WeekDays, DayHours, TypeGames, MemberTypes, HourConstraint } from '../../club-helper'
 import { courtService } from '../../../../../services/court.service'
 import { Loader } from '../../../../../components/loader.jsx';
 
@@ -23,7 +23,7 @@ export const ClubCourts = () => {
   const [courtType, setCourtType] = useState("טניס");
   const [priceConstraints, setPriceConstraints] = useState([])
   const [editPriceConstraints, setEditPriceConstraints] = useState([])
-  const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(EmptyConstraint)))
+  const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(HourConstraint)))
   const [courtData, setCourtData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()

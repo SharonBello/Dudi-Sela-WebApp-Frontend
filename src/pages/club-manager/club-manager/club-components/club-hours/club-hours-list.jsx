@@ -5,31 +5,21 @@ import { WeekDays, DayHours, DemoWorkHours } from '../../club-helper'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export const ClubHoursList = () => {
-  const [workDays, setWorkDays] = useState(WeekDays);
-  const [workHours, setWorkHours] = useState([]);
-  const [fromHour, setFromHour] = useState(DayHours());
-  const [tillHour, setTillHour] = useState(DayHours());
-  const handleSave = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-  }
-  useEffect(() => {
-    DemoWorkHours(setWorkHours)
-  }, [])
+export const ClubHoursList = ({clubHoursList, handleSaveClubHour, handleDeleteClubHour, handleEditClubHours, }) => {
   return (
     <div className="club-hr flex-column">
-          {workHours.map((wrkHrs) => (
+          {clubHoursList.map((clubHours, index) => (
             <div className="form-fields flex-column">
-              <p>{wrkHrs.days.join(", ")}</p>
+              <p>{clubHours.days.join(", ")}</p>
               <div className="select-fields flex justify-between">
                 <div>
-                  <SelectMenu defaultValue={wrkHrs.hours.startHour} inputLabel="משעה" values={fromHour} setValue={setFromHour} />
-                  <SelectMenu defaultValue={wrkHrs.hours.endHour} inputLabel="עד שעה" values={tillHour} setValue={setTillHour} />
+                  <SelectMenu multiple={true} inputLabel="ימים" defaultValue={clubHours.days} values={clubHours.days} setValue={(values) => handleEditClubHours(values, index, "days")} />
+                  <SelectMenu defaultValue={clubHours.hours.startHour} inputLabel="משעה" values={DayHours()} setValue={(values) => handleEditClubHours(values, index, "hours", "endHour")} />
+                  <SelectMenu defaultValue={clubHours.hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleEditClubHours(values, index, "hours", "startHour")} />
                 </div>
                 <div className="club-hours-actions flex align-center">
-                  <SaveButton onClick={handleSave} />
-                  <FontAwesomeIcon icon={faTrashAlt} />
+                  <SaveButton disabled={true} onClick={handleSaveClubHour} />
+                  <FontAwesomeIcon onClick={(e) => handleDeleteClubHour(e, index)} icon={faTrashAlt} />
                 </div>
               </div>
             </div>

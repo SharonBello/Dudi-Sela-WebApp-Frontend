@@ -27,6 +27,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { SaveButton } from '../../../../shared-components/save-button';
 import { PersonalDetails } from './personal-details';
+import { TextBox } from '../../../../shared-components/text-box';
+import TextField from '@mui/material/TextField';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -59,40 +61,64 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-//שם מלא טלפון כתובת מייל הרשאה תקף עד
 const headCells = [
   {
-    id: 'fullName',
+    id: 'permissionName',
     numeric: false,
     disablePadding: true,
-    label: 'שם מלא',
+    isCheckbox: false,
+    label: 'שם ההרשאה',
   },
   {
-    id: 'primaryPhone',
+    id: 'daysAheadInApp',
     numeric: true,
     disablePadding: false,
-    label: 'טלפון',
+    isCheckbox: false,
+    label: 'ימים הזמנה',
   },
   {
-    id: 'mail',
-    numeric: false,
+    id: 'daysAheadCancel',
+    numeric: true,
     disablePadding: false,
-    label: 'מייל',
+    isCheckbox: false,
+    label: 'ימים ביטול',
   },
   {
-    id: 'permission',
+    id: 'allowWatch',
     numeric: false,
     disablePadding: false,
-    label: 'הרשאה',
+    isCheckbox: true,
+    label: 'צפייה',
   },
   {
-    id: 'validTill',
+    id: 'isManager',
     numeric: false,
     disablePadding: false,
-    label: 'תקף עד',
+    isCheckbox: true,
+    label: 'מנהל',
   },
+  {
+    id: 'allowEditEvents',
+    numeric: false,
+    disablePadding: false,
+    isCheckbox: true,
+    label: 'עריכת אירועי מערכת',
+  },
+  {
+    id: 'allowInnerEvents',
+    numeric: false,
+    disablePadding: false,
+    isCheckbox: true,
+    label: 'עריכת אירועים עצמיים',
+  },
+  {
+    id: 'allowOpenGates',
+    numeric: false,
+    disablePadding: false,
+    isCheckbox: true,
+    label: 'פתיחת שערים',
+  }
 ];
-
 const DEFAULT_ORDER = 'asc';
 const DEFAULT_ORDER_BY = 'primaryPhone';
 const DEFAULT_ROWS_PER_PAGE = 5;
@@ -119,6 +145,24 @@ function EnhancedTableHead(props) {
           />
         </TableCell>
         {headCells.map((headCell) => (
+            headCell.isCheckbox ?
+            <TableCell>
+                <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}>
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    </Box>
+                ) : null}
+                </TableSortLabel>
+                <Checkbox
+                    color="primary"
+                />
+            </TableCell>
+             :
           <TableCell
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
@@ -135,6 +179,13 @@ function EnhancedTableHead(props) {
                 </Box>
               ) : null}
             </TableSortLabel>
+            <TextField
+                id="outlined-basic"
+                type="number"
+                variant="outlined"
+                // onChange={(e) => onChange(e.currentTarget.value)}
+                className='text-field-box'
+            />
           </TableCell>
         ))}
         <TableCell>
@@ -212,7 +263,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function UsersTable({rows}) {
+export default function PermissionsTable({rows}) {
   const [order, setOrder] = useState(DEFAULT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
   const [selectedAll, setSelectedAll] = useState([]);

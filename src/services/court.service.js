@@ -8,6 +8,7 @@ export const courtService = {
     editPriceConstraint,
     getPriceConstraints,
     getPunchCards,
+    getClubUsers,
     getClubClasses,
     addPunchCard,
     addClubClass,
@@ -18,6 +19,7 @@ export const courtService = {
     getClubPreferences,
     editAboutClub,
     getAboutClub,
+    getUserPermissions,
     deletePriceConstraint,
 }
 
@@ -64,6 +66,26 @@ async function getClubPreferences() {
 async function getPunchCards() {
     try {
         let res = await httpService.get('courts/punchcards')
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function getClubUsers() {
+    try {
+        let res = await httpService.get('courts/clubusers')
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function getUserPermissions() {
+    try {
+        let res = await httpService.get('courts/userpermissions')
         return res
     }
     catch (err) {

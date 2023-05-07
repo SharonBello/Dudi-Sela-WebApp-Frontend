@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import CustomDivider from '../../../../shared-components/custom-divider';
 import { TextBox } from '../../../../shared-components/text-box';
 import { SaveButton } from '../../../../shared-components/save-button';
 import { SwitchInput } from '../../../../shared-components/switch-input';
+import { courtService } from '../../../../../services/court.service'
+import Button from '@mui/material/Button';
+import { Loader } from '../../../../../components/loader.jsx';
 
 export const ClubSettings = () => {
-  const [hrBeforeCancel, setHrBeforeCancel] = useState(6);
+  const [hrBeforeCancel, setHrBeforeCancel] = useState();
   const [minPerReservation, setMinPerReservation] = useState(60);
   const [daysReservedBefore, setDaysReservedBefore] = useState(2);
   const [phoneCancelReservation, setPhoneCancelReservation] = useState("0523782815");
@@ -18,21 +22,53 @@ export const ClubSettings = () => {
   const [memberOnlyClub, setMemberOnlyClub] = useState(false);
   const [addPartnersToAll, setAddPartnersToAll] = useState(false);
   // const [timeIntervals, setTimeIntervals] = useState("15:00:00");
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSave = (e) => {
+  useEffect(()=> {
+    if (hrBeforeCancel === undefined) {
+      getClubPreferences().then(res => {
+        setHrBeforeCancel(res.hrBeforeCancel)
+        setMinPerReservation(res.minPerReservation)
+        setDaysReservedBefore(res.daysReservedBefore)
+        setPhoneCancelReservation(res.phoneCancelReservation)
+        setDaysInAdvance(res.daysInAdvance)
+        setCutOffDays(res.cutOffDays)
+        setTimeIntervals(res.timeIntervals)
+        setOnlineReserve(res.onlineReserve)
+        setMemberOnlyClub(res.memberOnlyClub)
+        setAddPartnersToAll(res.addPartnersToAll)
+      })
+    }
+  }, [])
+  const getClubPreferences = async () => {
+    try {
+      setIsLoading(true)
+      let res = await courtService.getClubPreferences()
+      setIsLoading(false)
+      return res.data.club_preferences
+    } catch (error) {
+      navigate('/')
+    }
+  }
+  const handleSave = async (e) => {
     e.stopPropagation()
     e.preventDefault()
-    // if (validateForm() === true) {
-    //   setIsLoading(true)
-    //   addReservation()
-    // } else {
-    //   setMessageAlert(validateForm())
-    //   setShowMessageAlert(true)
-    // }
+    setIsLoading(true)
+    const payload = {hrBeforeCancel, minPerReservation, daysReservedBefore, phoneCancelReservation, daysInAdvance, cutOffDays, timeIntervals, onlineReserve, memberOnlyClub, addPartnersToAll}
+    let res = await courtService.editClubPreferences(payload)
+    setIsLoading(false)
   }
-
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
+  }
   return (
     <Box className="club-setting-box container">
+      {renderIsLoading()}
       <div className="club-setting-content">
         <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
         <CustomDivider className="grid-divider" />
@@ -51,7 +87,7 @@ export const ClubSettings = () => {
           </Box>
         </Box>
         <Box className="btn-club-setting-components-container flex align-center">
-          <SaveButton onClick={handleSave} />
+          <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
         </Box>
       </div>
     </Box>

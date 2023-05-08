@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
@@ -17,9 +17,7 @@ import { CourtPrice } from './court-price.jsx'
 import { EventTitle } from './event-title.jsx'
 import Divider from '@mui/material/Divider';
 import { ParticipantsList } from './participants-lists.jsx';
-import { InstructorsList } from './instructors-list.jsx'
 import { EventDescription } from './event-description.jsx';
-import { FREQUENCY_TYPES, SCHEDULE_TYPE, PAID_STATUS } from './event';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { eventService } from '../../services/event.service'
 import Snackbar from '@mui/material/Snackbar'
@@ -27,66 +25,42 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
 import dayjs from 'dayjs'
+import { EventTypes, FrequencyTypes, PaymentStatus } from '../club-manager/club-manager/club-helper.jsx'
+import { SelectMenu } from '../shared-components/select-menu'
+import { instructorService } from '../../services/instructor.service';
 
 export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek }) => {
 
   const [isLoading, setIsLoading] = useState(false)
-  const [price, setPrice] = useState('');
-  const [paidStatus, setPaidStatus] = useState(PAID_STATUS.Paid)
-  const [description, setDescription] = useState("")
-  const [frequency, setFrequency] = useState(FREQUENCY_TYPES.OnceAWeek)
-  const [startHour, setStartHour] = useState(null)
-  const [endHour, setEndHour] = useState(null)
+  const [eventType, setEventType] = useState(EventTypes[0]);
+  const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+  const [hours, setHours] = useState({ startHour: "06:00", endHour: "21:00" })
+  const [frequencyType, setFrequencyType] = useState(FrequencyTypes[0])
+  const [courts, setCourts] = useState([["מגרש 1", "מגרש 2"]]);
+  const [price, setPrice] = useState();
   const [date, setDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-  const [title, setTitle] = useState("")
-  const [scheduleType, setScheduleType] = useState(SCHEDULE_TYPE.Schedule);
+  const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
+  const [description, setDescription] = useState("test")
+  const [endHour, setEndHour] = useState()
+  const [title, setTitle] = useState("test")
+  const [phoneNumber, setPhoneNumber] = useState("97223423423")
   const [shouldJoinClass, setShouldJoinClass] = useState(false);
-  const [instructorIndices, setInstructorIndices] = useState([]);
-  const [participantIndices, setPartipantIndices] = useState([]);
-  const [courtNumbers, setCourtNumbers] = useState([]);
+  const [instructor, setInstructor] = useState("");
+  const [participants, setParticipants] = useState(["קדם קבסו"]);
+  const [tennisInstructors, setTennisInstructors] = useState([])
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-
-  const initEvent = () => {
-    return {
-      price,
-      paidStatus,
-      description,
-      frequency,
-      startHour,
-      endHour,
-      date,
-      title,
-      scheduleType,
-      shouldJoinClass,
-      instructorIndices,
-      participantIndices,
-      courtNumbers
-    }
-  }
-  const editEventObj = useRef(initEvent())
   const navigate = useNavigate()
+  const getInstructors = useCallback(async () => {
+    let instructors = await instructorService.getInstructors()
+    setTennisInstructors(instructors)
+  }, [setTennisInstructors])
 
-
-  useEffect(() => {
-    editEventObj.current = {
-      price,
-      paidStatus,
-      description,
-      frequency,
-      startHour,
-      endHour,
-      date,
-      title,
-      scheduleType,
-      shouldJoinClass,
-      instructorIndices,
-      participantIndices,
-      courtNumbers
-    }
-  }, [price, paidStatus, description, frequency, startHour, endHour, date, title, scheduleType, shouldJoinClass, instructorIndices, participantIndices, courtNumbers])
+useEffect(() => {
+    getInstructors()
+}, [])
 
   const theme = createTheme({
     direction: 'rtl',
@@ -98,13 +72,12 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
   })
 
   const validateEvent = () => {
-    // TODO: date should be in 2023-02-28 format, before saving
     // required fields, startHour, endHour, instructorIndices at least one instructor,
-    if (!startHour) {
+    if (!hours.startHour) {
       setMessageAlert("יש למלא שעת התחלה")
       return false
     }
-    if (!endHour) {
+    if (!hours.endHour) {
       setMessageAlert("יש למלא שעת סיום")
       return false
     }
@@ -112,15 +85,17 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
       setMessageAlert("יש למלא כותרת ארוע")
       return false
     }
-    if (instructorIndices.length < 1) {
+    if (instructor.trim() === "") {
       setMessageAlert("יש לבחור מדריך אחד לפחות")
       return false
     }
     return true
   }
 
-  const saveEvent = async () => {
-    const payload = editEventObj.current
+  const saveClubEvent = async () => {
+    const payload =   { eventType, startDate, hours: JSON.stringify(hours), frequencyType, courts: JSON.stringify(courts),
+    price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants)}
+
     if (!loggedUser) {
       navigate('/signin')
     }
@@ -129,15 +104,13 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
         // validate that event of same date/time doesnt exist
         // let resExists = await eventService.isEventExists(uid, payload)
         // if (!resExists.data.isExists) {
-        let res = await eventService.addNewEvent(payload)
-        console.log(res.data.result)
-        // if (res.data.result === 0) {
-        //   _successMessage += "הארוע נשמר בהצלחה"
-        //   setSuccessMessage(_successMessage)
-        //   setShowSuccessAlert(true)
-        // } else {
-        //   setShowSuccessAlert(false)
-        // }
+        let res = await eventService.addClubEvent(payload)
+        if (res.data.result === 0) {
+          setMessageAlert("הארוע נשמר בהצלחה")
+        } else {
+          setMessageAlert("הארוע לא נשמר בהצלחה")
+        }
+        setShowMessageAlert(true)
       }
       catch (err) {
         console.log(err)
@@ -153,7 +126,7 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
     e.preventDefault()
     if (validateEvent() === true) {
       setIsLoading(true)
-      saveEvent()
+      saveClubEvent()
     } else {
       setShowMessageAlert(true)
     }
@@ -209,8 +182,7 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
             spacing={5}
             variant="filled"
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          >
-            {messageAlert}</Alert>
+          >{messageAlert}</Alert>
         </Snackbar>
       )
     }
@@ -232,17 +204,16 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
                 הזמנה חדשה
               </Typography>
             </Box>
-
             <Box className="modal-body">
-              <EventType scheduleType={scheduleType} setScheduleType={setScheduleType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
-              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={setStartHour} setEndHour={setEndHour} date={date} setDate={setDate} />
-              <EventFrequency theme={theme} cacheRtl={cacheRtl} frequency={frequency} setFrequency={setFrequency} />
+              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
+              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={hours.startHour} endHour={endHour} setStartHour={hours.setStartHour} setEndHour={setEndHour} date={date} setDate={setDate} />
+              <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">
                 <Typography className="modal-body-text">
                   מגרשים
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
-                  <SelectCourt theme={theme} cacheRtl={cacheRtl} courtNumbers={courtNumbers} setCourtNumbers={setCourtNumbers} />
+                  <SelectCourt theme={theme} cacheRtl={cacheRtl} courts={courts} setCourts={setCourts} />
                   <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus} />
                 </div>
               </Box>
@@ -252,8 +223,8 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
               </Box>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
-                <InstructorsList instructorIndices={instructorIndices} setInstructorIndices={setInstructorIndices} />
-                <ParticipantsList participantIndices={participantIndices} setPartipantIndices={setPartipantIndices} />
+                <SelectMenu inputLabel="שם המדריך" value={instructor} values={tennisInstructors} setValue={setInstructor} />
+                <ParticipantsList participants={participants} setParticipants={setParticipants} />
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>

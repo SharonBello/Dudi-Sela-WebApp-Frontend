@@ -109,3 +109,16 @@ export const DemoClubCourses = [
 ]
 
 export const DemoInstructors = ["תומר צירקין","אור","יואב בן צבי","יוני","דודי סלע"]
+
+export const EventTypes = ["הזמנה פנימית", "לא זמין"]
+
+export const FrequencyTypes = ["חד פעמי", "שבועי", "חודשי"]
+
+export const PaymentStatus = ["לא שולם","שולם"]
+
+export const DemoClubEvents = [
+  { eventType: EventTypes[0], startDate: "16/7/2023", hours: { startHour: "06:00", endHour: "21:00" }, frequencyType: PaymentStatus[0], courts: ["מגרש 1", "מגרש 2"],
+  price: 100, paidStatus: PaymentStatus[0], description: "test", title: "title", phoneNumber: "97223423423", instructor: "תומר", participants: ["קדם קבסו"]
+  }
+]
+

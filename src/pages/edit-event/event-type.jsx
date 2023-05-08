@@ -10,10 +10,10 @@ import EventBusyIcon from '@mui/icons-material/EventBusy';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
-export const EventType = ({ scheduleType, setScheduleType, shouldJoinClass, setShouldJoinClass }) => {
+export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass }) => {
 
-    const handleScheduleType = (scheduleType) => {
-        if (scheduleType !== null) setScheduleType(scheduleType);
+    const handleScheduleType = (eventType) => {
+        if (eventType !== null) setEventType(eventType);
     };
 
     const handleCheckedClass = (e) => {
@@ -29,7 +29,7 @@ export const EventType = ({ scheduleType, setScheduleType, shouldJoinClass, setS
             </Typography>
             <Box className="toggle-form-container flex align-center justify-between">
                 <ToggleButtonGroup
-                    value={scheduleType}
+                    value={eventType}
                     exclusive
                     onChange={handleScheduleType}
                     className="flex align-center toggle-schedule-type"

@@ -7,15 +7,14 @@ import Select from '@mui/material/Select';
 import { ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 
-export const SelectCourt = ({ theme, cacheRtl, courtNumbers, setCourtNumbers }) => {
+export const SelectCourt = ({ theme, cacheRtl, courts, setCourts }) => {
 
   const handleCourtSelection = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setCourtNumbers(courtNumbers.push(...e.target.value))
+    setCourts(courts.push(...e.target.value))
   };
 
-  // TODO: add multiple selection to the select input
   return (
     <CacheProvider value={cacheRtl}>
       <ThemeProvider theme={theme}>
@@ -28,7 +27,7 @@ export const SelectCourt = ({ theme, cacheRtl, courtNumbers, setCourtNumbers }) 
                 sx={{ minWidth: "10rem", padding: "8.5px 14px !important" }}
                 className="select-occurrence"
                 multiple
-                // value={courtNumbers}
+                // value={courts}
                 label="מגרש"
                 onChange={(e) => handleCourtSelection(e)}
                 value={[]}>

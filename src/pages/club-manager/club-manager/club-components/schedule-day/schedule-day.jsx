@@ -45,7 +45,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   // }, [mDate])
 
   const getTodaysEvents = useCallback(async () => {
-    // get events using eventsService.getEvents(), and then filter by mDate
+    // get events using eventsService.getClubEvents(), and then filter by mDate
     // let reservations = await reservationService.queryByDate(mDate)
     // let _rows = getRows()
     // reservations.forEach(reservation => {

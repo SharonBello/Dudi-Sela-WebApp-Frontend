@@ -12,11 +12,10 @@ import createCache from '@emotion/cache'
 import { EventFrequency } from './event-frequency.jsx'
 import { EventTime } from './event-time.jsx'
 import { EventType } from './event-type.jsx'
-import { SelectCourt } from './select-court.jsx'
 import { CourtPrice } from './court-price.jsx'
 import { EventTitle } from './event-title.jsx'
 import Divider from '@mui/material/Divider';
-import { ParticipantsList } from './participants-lists.jsx';
+import { ParticipantsList } from './participants-list.jsx';
 import { EventDescription } from './event-description.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { eventService } from '../../services/event.service'
@@ -28,15 +27,17 @@ import dayjs from 'dayjs'
 import { EventTypes, FrequencyTypes, PaymentStatus } from '../club-manager/club-manager/club-helper.jsx'
 import { SelectMenu } from '../shared-components/select-menu'
 import { instructorService } from '../../services/instructor.service';
+import { courtService } from '../../services/court.service';
+import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek }) => {
+export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourtNumber, selectedStartHour }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(EventTypes[0]);
   const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
-  const [hours, setHours] = useState({ startHour: "06:00", endHour: "21:00" })
+  const [hours, setHours] = useState({ startHour: hoursData[selectedStartHour]+":00", endHour: "21:00" })
   const [frequencyType, setFrequencyType] = useState(FrequencyTypes[0])
-  const [courts, setCourts] = useState([["מגרש 1", "מגרש 2"]]);
+  const [courts, setCourts] = useState([selectedCourtNumber]);
   const [price, setPrice] = useState();
   const [date, setDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
@@ -53,15 +54,19 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const navigate = useNavigate()
+  const clubCourts = useRef([])
   const getInstructors = useCallback(async () => {
     let instructors = await instructorService.getInstructors()
     setTennisInstructors(instructors)
   }, [setTennisInstructors])
-
 useEffect(() => {
     getInstructors()
+    if (clubCourts.current.length === 0) {
+      courtService.getClubCourts().then(res => {
+        clubCourts.current = res.data.club_courts.map(court => court.name)
+      })
+    }
 }, [])
-
   const theme = createTheme({
     direction: 'rtl',
   })
@@ -157,6 +162,18 @@ useEffect(() => {
     </>
   )
 
+  const handleSetStartHour = (e) => {
+    const _hours = JSON.parse(JSON.stringify(hours))
+    _hours.startHour = e.target.value
+    setHours(_hours)
+  }
+
+  const handleSetEndHour = (e) => {
+    const _hours = JSON.parse(JSON.stringify(hours))
+    _hours.endHour = e.target.value
+    setHours(_hours)
+  }
+
   const renderMessageAlert = () => {
     if (showMessageAlert) {
       return (
@@ -206,14 +223,14 @@ useEffect(() => {
             </Box>
             <Box className="modal-body">
               <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
-              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={hours.startHour} endHour={endHour} setStartHour={hours.setStartHour} setEndHour={setEndHour} date={date} setDate={setDate} />
+              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={hours.startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">
                 <Typography className="modal-body-text">
                   מגרשים
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
-                  <SelectCourt theme={theme} cacheRtl={cacheRtl} courts={courts} setCourts={setCourts} />
+                  <SelectMenu multiple={true} defaultValue={courts} inputLabel="בחר מגרש" values={clubCourts.current} setValue={setCourts} />
                   <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus} />
                 </div>
               </Box>
@@ -228,10 +245,10 @@ useEffect(() => {
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>
-                <button onClick={handleSave} className='save-btn'>
+                <button disabled={isLoading} onClick={handleSave} className='save-btn'>
                   שמירה
                 </button>
-                <button className='cancel-btn'>
+                <button onClick={closeEditEvent} className='cancel-btn'>
                   ביטול
                 </button>
               </div>

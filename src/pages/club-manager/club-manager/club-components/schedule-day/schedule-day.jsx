@@ -11,10 +11,13 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
-  // const [selectedStartHour, setSelectedStartHour] = useState();
+  const [selectedStartHour, setSelectedStartHour] = useState();
+  const [selectedCourtNumber, setSelectedCourtNumber] = useState();
   const START_HOUR_DAY = 6
 
-  const handleEditEvent = () => {
+  const handleEditEvent = (e) => {
+    setSelectedCourtNumber(e.row.courtNumber + " מגרש")
+    setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
 
@@ -132,7 +135,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} />
+        <EditEventModal openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourtNumber={selectedCourtNumber}/>
       )
     }
   }
@@ -150,7 +153,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       {renderModal()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
-          onCellClick={() => handleEditEvent()}
+          onCellClick={(e) => handleEditEvent(e)}
           rows={rows}
           columns={columns}
           editMode="row"

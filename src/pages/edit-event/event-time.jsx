@@ -56,7 +56,13 @@ export const EventTime = ({ theme, cacheRtl, startHour, setStartHour, endHour, s
                             <section className="hours-container flex align-center justify-between">
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <Container>
-                                        <TextField
+                                    <TextField
+                                            label='שעת התחלה'
+                                            value={startHour}
+                                            placeholder={startHour}
+                                            onChange={setStartHour}
+                                        />
+                                        {/* <TextField
                                             label='שעת התחלה'
                                             type="time"
                                             value={startHour}
@@ -65,10 +71,10 @@ export const EventTime = ({ theme, cacheRtl, startHour, setStartHour, endHour, s
                                                 shrink: true,
                                             }}
                                             minutesStep={60}
-                                            onChange={(newValue) => setStartHour(newValue)}
+                                            onChange={setStartHour}
                                             minTime={dayjs().set('hour', 8)}
                                             maxTime={dayjs().set('hour', 17)}
-                                        />
+                                        /> */}
                                         {/* <TimeField
                         label='שעת התחלה'
                         value={startHour}
@@ -76,11 +82,11 @@ export const EventTime = ({ theme, cacheRtl, startHour, setStartHour, endHour, s
                         minutesStep={60}
                         onChange={(newValue) => setStartHour(newValue)}
                     /> */}
-                                        <TimeField
+                                        <TextField
                                             label='שעת סיום'
                                             value={endHour}
                                             placeholder={endHour}
-                                            onChange={(newValue) => setEndHour(newValue)}
+                                            onChange={setEndHour}
                                         />
                                     </Container>
                                 </LocalizationProvider>

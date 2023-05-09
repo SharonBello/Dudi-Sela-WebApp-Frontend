@@ -110,7 +110,7 @@ export const DemoClubCourses = [
 
 export const DemoInstructors = ["תומר צירקין","אור","יואב בן צבי","יוני","דודי סלע"]
 
-export const EventTypes = ["הזמנה פנימית", "לא זמין"]
+export const EventTypes = ["הזמנה", "הזמנה פנימית", "לא זמין"]
 
 export const FrequencyTypes = ["חד פעמי", "שבועי", "חודשי"]
 

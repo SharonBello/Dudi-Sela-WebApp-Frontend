@@ -9,22 +9,28 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-const options = ['הוספת משתתפים'];
+const options = ['קדם קבסו','אור','סער','אמיר','גיל','ירון','גלעד'];
 
-export const ParticipantsList = ({participantIndices, setParticipantIndices}) => {
+export const ParticipantsList = ({participants, setParticipants}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
     const handleClick = () => {
-        // console.info(`You clicked ${options[participantIndices]}`);
     };
 
-    const handleMenuItemClick = (event, index) => {
-        setParticipantIndices(participantIndices.push(index));
+    const handleMenuItemClick = (event, option) => {
+        const _participants = JSON.parse(JSON.stringify(participants));
+        if (_participants.includes(option)) {
+            const index = participants.indexOf(option);
+            _participants.splice(index, 1); // 2nd parameter means remove one item only
+        } else {
+            _participants.push(option)
+        }
+        setParticipants(_participants);
         setOpen(false);
     };
 
-    const handleToggle = () => {
+    const handleSelectOption = () => {
         setOpen((prevOpen) => !prevOpen);
     };
 
@@ -38,14 +44,14 @@ export const ParticipantsList = ({participantIndices, setParticipantIndices}) =>
     return (
         <>
             <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                <Button onClick={handleClick}>{options[participantIndices]}</Button>
+                <Button onClick={handleSelectOption}>הוספת משתתפים</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
                     aria-expanded={open ? 'true' : undefined}
                     aria-label="select merge strategy"
                     aria-haspopup="menu"
-                    onClick={handleToggle}
+                    onClick={handleSelectOption}
                 >
                     <ArrowDropDownIcon />
                 </Button>
@@ -73,10 +79,9 @@ export const ParticipantsList = ({participantIndices, setParticipantIndices}) =>
                                 <MenuList id="split-button-menu" autoFocusItem>
                                     {options.map((option, index) => (
                                         <MenuItem
+                                            selected={participants.includes(option)}
                                             key={option}
-                                            disabled={index === 2}
-                                            selected={index === participantIndices}
-                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                            onClick={(event) => handleMenuItemClick(event, option)}
                                         >
                                             {option}
                                         </MenuItem>
@@ -90,3 +95,6 @@ export const ParticipantsList = ({participantIndices, setParticipantIndices}) =>
         </>
     );
 }
+{/* <MenuItem //TODO
+disabled={index === 2}
+selected={index === participants} */}

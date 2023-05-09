@@ -12,7 +12,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass }) => {
 
-    const handleScheduleType = (eventType) => {
+    const handleScheduleType = (e, eventType) => {
         if (eventType !== null) setEventType(eventType);
     };
 
@@ -31,10 +31,8 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                 <ToggleButtonGroup
                     value={eventType}
                     exclusive
-                    onChange={handleScheduleType}
-                    className="flex align-center toggle-schedule-type"
-                >
-                    <ToggleButton value="schedule">
+                    className="flex align-center toggle-schedule-type">
+                    <ToggleButton value="הזמנה" onClick={(e) => handleScheduleType(e, "הזמנה")}>
                         <Box className="flex align-center justify-between">
                             <CalendarMonthIcon />
                             <Typography>
@@ -42,7 +40,7 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                             </Typography>
                         </Box>
                     </ToggleButton>
-                    <ToggleButton value="internalSchedule">
+                    <ToggleButton value="הזמנה פנימית" onClick={(e) => handleScheduleType(e, "הזמנה פנימית")}>
                         <Box className="flex align-center">
                             <PermContactCalendarIcon />
                             <Typography>
@@ -50,7 +48,7 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                             </Typography>
                         </Box>
                     </ToggleButton>
-                    <ToggleButton value="unavailable">
+                    <ToggleButton value="לא זמין" onClick={(e) => handleScheduleType(e, "לא זמין")}>
                         <Box className="flex align-center">
                             <EventBusyIcon />
                             <Typography>

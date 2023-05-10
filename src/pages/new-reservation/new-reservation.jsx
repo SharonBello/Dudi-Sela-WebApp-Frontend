@@ -27,7 +27,6 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
   // TODO: GET COURT NUMBERS FROM BACKEND
-  const COURTS_NUMBERS = [1, 2]
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
@@ -48,12 +47,21 @@ export const NewReservation = () => {
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
+  const [clubCourts, setClubCourts] = useState([])
   const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
+
+  useEffect(() => {
+    if (clubCourts.length === 0) {
+      courtService.getClubCourts().then(res => {
+        res && res.data && setClubCourts(res.data.club_courts.map(court => court.name))
+      })
+    }
+}, [])
 
   const getSaturdayDate = () => {
     return dayjs().day(6)
@@ -63,7 +71,7 @@ export const NewReservation = () => {
   useEffect(() => {
     getCourtsData().then(res => {
       setInitCourtsData(res)
-      filterCourtsDataByCourtNumber(res)
+      //filterCourtsDataByCourtNumber(res)
     })
   })
 
@@ -99,7 +107,7 @@ export const NewReservation = () => {
     let _courtsData = JSON.parse(JSON.stringify(res))
     // Initialize court numbers
     // TODO: GET COURT NUMBERS FROM BACKEND
-    _courtsData.court_numbers = JSON.parse(JSON.stringify(COURTS_NUMBERS))
+    _courtsData.court_numbers = JSON.parse(JSON.stringify(clubCourts))
     // Get reserved courts by date
     const _date = dayjs(date).format('YYYY-MM-DD')
     let reservations = await reservationService.queryByDate(_date)
@@ -136,17 +144,18 @@ export const NewReservation = () => {
   }
 
   const filterCourtsDataByDate = async (_date) => {
+    // TODO filter courts
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
-    let reservations = await reservationService.queryByDate(_date)
-    setReservationsByDate(reservations)
+    // let reservations = await reservationService.queryByDate(_date)
+    // setReservationsByDate(reservations)
     // Filter courts data by reserved courts
-    reservations.forEach(reservation => {
-      if (reservation.date === _date && reservation.startHour === startHour) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
-      }
-    });
+    // reservations.forEach(reservation => {
+    //   if (reservation.date === _date && reservation.startHour === startHour) {
+    //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+    //     _courtsData.court_numbers.splice(index, 1);
+    //   }
+    // });
     setCourtsData(_courtsData);
   }
 
@@ -157,16 +166,19 @@ export const NewReservation = () => {
       endHour,
       courtNumber,
       date: _date,
-      username: email
+      username: email,
+      isCanceled: false,
+      uid
     }
     if (!loggedUser) {
       navigate('/signin')
     }
     else if (loggedUser || uid) {
       try {
-        let resExists = await reservationService.isReservationExists(uid, payload)
-        if (!resExists.data.isExists) {
-          let _userCredit = await reservationService.getCredit(uid)
+        // TODO: await reservationService.isReservationExists(uid, payload)
+        let resExists = false
+        if (!resExists) { //!resExists.data.isExists
+          let _userCredit = 0 // TODO await reservationService.getCredit(uid)
           const creditNum = payload.endHour - payload.startHour
           let _successMessage = ""
           // use credit if exists
@@ -176,9 +188,9 @@ export const NewReservation = () => {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
           }
-          let res = await reservationService.addNewReservation(uid, payload)
-          let resByDate = await reservationService.addNewReservationByDate(_date, payload)
-          if (res.data.result === 0 && resByDate.data.result === 0) {
+          let res = await reservationService.addNewReservation(payload)
+          // let resByDate = await reservationService.addNewReservationByDate(_date, payload)
+          if (res.data.result === 0) { //&& resByDate.data.result === 0
             _successMessage += "המגרש הוזמן בהצלחה"
             setSuccessMessage(_successMessage)
             setShowSuccessAlert(true)
@@ -206,7 +218,7 @@ export const NewReservation = () => {
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
     setEndHour(startHour + 1)
-    filterCourtsDataByHour(startHour, startHour + 1)
+    //filterCourtsDataByHour(startHour, startHour + 1)
     setCourtNumbers()
     setIsLoading(false)
     setShowDuration(true)
@@ -217,7 +229,7 @@ export const NewReservation = () => {
     e.preventDefault()
     setIsLoading(true)
     setEndHour(e.target.value + startHour)
-    filterCourtsDataByHour(startHour, e.target.value + startHour)
+    //filterCourtsDataByHour(startHour, e.target.value + startHour)
     setCourtNumbers()
     setIsLoading(false)
   }

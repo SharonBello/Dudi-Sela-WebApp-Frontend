@@ -30,14 +30,14 @@ import { instructorService } from '../../services/instructor.service';
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourtNumber, selectedStartHour }) => {
+export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
 
   const [isLoading, setIsLoading] = useState(false)
-  const [eventType, setEventType] = useState(EventTypes[0]);
+  const [eventType, setEventType] = useState(EventTypes[1]);
   const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [hours, setHours] = useState({ startHour: hoursData[selectedStartHour]+":00", endHour: "21:00" })
   const [frequencyType, setFrequencyType] = useState(FrequencyTypes[0])
-  const [courts, setCourts] = useState([selectedCourtNumber]);
+  const [courts, setCourts] = useState(selectedCourts);
   const [price, setPrice] = useState();
   const [date, setDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
   const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
@@ -51,19 +51,19 @@ export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek
   const [tennisInstructors, setTennisInstructors] = useState([])
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
+  const [clubCourts, setClubCourts] = useState([])
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const navigate = useNavigate()
-  const clubCourts = useRef([])
   const getInstructors = useCallback(async () => {
     let instructors = await instructorService.getInstructors()
     setTennisInstructors(instructors)
   }, [setTennisInstructors])
 useEffect(() => {
     getInstructors()
-    if (clubCourts.current.length === 0) {
+    if (clubCourts.length === 0) {
       courtService.getClubCourts().then(res => {
-        clubCourts.current = res.data.club_courts.map(court => court.name)
+        setClubCourts(res.data.club_courts.map(court => court.name))
       })
     }
 }, [])
@@ -230,7 +230,7 @@ useEffect(() => {
                   מגרשים
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
-                  <SelectMenu multiple={true} defaultValue={courts} inputLabel="בחר מגרש" values={clubCourts.current} setValue={setCourts} />
+                  <SelectMenu multiple={true} inputLabel="בחר מגרש" defaultValue={selectedCourts} values={clubCourts} setValue={setCourts} />
                   <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus} />
                 </div>
               </Box>

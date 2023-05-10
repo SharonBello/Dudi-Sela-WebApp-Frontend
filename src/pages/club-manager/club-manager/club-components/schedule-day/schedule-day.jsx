@@ -12,11 +12,11 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
-  const [selectedCourtNumber, setSelectedCourtNumber] = useState();
+  const [selectedCourts, setSelectedCourts] = useState([]);
   const START_HOUR_DAY = 6
 
   const handleEditEvent = (e) => {
-    setSelectedCourtNumber(e.row.courtNumber + " מגרש")
+    // setSelectedCourts([e.row.courtNumber + " מגרש"])  // TODO: fix select to show the selected as default
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
@@ -135,7 +135,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourtNumber={selectedCourtNumber}/>
+        <EditEventModal openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
       )
     }
   }

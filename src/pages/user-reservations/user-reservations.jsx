@@ -10,15 +10,16 @@ export const UserReservations = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {
-    getReservationsData(uid)
-  })
+    if (reservations.length === 0) setReservationsData(uid)
+  }, [reservations])
 
-  const getReservationsData = async (uid) => {
+  const setReservationsData = async (uid) => {
     if (loggedUser || uid) {
       let reservations = await reservationService.query(uid)
-      const _reservations = reservations.reverse()
-      setReservations(_reservations)
-      return _reservations
+      if (reservations && reservations.data) {
+        const _reservations = reservations.data.reservations.reverse()
+        setReservations(_reservations)
+      }
     }
   }
 

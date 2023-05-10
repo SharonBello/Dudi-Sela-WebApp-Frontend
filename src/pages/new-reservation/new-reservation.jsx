@@ -189,8 +189,9 @@ export const NewReservation = () => {
             }
           }
           let res = await reservationService.addNewReservation(payload)
-          // let resByDate = await reservationService.addNewReservationByDate(_date, payload)
-          if (res.data.result === 0) { //&& resByDate.data.result === 0
+          payload["refResId"] = res.data.id
+          let resUser = await reservationService.addNewReservationToUser(payload)
+          if (res.data.result === 0 && resUser.data.result === 0) { //&& resByDate.data.result === 0
             _successMessage += "המגרש הוזמן בהצלחה"
             setSuccessMessage(_successMessage)
             setShowSuccessAlert(true)

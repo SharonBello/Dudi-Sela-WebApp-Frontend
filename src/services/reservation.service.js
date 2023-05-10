@@ -19,6 +19,7 @@ export const reservationService = {
     isReservationExists,
     queryByWeekDay,
     resetByWeekDay,
+    addNewReservationToUser,
     postByWeekDay
 }
 
@@ -29,9 +30,8 @@ function getById(reservationId) {
 
 async function query(uid) {
     try {
-        let data = await httpService.get('reservations/reservations?docId=' + uid)
-        let reservations = data.data.reservations
-        return reservations
+        const results = await httpService.post('reservations/userreservations/user', {'uid': uid})
+        return results
     } catch (err) {
         throw err
     }
@@ -139,6 +139,16 @@ async function deleteReservation(uid, data) {
 async function deleteReservationByDate(date, data) {
     try {
         let res = await httpService.delete('reservations/reservations/bydate?date=' + date, data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function addNewReservationToUser(data) {
+    try {
+        let res = await httpService.post('reservations/addReservation/user', data)
         return res
     }
     catch (err) {

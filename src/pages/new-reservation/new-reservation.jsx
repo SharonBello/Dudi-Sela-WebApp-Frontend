@@ -177,15 +177,15 @@ export const NewReservation = () => {
         // TODO: await reservationService.isReservationExists(uid, payload)
         let resExists = false
         if (!resExists) { //!resExists.data.isExists
-          let _userCredit = 0 // TODO await reservationService.getCredit(uid)
+          let _userCredit = await reservationService.getCredit(uid)
           const creditNum = payload.endHour - payload.startHour
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            // const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
-            // if (resCredit.data.result === 0) {
-            //   _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
-            // }
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
+            if (resCredit.data.result === 0) {
+              _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
+            }
           }
           let res = await reservationService.addNewReservation(payload)
           payload["refResId"] = res.data.id

@@ -61,10 +61,9 @@ export const ReservationPreview = ({ item, todaysDate }) => {
         if (loggedUser) {
             const payload = item
             const res = await reservationService.deleteReservation(uid, payload)
-            // const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1 })
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1 })
             setShowDeleteAlert(false)
-            // && resCredit.data.result === 0
-            if (res.data.result === 0) {
+            if (res.data.result === 0 && resCredit.data.result === 0) {
                 setShowSuccessAlert(true)
             } else {
                 setShowSuccessAlert(false)

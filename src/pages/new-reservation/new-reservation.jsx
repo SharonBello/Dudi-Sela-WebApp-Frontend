@@ -167,7 +167,6 @@ export const NewReservation = () => {
       courtNumber,
       date: _date,
       username: email,
-      isCanceled: false,
       uid
     }
     if (!loggedUser) {
@@ -183,10 +182,10 @@ export const NewReservation = () => {
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
-            if (resCredit.data.result === 0) {
-              _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
-            }
+            // const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
+            // if (resCredit.data.result === 0) {
+            //   _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
+            // }
           }
           let res = await reservationService.addNewReservation(payload)
           payload["refResId"] = res.data.id

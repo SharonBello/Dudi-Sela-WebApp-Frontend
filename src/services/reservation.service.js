@@ -13,7 +13,6 @@ export const reservationService = {
     addNewReservation,
     addNewReservationByDate,
     deleteReservation,
-    deleteReservationByDate,
     changeCredit,
     getCredit,
     isReservationExists,
@@ -129,16 +128,6 @@ async function getCredit(uid) {
 async function deleteReservation(uid, data) {
     try {
         let res = await httpService.delete('reservations/reservations?docId=' + uid, data)
-        return res
-    }
-    catch (err) {
-        throw err
-    }
-}
-
-async function deleteReservationByDate(date, data) {
-    try {
-        let res = await httpService.delete('reservations/reservations/bydate?date=' + date, data)
         return res
     }
     catch (err) {

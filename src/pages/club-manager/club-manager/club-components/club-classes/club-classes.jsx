@@ -60,9 +60,9 @@ export const ClubClasses = () => {
   const renderClubCourses = () => {
     return (
       clubClasses.map((course) => <button>
-        <h2>{course.description}</h2>
+        <h2>{course.title}</h2>
         <div>מדריך: {course.tennisInstructor}</div>
-        <div>תיאור הקורס: {course.title}</div>
+        <div>תיאור הקורס: {course.description}</div>
       </button>
       )
     )

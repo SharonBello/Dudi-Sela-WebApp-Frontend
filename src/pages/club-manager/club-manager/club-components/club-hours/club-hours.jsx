@@ -41,6 +41,18 @@ export const ClubHours = () => {
       })
     }
   }
+  const handleDeleteClubHour = async(e, index) => {
+    setIsLoading(true)
+    let res = await courtService.deleteClubHours(clubHoursList[index])
+    // setIsLoading(false)
+    getClubHours().then(res => {
+      setClubHoursList(res)
+      setIsLoading(false)
+    })
+  }
+  const handleEditClubHours = async (e, clubHours) => {
+    console.log(clubHours)
+  }
   const getClubHours = async () => {
     try {
       setIsLoading(true)
@@ -58,18 +70,7 @@ export const ClubHours = () => {
     //   setNewConstraint(mData)
     // }
   // }
-  const handleDeleteClubHour = async(e, index) => {
-    setIsLoading(true)
-    let res = await courtService.deleteClubHours(clubHoursList[index])
-    // setIsLoading(false)
-    getClubHours().then(res => {
-      setClubHoursList(res)
-      setIsLoading(false)
-    })
-  }
-  const handleEditClubHours = async (e, clubHours) => {
-    console.log(clubHours)
-  }
+
   const renderAddClubHours = () => {
     return (<AddClubHours handleSaveClubHours={handleSaveClubHours}/>)
   }

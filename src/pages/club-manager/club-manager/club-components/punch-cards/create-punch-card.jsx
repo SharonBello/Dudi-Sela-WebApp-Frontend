@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import CustomDivider from '../../../../shared-components/custom-divider';
 import Typography from '@mui/material/Typography'
@@ -8,9 +9,10 @@ import Divider from '@mui/material/Divider';
 import { TextBox } from '../../../../shared-components/text-box';
 import { SwitchInput } from '../../../../shared-components/switch-input';
 import { SelectMenu } from '../../../../shared-components/select-menu'
-import { MemberTypes, DemoPunchCards } from '../../club-helper'
+import { MemberTypes, DemoPunchCards, DemoWorkHours } from '../../club-helper'
 import { AddClubHours } from '../club-hours/add-club-hours'
 import { ClubHoursList } from '../club-hours/club-hours-list'
+import { courtService } from '../../../../../services/court.service'
 
 export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, handleClose, isLoading }) => {
     // const [cardName, setCardName] = useState()
@@ -33,7 +35,52 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
     const [showForSale, setShowForSale] = useState(DemoPunchCards[0].showForSale)
     const [isMember, setIsMember] = useState(DemoPunchCards[0].isMember)
     const [validForMembers, setValidForMembers] = useState([DemoPunchCards[0].validForMembers])
+    const [clubHoursList, setClubHoursList] = useState([])
+    const [workHours, setWorkHours] = useState([]);
 
+    const navigate = useNavigate()
+
+    useEffect(()=> {
+        const getClubHours = async () => {
+            try {
+            //   setIsLoading(true)
+              let res = await courtService.getClubHours()
+            //   setIsLoading(false)
+              return res.data.club_hours
+            } catch (error) {
+              navigate('/')
+            }
+          }
+
+        if (clubHoursList.length === 0) {
+          DemoWorkHours(setWorkHours)
+          getClubHours().then(res => {
+            setClubHoursList(res)
+          })
+        }
+      }, [])
+      const handleSaveClubHours = async (e, clubHours) => {
+        // if (clubHours.days.length > 0) {
+        //   setIsLoading(true)
+        //   let res = await courtService.addClubHours(clubHours)
+        //   getClubHours().then(res => {
+        //     setClubHoursList(res)
+        //     setIsLoading(false)
+        //   })
+        // }
+      }
+      const handleDeleteClubHour = async(e, index) => {
+        // setIsLoading(true)
+        // let res = await courtService.deleteClubHours(clubHoursList[index])
+        // // setIsLoading(false)
+        // getClubHours().then(res => {
+        //   setClubHoursList(res)
+        //   setIsLoading(false)
+        // })
+      }
+      const handleEditClubHours = async (e, clubHours) => {
+        console.log(clubHours)
+      }
     return (
         <Modal
             open={showModalCreate}
@@ -70,7 +117,7 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
                         <Box className="club-hours-instructions">
                             <span>תקפות הכרטיסייה</span>
                         </Box>
-                        <ClubHoursList />
+                        <ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>
                             <button disabled={isLoading} onClick={(e) => handleSave(e, {cardName, creditAmount, creditInMinutes, dueNumDays, blockOnDate, price, additionalDetails, showForSale, "validForMembers": validForMembers[0] })} className='save-btn'>

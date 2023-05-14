@@ -31,9 +31,12 @@ export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModa
 
     const handleOnClick = (e) => {
         setIsDisabled(true)
-        handleSave(e, {"title": description, "description":courseDescription, "tennisInstructor": tennisInstructors[0]})
+        handleSave(e, {"title": description, "description":courseDescription, "tennisInstructor": instructorName})
     }
 
+    const handleSetInstructor = (name) => {
+        setInstructorName(name)
+    }
     return (
         <Modal
             open={showModalCreate}
@@ -50,7 +53,7 @@ export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModa
                     </Box>
                     <Box className="modal-body">
                         <TextBox label="כותרת הקורס" value={description} setValue={setDescription} />
-                        <SelectMenu inputLabel="שם המדריך" value={instructorName} values={tennisInstructors} setValue={setInstructorName} />
+                        <SelectMenu inputLabel="שם המדריך" value={instructorName} values={tennisInstructors} setValue={handleSetInstructor} />
                         <TextBox label="תיאור הקורס" value={courseDescription} setValue={setCourseDescription} />
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>

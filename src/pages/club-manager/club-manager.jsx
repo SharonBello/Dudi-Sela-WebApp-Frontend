@@ -20,7 +20,7 @@ import { primaryDrawerList, secondaryDrawerList } from './club-manager/club-help
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
-  const [notFormattedDate, setNotFormattedDate] = useState(new Date())
+  const [unFormattedDate, setUnFormattedDate] = useState(new Date())
   const [weekDay, setWeekDay] = useState(dayjs().format('dddd'))
   const [showSecondaryDrawer, setShowSecondaryDrawer] = useState(false)
   const [showScheduleManager, setShowScheduleManager] = useState(true)
@@ -30,22 +30,22 @@ export const ClubManager = () => {
   const dispatch = useDispatch()
 
   const openTodaysSchedule = () => {
-    setDate(dayjs(notFormattedDate).format('YYYY-MM-DD'))
-    setNotFormattedDate(new Date())
+    setDate(dayjs(unFormattedDate).format('YYYY-MM-DD'))
+    setUnFormattedDate(new Date())
   }
 
   const openNextDaySchedule = () => {
-    let _date = notFormattedDate
+    let _date = unFormattedDate
     _date.setDate(_date.getDate() + 1)
-    setNotFormattedDate(_date)
+    setUnFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }
 
   const openPreviousDaySchedule = () => {
-    let _date = notFormattedDate
+    let _date = unFormattedDate
     _date.setDate(_date.getDate() - 1)
-    setNotFormattedDate(_date)
+    setUnFormattedDate(_date)
     setDate(dayjs(_date).format('YYYY-MM-DD'))
     setWeekDay(dayjs(_date).format('dddd'))
   }

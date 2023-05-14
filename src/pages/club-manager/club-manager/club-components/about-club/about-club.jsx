@@ -28,6 +28,17 @@ export const AboutClub = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=> {
+
+    const getAboutClub = async () => {
+      try {
+        // setIsLoading(true)
+        let res = await courtService.getAboutClub()
+        // setIsLoading(false)
+        return res.data.about_club
+      } catch (error) {
+        navigate('/')
+      }
+    }
     if (clubName === "") {
       getAboutClub().then(res => {
         setClubName(res.clubName)
@@ -46,16 +57,6 @@ export const AboutClub = () => {
     }
   }, [])
 
-  const getAboutClub = async () => {
-    try {
-      // setIsLoading(true)
-      let res = await courtService.getAboutClub()
-      // setIsLoading(false)
-      return res.data.about_club
-    } catch (error) {
-      navigate('/')
-    }
-  }
   const handleSave = async (e) => {
     e.stopPropagation()
     e.preventDefault()

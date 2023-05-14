@@ -1,5 +1,5 @@
 import { httpService } from './http.service.js'
-import { getActionRemoveReservation } from '../store/actions/reservation.actions.js'
+// import { getActionRemoveReservation } from '../store/actions/reservation.actions.js'
 
 const reservationChannel = new BroadcastChannel('reservationChannel')
 
@@ -9,7 +9,6 @@ export const reservationService = {
     subscribe,
     unsubscribe,
     getById,
-    remove,
     addNewReservation,
     addNewReservationByDate,
     deleteReservation,
@@ -38,7 +37,7 @@ async function query(uid) {
 
 async function queryByDate(date) {
     try {
-        let data = await httpService.get('reservations/reservations/date?date=' + date)
+        let data = await httpService.post('reservations/userreservations/date', {"date": date})
         let reservations
         if (!data) {
             reservations = []
@@ -78,11 +77,6 @@ async function queryByWeekDay(weekday) {
     } catch (err) {
         throw err
     }
-}
-
-async function remove(reservationId) {
-    reservationChannel.postMessage(getActionRemoveReservation(reservationId))
-    await httpService.delete(`reservation/${reservationId}`)
 }
 
 async function addNewReservation(data) {

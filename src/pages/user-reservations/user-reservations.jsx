@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { ReservationList } from '../../components/reservation-list/reservation-list.jsx'
 import { reservationService } from '../../services/reservation.service.js'
@@ -10,18 +10,17 @@ export const UserReservations = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {
-    if (reservations.length === 0) setReservationsData(uid)
-  }, [reservations])
-
-  const setReservationsData = async (uid) => {
-    if (loggedUser || uid) {
-      let reservations = await reservationService.query(uid)
+    let reservations;
+    const fetchReservations = async () => {
+      reservations = await reservationService.query(uid);
       if (reservations && reservations.data) {
         const _reservations = reservations.data.reservations.reverse()
         setReservations(_reservations)
       }
     }
-  }
+    fetchReservations()
+  }, [reservations])
+
 
   return (
     <section className="reservations-app-container">

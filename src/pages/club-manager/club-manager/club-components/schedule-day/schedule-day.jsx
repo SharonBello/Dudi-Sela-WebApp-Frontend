@@ -16,7 +16,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const START_HOUR_DAY = 6
 
   const handleEditEvent = (e) => {
-    // setSelectedCourts([e.row.courtNumber + " מגרש"])  // TODO: fix select to show the selected as default
+    // setSelectedCourts([e.row.courtNumber + " מגרש"])  // TODO: fix select to show the selected court number in modal
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
@@ -37,15 +37,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   const columns = getColumns();
 
-  // const getTodaysReservations = useCallback(async () => {
-  //   let reservations = await reservationService.queryByDate(mDate)
-  //   let _rows = getRows()
-  //   reservations.forEach(reservation => {
-  //     const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-  //     _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-  //   });
-  //   setRows(_rows)
-  // }, [mDate])
+  const getTodayReservations = useCallback(async () => {
+    let reservations = await reservationService.queryByDate(mDate)
+    let _rows = getRows()
+    reservations.forEach(reservation => {
+      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+    });
+    setRows(_rows)
+  }, [mDate])
 
   const getTodaysEvents = useCallback(async () => {
     // get events using eventsService.getClubEvents(), and then filter by mDate
@@ -60,9 +60,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   useEffect(() => {
     initSchedule()
-    // getTodaysReservations()
-    getTodaysEvents()
-  }, [mDate, getTodaysEvents])
+    getTodayReservations()
+    // getTodaysEvents()
+  }, [mDate])
 
   const initSchedule = () => {
     let _rows = getRows()

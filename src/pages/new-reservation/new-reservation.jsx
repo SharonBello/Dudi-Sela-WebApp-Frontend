@@ -56,23 +56,35 @@ export const NewReservation = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(() => {
-    if (clubCourts.length === 0) {
-      courtService.getClubCourts().then(res => {
-        res && res.data && setClubCourts(res.data.club_courts.map(court => court.name))
-      })
+    const fetchClubCourts = async() => {
+      let res = await courtService.getClubCourts()
+      res && res.data && setClubCourts(res.data.club_courts.map(court => court.name))
     }
-}, [])
+    if (clubCourts.length === 0) {
+      fetchClubCourts()
+    }
+  }, [])
 
   const getSaturdayDate = () => {
     return dayjs().day(6)
   }
 
   const saturdayDate = getSaturdayDate()
+
   useEffect(() => {
+    const getCourtsData = async () => {
+      try {
+        let res = await courtService.getCourts()
+        return res.data
+      } catch (error) {
+        navigate('/')
+      }
+    }
+
     getCourtsData().then(res => {
       setInitCourtsData(res)
       //filterCourtsDataByCourtNumber(res)
-    })
+    }, [])
   })
 
   const theme = createTheme({
@@ -83,15 +95,6 @@ export const NewReservation = () => {
   const cacheRtl = createCache({
     key: 'muirtl',
   })
-
-  const getCourtsData = async () => {
-    try {
-      let res = await courtService.getCourts()
-      return res.data
-    } catch (error) {
-      navigate('/')
-    }
-  }
 
   const isIntersected = (reservation, _startHour, _endHour) => {
     return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within

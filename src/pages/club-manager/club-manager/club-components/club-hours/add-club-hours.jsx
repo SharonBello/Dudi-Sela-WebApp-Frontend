@@ -11,7 +11,8 @@ export const AddClubHours = ({handleSaveClubHours}) => {
   const [tillHour, setTillHour] = useState('11:00');
 
   useEffect(() => {
-    DemoWorkHours(setWorkHours)
+    if (workHours.length === 0)
+      DemoWorkHours(setWorkHours)
   }, [])
   return (
     <Box className="club-hours-fields-container flex justify-between">

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
@@ -20,12 +20,12 @@ export const CreateClubCourse = ({ showModalCreate, closeClubCourse, setShowModa
         setShowModalCreate(false)
     }
 
-    const getInstructors = useCallback(async () => {
-        let instructors = await instructorService.getInstructors()
-        setTennisInstructors(instructors)
-      }, [setTennisInstructors])
 
     useEffect(() => {
+        const getInstructors = async () => {
+            let instructors = await instructorService.getInstructors()
+            setTennisInstructors(instructors)
+        }
         getInstructors()
     }, [])
 

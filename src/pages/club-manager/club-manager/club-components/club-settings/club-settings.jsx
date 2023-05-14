@@ -26,6 +26,16 @@ export const ClubSettings = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=> {
+    const getClubPreferences = async () => {
+      try {
+        setIsLoading(true)
+        let res = await courtService.getClubPreferences()
+        setIsLoading(false)
+        return res.data.club_preferences
+      } catch (error) {
+        navigate('/')
+      }
+    }
     if (hrBeforeCancel === undefined) {
       getClubPreferences().then(res => {
         setHrBeforeCancel(res.hrBeforeCancel)
@@ -41,16 +51,7 @@ export const ClubSettings = () => {
       })
     }
   }, [])
-  const getClubPreferences = async () => {
-    try {
-      setIsLoading(true)
-      let res = await courtService.getClubPreferences()
-      setIsLoading(false)
-      return res.data.club_preferences
-    } catch (error) {
-      navigate('/')
-    }
-  }
+
   const handleSave = async (e) => {
     e.stopPropagation()
     e.preventDefault()

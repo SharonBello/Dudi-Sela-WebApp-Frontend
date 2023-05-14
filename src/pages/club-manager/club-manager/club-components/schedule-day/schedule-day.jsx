@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { reservationService } from '../../../../../services/reservation.service.js';
@@ -13,10 +14,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [selectedCourts, setSelectedCourts] = useState([]);
+  const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const START_HOUR_DAY = 6
+  const navigate = useNavigate()
 
   const handleEditEvent = (e) => {
-    // setSelectedCourts([e.row.courtNumber + " מגרש"])  // TODO: fix select to show the selected court number in modal
+    if (e.row.courtNumber>0)
+      setSelectedCourtNumber(e.row.courtNumber)
+    else
+      setSelectedCourtNumber(e.row.courtNumber.split("-")[0])
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
@@ -37,31 +43,28 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   const columns = getColumns();
 
-  const getTodayReservations = useCallback(async () => {
-    let reservations = await reservationService.queryByDate(mDate)
-    let _rows = getRows()
-    reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-    });
-    setRows(_rows)
-  }, [mDate])
-
-  const getTodaysEvents = useCallback(async () => {
-    // get events using eventsService.getClubEvents(), and then filter by mDate
-    // let reservations = await reservationService.queryByDate(mDate)
-    // let _rows = getRows()
-    // reservations.forEach(reservation => {
-    //   const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-    //   _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-    // });
-    // setRows(_rows)
-  }, [])
-
   useEffect(() => {
+    let _rows = JSON.parse(JSON.stringify(rows))
+    const getReservationsByDate = async () => {
+      let reservations = await reservationService.queryByDate(mDate)
+      reservations.forEach(reservation => {
+        const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+      });
+      setRows(_rows)
+    }
+    const getTodaysEvents = async () => {
+      let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+      reservations.forEach(reservation => {
+        const hrStart = JSON.parse(reservation.hours).startHour.split(":")[0]
+        const startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
+      });
+      setRows(_rows)
+      getReservationsByDate()
+    }
     initSchedule()
-    getTodayReservations()
-    // getTodaysEvents()
+    getTodaysEvents()
   }, [mDate])
 
   const initSchedule = () => {
@@ -71,6 +74,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
+    navigate('/manager')
   }
 
   const handleSubmit = async () => {
@@ -102,15 +106,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
 
   const handleImport = async () => {
-    setIsLoading(true)
-    let reservations = await reservationService.queryByWeekDay(dayOfWeek.toLowerCase())
-    let _rows = [...rows]
-    reservations.forEach(item => {
-      const startHourTxt = hoursDataArr[item.startHour - START_HOUR_DAY]
-      _rows[item.courtNumber - 1][startHourTxt] = item.username //.split("@")[0]
-    });
-    setRows(_rows)
-    setIsLoading(false)
+    // setIsLoading(true)
+    // let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+    // let _rows = [...rows]
+    // reservations.forEach(item => {
+    //   const startHourTxt = hoursDataArr[item.startHour - START_HOUR_DAY]
+    //   _rows[item.courtNumber - 1][startHourTxt] = item.username //.split("@")[0]
+    // });
+    // setRows(_rows)
+    // setIsLoading(false)
   }
 
   const handleExport = async () => {
@@ -135,7 +139,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
+        <EditEventModal selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
       )
     }
   }

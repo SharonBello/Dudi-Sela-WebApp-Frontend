@@ -32,7 +32,7 @@ export const getRows = () => {
     }
     _rows.push({
       id: 7,
-      courtNumber: "7 - כחול מוזל",
+      courtNumber: "7-כחול מוזל",
       sixAM: "",
       sevenAM: "",
       eightAM: "",
@@ -54,7 +54,7 @@ export const getRows = () => {
     })
     _rows.push({
       id: 8,
-      courtNumber: "8 - אדום מוזל",
+      courtNumber: "8-אדום מוזל",
       sixAM: "",
       sevenAM: "",
       eightAM: "",
@@ -76,7 +76,7 @@ export const getRows = () => {
     })
     _rows.push({
       id: 9,
-      courtNumber: "9 - ירוק מוזל",
+      courtNumber: "9-ירוק מוזל",
       sixAM: "",
       sevenAM: "",
       eightAM: "",

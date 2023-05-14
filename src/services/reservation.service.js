@@ -15,9 +15,9 @@ export const reservationService = {
     changeCredit,
     getCredit,
     isReservationExists,
-    queryByWeekDay,
     resetByWeekDay,
     addNewReservationToUser,
+    queryByDayofweek,
     postByWeekDay
 }
 
@@ -42,7 +42,22 @@ async function queryByDate(date) {
         if (!data) {
             reservations = []
         } else {
-            reservations = data.data.reservations
+            reservations = data.data
+        }
+        return reservations
+    } catch (err) {
+        throw err
+    }
+}
+
+async function queryByDayofweek(dayofweek) {
+    try {
+        let data = await httpService.post('reservations/userreservations/dayofweek', {"dayofweek": dayofweek})
+        let reservations
+        if (!data) {
+            reservations = []
+        } else {
+            reservations = data.data
         }
         return reservations
     } catch (err) {
@@ -64,16 +79,6 @@ async function resetByWeekDay(weekday) {
     try {
         let res = await httpService.post('reservations/schedule/reset?weekday=' + weekday)
         return res
-    } catch (err) {
-        throw err
-    }
-}
-
-async function queryByWeekDay(weekday) {
-    try {
-        let data = await httpService.get('reservations/schedule/weekday?weekday=' + weekday)
-        let reservations = data.data.reservations
-        return reservations
     } catch (err) {
         throw err
     }

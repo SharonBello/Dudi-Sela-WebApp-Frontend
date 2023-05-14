@@ -30,7 +30,7 @@ import { instructorService } from '../../services/instructor.service';
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
+export const EditEventModal = ({ selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(EventTypes[1]);
@@ -98,7 +98,7 @@ useEffect(() => {
   }
 
   const saveClubEvent = async () => {
-    const payload =   { eventType, startDate, hours: JSON.stringify(hours), frequencyType, courts: JSON.stringify(courts),
+    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, hours: JSON.stringify(hours), frequencyType, courtNumber: selectedCourtNumber,
     price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants)}
 
     if (!loggedUser) {
@@ -132,6 +132,7 @@ useEffect(() => {
     if (validateEvent() === true) {
       setIsLoading(true)
       saveClubEvent()
+      // TODO: refersh club manager page
     } else {
       setShowMessageAlert(true)
     }
@@ -222,15 +223,20 @@ useEffect(() => {
               </Typography>
             </Box>
             <Box className="modal-body">
+
+
+            <Typography className="modal-body-text">
+                  יום בשבוע - {dayOfWeek}
+                </Typography>
               <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
               <EventTime theme={theme} cacheRtl={cacheRtl} startHour={hours.startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">
                 <Typography className="modal-body-text">
-                  מגרשים
+                  מספר המגרש שנבחר - {selectedCourtNumber}
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
-                  <SelectMenu multiple={true} inputLabel="בחר מגרש" defaultValue={selectedCourts} values={clubCourts} setValue={setCourts} />
+                  {/* <SelectMenu inputLabel="בחר מגרש" defaultValue={selectedCourts} values={clubCourts} setValue={setCourts} /> */}
                   <CourtPrice price={price} setPrice={setPrice} paidStatus={paidStatus} setPaidStatus={setPaidStatus} />
                 </div>
               </Box>

@@ -26,11 +26,10 @@ import Alert from '@mui/material/Alert'
 import dayjs from 'dayjs'
 import { EventTypes, FrequencyTypes, PaymentStatus } from '../club-manager/club-manager/club-helper.jsx'
 import { SelectMenu } from '../shared-components/select-menu'
-import { instructorService } from '../../services/instructor.service';
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
+export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(EventTypes[1]);
@@ -48,19 +47,14 @@ export const EditEventModal = ({ selectedCourtNumber, openEditEvent, closeEditEv
   const [shouldJoinClass, setShouldJoinClass] = useState(false);
   const [instructor, setInstructor] = useState("");
   const [participants, setParticipants] = useState(["קדם קבסו"]);
-  const [tennisInstructors, setTennisInstructors] = useState([])
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [clubCourts, setClubCourts] = useState([])
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const navigate = useNavigate()
-  const getInstructors = useCallback(async () => {
-    let instructors = await instructorService.getInstructors()
-    setTennisInstructors(instructors)
-  }, [setTennisInstructors])
-useEffect(() => {
-    getInstructors()
+
+  useEffect(() => {
     if (clubCourts.length === 0) {
       courtService.getClubCourts().then(res => {
         setClubCourts(res.data.club_courts.map(court => court.name))

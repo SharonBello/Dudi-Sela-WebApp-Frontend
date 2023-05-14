@@ -7,6 +7,7 @@ import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js
 import { Loader } from '../../../../../components/loader.jsx';
 import { getRows, hoursData, hoursDataArr, columnsData } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
+import { instructorService } from '../../../../../services/instructor.service.js';
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -15,8 +16,14 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [selectedCourts, setSelectedCourts] = useState([]);
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
+  const [tennisInstructors, setTennisInstructors] = useState([])
+
   const START_HOUR_DAY = 6
-  const navigate = useNavigate()
+
+  const getInstructors = useCallback(async () => {
+    let instructors = await instructorService.getInstructors()
+    setTennisInstructors(instructors)
+  }, [setTennisInstructors])
 
   const handleEditEvent = (e) => {
     if (e.row.courtNumber>0)
@@ -33,6 +40,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       _columns.push({
         field: col.hour,
         headerName: col.headerName,
+        cellClassName: (params) => {
+          if(!tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
+            return 'single-event';
+          }
+          if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
+            return 'week-event';
+          }
+          return;
+        },
         type: 'singleSelect',
         width: 140,
         editable: true,
@@ -42,29 +58,29 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     return _columns;
   }
   const columns = getColumns();
-
+  const getReservationsByDate = async (_rows) => {
+    let reservations = await reservationService.queryByDate(mDate)
+    reservations.forEach(reservation => {
+      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+    });
+    setRows(_rows)
+  }
+  const getTodaysEvents = async (_rows) => {
+    let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+    reservations.forEach(reservation => {
+      const hrStart = JSON.parse(reservation.hours).startHour.split(":")[0]
+      const startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
+    });
+    setRows(_rows)
+    getReservationsByDate(_rows)
+  }
   useEffect(() => {
+    getInstructors()
     let _rows = JSON.parse(JSON.stringify(rows))
-    const getReservationsByDate = async () => {
-      let reservations = await reservationService.queryByDate(mDate)
-      reservations.forEach(reservation => {
-        const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
-      });
-      setRows(_rows)
-    }
-    const getTodaysEvents = async () => {
-      let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
-      reservations.forEach(reservation => {
-        const hrStart = JSON.parse(reservation.hours).startHour.split(":")[0]
-        const startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
-      });
-      setRows(_rows)
-      getReservationsByDate()
-    }
     initSchedule()
-    getTodaysEvents()
+    getTodaysEvents(_rows)
   }, [mDate])
 
   const initSchedule = () => {
@@ -74,7 +90,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
-    navigate('/manager')
+    let _rows = JSON.parse(JSON.stringify(rows))
+    getTodaysEvents(_rows)
   }
 
   const handleSubmit = async () => {
@@ -139,7 +156,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
+        <EditEventModal tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
       )
     }
   }
@@ -161,6 +178,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
           rows={rows}
           columns={columns}
           editMode="row"
+          sx={{ m: 2 }}
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />

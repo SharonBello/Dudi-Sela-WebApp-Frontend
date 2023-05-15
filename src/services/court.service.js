@@ -21,6 +21,7 @@ export const courtService = {
     getAboutClub,
     getUserPermissions,
     deletePriceConstraint,
+    queryAdminUser
 }
 
 async function getCourts() {
@@ -223,3 +224,12 @@ async function getPriceConstraints() {
     }
 }
 
+async function queryAdminUser(data) {
+    try {
+        let res = await httpService.post('courts/adminusers', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}

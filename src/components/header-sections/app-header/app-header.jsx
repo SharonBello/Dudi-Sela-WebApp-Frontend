@@ -6,6 +6,7 @@ import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions.jsx'
 import { userService } from '../../../services/user.service.js'
+import { courtService } from '../../../services/court.service.js'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
@@ -13,7 +14,7 @@ export const AppHeader = () => {
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   const [showProfileMenu, setShowProfileMenu] = useState(false)
   const [isSideMenu, setSideMenu] = useState(false)
-  const adminUser = sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
+  const [isAdminUser, setIsAdminUser] = useState(false)// = sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)
   const { width } = useWindowDimensions()
   const [scrolled, setScrolled] = useState(false)
 
@@ -23,6 +24,17 @@ export const AppHeader = () => {
   let [isActive, setIsActive] = useState(false)
   let classHamburgerMenu = (width < 900) ? 'visible' : 'hidden'
   let classNavList = (width < 600) ? 'hidden' : ''
+
+  useEffect(()=> {
+    const queryIsAdminUser = async () => {
+      return await courtService.queryAdminUser({"uid": loggedUser.uid})
+    }
+    if (loggedUser && loggedUser.uid) {
+      queryIsAdminUser().then(res => {
+        setIsAdminUser(res.data)
+      });
+    }
+  }, [loggedUser])
 
   const onToggleSideMenu = useCallback(() => {
     let flag = !isSideMenu
@@ -124,10 +136,10 @@ export const AppHeader = () => {
           <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
           </li>
 
-          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
+          {(isAdminUser === true && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
           </li> : null)}
 
-          {(adminUser === "true" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
+          {(isAdminUser === true && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
           </li> : null)}
 
           <li>

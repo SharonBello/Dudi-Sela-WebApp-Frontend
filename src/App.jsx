@@ -1,17 +1,18 @@
 import React from 'react'
+import { useEffect } from 'react'
 import routes from './routes.js'
 import { Routes, Route } from 'react-router'
 import { AppHeader } from './components/header-sections/app-header/app-header.jsx'
 import { AppFooter } from './components/app-footer/app-footer.jsx'
 import { SnackbarProvider } from 'notistack';
 import { useDispatch } from 'react-redux'
-import { setLoggedUser } from './store/actions/user.actions.js';
+import { setLoggedUser, setUserUid } from './store/actions/user.actions.js';
 import { useNavigate } from "react-router"
 import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ScrollTop from './components/scroll-top.jsx'
 import './main.scss'
-import { useEffect } from 'react'
+import { STORAGE_KEY_LOGGED_USER } from './services/user.service.js'
 
 export const App = () => {
    const dispatch = useDispatch()
@@ -19,6 +20,8 @@ export const App = () => {
 
    window.addEventListener("storage", () => {
       dispatch(setLoggedUser())
+      let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+      dispatch(setUserUid(uid))
       navigate('/')
    });
 

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export const ClubHoursList = ({clubHoursList, handleSaveClubHour, handleDeleteClubHour, handleEditClubHours, }) => {
   return (
     <div className="club-hr flex-column">
-          {clubHoursList.map((clubHours, index) => (
+          {clubHoursList && clubHoursList.map((clubHours, index) => (
             <div className="form-fields flex-column">
               <p>{clubHours.days.join(", ")}</p>
               <div className="select-fields flex justify-between">

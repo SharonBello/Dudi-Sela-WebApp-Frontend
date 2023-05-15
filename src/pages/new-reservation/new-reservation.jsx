@@ -72,20 +72,32 @@ export const NewReservation = () => {
   const saturdayDate = getSaturdayDate()
 
   useEffect(() => {
-    const getCourtsData = async () => {
+    const getClubCourts = async () => {
       try {
-        let res = await courtService.getCourts()
+        let res = await courtService.getClubCourts()
+        const courtsData = {
+          start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+          end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+          court_numbers: res.data.club_courts.map( court => court.name)
+        }
+        setInitCourtsData(courtsData)
+      } catch (error) {
+        navigate('/')
+      }
+    }
+    const getClubHours = async () => {
+      try {
+        let res = await courtService.getClubHours()
         return res.data
       } catch (error) {
         navigate('/')
       }
     }
+    getClubCourts();
 
-    getCourtsData().then(res => {
-      setInitCourtsData(res)
       //filterCourtsDataByCourtNumber(res)
     }, [])
-  })
+  // })
 
   const theme = createTheme({
     direction: 'rtl',

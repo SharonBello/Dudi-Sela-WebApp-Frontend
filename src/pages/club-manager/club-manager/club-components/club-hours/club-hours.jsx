@@ -27,6 +27,7 @@ export const ClubHours = () => {
       DemoWorkHours(setWorkHours)
       getClubHours().then(res => {
         setClubHoursList(res)
+        setIsLoading(false)
       })
     }
   }, [])
@@ -36,7 +37,7 @@ export const ClubHours = () => {
       setIsLoading(true)
       let res = await courtService.addClubHours(clubHours)
       getClubHours().then(res => {
-        setClubHoursList(res)
+        setClubHoursList(res.data)
         setIsLoading(false)
       })
     }
@@ -46,8 +47,8 @@ export const ClubHours = () => {
     let res = await courtService.deleteClubHours(clubHoursList[index])
     // setIsLoading(false)
     getClubHours().then(res => {
-      setClubHoursList(res)
       setIsLoading(false)
+      setClubHoursList(res.data.club_hours)
     })
   }
   const handleEditClubHours = async (e, clubHours) => {
@@ -56,9 +57,7 @@ export const ClubHours = () => {
   const getClubHours = async () => {
     try {
       setIsLoading(true)
-      let res = await courtService.getClubHours()
-      setIsLoading(false)
-      return res.data.club_hours
+      return await courtService.getClubHours()
     } catch (error) {
       navigate('/')
     }

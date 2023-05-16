@@ -73,6 +73,7 @@ export const ClubHours = () => {
   const renderAddClubHours = () => {
     return (<AddClubHours handleSaveClubHours={handleSaveClubHours}/>)
   }
+
   const renderClubHours = () => {
     if (clubHoursList.length > 0) {
       return (<ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>)

@@ -101,8 +101,6 @@ export const NewReservation = () => {
       }
     }
     getClubCourts();
-
-      //filterByCourtNumAndStartHour(res)
     }, [])
   // })
 
@@ -117,25 +115,21 @@ export const NewReservation = () => {
 
   const isIntersected = (reservation, _startHour, _endHour) => {
     return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within
-      (_startHour <= reservation.startHour && _endHour < reservation.endHour) || // intersect within
-      (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
+    (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
       (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
       (_startHour > reservation.startHour && _startHour < reservation.endHour && _endHour > reservation.endHour) || // intersect right
       (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
-  const filterByCourtNumAndStartHour = async (res) => {
-    // if for a given date and start time, all courts are reserved
-    //    splice the start time from the courts data
-    let _courtsData = JSON.parse(JSON.stringify(res))
-    // Initialize court numbers
-    // TODO: GET COURT NUMBERS FROM BACKEND
-    _courtsData.court_numbers = JSON.parse(JSON.stringify(clubCourts))
+  const filterStartHourByCourts = async () => {
+    // when a given date and start time, all courts are reserved
+    // then, splice the start time from the available start hours
+    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     const _date = dayjs(date).format(DateFormat)
     let reservations = await reservationService.queryByDate(_date)
     // Filter courts data by reserved courts
-    // loop over each time, and find out for e.g. 6am all courts are reserved
+    // loop each hour, parse whether all courts are reserved for that hour, e.g. for 6am all courts are reserved
     hoursVals.forEach(hour => {
       const setCourts = new Set()
       reservations.forEach(reservation => {
@@ -143,9 +137,8 @@ export const NewReservation = () => {
           setCourts.add(reservation.courtNumber)
         }
       });
-      // TODO
-      if (setCourts.size === 6) {// all courts are reserved
-        // TODO splice the start time
+      if (setCourts.size === _courtsData.court_numbers.length) {// all courts are reserved
+        // splice the start time
         _courtsData.start_time.splice(hour - START_HOUR_DAY, 1)
       }
     })
@@ -248,6 +241,7 @@ export const NewReservation = () => {
     setCourtNumber()
     setIsLoading(false)
     setShowDuration(true)
+    filterStartHourByCourts()
   }
 
   const handleDurationChange = (e) => {

@@ -35,7 +35,7 @@ export const NewReservation = () => {
   const [courtsData, setCourtsData] = useState()
   const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
-  const todaysDate = dayjs().format('DD/MM/YYYY')
+  const todaysDate = dayjs().format('YYYY-MM-DD')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)
@@ -59,6 +59,7 @@ export const NewReservation = () => {
     const fetchClubCourts = async() => {
       let res = await courtService.getClubCourts()
       res && res.data && setClubCourts(res.data.club_courts.map(court => court.name))
+      handleSelectDate(todaysDate)
     }
     if (clubCourts.length === 0) {
       fetchClubCourts()
@@ -71,16 +72,22 @@ export const NewReservation = () => {
 
   const saturdayDate = getSaturdayDate()
 
+  const handleInitCourtsData = async () => {
+    let res = await courtService.getClubCourts()
+    if (res && res.data) {
+      const courtsData = {
+        start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+        court_numbers: res.data.club_courts.map( court => court.name)
+      }
+      setInitCourtsData(courtsData)
+      setCourtsData(courtsData);
+    }
+  }
   useEffect(() => {
     const getClubCourts = async () => {
       try {
-        let res = await courtService.getClubCourts()
-        const courtsData = {
-          start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-          end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-          court_numbers: res.data.club_courts.map( court => court.name)
-        }
-        setInitCourtsData(courtsData)
+        await handleInitCourtsData()
       } catch (error) {
         navigate('/')
       }
@@ -159,19 +166,24 @@ export const NewReservation = () => {
   }
 
   const filterCourtsDataByDate = async (_date) => {
-    // TODO filter courts
-    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-    // Get reserved courts by date
-    // let reservations = await reservationService.queryByDate(_date)
-    // setReservationsByDate(reservations)
-    // Filter courts data by reserved courts
-    // reservations.forEach(reservation => {
-    //   if (reservation.date === _date && reservation.startHour === startHour) {
-    //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-    //     _courtsData.court_numbers.splice(index, 1);
-    //   }
-    // });
-    setCourtsData(_courtsData);
+    if (!initCourtsData) {
+      await handleInitCourtsData()
+    } else {
+      // TODO filter courts
+      let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
+      // Get reserved courts by date
+      // let reservations = await reservationService.queryByDate(_date)
+      // setReservationsByDate(reservations)
+      // Filter courts data by reserved courts
+      // reservations.forEach(reservation => {
+      //   if (reservation.date === _date && reservation.startHour === startHour) {
+      //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+      //     _courtsData.court_numbers.splice(index, 1);
+      //   }
+      // });
+      setCourtsData(_courtsData);
+
+    }
   }
 
   const addReservation = async () => {
@@ -523,11 +535,10 @@ export const NewReservation = () => {
           <ThemeProvider theme={theme}>
             <Stack spacing={4} sx={{ display: "flex-column", alignItems: "center", justifyContent: "justify-between", gap: "1.5rem" }}>
               <section className="date-container flex">
-                {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs}>
+               {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="il">
                   <MobileDatePicker
                     label="תאריך"
-                    inputFormat="DD/MM/YYYY"
-                    placeholder={todaysDate}
+                    defaultValue={dayjs(todaysDate)}
                     onChange={handleSelectDate}
                     renderInput={(params) => <TextField {...params} />}
                   />
@@ -535,8 +546,7 @@ export const NewReservation = () => {
                   : <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DesktopDatePicker
                       label="תאריך"
-                      inputFormat="DD/MM/YYYY"
-                      placeholder={todaysDate}
+                      defaultValue={dayjs(todaysDate)}
                       onChange={handleSelectDate}
                       renderInput={(params) => <TextField {...params} />}
                     />

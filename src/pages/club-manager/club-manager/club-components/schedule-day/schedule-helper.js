@@ -1,7 +1,8 @@
 import dayjs from "dayjs"
+import { DateFormat } from '../../club-helper'
 
 export const getCurrentDate = () => {
-    return dayjs(new Date()).format('YYYY-MM-DD')
+    return dayjs(new Date()).format(DateFormat)
 }
 
 export const getRows = () => {

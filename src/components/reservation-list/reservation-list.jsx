@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react'
 import { ReservationPreview } from '../reservation-preview/reservation-preview.jsx'
+import { DateFormat } from '../../pages/club-manager/club-manager/club-helper.jsx'
 import dayjs from 'dayjs';
 
 export const ReservationList = ({ reservations }) => {
-    const todaysDate = dayjs().format('YYYY-MM-DD')
+    const todaysDate = dayjs().format(DateFormat)
     const [sorting, setSorting] = useState({ field: 'date', ascending: false })
     const [currentReservations, setCurrentReservations] = useState(reservations)
 

@@ -24,7 +24,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
 import dayjs from 'dayjs'
-import { EventTypes, FrequencyTypes, PaymentStatus } from '../club-manager/club-manager/club-helper.jsx'
+import { EventTypes, FrequencyTypes, PaymentStatus, DateFormat } from '../club-manager/club-manager/club-helper.jsx'
 import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
@@ -33,12 +33,12 @@ export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEdi
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(EventTypes[1]);
-  const [startDate, setStartDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+  const [startDate, setStartDate] = useState(dayjs(new Date()).format(DateFormat));
   const [hours, setHours] = useState({ startHour: hoursData[selectedStartHour]+":00", endHour: "21:00" })
   const [frequencyType, setFrequencyType] = useState(FrequencyTypes[0])
   const [courts, setCourts] = useState(selectedCourts);
   const [price, setPrice] = useState();
-  const [date, setDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+  const [date, setDate] = useState(dayjs(new Date()).format(DateFormat));
   const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
   const [description, setDescription] = useState("test")
   const [endHour, setEndHour] = useState()

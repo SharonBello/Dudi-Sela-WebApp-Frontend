@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import TextField from '@mui/material/TextField';
+import { DateFormat } from '../../club-helper'
 
 export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, closeUserDetails }) => {
     const [firstName, setFirstName] = useState(user.firstName)
@@ -30,7 +31,7 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
     const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth)
 
     const handleDateChange = (dateChanged) => {
-        setDateOfBirth(dayjs(new Date(dateChanged)).format('YYYY-MM-DD'))
+        setDateOfBirth(dayjs(new Date(dateChanged)).format(DateFormat))
     }
     const { width } = useWindowDimensions()
     const todaysDate = dayjs().format('DD/MM/YYYY')

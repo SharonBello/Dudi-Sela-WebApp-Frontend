@@ -23,10 +23,10 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
+import { DateFormat } from '../club-manager/club-manager/club-helper.jsx'
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
-  // TODO: GET COURT NUMBERS FROM BACKEND
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
@@ -124,7 +124,7 @@ export const NewReservation = () => {
     // TODO: GET COURT NUMBERS FROM BACKEND
     _courtsData.court_numbers = JSON.parse(JSON.stringify(clubCourts))
     // Get reserved courts by date
-    const _date = dayjs(date).format('YYYY-MM-DD')
+    const _date = dayjs(date).format(DateFormat)
     let reservations = await reservationService.queryByDate(_date)
     // Filter courts data by reserved courts
     // loop over each time, and find out for e.g. 6am all courts are reserved
@@ -146,7 +146,7 @@ export const NewReservation = () => {
   const filterCourtsDataByHour = async (_startHour, _endHour) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
-    const _date = dayjs(date).format('YYYY-MM-DD')
+    const _date = dayjs(date).format(DateFormat)
     let reservations = await reservationService.queryByDate(_date)
     // Filter courts data by reserved courts
     reservations.forEach(reservation => {
@@ -175,7 +175,7 @@ export const NewReservation = () => {
   }
 
   const addReservation = async () => {
-    const _date = dayjs(date).format('YYYY-MM-DD')
+    const _date = dayjs(date).format(DateFormat)
     const payload = {
       startHour,
       endHour,
@@ -279,7 +279,7 @@ export const NewReservation = () => {
 
   const renderEndHourSelect = () => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-    const _date = dayjs(date).format('YYYY-MM-DD')
+    const _date = dayjs(date).format(DateFormat)
     // if courts available for startTime (valText), return button
     let _endHour
     courtsData.start_time.map(val => {
@@ -371,10 +371,10 @@ export const NewReservation = () => {
     }
   }
 
-  const handleDateChange = (newValue) => {
+  const handleSelectDate = (newValue) => {
     if (validDate(newValue)) {
       setDate(newValue)
-      filterCourtsDataByDate(dayjs(newValue).format('YYYY-MM-DD'))
+      filterCourtsDataByDate(dayjs(newValue).format(DateFormat))
     } else {
       setWarningMessage(true)
       setMessageAlert("לא ניתן להזמין מגרש אחרי שבת הקרובה")
@@ -528,7 +528,7 @@ export const NewReservation = () => {
                     label="תאריך"
                     inputFormat="DD/MM/YYYY"
                     placeholder={todaysDate}
-                    onChange={handleDateChange}
+                    onChange={handleSelectDate}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -537,7 +537,7 @@ export const NewReservation = () => {
                       label="תאריך"
                       inputFormat="DD/MM/YYYY"
                       placeholder={todaysDate}
-                      onChange={handleDateChange}
+                      onChange={handleSelectDate}
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </LocalizationProvider>}

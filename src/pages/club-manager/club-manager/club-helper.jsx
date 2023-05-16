@@ -122,3 +122,4 @@ export const DemoClubEvents = [
   }
 ]
 
+export const DateFormat = 'YYYY-MM-DD'

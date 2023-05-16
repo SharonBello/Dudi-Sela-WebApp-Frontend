@@ -16,7 +16,7 @@ import { ClubHours } from './club-manager/club-components/club-hours/club-hours.
 import { PunchCards } from './club-manager/club-components/punch-cards/punch-cards.jsx'
 import { ClubCourts } from './club-manager/club-components/club-courts/club-courts.jsx'
 import { SalesDetails } from './club-manager/club-components/sales-details/sales-details.jsx'
-import { primaryDrawerList, secondaryDrawerList } from './club-manager/club-helper.jsx'
+import { primaryDrawerList, secondaryDrawerList, DateFormat } from './club-manager/club-helper.jsx'
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -30,7 +30,7 @@ export const ClubManager = () => {
   const dispatch = useDispatch()
 
   const openTodaysSchedule = () => {
-    setDate(dayjs(unFormattedDate).format('YYYY-MM-DD'))
+    setDate(dayjs(unFormattedDate).format(DateFormat))
     setUnFormattedDate(new Date())
   }
 
@@ -38,7 +38,7 @@ export const ClubManager = () => {
     let _date = unFormattedDate
     _date.setDate(_date.getDate() + 1)
     setUnFormattedDate(_date)
-    setDate(dayjs(_date).format('YYYY-MM-DD'))
+    setDate(dayjs(_date).format(DateFormat))
     setWeekDay(dayjs(_date).format('dddd'))
   }
 
@@ -46,7 +46,7 @@ export const ClubManager = () => {
     let _date = unFormattedDate
     _date.setDate(_date.getDate() - 1)
     setUnFormattedDate(_date)
-    setDate(dayjs(_date).format('YYYY-MM-DD'))
+    setDate(dayjs(_date).format(DateFormat))
     setWeekDay(dayjs(_date).format('dddd'))
   }
 

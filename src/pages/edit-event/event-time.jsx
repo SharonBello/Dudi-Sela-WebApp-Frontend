@@ -12,13 +12,14 @@ import { TimeField } from '@mui/x-date-pickers/TimeField';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions';
 import dayjs from 'dayjs';
 import TextField from '@mui/material/TextField';
+import { DateFormat } from '../club-manager/club-manager/club-helper'
 
 export const EventTime = ({ theme, cacheRtl, startHour, setStartHour, endHour, setEndHour, date, setDate }) => {
     const { width } = useWindowDimensions()
     const todaysDate = dayjs().format('DD/MM/YYYY')
 
     const handleDateChange = (dateChanged) => {
-        setDate(dayjs(new Date(dateChanged)).format('YYYY-MM-DD'))
+        setDate(dayjs(new Date(dateChanged)).format(DateFormat))
     }
 
     return (

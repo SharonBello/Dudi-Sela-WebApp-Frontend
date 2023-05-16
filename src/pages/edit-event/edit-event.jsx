@@ -142,6 +142,7 @@ export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEdi
 
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
+    closeEditEvent()
   }
 
   const alertAction = (

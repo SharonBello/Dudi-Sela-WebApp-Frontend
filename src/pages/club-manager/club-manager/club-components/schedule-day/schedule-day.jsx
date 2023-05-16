@@ -74,7 +74,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       const startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
       _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
     });
-    setRows(_rows)
     getReservationsByDate(_rows)
   }
   useEffect(() => {

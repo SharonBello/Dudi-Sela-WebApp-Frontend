@@ -66,7 +66,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     });
     setRows(_rows)
   }
-  const getTodaysEvents = async (_rows) => {
+  const setTodaysEvents = async () => {
+    let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     reservations.forEach(reservation => {
       const hrStart = JSON.parse(reservation.hours).startHour.split(":")[0]
@@ -78,9 +79,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   useEffect(() => {
     getInstructors()
-    let _rows = JSON.parse(JSON.stringify(rows))
     initSchedule()
-    getTodaysEvents(_rows)
+    setTodaysEvents()
   }, [mDate])
 
   const initSchedule = () => {
@@ -90,67 +90,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
-    let _rows = JSON.parse(JSON.stringify(rows))
-    getTodaysEvents(_rows)
-  }
-
-  const handleSubmit = async () => {
-    setIsLoading(true)
-    let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-    const weeklyReservations = []
-    rows.forEach(row => {
-      Object.keys(row).forEach(key => {
-        if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
-          const hour = hoursData[key]
-          weeklyReservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
-        }
-      })
-    })
-    for (let i = 0; i < weeklyReservations.length; i++) {
-      const payload = weeklyReservations[i];
-      let resExists = await reservationService.isReservationExists(uid, payload)
-      if (!resExists.data.isExists) {
-        let res = await reservationService.addNewReservation(uid, payload)
-        let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
-        if (res.data.result === 0 && resByDate.data.result === 0) {
-          console.log("success")
-        } else {
-          console.log("failure")
-        }
-      }
-    }
-    setIsLoading(false)
-  }
-
-  const handleImport = async () => {
-    // setIsLoading(true)
-    // let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
-    // let _rows = [...rows]
-    // reservations.forEach(item => {
-    //   const startHourTxt = hoursDataArr[item.startHour - START_HOUR_DAY]
-    //   _rows[item.courtNumber - 1][startHourTxt] = item.username //.split("@")[0]
-    // });
-    // setRows(_rows)
-    // setIsLoading(false)
-  }
-
-  const handleExport = async () => {
-    setIsLoading(true)
-    // let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
-    // scheduleData = scheduleData[dayOfWeek.toLowerCase()]
-    const scheduleData = []
-    rows.forEach(row => {
-      Object.keys(row).forEach(key => {
-        if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
-          const hour = hoursData[key]
-          const username = row[key]
-          scheduleData.push({ startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate, username: username })
-        }
-      })
-    })
-    // const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
-    // const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
-    setIsLoading(false)
+    setTodaysEvents()
   }
 
   const renderModal = () => {
@@ -184,26 +124,85 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         />
         {renderIsLoading()}
       </Box>
-      <div className='flex'>
-        <button
-          className='submit-button'
-          type='submit'
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >עדכן</button>
-        <button
-          className='submit-button small-margin'
-          type='submit'
-          onClick={handleImport}
-          disabled={isLoading}
-        >יבוא תבנית הזמנות</button>
-        <button
-          className='submit-button small-margin'
-          type='submit'
-          onClick={handleExport}
-          disabled={isLoading}
-        >יצוא תבנית הזמנות</button>
-      </div>
+
     </>
   );
 }
+//  <div className='flex'>
+//         <button
+//           className='submit-button'
+//           type='submit'
+//           onClick={handleSubmit}
+//           disabled={isLoading}
+//         >עדכן</button>
+//         <button
+//           className='submit-button small-margin'
+//           type='submit'
+//           onClick={handleImport}
+//           disabled={isLoading}
+//         >יבוא תבנית הזמנות</button>
+//         <button
+//           className='submit-button small-margin'
+//           type='submit'
+//           onClick={handleExport}
+//           disabled={isLoading}
+//         >יצוא תבנית הזמנות</button>
+//       </div>
+// const handleSubmit = async () => {
+//   setIsLoading(true)
+//   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+//   const weeklyReservations = []
+//   rows.forEach(row => {
+//     Object.keys(row).forEach(key => {
+//       if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
+//         const hour = hoursData[key]
+//         weeklyReservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
+//       }
+//     })
+//   })
+//   for (let i = 0; i < weeklyReservations.length; i++) {
+//     const payload = weeklyReservations[i];
+//     let resExists = await reservationService.isReservationExists(uid, payload)
+//     if (!resExists.data.isExists) {
+//       let res = await reservationService.addNewReservation(uid, payload)
+//       let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
+//       if (res.data.result === 0 && resByDate.data.result === 0) {
+//         console.log("success")
+//       } else {
+//         console.log("failure")
+//       }
+//     }
+//   }
+//   setIsLoading(false)
+// }
+
+// const handleImport = async () => {
+//   // setIsLoading(true)
+//   // let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+//   // let _rows = [...rows]
+//   // reservations.forEach(item => {
+//   //   const startHourTxt = hoursDataArr[item.startHour - START_HOUR_DAY]
+//   //   _rows[item.courtNumber - 1][startHourTxt] = item.username //.split("@")[0]
+//   // });
+//   // setRows(_rows)
+//   // setIsLoading(false)
+// }
+
+// const handleExport = async () => {
+//   setIsLoading(true)
+//   // let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
+//   // scheduleData = scheduleData[dayOfWeek.toLowerCase()]
+//   const scheduleData = []
+//   rows.forEach(row => {
+//     Object.keys(row).forEach(key => {
+//       if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
+//         const hour = hoursData[key]
+//         const username = row[key]
+//         scheduleData.push({ startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate, username: username })
+//       }
+//     })
+//   })
+//   // const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
+//   // const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
+//   setIsLoading(false)
+// }

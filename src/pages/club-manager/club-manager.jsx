@@ -30,8 +30,11 @@ export const ClubManager = () => {
   const dispatch = useDispatch()
 
   const openTodaysSchedule = () => {
-    setDate(dayjs(unFormattedDate).format(DateFormat))
     setUnFormattedDate(new Date())
+    let _date = new Date()
+    _date.setDate(_date.getDate())
+    setDate(dayjs(_date).format(DateFormat))
+    setWeekDay(dayjs(_date).format('dddd'))
   }
 
   const openNextDaySchedule = () => {
@@ -118,9 +121,9 @@ export const ClubManager = () => {
             <li style={{ width: "20%" }}><Typography>{weekDayInHebrew[weekDay]} {date}</Typography></li>
             <li>
               <ul className='clean-list flex align-center justify-center' style={{ gap: "1rem" }}>
-                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule} />אתמול</li>
-                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule} />היום</li>
-                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule} />מחר</li>
+                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule}>אתמול</button></li>
+                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule}>היום</button></li>
+                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule}>מחר</button></li>
               </ul>
             </li>
             <li className="flex" style={{ width: "20%", justifyContent: "end" }}>

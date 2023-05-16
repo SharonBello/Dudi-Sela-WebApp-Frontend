@@ -11,13 +11,13 @@ import { AddClubHours } from './add-club-hours'
 import { ClubHoursList } from './club-hours-list'
 import { courtService } from '../../../../../services/court.service'
 import { useNavigate } from 'react-router-dom'
-import { Loader } from '../../../../../components/loader.jsx';
+import { Loader } from '../../../../../components/loader.jsx'
 
 export const ClubHours = () => {
-  const [workDays, setWorkDays] = useState(WeekDays);
-  const [workHours, setWorkHours] = useState([]);
-  const [fromHour, setFromHour] = useState(DayHours());
-  const [tillHour, setTillHour] = useState(DayHours());
+  const [workDays, setWorkDays] = useState(WeekDays)
+  const [workHours, setWorkHours] = useState([])
+  const [fromHour, setFromHour] = useState(DayHours())
+  const [tillHour, setTillHour] = useState(DayHours())
   const [clubHoursList, setClubHoursList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
@@ -26,7 +26,7 @@ export const ClubHours = () => {
     if (clubHoursList.length === 0) {
       DemoWorkHours(setWorkHours)
       getClubHours().then(res => {
-        setClubHoursList(res)
+        setClubHoursList(res.data)
         setIsLoading(false)
       })
     }
@@ -48,7 +48,7 @@ export const ClubHours = () => {
     // setIsLoading(false)
     getClubHours().then(res => {
       setIsLoading(false)
-      setClubHoursList(res.data.club_hours)
+      setClubHoursList(res.data)
     })
   }
   const handleEditClubHours = async (e, clubHours) => {

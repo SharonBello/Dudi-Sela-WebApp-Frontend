@@ -62,7 +62,7 @@ export const ClubCourts = () => {
     }
   }
   const renderCourts = () => {
-    if (courtData.length > 0) {
+    if (courtData && courtData.length > 0) {
       return (
         courtData.map((court) => {
           return <Box key={court.name} className="club-court">
@@ -87,7 +87,7 @@ export const ClubCourts = () => {
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
       setIsLoading(true)
-      let res = await courtService.addClubCourt({"name": courtName, "type": courtType})
+      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType})
       getClubCourts().then(res => {
         setCourtData(res)
       })

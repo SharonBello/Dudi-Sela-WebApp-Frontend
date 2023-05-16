@@ -30,7 +30,7 @@ export const NewReservation = () => {
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
-  const [courtNumber, setCourtNumbers] = useState()
+  const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
   const [initCourtsData, setInitCourtsData] = useState()
@@ -58,7 +58,7 @@ export const NewReservation = () => {
   useEffect(() => {
     const fetchClubCourts = async() => {
       let res = await courtService.getClubCourts()
-      res && res.data && setClubCourts(res.data.club_courts.map(court => court.name))
+      res && res.data && res.data.club_courts && setClubCourts(res.data.club_courts.map(court => court.name))
       handleSelectDate(todaysDate)
     }
     if (clubCourts.length === 0) {
@@ -102,7 +102,7 @@ export const NewReservation = () => {
     }
     getClubCourts();
 
-      //filterCourtsDataByCourtNumber(res)
+      //filterByCourtNumAndStartHour(res)
     }, [])
   // })
 
@@ -117,13 +117,14 @@ export const NewReservation = () => {
 
   const isIntersected = (reservation, _startHour, _endHour) => {
     return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within
+      (_startHour <= reservation.startHour && _endHour < reservation.endHour) || // intersect within
       (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
       (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
       (_startHour > reservation.startHour && _startHour < reservation.endHour && _endHour > reservation.endHour) || // intersect right
       (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
-  const filterCourtsDataByCourtNumber = async (res) => {
+  const filterByCourtNumAndStartHour = async (res) => {
     // if for a given date and start time, all courts are reserved
     //    splice the start time from the courts data
     let _courtsData = JSON.parse(JSON.stringify(res))
@@ -142,6 +143,7 @@ export const NewReservation = () => {
           setCourts.add(reservation.courtNumber)
         }
       });
+      // TODO
       if (setCourts.size === 6) {// all courts are reserved
         // TODO splice the start time
         _courtsData.start_time.splice(hour - START_HOUR_DAY, 1)
@@ -150,7 +152,7 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
-  const filterCourtsDataByHour = async (_startHour, _endHour) => {
+  const filterByStartAndEndHour = async (_startHour, _endHour) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
     // Get reserved courts by date
     const _date = dayjs(date).format(DateFormat)
@@ -165,24 +167,21 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
-  const filterCourtsDataByDate = async (_date) => {
+  const filterByDateAndStartHour = async (_date) => {
     if (!initCourtsData) {
       await handleInitCourtsData()
-    } else {
-      // TODO filter courts
+    }
+    if (initCourtsData) {
       let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-      // Get reserved courts by date
-      // let reservations = await reservationService.queryByDate(_date)
-      // setReservationsByDate(reservations)
-      // Filter courts data by reserved courts
-      // reservations.forEach(reservation => {
-      //   if (reservation.date === _date && reservation.startHour === startHour) {
-      //     const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-      //     _courtsData.court_numbers.splice(index, 1);
-      //   }
-      // });
+      let reservations = await reservationService.queryByDate(_date)
+      setReservationsByDate(reservations)
+      reservations.forEach(reservation => {
+        if (reservation.date === _date && reservation.startHour === startHour) {
+          const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+          _courtsData.court_numbers.splice(index, 1);
+        }
+      });
       setCourtsData(_courtsData);
-
     }
   }
 
@@ -245,8 +244,8 @@ export const NewReservation = () => {
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
     setEndHour(startHour + 1)
-    //filterCourtsDataByHour(startHour, startHour + 1)
-    setCourtNumbers()
+    filterByStartAndEndHour(startHour, startHour + 1)
+    setCourtNumber()
     setIsLoading(false)
     setShowDuration(true)
   }
@@ -256,15 +255,15 @@ export const NewReservation = () => {
     e.preventDefault()
     setIsLoading(true)
     setEndHour(e.target.value + startHour)
-    //filterCourtsDataByHour(startHour, e.target.value + startHour)
-    setCourtNumbers()
+    filterByStartAndEndHour(startHour, e.target.value + startHour)
+    setCourtNumber()
     setIsLoading(false)
   }
 
   const handleCourtNumberChange = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setCourtNumbers(+e.target.innerHTML)
+    setCourtNumber(+e.target.innerHTML)
   }
 
   const validateForm = (e) => {
@@ -386,7 +385,7 @@ export const NewReservation = () => {
   const handleSelectDate = (newValue) => {
     if (validDate(newValue)) {
       setDate(newValue)
-      filterCourtsDataByDate(dayjs(newValue).format(DateFormat))
+      filterByDateAndStartHour(dayjs(newValue).format(DateFormat))
     } else {
       setWarningMessage(true)
       setMessageAlert("לא ניתן להזמין מגרש אחרי שבת הקרובה")

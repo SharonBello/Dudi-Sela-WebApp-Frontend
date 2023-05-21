@@ -112,7 +112,7 @@ export const DemoInstructors = ["תומר צירקין","אור","יואב בן 
 
 export const EventTypes = ["הזמנה", "הזמנה פנימית", "לא זמין"]
 
-export const FrequencyTypes = ["חד פעמי", "שבועי", "חודשי"]
+export const FrequencyTypes = ["חד פעמי", "שבועי"]
 
 export const PaymentStatus = ["לא שולם","שולם"]
 
@@ -123,3 +123,10 @@ export const DemoClubEvents = [
 ]
 
 export const DateFormat = 'YYYY-MM-DD'
+
+// export const EmptyEvent = { dayOfWeek, eventType, startDate, startHour, endHour, frequencyType, courtNumber,
+// price, paidStatus, description, title, phoneNumber, instructor, participants}
+
+export const EmptyEvent = { "dayOfWeek": "", "eventType": "", "startDate": "", "startHour": "", "endHour": "", "frequencyType":"", "courtNumber":"",
+      "price": "", "paidStatus":"", "description": "", "title":"", "phoneNumber": "", "instructor": "", "participants": []}
+

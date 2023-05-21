@@ -29,24 +29,24 @@ import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
+export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(EventTypes[1]);
   const [startDate, setStartDate] = useState(dayjs(new Date()).format(DateFormat));
   const [hours, setHours] = useState({ startHour: hoursData[selectedStartHour]+":00", endHour: "21:00" })
-  const [frequencyType, setFrequencyType] = useState(FrequencyTypes[0])
+  const [frequencyType, setFrequencyType] = useState(FrequencyTypes[1])
   const [courts, setCourts] = useState(selectedCourts);
   const [price, setPrice] = useState();
   const [date, setDate] = useState(dayjs(new Date()).format(DateFormat));
   const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
-  const [description, setDescription] = useState("test")
+  const [description, setDescription] = useState()
   const [endHour, setEndHour] = useState()
-  const [title, setTitle] = useState("test")
+  const [title, setTitle] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("97223423423")
   const [shouldJoinClass, setShouldJoinClass] = useState(false);
   const [instructor, setInstructor] = useState("");
-  const [participants, setParticipants] = useState(["קדם קבסו"]);
+  const [participants, setParticipants] = useState([]);
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [clubCourts, setClubCourts] = useState([])
@@ -80,19 +80,15 @@ export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEdi
       setMessageAlert("יש למלא שעת סיום")
       return false
     }
-    if (title.trim() === "") {
-      setMessageAlert("יש למלא כותרת ארוע")
-      return false
-    }
-    if (instructor.trim() === "") {
-      setMessageAlert("יש לבחור מדריך אחד לפחות")
+    if (!(title.trim() !== "" || instructor.trim() !== "")) {
+      setMessageAlert("יש למלא מדריך אחד לפחות או את כותרת ארוע")
       return false
     }
     return true
   }
 
   const saveClubEvent = async () => {
-    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, hours: JSON.stringify(hours), frequencyType, courtNumber: selectedCourtNumber,
+    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: hours.startHour, endHour: hours.endHour, frequencyType, courtNumber: selectedCourtNumber,
     price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants)}
 
     if (!loggedUser) {
@@ -126,7 +122,6 @@ export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEdi
     if (validateEvent() === true) {
       setIsLoading(true)
       saveClubEvent()
-      // TODO: refersh club manager page
     } else {
       setShowMessageAlert(true)
     }
@@ -236,13 +231,13 @@ export const EditEventModal = ({ tennisInstructors, selectedCourtNumber, openEdi
                 </div>
               </Box>
               <Box className="flex-row">
-                <EventDescription description={description} setDescription={setDescription} />
                 <EventTitle title={title} setTitle={setTitle} />
+                <EventDescription description={description} setDescription={setDescription} />
               </Box>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
                 <SelectMenu inputLabel="שם המדריך" value={instructor} values={tennisInstructors} setValue={setInstructor} />
-                <ParticipantsList participants={participants} setParticipants={setParticipants} />
+                {/* <ParticipantsList participants={participants} setParticipants={setParticipants} /> */}
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>

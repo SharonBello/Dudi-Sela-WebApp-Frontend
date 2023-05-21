@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
@@ -8,6 +8,7 @@ import { Loader } from '../../../../../components/loader.jsx';
 import { getRows, hoursData, hoursDataArr, columnsData } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
 import { instructorService } from '../../../../../services/instructor.service.js';
+import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -17,7 +18,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [selectedCourts, setSelectedCourts] = useState([]);
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [tennisInstructors, setTennisInstructors] = useState([])
-
+  const [selectedEvent, setSelectedEvent] = useState()
+  const events = useRef([])
   const START_HOUR_DAY = 6
 
   const getInstructors = useCallback(async () => {
@@ -25,11 +27,30 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setTennisInstructors(instructors)
   }, [setTennisInstructors])
 
-  const handleEditEvent = (e) => {
-    if (e.row.courtNumber>0)
-      setSelectedCourtNumber(e.row.courtNumber)
-    else
-      setSelectedCourtNumber(e.row.courtNumber.split("-")[0])
+
+  const getEvent = (courtNumber, startHour) => {
+    const foundEvent = events.current.find(event => event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) === startHour)
+    return foundEvent
+  }
+
+  const handleEditEvent = (e, rows) => {
+    const courtNum = e.row.courtNumber
+    if (courtNum>0) {
+      setSelectedCourtNumber(courtNum)
+    } else {
+      setSelectedCourtNumber(courtNum.split("-")[0])
+    }
+    if (rows[courtNum-1][e.field] !== "") {
+      const foundEvent = getEvent(courtNum, hoursData[e.field])
+      setSelectedEvent(foundEvent)
+      console.log("event exists")
+    } else {
+      const _emptyEvent = EmptyEvent;
+      _emptyEvent.courtNumber=courtNum
+      _emptyEvent.startHour=hoursData[e.field]
+      setSelectedEvent(_emptyEvent)
+      console.log("event doesnt exist")
+    }
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
@@ -60,6 +81,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const columns = getColumns();
   const getReservationsByDate = async (_rows) => {
     let reservations = await reservationService.queryByDate(mDate)
+    events.current.push(...reservations)
     reservations.forEach(reservation => {
       const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
       _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
@@ -69,10 +91,19 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const setTodaysEvents = async () => {
     let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+    events.current.push(...reservations)
     reservations.forEach(reservation => {
-      const hrStart = JSON.parse(reservation.hours).startHour.split(":")[0]
-      const startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
+      // add event if it is a weekly event or not a weekly but reserved by user for that date
+      let hrStart, startHourTxt
+      // TODO: if (reservation.frequencyType === FrequencyTypes[1] || (reservation.frequencyType === FrequencyTypes[0] && reservation.startDate === mDate)) {
+      hrStart = reservation.startHour.split(":")[0]
+      startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
+      if (reservation.instructor) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
+      } else {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title //.split("@")[0]
+      }
+      // }
     });
     getReservationsByDate(_rows)
   }
@@ -95,7 +126,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
+        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
       )
     }
   }
@@ -113,7 +144,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       {renderModal()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
-          onCellClick={(e) => handleEditEvent(e)}
+          onCellClick={(e) => handleEditEvent(e, rows)}
           rows={rows}
           columns={columns}
           editMode="row"

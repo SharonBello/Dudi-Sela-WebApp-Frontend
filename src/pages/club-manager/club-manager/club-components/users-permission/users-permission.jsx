@@ -154,9 +154,9 @@ export const UsersPermission = () => {
           <Typography id="club-title" variant="h6" component="h2">משתמשים</Typography>
         </Box>
         <CustomDivider />
-        <button onClick={() => toggleCreateUser()}>
+        {/* <button onClick={() => toggleCreateUser()}>
           <h2>הזמן משתמש</h2>
-        </button>
+        </button> */}
         <button onClick={() => toggleAddUser()}>
           <h2>הוסף משתמש</h2>
         </button>

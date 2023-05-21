@@ -13,11 +13,11 @@ import { Loader } from '../../../../../components/loader.jsx';
 export const ClubSettings = () => {
   const [hrBeforeCancel, setHrBeforeCancel] = useState();
   const [minPerReservation, setMinPerReservation] = useState(60);
-  const [daysReservedBefore, setDaysReservedBefore] = useState(2);
+  const [daysReservedBefore, setDaysReservedBefore] = useState(7);
   const [phoneCancelReservation, setPhoneCancelReservation] = useState("0523782815");
-  const [daysInAdvance, setDaysInAdvance] = useState(8);
+  const [daysInAdvance, setDaysInAdvance] = useState(7);
   const [cutOffDays, setCutOffDays] = useState("15:00:00");
-  const [timeIntervals, setTimeIntervals] = useState("15");
+  const [timeIntervals, setTimeIntervals] = useState("30");
   const [onlineReserve, setOnlineReserve] = useState(true);
   const [memberOnlyClub, setMemberOnlyClub] = useState(false);
   const [addPartnersToAll, setAddPartnersToAll] = useState(false);
@@ -80,7 +80,7 @@ export const ClubSettings = () => {
           <TextBox label="מספר טלפון לעדכון ההזמנה" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
           <TextBox label="days in advance" value={daysInAdvance} setValue={setDaysInAdvance} />
           <TextBox label="cut off days" value={cutOffDays} setValue={setCutOffDays} />
-          <TextBox label="מרווחי זמן" value={timeIntervals} setValue={setTimeIntervals} />
+          <TextBox label="מרווחי זמן בדקות" value={timeIntervals} setValue={setTimeIntervals} />
           <Box className="switch-input-container">
             <SwitchInput label="פתוח להזמנות ברשת" value={onlineReserve} setValue={setOnlineReserve} />
             <SwitchInput label="מועדון לחברים בלבד" value={memberOnlyClub} setValue={setMemberOnlyClub} />

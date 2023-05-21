@@ -17,6 +17,7 @@ export const AboutClub = () => {
   const [clubNameEng, setClubNameEng] = useState("Dudi Sela Tennis Academy");
   const [city, setCity] = useState("תל אביב");
   const [address, setAddress] = useState("אוניברסיטת תל אביב שער 9");
+  const [addressInEng, setAddressInEng] = useState("Haim Lebanon 60, Tel Aviv, Israel");
   const [cityInEng, setCityInEng] = useState("Tel-Aviv");
   const [phone, setPhone] = useState("");
   const [instagram, setInstagram] = useState("");
@@ -61,7 +62,7 @@ export const AboutClub = () => {
     e.stopPropagation()
     e.preventDefault()
     setIsLoading(true)
-    const payload = {clubMail, clubName, clubNameEng, city, address, cityInEng, clubName, phone, facebook, instagram, moreDetails, moreDetailsInEng, "facilityServices": facilityServices}
+    const payload = {clubMail, clubName, clubNameEng, city, address, addressInEng, cityInEng, clubName, phone, facebook, instagram, moreDetails, moreDetailsInEng, "facilityServices": facilityServices}
     let res = await courtService.editAboutClub(payload)
     setIsLoading(false)
   }
@@ -79,14 +80,14 @@ export const AboutClub = () => {
         <Typography id="club-title" className="club-title" variant="h6" component="h2">מידע על המועדון</Typography>
         <CustomDivider className="grid-divider" />
         <Box className="main-component-fields-container">
-          <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
           <TextBox label="שם המועדון" value={clubName} setValue={setClubName} />
-          <TextBox label="שם המועדון באנגלית" value={clubNameEng} setValue={setClubNameEng} />
+          <TextBox label="מייל" value={clubMail} setValue={setClubMail} />
           <TextBox label="עיר" value={city} setValue={setCity} />
+          <TextBox label="שם המועדון באנגלית" value={clubNameEng} setValue={setClubNameEng} />
           <TextBox label="כתובת" value={address} setValue={setAddress} />
           <TextBox label="שם העיר באנגלית" value={cityInEng} setValue={setCityInEng} />
-          <TextBox label="כתובת באנגלית" value={clubName} setValue={setClubName} />
           <TextBox label="טלפון" value={phone} setValue={setPhone} />
+          <TextBox label="כתובת באנגלית" value={addressInEng} setValue={setAddressInEng} />
           <Box>
             <FacilityServices facilityServices={facilityServices} setFacilityServices={setFacilityServices} />
           </Box>
@@ -96,7 +97,7 @@ export const AboutClub = () => {
           <TextBox label="מידע נוסף באנגלית" value={moreDetailsInEng} setValue={setMoreDetailsInEng} />
         </Box>
         <Box className="btn-club-components-container flex align-center">
-          <UploadButton />
+          {/* <UploadButton /> */}
           <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
         </Box>
       </div>

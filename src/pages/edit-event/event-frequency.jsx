@@ -31,12 +31,10 @@ export const EventFrequency = ({ theme, cacheRtl, frequencyType, setFrequencyTyp
                                 <Select
                                     labelId="select-occurrence-label"
                                     className="select-occurrence"
-                                    value={FrequencyTypes[0]}
-                                    label="אירוע חד פעמי"
+                                    value={frequencyType}
                                     onChange={(e) => handleOccurrence(e)}>
                                     <MenuItem value={FrequencyTypes[0]} className="select-occurrence-item">חד פעמי</MenuItem>
                                     <MenuItem value={FrequencyTypes[1]} className="select-occurrence-item">שבועי</MenuItem>
-                                    <MenuItem value={FrequencyTypes[2]} className="select-occurrence-item">חודשי</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box>

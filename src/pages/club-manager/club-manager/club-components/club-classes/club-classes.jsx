@@ -83,7 +83,7 @@ export const ClubClasses = () => {
         </Box>
         <CustomDivider />
         <button onClick={() => setShowModalCreate(true)}>
-          <h2>הוסף קורס</h2>
+          <h2>הוסף חוג</h2>
         </button>
         {renderModalCreate()}
         <CustomDivider />

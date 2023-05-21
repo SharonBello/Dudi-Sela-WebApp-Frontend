@@ -91,7 +91,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
 
   const saveClubEvent = async () => {
     const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
-    price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants)}
+    price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants), "id": selectedEvent.id}
 
     if (!loggedUser) {
       navigate('/signin')
@@ -101,7 +101,12 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
         // validate that event of same date/time doesnt exist
         // let resExists = await eventService.isEventExists(uid, payload)
         // if (!resExists.data.isExists) {
-        let res = await eventService.addClubEvent(payload)
+        let res
+        if (isEventExists) {
+          res = await eventService.editClubEvent(payload)
+        } else {
+          res = await eventService.addClubEvent(payload)
+        }
         if (res.data.result === 0) {
           setMessageAlert("הארוע נשמר בהצלחה")
         } else {

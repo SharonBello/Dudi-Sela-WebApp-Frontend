@@ -26,8 +26,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }, [setTennisInstructors])
 
 
-  const getEvent = (courtNumber, startHour) => {
-    const foundEvent = events.current.find(event => event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) === startHour)
+  const getEvent = (courtNumber, hour) => {
+    const foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
     return foundEvent
   }
 

@@ -118,7 +118,7 @@ export const getRows = () => {
     return _rows;
 }
 
-export const hoursData = {sixAM:6, sevenAM: 7, eightAM: 8, nineAM:9, tenAM:10, elevenAM:11, twelveAM:12, onePM: 13, twoPM: 14, threePM: 15, fourPM: 16, fivePM: 17, sixPM: 18, sevenPM: 19, eightPM: 20, ninePM: 21, tenPM: 22, elevenPM: 23};
+export const hoursData = {sixAM:6, sixThirtyAM:6, sevenAM: 7, sevenThirtyAM: 7, eightAM: 8, eightThirtyAM: 8, nineAM:9, nineThirtyAM:9, tenAM:10, tenThirtyAM:10, elevenAM:11, elevenThirtyAM:11, twelveAM:12, twelveThirtyAM:12, onePM: 13, oneThirtyPM: 13, twoPM: 14, twoThirtyPM: 14, threePM: 15, threeThirtyPM: 15, fourPM: 16, fourThirtyPM: 16, fivePM: 17, fiveThirtyPM: 17, sixPM: 18, sixThirtyPM: 18, sevenPM: 19, sevenThirtyPM: 19, eightPM: 20, eightThirtyPM: 20, ninePM: 21, nineThirtyPM: 21, tenPM: 22, tenThirtyPM: 22, elevenPM: 23, elevenThirtyPM: 23};
 export const hoursDataArr = ['sixAM', 'sixThirtyAM', 'sevenAM', 'sevenThirtyAM', 'eightAM', 'eightThirtyAM', 'nineAM', 'nineThirtyAM', 'tenAM', 'tenThirtyAM', 'elevenAM', 'elevenThirtyAM', 'twelveAM', 'twelveThirtyAM', 'onePM', 'oneThirtyPM', 'twoPM', 'twoThirtyPM', 'threePM', 'threeThirtyPM', 'fourPM', 'fourThirtyPM', 'fivePM', 'fiveThirtyPM', 'sixPM', 'sixThirtyPM', 'sevenPM', 'sevenThirtyPM', 'eightPM', 'eightThirtyPM', 'ninePM', 'nineThirtyPM', 'tenPM', 'tenThirtyPM', 'elevenPM', 'elevenThirtyPM']
 export const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'},{hour: 'sixAM', headerName:'6:00'},{hour: 'sixThirtyAM', headerName:'6:30'},
   {hour: 'sevenAM', headerName:'7:00'},{hour: 'sevenThirtyAM', headerName:'7:30'},{hour: 'eightAM', headerName:'8:00'},{hour: 'eightThirtyAM', headerName:'8:30'},

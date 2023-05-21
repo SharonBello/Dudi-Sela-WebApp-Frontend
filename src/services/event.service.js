@@ -2,7 +2,8 @@ import { httpService } from './http.service.js'
 
 export const eventService = {
     getClubEvents,
-    addClubEvent
+    addClubEvent,
+    editClubEvent
 }
 
 async function getClubEvents() {
@@ -18,6 +19,16 @@ async function getClubEvents() {
 async function addClubEvent(data) {
     try {
         let res = await httpService.post('events/addClubEvent', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function editClubEvent(data) {
+    try {
+        let res = await httpService.post('events/editClubEvent', data)
         return res
     }
     catch (err) {

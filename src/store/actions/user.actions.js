@@ -84,7 +84,6 @@ export function signup(credentials) {
 export function signout() {
     return async (dispatch) => {
         try {
-            await userService.authSignout()
             dispatch({
                 type: 'SET_USER',
                 user: null

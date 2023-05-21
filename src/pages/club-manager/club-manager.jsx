@@ -76,8 +76,8 @@ export const ClubManager = () => {
   }
 
   const logout = () => {
-    dispatch(setUserUid(null))
-    dispatch(signout())
+    // dispatch(setUserUid(null))
+    // dispatch(signout())
     navigate('/homepage')
   }
 

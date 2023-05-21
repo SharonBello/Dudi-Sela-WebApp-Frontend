@@ -3,6 +3,11 @@
     min-height: unset !important;
     padding: unset !important;
 
+    .delete-event {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
     .modal-body {
         overflow-y: scroll;
         overflow-x: hidden !important;

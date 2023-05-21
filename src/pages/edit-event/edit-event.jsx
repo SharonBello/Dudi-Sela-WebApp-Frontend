@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
@@ -28,8 +30,9 @@ import { EventTypes, FrequencyTypes, PaymentStatus, DateFormat } from '../club-m
 import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import { reservationService } from "../../services/reservation.service"
 
-export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek }) => {
+export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -190,6 +193,25 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
       )
     }
   }
+  const handleDeleteEvent = async () => {
+    let res
+    // if (!isClubEvent) { // commented since a user event can be deleted only by the user
+    //   res = await reservationService.deleteReservation(uid, selectedEvent)
+    // } else {
+    res = await reservationService.deleteEvent(selectedEvent)
+    // }
+    if (res.data.result === 0) {
+      setMessageAlert("הארוע נמחק")
+    } else {
+      setMessageAlert("הארוע לא נמחק")
+    }
+    setShowMessageAlert(true)
+  }
+
+  const renderDeleteEvent = () => {
+    if (isEventExists && isClubEvent)
+      return (<FontAwesomeIcon className="delete-event" onClick={handleDeleteEvent} icon={faTrashAlt} />)
+  }
   return (
     <>
       {renderIsLoading()}
@@ -239,9 +261,12 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
                 <button disabled={isLoading} onClick={handleSave} className='save-btn'>
                   שמירה
                 </button>
-                <button onClick={closeEditEvent} className='cancel-btn'>
-                  ביטול
-                </button>
+                <div>
+                  <button onClick={closeEditEvent} className='cancel-btn'>
+                    ביטול
+                  </button>
+                  {renderDeleteEvent()}
+                </div>
               </div>
             </Box>
           </Container>

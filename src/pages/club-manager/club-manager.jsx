@@ -124,7 +124,7 @@ export const ClubManager = () => {
             <li>
               <ul className='clean-list flex align-center justify-center' style={{ gap: "1rem" }}>
                 <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule}><ArrowForwardIosIcon /></button></li>
-                <li className="schedule-daily-btn"><button onClick={openTodaysSchedule}>היום</button></li>
+                <li className="today-btn"><button onClick={openTodaysSchedule}>היום</button></li>
                 <li className="schedule-daily-btn"><button onClick={openNextDaySchedule}><ArrowBackIosIcon /></button></li>
               </ul>
             </li>

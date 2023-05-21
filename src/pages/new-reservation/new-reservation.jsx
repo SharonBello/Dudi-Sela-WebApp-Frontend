@@ -180,10 +180,12 @@ export const NewReservation = () => {
 
   const addReservation = async () => {
     const _date = dayjs(date).format(DateFormat)
+    const _startHour = startHour.toString()+":00"
+    const _endHour = endHour.toString()+":00"
     const payload = {
-      startHour,
-      endHour,
-      courtNumber,
+      startHour: _startHour,
+      endHour: _endHour,
+      courtNumber:courtNumber,
       date: _date,
       username: email,
       uid

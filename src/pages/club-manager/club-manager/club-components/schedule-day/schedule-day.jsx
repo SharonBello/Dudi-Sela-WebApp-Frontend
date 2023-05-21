@@ -19,6 +19,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [tennisInstructors, setTennisInstructors] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
+  const [isEventExists, setIsEventExists] = useState(false)
   const events = useRef([])
   const START_HOUR_DAY = 6
 
@@ -43,14 +44,14 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     if (rows[courtNum-1][e.field] !== "") {
       const foundEvent = getEvent(courtNum, hoursData[e.field])
       setSelectedEvent(foundEvent)
-      console.log("event exists")
+      setIsEventExists(true)
     } else {
       const _emptyEvent = EmptyEvent;
       _emptyEvent.courtNumber=courtNum
       _emptyEvent.startHour=hoursData[e.field]+":00"
       _emptyEvent.endHour=(hoursData[e.field]+1).toString()+":00"
       setSelectedEvent(_emptyEvent)
-      console.log("new event")
+      setIsEventExists(false)
     }
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
@@ -84,7 +85,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     let reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
+      const startHourTxt = hoursDataArr[reservation.startHour.split(":")[0] - START_HOUR_DAY]
       _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
     });
     setRows(_rows)
@@ -127,7 +128,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} />
+        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username}/>
       )
     }
   }

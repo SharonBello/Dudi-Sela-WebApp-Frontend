@@ -47,9 +47,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     } else {
       const _emptyEvent = EmptyEvent;
       _emptyEvent.courtNumber=courtNum
-      _emptyEvent.startHour=hoursData[e.field]
+      _emptyEvent.startHour=hoursData[e.field]+":00"
+      _emptyEvent.endHour=(hoursData[e.field]+1).toString()+":00"
       setSelectedEvent(_emptyEvent)
-      console.log("event doesnt exist")
+      console.log("new event")
     }
     setSelectedStartHour(e.field)
     setOpenEditEvent(true)
@@ -126,7 +127,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} mDate={mDate} dayOfWeek={dayOfWeek} selectedStartHour={selectedStartHour} selectedCourts={selectedCourts}/>
+        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} />
       )
     }
   }

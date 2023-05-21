@@ -9,7 +9,7 @@ export const EventDescription = ({description, setDescription}) => {
             component="form"
             noValidate
             autoComplete="off">
-            <TextField valuse={description} onChange={(e) => setDescription(e.target.value)} id="event-description" label="תיאור האירוע" variant="outlined" sx={{ marginBlock: "unset !importsnt"}} />
+            <TextField value={description} onChange={(e) => setDescription(e.target.value)} id="event-description" label="תיאור האירוע" variant="outlined" sx={{ marginBlock: "unset !importsnt"}} />
         </Box>
     )
 }

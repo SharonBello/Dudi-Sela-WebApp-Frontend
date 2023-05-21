@@ -29,24 +29,23 @@ import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourtNumber, openEditEvent, closeEditEvent, mDate, dayOfWeek, selectedCourts, selectedStartHour }) => {
+export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek }) => {
 
   const [isLoading, setIsLoading] = useState(false)
-  const [eventType, setEventType] = useState(EventTypes[1]);
-  const [startDate, setStartDate] = useState(dayjs(new Date()).format(DateFormat));
-  const [hours, setHours] = useState({ startHour: hoursData[selectedStartHour]+":00", endHour: "21:00" })
-  const [frequencyType, setFrequencyType] = useState(FrequencyTypes[1])
-  const [courts, setCourts] = useState(selectedCourts);
-  const [price, setPrice] = useState();
-  const [date, setDate] = useState(dayjs(new Date()).format(DateFormat));
-  const [paidStatus, setPaidStatus] = useState(PaymentStatus[0])
-  const [description, setDescription] = useState()
-  const [endHour, setEndHour] = useState()
-  const [title, setTitle] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("97223423423")
-  const [shouldJoinClass, setShouldJoinClass] = useState(false);
-  const [instructor, setInstructor] = useState("");
-  const [participants, setParticipants] = useState([]);
+  const [eventType, setEventType] = useState(selectedEvent.eventType);
+  const [startDate, setStartDate] = useState(selectedEvent.startDate);
+  const [startHour, setStartHour] = useState(selectedEvent.startHour)
+  const [endHour, setEndHour] = useState(selectedEvent.endHour)
+  const [frequencyType, setFrequencyType] = useState(selectedEvent.frequencyType)
+  const [price, setPrice] = useState(selectedEvent.price);
+  const [date, setDate] = useState(selectedEvent.date);
+  const [paidStatus, setPaidStatus] = useState(selectedEvent.paidStatus)
+  const [description, setDescription] = useState(selectedEvent.description)
+  const [title, setTitle] = useState(selectedEvent.title)
+  const [phoneNumber, setPhoneNumber] = useState(selectedEvent.phoneNumber)
+  const [shouldJoinClass, setShouldJoinClass] = useState(selectedEvent.shouldJoinClass);
+  const [instructor, setInstructor] = useState(selectedEvent.instructor);
+  const [participants, setParticipants] = useState(selectedEvent.participants);
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [clubCourts, setClubCourts] = useState([])
@@ -72,11 +71,11 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourt
 
   const validateEvent = () => {
     // required fields, startHour, endHour, instructorIndices at least one instructor,
-    if (!hours.startHour) {
+    if (!startHour) {
       setMessageAlert("יש למלא שעת התחלה")
       return false
     }
-    if (!hours.endHour) {
+    if (!endHour) {
       setMessageAlert("יש למלא שעת סיום")
       return false
     }
@@ -88,7 +87,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourt
   }
 
   const saveClubEvent = async () => {
-    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: hours.startHour, endHour: hours.endHour, frequencyType, courtNumber: selectedCourtNumber,
+    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
     price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants)}
 
     if (!loggedUser) {
@@ -154,15 +153,11 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourt
   )
 
   const handleSetStartHour = (e) => {
-    const _hours = JSON.parse(JSON.stringify(hours))
-    _hours.startHour = e.target.value
-    setHours(_hours)
+    setStartHour(e.target.value)
   }
 
   const handleSetEndHour = (e) => {
-    const _hours = JSON.parse(JSON.stringify(hours))
-    _hours.endHour = e.target.value
-    setHours(_hours)
+    setEndHour(e.target.value)
   }
 
   const renderMessageAlert = () => {
@@ -219,11 +214,11 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourt
                   יום בשבוע - {dayOfWeek}
                 </Typography>
               <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
-              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={hours.startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
+              <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">
                 <Typography className="modal-body-text">
-                  מספר המגרש שנבחר - {selectedCourtNumber}
+                  מספר המגרש שנבחר - {selectedEvent.courtNumber}
                 </Typography>
                 <div className="flex align-center" style={{ gap: "0.5rem" }}>
                   {/* <SelectMenu inputLabel="בחר מגרש" defaultValue={selectedCourts} values={clubCourts} setValue={setCourts} /> */}
@@ -236,7 +231,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, selectedCourt
               </Box>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
-                <SelectMenu inputLabel="שם המדריך" value={instructor} values={tennisInstructors} setValue={setInstructor} />
+                <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
                 {/* <ParticipantsList participants={participants} setParticipants={setParticipants} /> */}
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />

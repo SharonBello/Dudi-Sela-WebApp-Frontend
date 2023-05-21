@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export const WeekDays = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"]
 
 export const CourtNames = ["מגרש 1", "מגרש 2", "מגרש 3", "מגרש 4", "מגרש 5", "מגרש 6", "כחול מוזל", "אדום מוזל", "ירוק מוזל"]
@@ -127,6 +129,6 @@ export const DateFormat = 'YYYY-MM-DD'
 // export const EmptyEvent = { dayOfWeek, eventType, startDate, startHour, endHour, frequencyType, courtNumber,
 // price, paidStatus, description, title, phoneNumber, instructor, participants}
 
-export const EmptyEvent = { "dayOfWeek": "", "eventType": "", "startDate": "", "startHour": "", "endHour": "", "frequencyType":"", "courtNumber":"",
-      "price": "", "paidStatus":"", "description": "", "title":"", "phoneNumber": "", "instructor": "", "participants": []}
+export const EmptyEvent = { "dayOfWeek": "", "eventType": EventTypes[1], "startDate": dayjs(new Date()).format(DateFormat), "startHour": "", "endHour": "", "frequencyType":FrequencyTypes[1], "courtNumber":"",
+      "price": "", "paidStatus":PaymentStatus[0], "description": "", "title":"", "phoneNumber": "", "instructor": "", "participants": [], "shouldJoinClass": false}
 

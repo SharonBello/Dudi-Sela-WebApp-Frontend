@@ -94,11 +94,14 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     reservations.forEach(reservation => {
       // TODO: if (reservation.frequencyType === FrequencyTypes[1] || (reservation.frequencyType === FrequencyTypes[0] && reservation.startDate === mDate)) {
       const hrStart = reservation.startHour.split(":")[0]
+      const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
       const hrEnd = reservation.endHour.split(":")[0]
+      const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
       let startHourTxt
-      const numTimeSlots = Number(hrEnd)-Number(hrStart)
+      let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
+      numTimeSlots*=2
       for (let i = 0; i < numTimeSlots; i++) {
-        startHourTxt = hoursDataArr[Number(hrStart) + i - START_HOUR_DAY]
+        startHourTxt = hoursDataArr[Number(hrStart) + Number(minStart)*2 + i - START_HOUR_DAY]
         if (reservation.instructor) {
           _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
         } else {

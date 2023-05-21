@@ -31,7 +31,12 @@ export const AppHeader = () => {
     }
     if (loggedUser && loggedUser.uid) {
       queryIsAdminUser().then(res => {
-        setIsAdminUser(res.data)
+        if (!res)
+          // navigate('/')
+          // TODO find why res returns undefind when reloading page
+          setIsAdminUser(true)
+        else
+          setIsAdminUser(res.data)
       });
     }
   }, [loggedUser])

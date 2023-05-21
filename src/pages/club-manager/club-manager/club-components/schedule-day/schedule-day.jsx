@@ -11,11 +11,8 @@ import { instructorService } from '../../../../../services/instructor.service.js
 import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
-  const [isLoading, setIsLoading] = useState(false)
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
-  const [selectedStartHour, setSelectedStartHour] = useState();
-  const [selectedCourts, setSelectedCourts] = useState([]);
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [tennisInstructors, setTennisInstructors] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
@@ -53,7 +50,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       setSelectedEvent(_emptyEvent)
       setIsEventExists(false)
     }
-    setSelectedStartHour(e.field)
     setOpenEditEvent(true)
   }
 
@@ -90,22 +86,25 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     });
     setRows(_rows)
   }
+
   const setTodaysEvents = async () => {
     let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      // add event if it is a weekly event or not a weekly but reserved by user for that date
-      let hrStart, startHourTxt
       // TODO: if (reservation.frequencyType === FrequencyTypes[1] || (reservation.frequencyType === FrequencyTypes[0] && reservation.startDate === mDate)) {
-      hrStart = reservation.startHour.split(":")[0]
-      startHourTxt = hoursDataArr[hrStart - START_HOUR_DAY]
-      if (reservation.instructor) {
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
-      } else {
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title //.split("@")[0]
+      const hrStart = reservation.startHour.split(":")[0]
+      const hrEnd = reservation.endHour.split(":")[0]
+      let startHourTxt
+      const numTimeSlots = Number(hrEnd)-Number(hrStart)
+      for (let i = 0; i < numTimeSlots; i++) {
+        startHourTxt = hoursDataArr[Number(hrStart) + i - START_HOUR_DAY]
+        if (reservation.instructor) {
+          _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
+        } else {
+          _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title //.split("@")[0]
+        }
       }
-      // }
     });
     getReservationsByDate(_rows)
   }
@@ -133,14 +132,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     }
   }
 
-  const renderIsLoading = () => {
-    if (isLoading) {
-      return (
-        <Loader />
-      )
-    }
-  }
-
   return (
     <>
       {renderModal()}
@@ -154,7 +145,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />
-        {renderIsLoading()}
       </Box>
 
     </>

@@ -92,7 +92,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      // TODO: if (reservation.frequencyType === FrequencyTypes[1] || (reservation.frequencyType === FrequencyTypes[0] && reservation.startDate === mDate)) {
       const hrStart = reservation.startHour.split(":")[0]
       const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
       const hrEnd = reservation.endHour.split(":")[0]

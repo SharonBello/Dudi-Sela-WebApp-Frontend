@@ -157,6 +157,16 @@ export const NewReservation = () => {
         _courtsData.court_numbers.splice(index, 1);
       }
     });
+
+    const selectedDate = dayjs(date)
+    const dayOfWeek = selectedDate.format('dddd').toLowerCase()
+    reservations = await reservationService.queryByDayofweek(dayOfWeek)
+    reservations.forEach(reservation => {
+      if (reservation.dayOfWeek === dayOfWeek && (startHour >= reservation.startHour.split(":")[0] && startHour <= reservation.endHour.split(":")[0])) {
+        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        _courtsData.court_numbers.splice(index, 1);
+      }
+    });
     setCourtsData(_courtsData);
   }
 
@@ -379,9 +389,10 @@ export const NewReservation = () => {
   }
 
   const handleSelectDate = (newValue) => {
+    const _date = dayjs(newValue).format(DateFormat)
     if (validDate(newValue)) {
       setDate(newValue)
-      filterByDateAndStartHour(dayjs(newValue).format(DateFormat))
+      filterByDateAndStartHour(_date)
     } else {
       setWarningMessage(true)
       setMessageAlert("לא ניתן להזמין מגרש אחרי שבת הקרובה")

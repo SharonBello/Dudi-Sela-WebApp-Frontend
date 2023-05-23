@@ -14,29 +14,18 @@ import { AddClubHours } from '../club-hours/add-club-hours'
 import { ClubHoursList } from '../club-hours/club-hours-list'
 import { courtService } from '../../../../../services/court.service'
 
-export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, handleClose, isLoading }) => {
-    // const [cardName, setCardName] = useState()
-    // const [creditAmount, setCreditAmount] = useState()
-    // const [creditInMinutes, setCreditInMinutes] = useState()
-    // const [dueNumDays, setDueNumDays] = useState()
-    // const [blockOnDate, setBlockOnDate] = useState()
-    // const [price, setPrice] = useState()
-    // const [additionalDetails, setAdditionalDetails] = useState()
-    // const [showForSale, setShowForSale] = useState(false)
-    // const [isMember, setIsMember] = useState(false)
-    // const [validForMembers, setValidForMembers] = useState([])
-    const [cardName, setCardName] = useState()
-    const [creditAmount, setCreditAmount] = useState()
-    const [creditInMinutes, setCreditInMinutes] = useState()
-    const [dueNumDays, setDueNumDays] = useState()
-    const [blockOnDate, setBlockOnDate] = useState()
-    const [price, setPrice] = useState()
-    const [additionalDetails, setAdditionalDetails] = useState()
-    const [showForSale, setShowForSale] = useState()
-    const [isMember, setIsMember] = useState()
-    const [validForMembers, setValidForMembers] = useState([])
-    const [clubHoursList, setClubHoursList] = useState([])
-    const [workHours, setWorkHours] = useState([]);
+export const CreatePunchCard = ({ selectedCard, showModalCreate, closePunchCard, handleSave, handleClose, isLoading, removeSelectedCard }) => {
+    const [cardName, setCardName] = useState(selectedCard.cardName)
+    const [creditAmount, setCreditAmount] = useState(selectedCard.creditAmount)
+    const [creditInMinutes, setCreditInMinutes] = useState(selectedCard.creditInMinutes)
+    const [dueNumDays, setDueNumDays] = useState(selectedCard.dueNumDays)
+    const [blockOnDate, setBlockOnDate] = useState(selectedCard.blockOnDate)
+    const [price, setPrice] = useState(selectedCard.price)
+    const [additionalDetails, setAdditionalDetails] = useState(selectedCard.additionalDetails)
+    const [showForSale, setShowForSale] = useState(selectedCard.showForSale)
+    const [isMember, setIsMember] = useState(selectedCard.isMember)
+    const [validForMembers, setValidForMembers] = useState(selectedCard.validForMembers)
+    const [clubHoursList, setClubHoursList] = useState(selectedCard.cardHours)
 
     const navigate = useNavigate()
 
@@ -51,36 +40,20 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
               navigate('/')
             }
           }
-
-        if (clubHoursList.length === 0) {
-          DemoWorkHours(setWorkHours)
-          getClubHours().then(res => {
-            setClubHoursList(res)
-          })
-        }
-      }, [])
-      const handleSaveClubHours = async (e, clubHours) => {
-        // if (clubHours.days.length > 0) {
-        //   setIsLoading(true)
-        //   let res = await courtService.addClubHours(clubHours)
-        //   getClubHours().then(res => {
-        //     setClubHoursList(res)
-        //     setIsLoading(false)
-        //   })
-        // }
-      }
-      const handleDeleteClubHour = async(e, index) => {
-        // setIsLoading(true)
-        // let res = await courtService.deleteClubHours(clubHoursList[index])
-        // // setIsLoading(false)
-        // getClubHours().then(res => {
-        //   setClubHoursList(res)
-        //   setIsLoading(false)
-        // })
-      }
-      const handleEditClubHours = async (e, clubHours) => {
-        console.log(clubHours)
-      }
+    }, [])
+    const handleSaveClubHours = async (e, clubHours) => {
+      const _clubHours = JSON.parse(JSON.stringify(clubHoursList))
+      _clubHours.push(clubHours)
+      setClubHoursList(_clubHours)
+    }
+    const handleDeleteClubHour = async(e, index) => {
+      const _clubHours = JSON.parse(JSON.stringify(clubHoursList))
+      _clubHours.splice(index, 1)
+      setClubHoursList(_clubHours)
+    }
+    const handleEditClubHours = async (e, clubHours) => {
+      console.log(clubHours)
+    }
     return (
         <Modal
             open={showModalCreate}
@@ -92,7 +65,7 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
                 <Container className="modal-content">
                     <Box className="modal-header">
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            כרטיסיה חדשה
+                            כרטיסיה
                         </Typography>
                     </Box>
                     <Box className="modal-body">
@@ -105,14 +78,14 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
                         <TextBox label="מחיר" value={price} setValue={setPrice} />
                         <TextBox label="מידע נוסף" value={additionalDetails} setValue={setAdditionalDetails} />
                         <SwitchInput label="להציג למכירה" value={showForSale} setValue={setShowForSale} />
-                        <SelectMenu multiple={true} inputLabel="תקף עבור" defaultValue={validForMembers} values={MemberTypes} setValue={setValidForMembers} />
+                        <SelectMenu inputLabel="תקף עבור" defaultValue={validForMembers} values={MemberTypes} setValue={setValidForMembers} />
 
                         <CustomDivider className="grid-divider" />
                         <Box className="club-hours-instructions">
                             <span>שעות הפעילות</span>
                         </Box>
                         <CustomDivider className="grid-divider" />
-                        <AddClubHours />
+                        <AddClubHours handleSaveClubHours={handleSaveClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <Box className="club-hours-instructions">
                             <span>תקפות הכרטיסייה</span>
@@ -120,8 +93,8 @@ export const CreatePunchCard = ({ showModalCreate, closePunchCard, handleSave, h
                         <ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>
-                            <button disabled={isLoading} onClick={(e) => handleSave(e, {cardName, creditAmount, creditInMinutes, dueNumDays, blockOnDate, price, additionalDetails, showForSale, "validForMembers": validForMembers[0] })} className='save-btn'>
-                                צור כרטיסיה
+                            <button disabled={isLoading} onClick={(e) => handleSave(e, {cardName, creditAmount, creditInMinutes, dueNumDays, blockOnDate, price, additionalDetails, showForSale, validForMembers, cardHours: clubHoursList })} className='save-btn'>
+                                שמור כרטיסיה
                             </button>
                             <button onClick={handleClose} className='cancel-btn'>
                                 ביטול

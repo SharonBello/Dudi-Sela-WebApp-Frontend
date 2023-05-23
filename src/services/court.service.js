@@ -10,6 +10,7 @@ export const courtService = {
     getClubUsers,
     getClubClasses,
     addPunchCard,
+    editPunchCard,
     addClubClass,
     getClubHours,
     addClubHours,
@@ -98,6 +99,16 @@ async function getClubClasses() {
 async function addPunchCard(data) {
     try {
         let res = await httpService.post('courts/punchcards/addPunchCard', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function editPunchCard(data) {
+    try {
+        let res = await httpService.post('courts/punchcards/editPunchCard', data)
         return res
     }
     catch (err) {

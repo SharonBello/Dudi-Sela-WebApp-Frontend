@@ -10,17 +10,18 @@ import { Loader } from '../../../../../components/loader.jsx';
 
 export const PunchCards = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
-  const [, setShowPunchCard] = useState(false);
-  const [, setSelectedPunchCard] = useState(false);
   const [punchCards, setPunchCards] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedCard, setSelectedCard] = useState();
   const navigate = useNavigate()
+  const _emptyCard = { cardName: undefined, creditAmount: undefined, creditInMinutes: undefined, dueNumDays: undefined, blockOnDate: undefined, price: undefined, additionalDetails: undefined, showForSale: undefined, isMember: false, validForMembers: [], cardHours: []}
 
   useEffect(()=> {
     if (punchCards.length === 0) {
       getPunchCards().then(res => {
         setPunchCards(res)
       })
+      setSelectedCard(_emptyCard)
     }
   }, [])
   const getPunchCards = async () => {
@@ -37,31 +38,21 @@ export const PunchCards = () => {
     console.log("close")
   }
 
-  const handleSave = async (e, card) => {
-    if (card.cardName.trim() !== "") {
-      setIsLoading(true)
-      let res = await courtService.addPunchCard(card)
-      getPunchCards().then(res => {
-        setPunchCards(res)
-        setIsLoading(false)
-      })
-    }
-    setShowModalCreate(false)
-  }
   const handleClose = () => {
       setShowModalCreate(false)
+      setSelectedCard(_emptyCard)
   }
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={handleSave} handleClose={(e) => handleClose(e)} isLoading={isLoading}/>
+        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading}/>
       )
     }
   }
   const handleShowPunchCard = (e, card) => {
     console.log(e, card)
-    setSelectedPunchCard(card)
-    setShowPunchCard(true)
+    setSelectedCard(card)
+    setShowModalCreate(true)
   }
   const renderPunchCards = () => {
     return (
@@ -73,10 +64,43 @@ export const PunchCards = () => {
       )
     )
   }
+  const removeSelectedCard = async (court) => {
+    let res = await courtService.deletePunchCard(court)
+    // getClubCards().then(res => {
+    //   setCardData(res)
+    // })
+    setShowModalCreate(false)
+  }
+  const saveSelectedCard = async (e, card) => {
+    // let res = await courtService.editPunchCard(selectedCard)
+    // getClubCards().then(res => {
+    //   setCardData(res)
+    // })
+
+    if (card.cardName.trim() !== "") {
+      setIsLoading(true)
+      let res
+      if (selectedCard && selectedCard.id) { // card exists
+        card["id"] = selectedCard.id
+        res = await courtService.editPunchCard(card)
+      } else {
+        res = await courtService.addPunchCard(card)
+      }
+      getPunchCards().then(res => {
+        setPunchCards(res)
+        setIsLoading(false)
+      })
+    }
+    setShowModalCreate(false)
+    setSelectedCard(_emptyCard)
+    setShowModalCreate(false)
+  }
   const renderModalPunchCard = () => {
-    return (
-      <></>
-    )
+    if (showModalCreate) {
+      return (
+        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading} removeSelectedCard={removeSelectedCard}/>
+      )
+    }
   }
   const renderIsLoading = () => {
     if (isLoading) {

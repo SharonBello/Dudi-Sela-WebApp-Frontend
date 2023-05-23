@@ -15,8 +15,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [tennisInstructors, setTennisInstructors] = useState([])
+  const [classParticipants, setClassParticipants] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
   const [isEventExists, setIsEventExists] = useState(false)
+  const [columns, setColumns] = useState([])
   const events = useRef([])
   const START_HOUR_DAY = 6
 
@@ -25,13 +27,18 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setTennisInstructors(instructors)
   }, [setTennisInstructors])
 
+  const getClassParticipants = useCallback(async () => {
+    let participants = await instructorService.getParticipants()
+    setClassParticipants(participants)
+  }, [setClassParticipants])
+
 
   const getEvent = (courtNumber, hour) => {
     const foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
     return foundEvent
   }
 
-  const handleEditEvent = (e, rows) => {
+  const handleEditEvent = useCallback((e, rows) => {
     const courtNum = e.row.courtNumber
     if (courtNum>0) {
       setSelectedCourtNumber(courtNum)
@@ -51,9 +58,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       setIsEventExists(false)
     }
     setOpenEditEvent(true)
-  }
+  })
 
-  const getColumns = () => {
+  const getColumns = useCallback(() => {
     const _columns = [];
     columnsData.forEach(col => {
       _columns.push({
@@ -74,15 +81,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         renderEditCell: { handleEditEvent },
       })
     });
-    return _columns;
-  }
-  const columns = getColumns();
+    setColumns(_columns);
+  }, [handleEditEvent, tennisInstructors])
+
   const getReservationsByDate = async (_rows) => {
     let reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       const startHourTxt = hoursDataArr[reservation.startHour.split(":")[0] - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username //.split("@")[0]
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
     });
     setRows(_rows)
   }
@@ -92,19 +99,21 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      const hrStart = reservation.startHour.split(":")[0]
-      const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
-      const hrEnd = reservation.endHour.split(":")[0]
-      const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
-      let startHourTxt
-      let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
-      numTimeSlots*=2
-      for (let i = 0; i < numTimeSlots; i++) {
-        startHourTxt = hoursDataArr[Number(hrStart) + Number(minStart)*2 + i - START_HOUR_DAY]
-        if (reservation.instructor) {
-          _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor //.split("@")[0]
-        } else {
-          _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title //.split("@")[0]
+      if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
+        const hrStart = reservation.startHour.split(":")[0]
+        const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
+        const hrEnd = reservation.endHour.split(":")[0]
+        const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
+        let startHourTxt
+        let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
+        numTimeSlots*=2
+        for (let i = 0; i < numTimeSlots; i++) {
+          startHourTxt = hoursDataArr[Number(hrStart) + Number(minStart)*2 + i - START_HOUR_DAY]
+          if (reservation.instructor) {
+            _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
+          } else {
+            _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+          }
         }
       }
     });
@@ -112,8 +121,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }
   useEffect(() => {
     getInstructors()
+    getClassParticipants()
     initSchedule()
     setTodaysEvents()
+    getColumns()
   }, [mDate])
 
   const initSchedule = () => {
@@ -129,7 +140,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username}/>
+        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} />
       )
     }
   }
@@ -152,81 +163,3 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     </>
   );
 }
-//  <div className='flex'>
-//         <button
-//           className='submit-button'
-//           type='submit'
-//           onClick={handleSubmit}
-//           disabled={isLoading}
-//         >עדכן</button>
-//         <button
-//           className='submit-button small-margin'
-//           type='submit'
-//           onClick={handleImport}
-//           disabled={isLoading}
-//         >יבוא תבנית הזמנות</button>
-//         <button
-//           className='submit-button small-margin'
-//           type='submit'
-//           onClick={handleExport}
-//           disabled={isLoading}
-//         >יצוא תבנית הזמנות</button>
-//       </div>
-// const handleSubmit = async () => {
-//   setIsLoading(true)
-//   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-//   const weeklyReservations = []
-//   rows.forEach(row => {
-//     Object.keys(row).forEach(key => {
-//       if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
-//         const hour = hoursData[key]
-//         weeklyReservations.push({ username: row[key], startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate })
-//       }
-//     })
-//   })
-//   for (let i = 0; i < weeklyReservations.length; i++) {
-//     const payload = weeklyReservations[i];
-//     let resExists = await reservationService.isReservationExists(uid, payload)
-//     if (!resExists.data.isExists) {
-//       let res = await reservationService.addNewReservation(uid, payload)
-//       let resByDate = await reservationService.addNewReservationByDate(mDate, payload)
-//       if (res.data.result === 0 && resByDate.data.result === 0) {
-//         console.log("success")
-//       } else {
-//         console.log("failure")
-//       }
-//     }
-//   }
-//   setIsLoading(false)
-// }
-
-// const handleImport = async () => {
-//   // setIsLoading(true)
-//   // let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
-//   // let _rows = [...rows]
-//   // reservations.forEach(item => {
-//   //   const startHourTxt = hoursDataArr[item.startHour - START_HOUR_DAY]
-//   //   _rows[item.courtNumber - 1][startHourTxt] = item.username //.split("@")[0]
-//   // });
-//   // setRows(_rows)
-//   // setIsLoading(false)
-// }
-
-// const handleExport = async () => {
-//   setIsLoading(true)
-//   // let scheduleData = JSON.parse(sessionStorage.getItem("dudi-sela-schedule"))
-//   // scheduleData = scheduleData[dayOfWeek.toLowerCase()]
-//   const scheduleData = []
-//   rows.forEach(row => {
-//     Object.keys(row).forEach(key => {
-//       if (key !== "id" && key !== "courtNumber" && row[key] !== "") {
-//         const hour = hoursData[key]
-//         const username = row[key]
-//         scheduleData.push({ startHour: hour, endHour: hour + 1, courtNumber: row["id"], date: mDate, username: username })
-//       }
-//     })
-//   })
-//   // const res = await reservationService.resetByWeekDay(dayOfWeek.toLowerCase())
-//   // const res2 = await reservationService.postByWeekDay(dayOfWeek.toLowerCase(), scheduleData)
-//   setIsLoading(false)
-// }

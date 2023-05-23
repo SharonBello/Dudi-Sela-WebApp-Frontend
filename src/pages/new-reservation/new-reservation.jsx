@@ -147,8 +147,9 @@ export const NewReservation = () => {
 
   const filterByStartAndEndHour = async (_startHour, _endHour) => {
     let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
+    const selectedDate = dayjs(date)
     // Get reserved courts by date
-    const _date = dayjs(date).format(DateFormat)
+    const _date = selectedDate.format(DateFormat)
     let reservations = await reservationService.queryByDate(_date)
     // Filter courts data by reserved courts
     reservations.forEach(reservation => {
@@ -158,7 +159,6 @@ export const NewReservation = () => {
       }
     });
 
-    const selectedDate = dayjs(date)
     const dayOfWeek = selectedDate.format('dddd').toLowerCase()
     reservations = await reservationService.queryByDayofweek(dayOfWeek)
     reservations.forEach(reservation => {

@@ -32,7 +32,7 @@ import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 import { reservationService } from "../../services/reservation.service"
 
-export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent }) => {
+export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -91,7 +91,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
 
   const saveClubEvent = async () => {
     const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
-    price, paidStatus, description, title, phoneNumber, instructor, participants: JSON.stringify(participants), "id": selectedEvent.id}
+    price, paidStatus, description, title, phoneNumber, instructor, participants, "id": selectedEvent.id}
 
     if (!loggedUser) {
       navigate('/signin')
@@ -124,13 +124,14 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
   }
 
   const handleSave = (e) => {
+    setIsLoading(true)
     e.stopPropagation()
     e.preventDefault()
     if (validateEvent() === true) {
-      setIsLoading(true)
       saveClubEvent()
     } else {
       setShowMessageAlert(true)
+      setIsLoading(false)
     }
   }
 
@@ -212,10 +213,24 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
     }
     setShowMessageAlert(true)
   }
-
   const renderDeleteEvent = () => {
     if (isEventExists && isClubEvent)
       return (<FontAwesomeIcon className="delete-event" onClick={handleDeleteEvent} icon={faTrashAlt} />)
+  }
+  const addParticipant = (newParticipant) => {
+    const _particpants = [...participants]
+    if (!_particpants.includes(newParticipant)) {
+      _particpants.push(newParticipant)
+      setParticipants(_particpants)
+    }
+  }
+  const removeParticipant = (participant) => {
+    const _particpants = [...participants]
+    if (_particpants.includes(participant)) {
+      const index = _particpants.indexOf(participant);
+      _particpants.splice(index, 1);
+      setParticipants(_particpants)
+    }
   }
   return (
     <>
@@ -259,7 +274,9 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
                 <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
-                {/* <ParticipantsList participants={participants} setParticipants={setParticipants} /> */}
+                <ParticipantsList participants={participants} setParticipants={setParticipants} />
+                <SelectMenu inputLabel="הוסף משתתף" values={classParticipants} setValue={addParticipant} />
+                <SelectMenu inputLabel="הסר משתתף" values={participants} setValue={removeParticipant} />
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>

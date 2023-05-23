@@ -9,24 +9,12 @@ import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
-const options = ['קדם קבסו','אור','סער','אמיר','גיל','ירון','גלעד'];
 
 export const ParticipantsList = ({participants, setParticipants}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
-    const handleClick = () => {
-    };
-
     const handleMenuItemClick = (event, option) => {
-        const _participants = JSON.parse(JSON.stringify(participants));
-        if (_participants.includes(option)) {
-            const index = participants.indexOf(option);
-            _participants.splice(index, 1); // 2nd parameter means remove one item only
-        } else {
-            _participants.push(option)
-        }
-        setParticipants(_participants);
         setOpen(false);
     };
 
@@ -44,7 +32,7 @@ export const ParticipantsList = ({participants, setParticipants}) => {
     return (
         <>
             <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-                <Button onClick={handleSelectOption}>הוספת משתתפים</Button>
+                <Button onClick={handleSelectOption}>משתתפים</Button>
                 <Button
                     size="small"
                     aria-controls={open ? 'split-button-menu' : undefined}
@@ -77,7 +65,7 @@ export const ParticipantsList = ({participants, setParticipants}) => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList id="split-button-menu" autoFocusItem>
-                                    {options.map((option, index) => (
+                                    {participants && participants.map((option, index) => (
                                         <MenuItem
                                             selected={participants.includes(option)}
                                             key={option}
@@ -95,6 +83,3 @@ export const ParticipantsList = ({participants, setParticipants}) => {
         </>
     );
 }
-{/* <MenuItem //TODO
-disabled={index === 2}
-selected={index === participants} */}

@@ -13,6 +13,7 @@ import { SaveButton } from '../../../../shared-components/save-button';
 import { WeekDays, DayHours, TypeGames, MemberTypes, HourConstraint } from '../../club-helper'
 import { courtService } from '../../../../../services/court.service'
 import { Loader } from '../../../../../components/loader.jsx';
+import { EditCourtModal } from '../../../../edit-event/edit-court';
 
 export const ClubCourts = () => {
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
@@ -26,6 +27,9 @@ export const ClubCourts = () => {
   const [newConstraint, setNewConstraint] = useState(JSON.parse(JSON.stringify(HourConstraint)))
   const [courtData, setCourtData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [openEditCourt, setOpenEditCourt] = useState(false)
+  const [selectedCourt, setSelectedCourt] = useState([]);
+
   const navigate = useNavigate()
 
   useEffect(()=> {
@@ -41,6 +45,22 @@ export const ClubCourts = () => {
       })
     }
   }, [])
+  const removeSelectedCourt = async (court) => {
+    let res = await courtService.deleteClubCourt(court)
+    getClubCourts().then(res => {
+      setCourtData(res)
+    })
+    setOpenEditCourt(false)
+  }
+  const saveSelectedCourt = async (courtName, courtType) => {
+    selectedCourt.name = courtName
+    selectedCourt.type = courtType
+    let res = await courtService.editClubCourt(selectedCourt)
+    getClubCourts().then(res => {
+      setCourtData(res)
+    })
+    setOpenEditCourt(false)
+  }
   const getClubCourts = async () => {
     try {
       setIsLoading(true)
@@ -61,12 +81,28 @@ export const ClubCourts = () => {
       navigate('/')
     }
   }
+  const handleOpenCourt = (court) => {
+    setSelectedCourt(court)
+    setOpenEditCourt(true)
+  }
+  const closeEditCourt = () => {
+    setOpenEditCourt(false)
+  }
+
+
+  const renderEditCourt = () => {
+    if (openEditCourt) {
+      return (
+        <EditCourtModal selectedCourt={selectedCourt} openEditCourt={openEditCourt} closeEditCourt={closeEditCourt} saveSelectedCourt={saveSelectedCourt} removeSelectedCourt={removeSelectedCourt} />
+      )
+    }
+  }
   const renderCourts = () => {
     if (courtData && courtData.length > 0) {
       return (
         courtData.map((court) => {
           return <Box key={court.name} className="club-court">
-            <div variant="contained" component="label">
+            <div variant="contained" component="label" onClick={() => handleOpenCourt(court)}>
               {court.name} - {court.type}
             </div>
           </Box>
@@ -214,6 +250,7 @@ export const ClubCourts = () => {
           <Typography id="club-title" variant="h6" component="h2">ניהול מגרשים</Typography>
         </Box>
         <CustomDivider />
+        {renderEditCourt()}
         {renderCourts()}
         {renderCourtActions()}
         {showAddCourtForm && renderAddCourtForm()}

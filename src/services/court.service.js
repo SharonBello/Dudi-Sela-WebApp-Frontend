@@ -20,6 +20,8 @@ export const courtService = {
     getAboutClub,
     getUserPermissions,
     deletePriceConstraint,
+    deleteClubCourt,
+    editClubCourt,
     queryAdminUser
 }
 
@@ -143,6 +145,16 @@ async function addClubCourt(data) {
     }
 }
 
+async function editClubCourt(data) {
+    try {
+        let res = await httpService.post('courts/clubcourts/editClubCourt', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
 async function addPriceConstraint(data) {
     try {
         let res = await httpService.post('courts/clubcourts/addPriceConstraint', data)
@@ -176,6 +188,16 @@ async function editClubPreferences(data) {
 async function editAboutClub(data) {
     try {
         let res = await httpService.post('courts/aboutclub', data)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function deleteClubCourt(data) {
+    try {
+        let res = await httpService.delete('courts/clubcourts/court', data)
         return res
     }
     catch (err) {

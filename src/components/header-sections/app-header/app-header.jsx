@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { signout, setUserUid } from '../../../store/actions/user.actions.js'
+import { signout, setUserUid, setUserRole } from '../../../store/actions/user.actions.js'
 import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions.jsx'
@@ -100,6 +100,7 @@ export const AppHeader = () => {
     userService.authSignout()
       .then((response) => {
         dispatch(setUserUid(null))
+        dispatch(setUserRole(null))
         dispatch(signout())
         document.location.href = '/'
         userService.authSignout();

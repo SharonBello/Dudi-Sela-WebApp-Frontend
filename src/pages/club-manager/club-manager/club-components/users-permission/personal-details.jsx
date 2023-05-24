@@ -21,7 +21,7 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
     const [id, setId] = useState(user.id)
     const [primaryPhone, setPrimaryPhone] = useState(user.primaryPhone)
     const [contactPhone, setContactPhone] = useState(user.contactPhone)
-    const [mailAddress, setMailAddress] = useState(user.mailAddress)
+    const [email, setEmail] = useState(user.email)
     const [additionalPhone, setAdditionalPhone] = useState(user.additionalPhone)
     const [city, setCity] = useState(user.city)
     const [fullAddress, setFullAddress] = useState(user.fullAddress)
@@ -63,7 +63,7 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
                         <TextBox label="תעודת זהות" value={id} setValue={setId} />
                         <TextBox label="טלפון ראשי" value={primaryPhone} setValue={setPrimaryPhone} />
                         <TextBox label="טלפון יצירת קשר" value={contactPhone} setValue={setContactPhone} />
-                        <TextBox label="כתובת מייל" value={mailAddress} setValue={setMailAddress} />
+                        <TextBox label="כתובת מייל" value={email} setValue={setEmail} />
                         <TextBox label="טלפון נוסף" value={additionalPhone} setValue={setAdditionalPhone} />
                         <TextBox label="עיר" value={city} setValue={setCity} />
                         <TextBox label="כתבות מלאה" value={fullAddress} setValue={setFullAddress} />

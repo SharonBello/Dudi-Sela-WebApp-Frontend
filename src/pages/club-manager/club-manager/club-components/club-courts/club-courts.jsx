@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
@@ -29,6 +30,7 @@ export const ClubCourts = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [openEditCourt, setOpenEditCourt] = useState(false)
   const [selectedCourt, setSelectedCourt] = useState([]);
+  const role = useSelector((storeState) => storeState.userModule.role)
 
   const navigate = useNavigate()
 
@@ -123,7 +125,7 @@ export const ClubCourts = () => {
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
       setIsLoading(true)
-      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType})
+      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType, "role": role})
       getClubCourts().then(res => {
         setCourtData(res)
       })

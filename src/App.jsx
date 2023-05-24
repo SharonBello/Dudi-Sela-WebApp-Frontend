@@ -6,22 +6,26 @@ import { AppHeader } from './components/header-sections/app-header/app-header.js
 import { AppFooter } from './components/app-footer/app-footer.jsx'
 import { SnackbarProvider } from 'notistack';
 import { useDispatch } from 'react-redux'
-import { setLoggedUser, setUserUid } from './store/actions/user.actions.js';
+import { setLoggedUser, setUserUid, setUserRole } from './store/actions/user.actions.js';
 import { useNavigate } from "react-router"
 import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ScrollTop from './components/scroll-top.jsx'
 import './main.scss'
 import { STORAGE_KEY_LOGGED_USER } from './services/user.service.js'
+import { courtService } from './services/court.service.js'
 
 export const App = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
 
-   window.addEventListener("storage", () => {
+   window.addEventListener("storage", async () => {
       dispatch(setLoggedUser())
-      let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+      const uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+      const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
+      const res = await courtService.getUser({"email": email})
       dispatch(setUserUid(uid))
+      dispatch(setUserRole(res.data.role))
       navigate('/')
    });
 

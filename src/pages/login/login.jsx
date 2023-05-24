@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { login, setLoggedUser, setUserUid, setUserRole } from '../../store/actions/user.actions.js'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -47,6 +47,7 @@ export const Login = () => {
       .then((response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
+          dispatch(setUserRole(null))
           setIsLogin(!isLogin)
           navigate('/signin')
         } else {
@@ -58,6 +59,7 @@ export const Login = () => {
             sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
           }
           dispatch(setUserUid(response.data.uid))
+          dispatch(setUserRole(response.data.role))
           setIsLogin(isLogin)
           dispatch(login(payload))
           dispatch(setLoggedUser())

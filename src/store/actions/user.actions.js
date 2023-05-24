@@ -124,3 +124,13 @@ export function setUserUid(uid) {
         }
     }
 }
+
+export function setUserRole(role) {
+    return async (dispatch) => {
+        try {
+            dispatch({ type: 'SET_USER_ROLE', role })
+        } catch (err) {
+            console.error('Cannot save role', err)
+        }
+    }
+}

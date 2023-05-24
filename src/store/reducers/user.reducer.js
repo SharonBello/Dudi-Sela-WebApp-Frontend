@@ -3,6 +3,7 @@ const initialState = {
     uid: null,
     // watchedUser: null,
     loggedUser: null,
+    role: null
 }
 
 export function userReducer(state = initialState, action) {
@@ -25,6 +26,9 @@ export function userReducer(state = initialState, action) {
             break
         case 'SET_USER_UID':
             newState = { ...state, uid: action.uid }
+            break
+        case 'SET_USER_ROLE':
+            newState = { ...state, role: action.role }
             break
         default:
             return state

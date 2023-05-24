@@ -18,7 +18,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { userService } from '../../services/user.service.js'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
-import { login, setLoggedUser, setUserUid } from '../../store/actions/user.actions.js'
+import { login, setLoggedUser, setUserUid, setUserRole } from '../../store/actions/user.actions.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 
@@ -71,12 +71,14 @@ export const Signup = () => {
       .then((response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
+          dispatch(setUserRole(null))
           navigate('/signin')
         } else {
           const miniUser = {"email": payload.email, "uid": response.data.uid}
           sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
 
           dispatch(setUserUid(response.data.uid))
+          dispatch(setUserRole(response.data.role))
           dispatch(login(payload))
           dispatch(setLoggedUser())
           navigate('/')

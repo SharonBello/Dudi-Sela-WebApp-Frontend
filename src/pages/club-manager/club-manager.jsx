@@ -9,7 +9,6 @@ import { ScheduleDay } from './club-manager/club-components/schedule-day/schedul
 import { getCurrentDate, weekDayInHebrew } from './club-manager/club-components/schedule-day/schedule-helper.js'
 import SecondarySideDrawer from './drawers-manager/secondary-side-drawer/secondary-side-drawer.jsx'
 import PrimarySideDrawer from "./drawers-manager/primary-drawer/primary-side-drawer.jsx"
-import { signout, setUserUid } from '../../store/actions/user.actions.js'
 import { UsersPermission } from './club-manager/club-components/users-permission/users-permission.jsx'
 import { ClubClasses } from './club-manager/club-components/club-classes/club-classes.jsx'
 import { AboutClub } from './club-manager/club-components/about-club/about-club.jsx'
@@ -76,6 +75,7 @@ export const ClubManager = () => {
   }
 
   const logout = () => {
+    // dispatch(setUserRole(null))
     // dispatch(setUserUid(null))
     // dispatch(signout())
     navigate('/homepage')

@@ -78,7 +78,7 @@ export const Signup = () => {
           sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
 
           dispatch(setUserUid(response.data.uid))
-          dispatch(setUserRole(response.data.role))
+          //signup doesnt give an admin role
           dispatch(login(payload))
           dispatch(setLoggedUser())
           navigate('/')

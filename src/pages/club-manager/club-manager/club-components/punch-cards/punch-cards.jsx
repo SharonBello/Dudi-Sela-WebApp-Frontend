@@ -72,14 +72,11 @@ export const PunchCards = () => {
     setShowModalCreate(false)
   }
   const saveSelectedCard = async (e, card) => {
-    // let res = await courtService.editPunchCard(selectedCard)
-    // getClubCards().then(res => {
-    //   setCardData(res)
-    // })
-
+    // TODO add role
     if (card.cardName.trim() !== "") {
       setIsLoading(true)
       let res
+      // TODO add role
       if (selectedCard && selectedCard.id) { // card exists
         card["id"] = selectedCard.id
         res = await courtService.editPunchCard(card)

@@ -63,6 +63,7 @@ export const AboutClub = () => {
     e.preventDefault()
     setIsLoading(true)
     const payload = {clubMail, clubName, clubNameEng, city, address, addressInEng, cityInEng, clubName, phone, facebook, instagram, moreDetails, moreDetailsInEng, "facilityServices": facilityServices}
+    // TODO add role
     let res = await courtService.editAboutClub(payload)
     setIsLoading(false)
   }

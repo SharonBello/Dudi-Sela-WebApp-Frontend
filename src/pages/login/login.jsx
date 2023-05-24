@@ -18,6 +18,7 @@ import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
+import { courtService } from '../../services/court.service.js'
 
 export const Login = () => {
   const navigate = useNavigate()
@@ -44,7 +45,7 @@ export const Login = () => {
       password
     }
     userService.login(payload)
-      .then((response) => {
+      .then(async (response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
           dispatch(setUserRole(null))
@@ -59,7 +60,8 @@ export const Login = () => {
             sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
           }
           dispatch(setUserUid(response.data.uid))
-          dispatch(setUserRole(response.data.role))
+          const resUser = await courtService.getUser({"email": email})
+          dispatch(setUserRole(resUser.data.role))
           setIsLogin(isLogin)
           dispatch(login(payload))
           dispatch(setLoggedUser())

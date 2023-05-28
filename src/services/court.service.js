@@ -2,6 +2,7 @@ import { httpService } from './http.service.js'
 
 export const courtService = {
     getClubCourts,
+    editClubUser,
     addClubCourt,
     addPriceConstraint,
     editPriceConstraint,
@@ -24,6 +25,8 @@ export const courtService = {
     deletePriceConstraint,
     deleteClubCourt,
     editClubCourt,
+    deleteClubUser,
+    saveClubUser,
     getUser
 }
 
@@ -140,6 +143,36 @@ async function addClubClass(data, role='admin') {
 async function addClubUser(data, role='admin') {
     try {
         let res = await httpService.post('courts/clubusers/addClubUser', data, role)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function editClubUser(data, role='admin') {
+    try {
+        let res = await httpService.post('courts/clubusers/editClubUser', data, role)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function deleteClubUser(data, role='admin') {
+    try {
+        let res = await httpService.delete('courts/clubusers/deleteClubUser', data, role)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function saveClubUser(data, role='admin') {
+    try {
+        let res = await httpService.delete('courts/clubusers/saveClubUser', data, role)
         return res
     }
     catch (err) {

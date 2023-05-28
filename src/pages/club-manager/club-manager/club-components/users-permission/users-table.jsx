@@ -74,7 +74,7 @@ const headCells = [
     label: 'טלפון',
   },
   {
-    id: 'mail',
+    id: 'email',
     numeric: false,
     disablePadding: false,
     label: 'מייל',
@@ -98,7 +98,7 @@ const DEFAULT_ORDER_BY = 'primaryPhone';
 const DEFAULT_ROWS_PER_PAGE = 5;
 
 function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+  const { order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (newOrderBy) => (event) => {
     onRequestSort(event, newOrderBy);
@@ -107,17 +107,6 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -151,7 +140,6 @@ function EnhancedTableHead(props) {
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
@@ -171,25 +159,14 @@ function EnhancedTableToolbar(props) {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          חברי מועדון
-        </Typography>
-      )}
+      <Typography
+        sx={{ flex: '1 1 100%' }}
+        variant="h6"
+        id="tableTitle"
+        component="div"
+      >
+        חברי מועדון
+      </Typography>
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -212,11 +189,10 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function UsersTable({rows}) {
+export default function UsersTable({handleGetClubUsers, usersData, rows, handleSaveUser, handleDeleteUser}) {
   const [order, setOrder] = useState(DEFAULT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
-  const [selectedAll, setSelectedAll] = useState([]);
-  const [selectedUser, setSelectedUser] = useState([]);
+  const [selectedUser, setSelectedUser] = useState();
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [visibleRows, setVisibleRows] = useState(null);
@@ -257,24 +233,14 @@ export default function UsersTable({rows}) {
     [order, orderBy, page, rowsPerPage],
   );
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelected = rows.map((n) => n.fullName);
-      setSelectedAll(newSelected);
-      return;
-    }
-    setSelectedAll([]);
-  };
-
-  const handleClick = (event, index) => {
-    const mUser = rows.filter(user => user.primaryPhone === visibleRows[index].primaryPhone)
-    setSelectedUser(mUser);
+  const handleSelectUser = (event, index) => {
+    const mUser = usersData.filter(user => user.email === visibleRows[index].email)
+    setSelectedUser(mUser[0]);
   };
 
   const handleChangePage = useCallback(
     (event, newPage) => {
       setPage(newPage);
-
       const sortedRows = stableSort(rows, getComparator(order, orderBy));
       const updatedRows = sortedRows.slice(
         newPage * rowsPerPage,
@@ -314,22 +280,17 @@ export default function UsersTable({rows}) {
     [order, orderBy],
   );
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
-  const isSelected = (fullName) => selectedUser.fullName === fullName;
-
-  const onDeletePerimission = () => {
-    console.log("onDeletePerimission");
+  const onDeletePerimission = (e) => {
+    console.log(e)
+    handleDeleteUser(selectedUser)
   }
 
-  const onSavePerimission = () => {
-    console.log("onSavePerimission");
+  const onSavePerimission = (e) => {
+    console.log(e)
+    handleSaveUser(selectedUser)
   }
 
   const onOpenPersonalDetails = (editMode) => {
-    console.log("open modal with user personal details ", selectedUser);
     setShowUserDetails(true)
   }
 
@@ -339,7 +300,7 @@ export default function UsersTable({rows}) {
   const renderModal = () => {
     if (showUserDetails) {
       return (
-        <PersonalDetails user={selectedUser[0]} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
+        <PersonalDetails handleGetClubUsers={handleGetClubUsers} user={selectedUser} showUserDetails={showUserDetails} setShowUserDetails={setShowUserDetails} closeUserDetails={closeUserDetails} />
       )
     }
   }
@@ -349,7 +310,6 @@ export default function UsersTable({rows}) {
         {renderModal()}
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selectedAll.length} />
                 <TableContainer>
                 <Table
                     sx={{ minWidth: 750 }}
@@ -357,39 +317,25 @@ export default function UsersTable({rows}) {
                     size={dense ? 'small' : 'medium'}
                 >
                     <EnhancedTableHead
-                    numSelected={selectedAll.length}
                     order={order}
                     orderBy={orderBy}
-                    onSelectAllClick={handleSelectAllClick}
                     onRequestSort={handleRequestSort}
                     rowCount={rows.length}
                     />
                     <TableBody>
                     {visibleRows
                         ? visibleRows.map((row, index) => {
-                            const isItemSelected = isSelected(row.fullName);
                             const labelId = `enhanced-table-checkbox-${index}`;
 
                             return (
                             <TableRow
                                 hover
-                                onClick={(event) => handleClick(event, index)}
+                                onMouseOver={(event) => handleSelectUser(event, index)}
                                 role="checkbox"
-                                aria-checked={isItemSelected}
                                 tabIndex={-1}
                                 key={row.fullName}
-                                selected={isItemSelected}
                                 sx={{ cursor: 'pointer' }}
                             >
-                                <TableCell padding="checkbox">
-                                <Checkbox
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                    'aria-labelledby': labelId,
-                                    }}
-                                />
-                                </TableCell>
                                 <TableCell
                                 component="th"
                                 id={labelId}
@@ -399,11 +345,11 @@ export default function UsersTable({rows}) {
                                 {row.fullName}
                                 </TableCell>
                                 <TableCell align="right">{row.primaryPhone}</TableCell>
-                                <TableCell align="right">{row.mail}</TableCell>
+                                <TableCell align="right">{row.email}</TableCell>
                                 <TableCell align="right">{row.permission}</TableCell>
                                 <TableCell align="right">{row.validTill}</TableCell>
                                 <TableCell align="right">
-                                    <SaveButton onClick={(e) => onSavePerimission(e)} />
+                                    <SaveButton onSave={onSavePerimission} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button

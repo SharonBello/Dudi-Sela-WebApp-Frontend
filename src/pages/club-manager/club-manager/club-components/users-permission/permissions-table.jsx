@@ -453,7 +453,7 @@ export default function PermissionsTable({rows}) {
                                 <TableCell align="right">{row.permission}</TableCell>
                                 <TableCell align="right">{row.validTill}</TableCell>
                                 <TableCell align="right">
-                                    <SaveButton onClick={(e) => onSavePerimission(e)} />
+                                    <SaveButton onSave={onSavePerimission} />
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button

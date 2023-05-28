@@ -18,7 +18,7 @@ export const ClubHoursList = ({clubHoursList, handleSaveClubHour, handleDeleteCl
                   <SelectMenu defaultValue={clubHours.hours.endHour} inputLabel="עד שעה" values={DayHours()} setValue={(values) => handleEditClubHours(values, index, "hours", "startHour")} />
                 </div>
                 <div className="club-hours-actions flex align-center">
-                  <SaveButton disabled={true} onClick={handleSaveClubHour} />
+                  <SaveButton disabled={true} onSave={handleSaveClubHour} />
                   <FontAwesomeIcon onClick={(e) => handleDeleteClubHour(e, index)} icon={faTrashAlt} />
                 </div>
               </div>

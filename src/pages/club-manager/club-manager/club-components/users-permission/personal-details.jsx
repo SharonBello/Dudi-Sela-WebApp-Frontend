@@ -20,7 +20,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { courtService } from '../../../../../services/court.service';
 
-export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, closeUserDetails }) => {
+export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, setShowUserDetails, closeUserDetails }) => {
     const [firstName, setFirstName] = useState(user.firstName)
     const [role, setRole] = useState(user.role)
     const [lastName, setLastName] = useState(user.lastName)
@@ -62,11 +62,17 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
         if (validateUser()) {
             const payload =   { role, email, firstName, lastName, nickname, id, primaryPhone, contactPhone,
                 additionalPhone, city, fullAddress, clientComments, isInstructor, instructorDetails, dateOfBirth}
-            const res = await courtService.addClubUser(payload)
-            if (res.data.result === 0) {
-            setMessageAlert("המשתמש הוסף בהצלחה")
+            let res
+            if (payload.id) {
+                res = await courtService.editClubUser(payload)
             } else {
-            setMessageAlert("המשתמש לא הוסף בהצלחה")
+                res = await courtService.addClubUser(payload)
+
+            }
+            if (res.data.result === 0) {
+                payload.id ? setMessageAlert("המשתמש עודכן בהצלחה") : setMessageAlert("המשתמש הוסף בהצלחה")
+            } else {
+                payload.id ? setMessageAlert("המשתמש לא עודכן בהצלחה") : setMessageAlert("המשתמש לא הוסף בהצלחה")
             }
             setShowMessageAlert(true)
         } else {
@@ -79,7 +85,8 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
     }
     const handleCloseAlert = (event, reason) => {
         setShowMessageAlert(false)
-        // closeEditEvent()
+        handleGetClubUsers()
+        handleClose()
     }
 
     const alertAction = (
@@ -137,12 +144,9 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
                 <Box className="user-details-box flex-column align-center justify-between container">
                     <div className="grid-club-component">
                         <Typography id="club-title" className="club-title" variant="h6" component="h2">פרטים אישיים</Typography>
-                        <h3>הרשאה: {user.role}</h3>
-                        <SelectMenu inputLabel="סוג ההרשאה" value={role} values={UserRoles} setValue={setRole} />
-                        <TextBox label="מייל" value={email} setValue={setEmail} />
-
                         <Box className="main-component-fields-container">
-
+                            <SelectMenu inputLabel="סוג ההרשאה" defaultValue={user.role} value={role} values={UserRoles} setValue={setRole} />
+                            <TextBox label="מייל" value={email} setValue={setEmail} />
                             <TextBox label="שם פרטי" value={firstName} setValue={setFirstName} />
                             <TextBox label="שם משפחה" value={lastName} setValue={setLastName} />
                             <TextBox label="כינוי" value={nickname} setValue={setNickname} />

@@ -29,6 +29,8 @@ export const UsersPermission = () => {
   const navigate = useNavigate()
   const [rowsTableUsers, setRowsTableUsers] = useState([])
   const [rowsUserPermissions, setRowsUserPermissions] = useState([])
+  const [usersData, setUsersData] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(()=> {
     if (userName) {
@@ -42,6 +44,7 @@ export const UsersPermission = () => {
       if (res.length > 0) {
         const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
         setRowsTableUsers(_rowsTableUsers);
+        setUsersData(res)
       }
     })
   })
@@ -52,15 +55,16 @@ export const UsersPermission = () => {
         if (res.length > 0) {
           const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
           setRowsTableUsers(_rowsTableUsers);
+          setUsersData(res)
         }
       })
     }
   }, [])
   const getClubUsers = async () => {
     try {
-      // setIsLoading(true)
+      setIsLoading(true)
       let res = await courtService.getClubUsers()
-      // setIsLoading(false)
+      setIsLoading(false)
       return res.data
     } catch (error) {
       navigate('/')
@@ -70,14 +74,14 @@ export const UsersPermission = () => {
   const handleSearch = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setRowsTableUsers(rowsTableUsers.filter( (user) => user.mail.indexOf(email.trim()) !== -1));
+    setRowsTableUsers(rowsTableUsers.filter( (user) => user.email.indexOf(email.trim()) !== -1));
     if (email.trim() === "") handleGetClubUsers()
   }
-  const createUserData = (fullName, primaryPhone, mail, permission, validTill) => {
+  const createUserData = (fullName, primaryPhone, email, permission, validTill) => {
     return {
       fullName,
       primaryPhone,
-      mail,
+      email,
       permission,
       validTill,
     };
@@ -98,6 +102,18 @@ export const UsersPermission = () => {
     handleGetClubUsers()
     setShowSearchUser(false)
   }
+  const handleSaveUser = async (selectedUser) => {
+    setIsLoading(true)
+    let res = await courtService.saveClubUser(selectedUser)
+    handleGetClubUsers()
+    setIsLoading(false)
+  }
+  const handleDeleteUser = async (selectedUser) => {
+    setIsLoading(true)
+    let res = await courtService.deleteClubUser(selectedUser)
+    handleGetClubUsers()
+    setIsLoading(false)
+  }
   const renderSearchUser = () => {
     if (showSearchUser) {
       return (
@@ -112,15 +128,23 @@ export const UsersPermission = () => {
       )
     }
   }
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
+  }
   const renderModal = () => {
     if (showAddUser) {
       return (
-        <PersonalDetails user={{}} showUserDetails={showAddUser} setShowUserDetails={setShowAddUser} closeUserDetails={closeAddUser} />
+        <PersonalDetails handleGetClubUsers={handleGetClubUsers} user={{}} showUserDetails={showAddUser} setShowUserDetails={setShowAddUser} closeUserDetails={closeAddUser} />
       )
     }
   }
   return (
     <Box className="club-box container">
+      {renderIsLoading()}
       <Container className="club-content">
         <Box className="club-header">
           <Typography id="club-title" variant="h6" component="h2">משתמשים</Typography>
@@ -135,7 +159,7 @@ export const UsersPermission = () => {
         </button>
         {renderSearchUser()}
         <CustomDivider />
-        <UsersTable rows={rowsTableUsers} />
+        <UsersTable handleGetClubUsers={handleGetClubUsers} usersData={usersData} rows={rowsTableUsers} handleSaveUser={handleSaveUser} handleDeleteUser={handleDeleteUser}/>
         <CustomDivider />
       </Container>
     </Box>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CustomDivider from '../../../../shared-components/custom-divider';
@@ -14,10 +14,12 @@ import PermissionsTable from './permissions-table';
 import { SelectMenu } from '../../../../shared-components/select-menu';
 import { UserRoles } from '../../club-helper';
 import { PersonalDetails } from './personal-details';
+import { Button } from '@mui/material';
 
 export const UsersPermission = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
+  const [showSearchUser, setShowSearchUser] = useState(false);
   const [email, setEmail] = useState();
   const [userName, setUserName] = useState();
   const [userMessage, setUserMessage] = useState(`שלום  מועדון האקדמיה לטניס דודי סלע  מזמין אותך להצטרף למערכת הזמנות ממוחשבת. לחץ על הקישור להורדת האפליקציה https://lazuz.co.il`);
@@ -34,19 +36,23 @@ export const UsersPermission = () => {
       setUserMessage(message)
     }
   }, [userName])
+  const handleGetClubUsers = useCallback(() => {
+    getClubUsers().then(res => {
+      setClubUsers(res)
+      if (res.length > 0) {
+        const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
+        setRowsTableUsers(_rowsTableUsers);
+      }
+    })
+  })
   useEffect(()=> {
     if (clubUsers.length === 0) {
       getClubUsers().then(res => {
         setClubUsers(res)
-        if (res.length > 0)
-          setRowsTableUsers(res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill)));
-      })
-    }
-    if (userPermissions.length === 0) {
-      getUserPermissions().then(res => {
-        setUserPermissions(res)
-        if (res.length > 0)
-        setRowsUserPermissions(res);
+        if (res.length > 0) {
+          const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
+          setRowsTableUsers(_rowsTableUsers);
+        }
       })
     }
   }, [])
@@ -60,25 +66,12 @@ export const UsersPermission = () => {
       navigate('/')
     }
   }
-  const getUserPermissions = async () => {
-    try {
-      // setIsLoading(true)
-      let res = await courtService.getUserPermissions()
-      // setIsLoading(false)
-      // permissionName, daysAheadInApp, daysAheadCancel, allowWatch, isManager, allowEditEvents, allowInnerEvents, allowOpenGates
-      return res.data.user_permissions
-    } catch (error) {
-      navigate('/')
-    }
-  }
-  const handleSend = (e) => {
+
+  const handleSearch = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    // if (validateForm() === true) {
-    // } else {
-    //   setMessageAlert(validateForm())
-    //   setShowMessageAlert(true)
-    // }
+    setRowsTableUsers(rowsTableUsers.filter( (user) => user.mail.indexOf(email.trim()) !== -1));
+    if (email.trim() === "") handleGetClubUsers()
   }
   const createUserData = (fullName, primaryPhone, mail, permission, validTill) => {
     return {
@@ -90,29 +83,31 @@ export const UsersPermission = () => {
     };
   }
 
-  const handleAddPermission = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-
-  }
 
   const toggleAddUser = () => {
     setShowAddUser(!showAddUser)
   }
 
+  const toggleSearchUser = () => {
+    setShowSearchUser(!showSearchUser)
+  }
   const closeAddUser = () => {
     setShowAddUser(false)
   }
-
+  const handelCancelSearch = () => {
+    handleGetClubUsers()
+    setShowSearchUser(false)
+  }
   const renderSearchUser = () => {
-    if (showAddUser) {
+    if (showSearchUser) {
       return (
         <>
         <Box className="main-component-fields-container">
           <TextBox label="חפש שם משתמש לפי כתובת מייל" value={email} setValue={setEmail} />
         </Box>
         <Box className="">
-          <SaveButton label="חפש" onClick={handleSend} />
+        <Button label="חפש" component="label" onClick={(e) => handleSearch(e)}>חפש</Button>
+        <Button label="ביטול" component="label" onClick={()=> handelCancelSearch() }>ביטול</Button>
         </Box></>
       )
     }
@@ -124,7 +119,6 @@ export const UsersPermission = () => {
       )
     }
   }
-
   return (
     <Box className="club-box container">
       <Container className="club-content">
@@ -136,7 +130,10 @@ export const UsersPermission = () => {
           <h2>הוסף משתמש</h2>
         </button>
         {renderModal()}
-        {/* {renderSearchUser()} */}
+        <button onClick={() => toggleSearchUser()}>
+          <h2>חפש משתמש</h2>
+        </button>
+        {renderSearchUser()}
         <CustomDivider />
         <UsersTable rows={rowsTableUsers} />
         <CustomDivider />
@@ -166,6 +163,11 @@ export const UsersPermission = () => {
 /* <PermissionsTable rows={rowsUserPermissions} /> */
 
 /* {renderCreateUser()} */
+// const handleAddPermission = (e) => {
+//   e.stopPropagation()
+//   e.preventDefault()
+
+// }
 
 // const renderCreateUser = () => {
 //   if (showCreateUser) {
@@ -183,3 +185,23 @@ export const UsersPermission = () => {
 //   }
 // }
 
+
+// const getUserPermissions = async () => {
+//   try {
+//     // setIsLoading(true)
+//     let res = await courtService.getUserPermissions()
+//     // setIsLoading(false)
+//     // permissionName, daysAheadInApp, daysAheadCancel, allowWatch, isManager, allowEditEvents, allowInnerEvents, allowOpenGates
+//     return res.data.user_permissions
+//   } catch (error) {
+//     navigate('/')
+//   }
+// }
+// following in useEffect
+// if (userPermissions.length === 0) {
+//   getUserPermissions().then(res => {
+//     setUserPermissions(res)
+//     if (res.length > 0)
+//     setRowsUserPermissions(res);
+//   })
+// }

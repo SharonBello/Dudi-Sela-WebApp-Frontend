@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import PermissionsTable from './permissions-table';
 import { SelectMenu } from '../../../../shared-components/select-menu';
 import { UserRoles } from '../../club-helper';
+import { PersonalDetails } from './personal-details';
 
 export const UsersPermission = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
@@ -99,6 +100,10 @@ export const UsersPermission = () => {
     setShowAddUser(!showAddUser)
   }
 
+  const closeAddUser = () => {
+    setShowAddUser(false)
+  }
+
   const renderSearchUser = () => {
     if (showAddUser) {
       return (
@@ -112,24 +117,14 @@ export const UsersPermission = () => {
       )
     }
   }
-
-  const renderAddPermission = () => {
+  const renderModal = () => {
     if (showAddUser) {
       return (
-        <>
-        <Box className="main-component-fields-container">
-          <TextBox label="מייל המשתמש" value={permissionType} setValue={setPermissionType} />
-        </Box>
-        <Box className="main-component-fields-container">
-          <SelectMenu inputLabel="סוג ההרשאה" value={permissionType} values={UserRoles} setValue={setPermissionType} />
-        </Box>
-        <Box className="">
-          <SaveButton label="הוסף" onClick={handleAddPermission} />
-        </Box>
-        </>
+        <PersonalDetails user={{}} showUserDetails={showAddUser} setShowUserDetails={setShowAddUser} closeUserDetails={closeAddUser} />
       )
     }
   }
+
   return (
     <Box className="club-box container">
       <Container className="club-content">
@@ -140,7 +135,7 @@ export const UsersPermission = () => {
         <button onClick={() => toggleAddUser()}>
           <h2>הוסף משתמש</h2>
         </button>
-        {renderAddPermission()}
+        {renderModal()}
         {/* {renderSearchUser()} */}
         <CustomDivider />
         <UsersTable rows={rowsTableUsers} />
@@ -150,7 +145,24 @@ export const UsersPermission = () => {
   )
 }
 
-
+/* {renderAddPermission()} */
+// const renderAddPermission = () => {
+//   if (showAddUser) {
+//     return (
+//       <>
+//       <Box className="main-component-fields-container">
+//         <TextBox label="מייל המשתמש" value={permissionType} setValue={setPermissionType} />
+//       </Box>
+//       <Box className="main-component-fields-container">
+//         <SelectMenu inputLabel="סוג ההרשאה" value={permissionType} values={UserRoles} setValue={setPermissionType} />
+//       </Box>
+//       <Box className="">
+//         <SaveButton label="הוסף" onClick={handleAddPermission} />
+//       </Box>
+//       </>
+//     )
+//   }
+// }
 /* <PermissionsTable rows={rowsUserPermissions} /> */
 
 /* {renderCreateUser()} */

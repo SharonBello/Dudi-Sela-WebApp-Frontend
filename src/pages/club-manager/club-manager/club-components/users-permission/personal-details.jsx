@@ -12,10 +12,12 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import TextField from '@mui/material/TextField';
-import { DateFormat } from '../../club-helper'
+import { DateFormat, UserRoles } from '../../club-helper'
+import { SelectMenu } from '../../../../shared-components/select-menu';
 
 export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, closeUserDetails }) => {
     const [firstName, setFirstName] = useState(user.firstName)
+    const [role, setRole] = useState(user.role)
     const [lastName, setLastName] = useState(user.lastName)
     const [nickname, setNickname] = useState(user.nickname)
     const [id, setId] = useState(user.id)
@@ -39,6 +41,9 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
     const handleSave = (e) => {
         e.stopPropagation()
         e.preventDefault()
+        const payload =   { role, firstName, lastName, nickname, id, primaryPhone, contactPhone, email,
+            additionalPhone, city, fullAddress, clientComments, isInstructor, instructorDetails, dateOfBirth}
+// TODO save payload to club_users
         setShowUserDetails(false)
     }
     const handleClose = () => {
@@ -55,15 +60,18 @@ export const PersonalDetails = ({ user, showUserDetails, setShowUserDetails, clo
             <Box className="user-details-box flex-column align-center justify-between container">
                 <div className="grid-club-component">
                     <Typography id="club-title" className="club-title" variant="h6" component="h2">פרטים אישיים</Typography>
-                    <h3>חבר מועדון: {user.permission}</h3>
+                    <h3>הרשאה: {user.role}</h3>
+                    <SelectMenu inputLabel="סוג ההרשאה" value={role} values={UserRoles} setValue={setRole} />
+                    <TextBox label="מייל" value={email} setValue={setEmail} />
+
                     <Box className="main-component-fields-container">
+
                         <TextBox label="שם פרטי" value={firstName} setValue={setFirstName} />
                         <TextBox label="שם משפחה" value={lastName} setValue={setLastName} />
                         <TextBox label="כינוי" value={nickname} setValue={setNickname} />
                         <TextBox label="תעודת זהות" value={id} setValue={setId} />
                         <TextBox label="טלפון ראשי" value={primaryPhone} setValue={setPrimaryPhone} />
                         <TextBox label="טלפון יצירת קשר" value={contactPhone} setValue={setContactPhone} />
-                        <TextBox label="כתובת מייל" value={email} setValue={setEmail} />
                         <TextBox label="טלפון נוסף" value={additionalPhone} setValue={setAdditionalPhone} />
                         <TextBox label="עיר" value={city} setValue={setCity} />
                         <TextBox label="כתבות מלאה" value={fullAddress} setValue={setFullAddress} />

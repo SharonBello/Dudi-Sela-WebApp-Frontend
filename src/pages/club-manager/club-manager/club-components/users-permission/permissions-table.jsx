@@ -275,7 +275,6 @@ export default function PermissionsTable({rows}) {
   const [paddingHeight, setPaddingHeight] = useState(0);
   const [showUserDetails, setShowUserDetails] = useState(false);
 
-
   useEffect(() => {
     let rowsOnMount = stableSort(
       rows,

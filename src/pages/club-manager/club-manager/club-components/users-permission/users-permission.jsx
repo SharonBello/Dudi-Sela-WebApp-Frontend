@@ -11,6 +11,8 @@ import { Loader } from '../../../../../components/loader.jsx';
 import { courtService } from '../../../../../services/court.service'
 import { useNavigate } from 'react-router-dom'
 import PermissionsTable from './permissions-table';
+import { SelectMenu } from '../../../../shared-components/select-menu';
+import { UserRoles } from '../../club-helper';
 
 export const UsersPermission = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
@@ -36,7 +38,7 @@ export const UsersPermission = () => {
       getClubUsers().then(res => {
         setClubUsers(res)
         if (res.length > 0)
-          setRowsTableUsers(res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.mailAddress, user.permission, user.validTill)));
+          setRowsTableUsers(res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill)));
       })
     }
     if (userPermissions.length === 0) {
@@ -52,7 +54,7 @@ export const UsersPermission = () => {
       // setIsLoading(true)
       let res = await courtService.getClubUsers()
       // setIsLoading(false)
-      return res.data.club_users
+      return res.data
     } catch (error) {
       navigate('/')
     }
@@ -90,33 +92,14 @@ export const UsersPermission = () => {
   const handleAddPermission = (e) => {
     e.stopPropagation()
     e.preventDefault()
-  }
 
-  const toggleCreateUser = () => {
-    setShowCreateUser(!showCreateUser)
   }
 
   const toggleAddUser = () => {
     setShowAddUser(!showAddUser)
   }
 
-  const renderCreateUser = () => {
-    if (showCreateUser) {
-      return (
-        <>
-        <Box className="main-component-fields-container">
-          <TextBox label="טלפון הלקוח" value={email} setValue={setEmail} />
-          <TextBox label="שם משתמש (בכניסה לאפליקציה)" value={userName} setValue={setUserName} />
-          <TextBox label="תוכן מודעה" value={userMessage} setValue={setUserMessage} />
-        </Box>
-        <Box className="">
-          <SaveButton label="שלח הזמנה" onClick={handleSend} />
-        </Box></>
-      )
-    }
-  }
-
-  const renderAddUser = () => {
+  const renderSearchUser = () => {
     if (showAddUser) {
       return (
         <>
@@ -135,10 +118,10 @@ export const UsersPermission = () => {
       return (
         <>
         <Box className="main-component-fields-container">
-          <TextBox label="סוג המשתמש" value={permissionType} setValue={setPermissionType} />
+          <TextBox label="מייל המשתמש" value={permissionType} setValue={setPermissionType} />
         </Box>
         <Box className="main-component-fields-container">
-          <SwitchInput label="מנהל" value={permissionType} setValue={setPermissionType} />
+          <SelectMenu inputLabel="סוג ההרשאה" value={permissionType} values={UserRoles} setValue={setPermissionType} />
         </Box>
         <Box className="">
           <SaveButton label="הוסף" onClick={handleAddPermission} />
@@ -154,21 +137,37 @@ export const UsersPermission = () => {
           <Typography id="club-title" variant="h6" component="h2">משתמשים</Typography>
         </Box>
         <CustomDivider />
-        {/* <button onClick={() => toggleCreateUser()}>
-          <h2>הזמן משתמש</h2>
-        </button> */}
         <button onClick={() => toggleAddUser()}>
           <h2>הוסף משתמש</h2>
         </button>
-        {renderCreateUser()}
-        {renderAddUser()}
+        {renderAddPermission()}
+        {/* {renderSearchUser()} */}
         <CustomDivider />
         <UsersTable rows={rowsTableUsers} />
         <CustomDivider />
-        <PermissionsTable rows={rowsUserPermissions} />
-        <CustomDivider />
-        {renderAddPermission()}
       </Container>
     </Box>
   )
 }
+
+
+/* <PermissionsTable rows={rowsUserPermissions} /> */
+
+/* {renderCreateUser()} */
+
+// const renderCreateUser = () => {
+//   if (showCreateUser) {
+//     return (
+//       <>
+//       <Box className="main-component-fields-container">
+//         <TextBox label="טלפון הלקוח" value={email} setValue={setEmail} />
+//         <TextBox label="שם משתמש (בכניסה לאפליקציה)" value={userName} setValue={setUserName} />
+//         <TextBox label="תוכן מודעה" value={userMessage} setValue={setUserMessage} />
+//       </Box>
+//       <Box className="">
+//         <SaveButton label="שלח הזמנה" onClick={handleSend} />
+//       </Box></>
+//     )
+//   }
+// }
+

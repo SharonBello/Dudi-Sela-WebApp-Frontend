@@ -15,7 +15,7 @@ import PermissionsTable from './permissions-table';
 export const UsersPermission = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
-  const [userPhone, setUserPhone] = useState();
+  const [email, setEmail] = useState();
   const [userName, setUserName] = useState();
   const [userMessage, setUserMessage] = useState(`שלום  מועדון האקדמיה לטניס דודי סלע  מזמין אותך להצטרף למערכת הזמנות ממוחשבת. לחץ על הקישור להורדת האפליקציה https://lazuz.co.il`);
   const [permissionType, setPermissionType] = useState()
@@ -105,7 +105,7 @@ export const UsersPermission = () => {
       return (
         <>
         <Box className="main-component-fields-container">
-          <TextBox label="טלפון הלקוח" value={userPhone} setValue={setUserPhone} />
+          <TextBox label="טלפון הלקוח" value={email} setValue={setEmail} />
           <TextBox label="שם משתמש (בכניסה לאפליקציה)" value={userName} setValue={setUserName} />
           <TextBox label="תוכן מודעה" value={userMessage} setValue={setUserMessage} />
         </Box>
@@ -121,7 +121,7 @@ export const UsersPermission = () => {
       return (
         <>
         <Box className="main-component-fields-container">
-          <TextBox label="חפש שם משתמש לפי טלפון ללא ספרת ה-0" value={userPhone} setValue={setUserPhone} />
+          <TextBox label="חפש שם משתמש לפי כתובת מייל" value={email} setValue={setEmail} />
         </Box>
         <Box className="">
           <SaveButton label="חפש" onClick={handleSend} />

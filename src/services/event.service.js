@@ -16,9 +16,9 @@ async function getClubEvents() {
     }
 }
 
-async function addClubEvent(data) {
+async function addClubEvent(data, role='admin') {
     try {
-        let res = await httpService.post('events/addClubEvent', data)
+        let res = await httpService.post('events/addClubEvent', data, role)
         return res
     }
     catch (err) {
@@ -26,9 +26,9 @@ async function addClubEvent(data) {
     }
 }
 
-async function editClubEvent(data) {
+async function editClubEvent(data, role='admin') {
     try {
-        let res = await httpService.post('events/editClubEvent', data)
+        let res = await httpService.post('events/editClubEvent', data, role)
         return res
     }
     catch (err) {

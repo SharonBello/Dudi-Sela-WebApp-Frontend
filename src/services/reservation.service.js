@@ -27,18 +27,18 @@ function getById(reservationId) {
     return reservation
 }
 
-async function query(uid) {
+async function query(uid, role='subscriber') {
     try {
-        const results = await httpService.post('reservations/userreservations/user', {'uid': uid})
+        const results = await httpService.post('reservations/userreservations/user', {'uid': uid}, role)
         return results
     } catch (err) {
         throw err
     }
 }
 
-async function queryByDate(date) {
+async function queryByDate(date, role='subscriber') {
     try {
-        let data = await httpService.post('reservations/userreservations/date', {"date": date})
+        let data = await httpService.post('reservations/userreservations/date', {"date": date}, role)
         let reservations
         if (!data) {
             reservations = []
@@ -51,9 +51,9 @@ async function queryByDate(date) {
     }
 }
 
-async function queryByDayofweek(dayofweek) {
+async function queryByDayofweek(dayofweek, role='subscriber') {
     try {
-        let data = await httpService.post('reservations/userreservations/dayofweek', {"dayofweek": dayofweek})
+        let data = await httpService.post('reservations/userreservations/dayofweek', {"dayofweek": dayofweek}, role)
         let reservations
         if (!data) {
             reservations = []
@@ -67,27 +67,27 @@ async function queryByDayofweek(dayofweek) {
 }
 
 
-async function postByWeekDay(weekday, data) {
+async function postByWeekDay(weekday, role='admin') {
     try {
-        let res = await httpService.post('reservations/schedule/weekday?weekday=' + weekday, data)
+        let res = await httpService.post('reservations/schedule/weekday?weekday=' + weekday, {}, role)
         return res
     } catch (err) {
         throw err
     }
 }
 
-async function resetByWeekDay(weekday) {
+async function resetByWeekDay(weekday, role='admin') {
     try {
-        let res = await httpService.post('reservations/schedule/reset?weekday=' + weekday)
+        let res = await httpService.post('reservations/schedule/reset?weekday=' + weekday, {}, role)
         return res
     } catch (err) {
         throw err
     }
 }
 
-async function addNewReservation(data) {
+async function addNewReservation(data, role='subscriber') {
     try {
-        let res = await httpService.post('reservations/addReservation', data)
+        let res = await httpService.post('reservations/addReservation', data, role)
         return res
     }
     catch (err) {
@@ -95,9 +95,9 @@ async function addNewReservation(data) {
     }
 }
 
-async function isReservationExists(uid, data) {
+async function isReservationExists(uid, data, role='admin') {
     try {
-        let res = await httpService.post('reservations/reservation/exists?docId=' + uid, data)
+        let res = await httpService.post('reservations/reservation/exists?docId=' + uid, data, role)
         return res
     }
     catch (err) {
@@ -105,9 +105,9 @@ async function isReservationExists(uid, data) {
     }
 }
 
-async function changeCredit(uid, data) {
+async function changeCredit(uid, data, role='subscriber') {
     try {
-        let res = await httpService.post('reservations/usercredit?docId=' + uid, data)
+        let res = await httpService.post('reservations/usercredit?docId=' + uid, data, role)
         return res
     }
     catch (err) {
@@ -125,9 +125,9 @@ async function getCredit(uid) {
     }
 }
 
-async function deleteReservation(uid, data) {
+async function deleteReservation(uid, data, role='subscriber') {
     try {
-        let res = await httpService.delete('reservations/reservations?docId=' + uid, data)
+        let res = await httpService.delete('reservations/reservations?docId=' + uid, data, role)
         return res
     }
     catch (err) {
@@ -135,9 +135,9 @@ async function deleteReservation(uid, data) {
     }
 }
 
-async function deleteEvent(data) {
+async function deleteEvent(data, role='admin') {
     try {
-        let res = await httpService.delete('reservations/reservations/event', data)
+        let res = await httpService.delete('reservations/reservations/event', data, role)
         return res
     }
     catch (err) {
@@ -145,9 +145,9 @@ async function deleteEvent(data) {
     }
 }
 
-async function addNewReservationToUser(data) {
+async function addNewReservationToUser(data, role='subscriber') {
     try {
-        let res = await httpService.post('reservations/addReservation/user', data)
+        let res = await httpService.post('reservations/addReservation/user', data, role)
         return res
     }
     catch (err) {
@@ -155,9 +155,9 @@ async function addNewReservationToUser(data) {
     }
 }
 
-async function addNewReservationByDate(date, data) {
+async function addNewReservationByDate(date, data, role='subscriber') {
     try {
-        let res = await httpService.post('reservations/reservations/date?date=' + date, data)
+        let res = await httpService.post('reservations/reservations/date?date=' + date, data, role)
         return res
     }
     catch (err) {

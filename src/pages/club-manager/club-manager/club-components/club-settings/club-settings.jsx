@@ -57,7 +57,6 @@ export const ClubSettings = () => {
     e.preventDefault()
     setIsLoading(true)
     const payload = {hrBeforeCancel, minPerReservation, daysReservedBefore, phoneCancelReservation, daysInAdvance, cutOffDays, timeIntervals, onlineReserve, memberOnlyClub, addPartnersToAll}
-    // TODO add role
     let res = await courtService.editClubPreferences(payload)
     setIsLoading(false)
   }

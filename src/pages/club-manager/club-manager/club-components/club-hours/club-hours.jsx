@@ -35,7 +35,6 @@ export const ClubHours = () => {
   const handleSaveClubHours = async (e, clubHours) => {
     if (clubHours.days.length > 0) {
       setIsLoading(true)
-      // TODO add role
       let res = await courtService.addClubHours(clubHours)
       getClubHours().then(res => {
         setClubHoursList(res.data)
@@ -45,7 +44,6 @@ export const ClubHours = () => {
   }
   const handleDeleteClubHour = async(e, index) => {
     setIsLoading(true)
-    // TODO add role
     let res = await courtService.deleteClubHours(clubHoursList[index])
     // setIsLoading(false)
     getClubHours().then(res => {

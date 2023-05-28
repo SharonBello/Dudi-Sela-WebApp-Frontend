@@ -14,9 +14,9 @@ export const userService = {
 
 window.userService = userService
 
-async function login(userCred) {
+async function login(userCred, role='subscriber') {
     try {
-        const loggedUser = await httpService.post('auth/signin', userCred)
+        const loggedUser = await httpService.post('auth/signin', userCred, role)
         if (loggedUser) {
             _handleLogin(userCred)
             return loggedUser
@@ -26,9 +26,9 @@ async function login(userCred) {
     }
 }
 
-async function signup(payload) {
+async function signup(payload, role='subscriber') {
     try {
-        const user = await httpService.post('auth/signup', payload)
+        const user = await httpService.post('auth/signup', payload, role)
         _handleLogin(payload)
         return user
     } catch (err) {
@@ -38,7 +38,7 @@ async function signup(payload) {
 
 async function authSignout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
-    return await httpService.post('auth/signout')
+    return await httpService.post('auth/signout', {}, 'subscriber')
 }
 
 function _handleLogin(user) {

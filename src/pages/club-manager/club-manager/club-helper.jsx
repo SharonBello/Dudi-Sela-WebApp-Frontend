@@ -132,3 +132,4 @@ export const DateFormat = 'YYYY-MM-DD'
 export const EmptyEvent = { "dayOfWeek": "", "eventType": EventTypes[1], "startDate": dayjs(new Date()).format(DateFormat), "startHour": "", "endHour": "", "frequencyType":FrequencyTypes[1], "courtNumber":"",
       "price": "", "paidStatus":PaymentStatus[0], "description": "", "title":"", "phoneNumber": "", "instructor": "", "participants": [], "shouldJoinClass": false}
 
+export const UserRoles = ['subscriber', 'student', 'instructor', 'manager', 'admin']

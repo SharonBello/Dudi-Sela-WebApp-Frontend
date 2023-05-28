@@ -86,9 +86,9 @@ async function getUserPermissions() {
     }
 }
 
-async function getUser(data) {
+async function getUser(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubuser', data)
+        let res = await httpService.post('courts/clubuser', data, role)
         return res
     }
     catch (err) {
@@ -106,9 +106,9 @@ async function getClubClasses() {
     }
 }
 
-async function addPunchCard(data) {
+async function addPunchCard(data, role='admin') {
     try {
-        let res = await httpService.post('courts/punchcards/addPunchCard', data)
+        let res = await httpService.post('courts/punchcards/addPunchCard', data, role)
         return res
     }
     catch (err) {
@@ -116,9 +116,9 @@ async function addPunchCard(data) {
     }
 }
 
-async function editPunchCard(data) {
+async function editPunchCard(data, role='admin') {
     try {
-        let res = await httpService.post('courts/punchcards/editPunchCard', data)
+        let res = await httpService.post('courts/punchcards/editPunchCard', data, role)
         return res
     }
     catch (err) {
@@ -126,9 +126,9 @@ async function editPunchCard(data) {
     }
 }
 
-async function addClubClass(data) {
+async function addClubClass(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubclasses/addClubClass', data)
+        let res = await httpService.post('courts/clubclasses/addClubClass', data, role)
         return res
     }
     catch (err) {
@@ -146,9 +146,9 @@ async function getClubHours() {
     }
 }
 
-async function addClubHours(data) {
+async function addClubHours(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubhours/addClubHours', data)
+        let res = await httpService.post('courts/clubhours/addClubHours', data, role)
         return res
     }
     catch (err) {
@@ -156,9 +156,9 @@ async function addClubHours(data) {
     }
 }
 
-async function addClubCourt(data) {
+async function addClubCourt(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubcourts/addClubCourt', data)
+        let res = await httpService.post('courts/clubcourts/addClubCourt', data, role)
         return res
     }
     catch (err) {
@@ -166,9 +166,9 @@ async function addClubCourt(data) {
     }
 }
 
-async function editClubCourt(data) {
+async function editClubCourt(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubcourts/editClubCourt', data)
+        let res = await httpService.post('courts/clubcourts/editClubCourt', data, role)
         return res
     }
     catch (err) {
@@ -176,9 +176,9 @@ async function editClubCourt(data) {
     }
 }
 
-async function addPriceConstraint(data) {
+async function addPriceConstraint(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubcourts/addPriceConstraint', data)
+        let res = await httpService.post('courts/clubcourts/addPriceConstraint', data, role)
         return res
     }
     catch (err) {
@@ -186,9 +186,9 @@ async function addPriceConstraint(data) {
     }
 }
 
-async function editPriceConstraint(data) {
+async function editPriceConstraint(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubcourts/editPriceConstraint', data)
+        let res = await httpService.post('courts/clubcourts/editPriceConstraint', data, role)
         return res
     }
     catch (err) {
@@ -196,9 +196,9 @@ async function editPriceConstraint(data) {
     }
 }
 
-async function editClubPreferences(data) {
+async function editClubPreferences(data, role='admin') {
     try {
-        let res = await httpService.post('courts/clubpreferences', data)
+        let res = await httpService.post('courts/clubpreferences', data, role)
         return res
     }
     catch (err) {
@@ -206,9 +206,9 @@ async function editClubPreferences(data) {
     }
 }
 
-async function editAboutClub(data) {
+async function editAboutClub(data, role='admin') {
     try {
-        let res = await httpService.post('courts/aboutclub', data)
+        let res = await httpService.post('courts/aboutclub', data, role)
         return res
     }
     catch (err) {
@@ -216,9 +216,9 @@ async function editAboutClub(data) {
     }
 }
 
-async function deleteClubCourt(data) {
+async function deleteClubCourt(data, role='admin') {
     try {
-        let res = await httpService.delete('courts/clubcourts/court', data)
+        let res = await httpService.delete('courts/clubcourts/court', data, role)
         return res
     }
     catch (err) {
@@ -226,9 +226,9 @@ async function deleteClubCourt(data) {
     }
 }
 
-async function deletePriceConstraint(data) {
+async function deletePriceConstraint(data, role='admin') {
     try {
-        let res = await httpService.delete('courts/clubcourts', data)
+        let res = await httpService.delete('courts/clubcourts', data, role)
         return res
     }
     catch (err) {
@@ -236,9 +236,9 @@ async function deletePriceConstraint(data) {
     }
 }
 
-async function deleteClubHours(data) {
+async function deleteClubHours(data, role='admin') {
     try {
-        let res = await httpService.delete('courts/clubhours', data)
+        let res = await httpService.delete('courts/clubhours', data, role)
         return res
     }
     catch (err) {

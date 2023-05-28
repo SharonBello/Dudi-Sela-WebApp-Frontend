@@ -40,7 +40,6 @@ export const ClubClasses = () => {
 
   const handleSave = async (e, clubClass) => {
     if (clubClass.title.trim() !== "") {
-      // TODO add role
       setIsLoading(true)
       let res = await courtService.addClubClass(clubClass)
       getClubClasses().then(res => {

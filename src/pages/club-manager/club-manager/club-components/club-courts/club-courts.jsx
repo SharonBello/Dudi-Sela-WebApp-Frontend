@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Box from '@mui/material/Box';
@@ -30,7 +29,6 @@ export const ClubCourts = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [openEditCourt, setOpenEditCourt] = useState(false)
   const [selectedCourt, setSelectedCourt] = useState([]);
-  const role = useSelector((storeState) => storeState.userModule.role)
 
   const navigate = useNavigate()
 
@@ -48,7 +46,6 @@ export const ClubCourts = () => {
     }
   }, [])
   const removeSelectedCourt = async (court) => {
-    // TODO add role
     let res = await courtService.deleteClubCourt(court)
     getClubCourts().then(res => {
       setCourtData(res)
@@ -58,7 +55,6 @@ export const ClubCourts = () => {
   const saveSelectedCourt = async (courtName, courtType) => {
     selectedCourt.name = courtName
     selectedCourt.type = courtType
-    // TODO add role
     let res = await courtService.editClubCourt(selectedCourt)
     getClubCourts().then(res => {
       setCourtData(res)
@@ -127,8 +123,7 @@ export const ClubCourts = () => {
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
       setIsLoading(true)
-      // TODO add role
-      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType, "role": role})
+      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType})
       getClubCourts().then(res => {
         setCourtData(res)
       })
@@ -160,7 +155,6 @@ export const ClubCourts = () => {
     e.stopPropagation()
     if (newConstraint.days.length>0) {
       setIsLoading(true)
-      // TODO add role
       let res = await courtService.addPriceConstraint(newConstraint)
       setIsLoading(false)
       if (res.data.result === 0) {
@@ -171,7 +165,6 @@ export const ClubCourts = () => {
   const editConstraint = async (e, constraint) => {
     e.stopPropagation()
     setIsLoading(true)
-    // TODO add role
     let res = await courtService.editPriceConstraint(constraint)
     setIsLoading(false)
     if (res.data.result === 0) {
@@ -180,7 +173,6 @@ export const ClubCourts = () => {
   }
   const deleteConstraint = async (e, index) => {
     setIsLoading(true)
-    // TODO add role
     let res = await courtService.deletePriceConstraint(priceConstraints[index])
     setIsLoading(false)
     if (res.data.result === 0) {

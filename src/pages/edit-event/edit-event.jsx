@@ -109,6 +109,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
         }
         if (res.data.result === 0) {
           setMessageAlert("הארוע נשמר בהצלחה")
+          closeEditEvent()
         } else {
           setMessageAlert("הארוע לא נשמר בהצלחה")
         }
@@ -145,7 +146,6 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
 
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
-    closeEditEvent()
   }
 
   const alertAction = (
@@ -208,6 +208,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
     // }
     if (res.data.result === 0) {
       setMessageAlert("הארוע נמחק")
+      closeEditEvent()
     } else {
       setMessageAlert("הארוע לא נמחק")
     }
@@ -284,7 +285,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
                   שמירה
                 </button>
                 <div>
-                  <button onClick={closeEditEvent} className='cancel-btn'>
+                  <button disabled={isLoading} onClick={closeEditEvent} className='cancel-btn'>
                     ביטול
                   </button>
                   {renderDeleteEvent()}

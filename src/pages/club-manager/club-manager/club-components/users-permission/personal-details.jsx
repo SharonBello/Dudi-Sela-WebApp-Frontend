@@ -19,8 +19,10 @@ import Alert from '@mui/material/Alert'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { courtService } from '../../../../../services/court.service';
+import { Loader } from '../../../../../components/loader';
 
 export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, setShowUserDetails, closeUserDetails }) => {
+    const [isLoading, setIsLoading] = useState(false)
     const [firstName, setFirstName] = useState(user.firstName)
     const [role, setRole] = useState(user.role)
     const [lastName, setLastName] = useState(user.lastName)
@@ -60,6 +62,7 @@ export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, set
         e.stopPropagation()
         e.preventDefault()
         if (validateUser()) {
+            setIsLoading(true)
             const payload =   { role, email, firstName, lastName, nickname, id, primaryPhone, contactPhone,
                 additionalPhone, city, fullAddress, clientComments, isInstructor, instructorDetails, dateOfBirth}
             let res
@@ -67,12 +70,12 @@ export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, set
                 res = await courtService.editClubUser(payload)
             } else {
                 res = await courtService.addClubUser(payload)
-
             }
+            setIsLoading(false)
             if (res.data.result === 0) {
                 payload.id ? setMessageAlert("המשתמש עודכן בהצלחה") : setMessageAlert("המשתמש הוסף בהצלחה")
             } else {
-                payload.id ? setMessageAlert("המשתמש לא עודכן בהצלחה") : setMessageAlert("המשתמש לא הוסף בהצלחה")
+                payload.id ? setMessageAlert("המשתמש לא עודכן") : setMessageAlert("המשתמש לא הוסף")
             }
             setShowMessageAlert(true)
         } else {
@@ -86,7 +89,7 @@ export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, set
     const handleCloseAlert = (event, reason) => {
         setShowMessageAlert(false)
         handleGetClubUsers()
-        handleClose()
+        if (messageAlert.indexOf('בהצלחה') !== -1) handleClose()
     }
 
     const alertAction = (
@@ -131,10 +134,17 @@ export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, set
           )
         }
       }
-
+    const renderIsLoading = () => {
+        if (isLoading) {
+            return (
+            <Loader />
+            )
+        }
+    }
     return (
         <>
             {renderMessageAlert()}
+            {renderIsLoading()}
             <Modal
                 open={showUserDetails}
                 onClose={closeUserDetails}
@@ -193,10 +203,10 @@ export const PersonalDetails = ({ handleGetClubUsers, user, showUserDetails, set
 
                         </Box>
                         <Box className="btn-club-components-container flex align-center">
-                            <button onClick={handleSave} className='save-btn'>
+                            <button disabled={isLoading} onClick={handleSave} className='save-btn'>
                                 שמור
                             </button>
-                            <button onClick={handleClose} className='cancel-btn'>
+                            <button disabled={isLoading} onClick={handleClose} className='cancel-btn'>
                                 סגור
                             </button>
                         </Box>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs';
@@ -33,7 +33,6 @@ export const NewReservation = () => {
   const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
-  const [initCourtsData, setInitCourtsData] = useState()
   const { width } = useWindowDimensions()
   const todaysDate = dayjs().format('YYYY-MM-DD')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
@@ -55,54 +54,30 @@ export const NewReservation = () => {
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
-  useEffect(() => {
-    const fetchClubCourts = async() => {
-      let res = await courtService.getClubCourts()
-      res && res.data && res.data.club_courts && setClubCourts(res.data.club_courts.map(court => court.name))
-      handleSelectDate(todaysDate)
-    }
-    if (clubCourts.length === 0) {
-      fetchClubCourts()
-    }
-  }, [])
-
   const getSaturdayDate = () => {
     return dayjs().day(6)
   }
 
   const saturdayDate = getSaturdayDate()
-
-  const handleInitCourtsData = async () => {
+  const handleCourtsData = useCallback(async (date) => {
     let res = await courtService.getClubCourts()
-    if (res && res.data) {
-      const courtsData = {
-        start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-        end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-        court_numbers: res.data.club_courts.map( court => court.name)
-      }
-      setInitCourtsData(courtsData)
-      setCourtsData(courtsData);
+    const courtsData = {
+      start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+      end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      court_numbers: res.data.club_courts.map( court => court.name)
     }
-  }
+    setCourtsData(courtsData);
+    let _date
+    if (!date) {
+      date = new Date()
+    }
+    _date = dayjs(date).format(DateFormat)
+    handleDateChange(_date, courtsData)
+  }, [])
+
   useEffect(() => {
-    const getClubCourts = async () => {
-      try {
-        await handleInitCourtsData()
-      } catch (error) {
-        navigate('/')
-      }
-    }
-    const getClubHours = async () => {
-      try {
-        let res = await courtService.getClubHours()
-        return res.data
-      } catch (error) {
-        navigate('/')
-      }
-    }
-    getClubCourts();
+    handleCourtsData()
     }, [])
-  // })
 
   const theme = createTheme({
     direction: 'rtl',
@@ -121,15 +96,14 @@ export const NewReservation = () => {
       (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
-  const filterStartHourByCourts = async () => {
-    // when a given date and start time, all courts are reserved
-    // then, splice the start time from the available start hours
-    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-    // Get reserved courts by date
-    const _date = dayjs(date).format(DateFormat)
-    let reservations = await reservationService.queryByDate(_date)
-    // Filter courts data by reserved courts
-    // loop each hour, parse whether all courts are reserved for that hour, e.g. for 6am all courts are reserved
+  const handleDateChange = async (_date, mCourtsData) => {
+    if (!mCourtsData) {
+      mCourtsData = courtsData
+    }
+    let _courtsData = JSON.parse(JSON.stringify(mCourtsData))
+    const reservations = await reservationService.queryByDate(_date)
+    const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
+    const reservations2 = await reservationService.queryByDayofweek(dayOfWeek) // query club events
     hoursVals.forEach(hour => {
       const setCourts = new Set()
       reservations.forEach(reservation => {
@@ -137,32 +111,33 @@ export const NewReservation = () => {
           setCourts.add(reservation.courtNumber)
         }
       });
+      reservations2.forEach(reservation => {
+        if (Number(reservation.startHour.split(":")[0]) === hour) {
+          setCourts.add(reservation.courtNumber)
+        }
+      });
       if (setCourts.size === _courtsData.court_numbers.length) {// all courts are reserved
-        // splice the start time
         _courtsData.start_time.splice(hour - START_HOUR_DAY, 1)
       }
     })
     setCourtsData(_courtsData);
   }
 
-  const filterByStartAndEndHour = async (_startHour, _endHour) => {
-    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-    const selectedDate = dayjs(date)
-    // Get reserved courts by date
-    const _date = selectedDate.format(DateFormat)
-    let reservations = await reservationService.queryByDate(_date)
-    // Filter courts data by reserved courts
+  const filterCourtNumbers = async (_startHour, _endHour, _date) => {
+    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+    let reservations = await reservationService.queryByDate(_date) // query user reservations
     reservations.forEach(reservation => {
       if (isIntersected(reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }
     });
-
-    const dayOfWeek = selectedDate.format('dddd').toLowerCase()
-    reservations = await reservationService.queryByDayofweek(dayOfWeek)
+    const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
+    reservations = await reservationService.queryByDayofweek(dayOfWeek) // query club events
     reservations.forEach(reservation => {
-      if (reservation.dayOfWeek === dayOfWeek && (startHour >= reservation.startHour.split(":")[0] && startHour <= reservation.endHour.split(":")[0])) {
+      reservation.startHour = Number(reservation.startHour.split(":")[0])
+      reservation.endHour = Number(reservation.endHour.split(":")[0])
+      if (reservation.dayOfWeek === dayOfWeek && isIntersected(reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }
@@ -170,23 +145,7 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
-  const filterByDateAndStartHour = async (_date) => {
-    if (!initCourtsData) {
-      await handleInitCourtsData()
-    }
-    if (initCourtsData) {
-      let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
-      let reservations = await reservationService.queryByDate(_date)
-      setReservationsByDate(reservations)
-      reservations.forEach(reservation => {
-        if (reservation.date === _date && reservation.startHour === startHour) {
-          const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-          _courtsData.court_numbers.splice(index, 1);
-        }
-      });
-      setCourtsData(_courtsData);
-    }
-  }
+
 
   const addReservation = async () => {
     const _date = dayjs(date).format(DateFormat)
@@ -249,11 +208,11 @@ export const NewReservation = () => {
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
     setEndHour(startHour + 1)
-    filterByStartAndEndHour(startHour, startHour + 1)
+    const _date = dayjs(date).format(DateFormat)
+    filterCourtNumbers(startHour, startHour + 1, _date)
     setCourtNumber()
     setIsLoading(false)
     setShowDuration(true)
-    filterStartHourByCourts()
   }
 
   const handleDurationChange = (e) => {
@@ -261,7 +220,8 @@ export const NewReservation = () => {
     e.preventDefault()
     setIsLoading(true)
     setEndHour(e.target.value + startHour)
-    filterByStartAndEndHour(startHour, e.target.value + startHour)
+    const _date = dayjs(date).format(DateFormat)
+    filterCourtNumbers(startHour, e.target.value + startHour, _date)
     setCourtNumber()
     setIsLoading(false)
   }
@@ -295,7 +255,7 @@ export const NewReservation = () => {
   }
 
   const renderEndHourSelect = () => {
-    let _courtsData = JSON.parse(JSON.stringify(initCourtsData))
+    let _courtsData = JSON.parse(JSON.stringify(courtsData))
     const _date = dayjs(date).format(DateFormat)
     // if courts available for startTime (valText), return button
     let _endHour
@@ -389,10 +349,13 @@ export const NewReservation = () => {
   }
 
   const handleSelectDate = (newValue) => {
-    const _date = dayjs(newValue).format(DateFormat)
     if (validDate(newValue)) {
       setDate(newValue)
-      filterByDateAndStartHour(_date)
+      const _date = dayjs(newValue).format(DateFormat)
+      setStartHour()
+      setEndHour()
+      setCourtNumber()
+      handleCourtsData(_date)
     } else {
       setWarningMessage(true)
       setMessageAlert("לא ניתן להזמין מגרש אחרי שבת הקרובה")

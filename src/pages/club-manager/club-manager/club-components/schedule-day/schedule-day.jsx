@@ -108,7 +108,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
         numTimeSlots*=2
         for (let i = 0; i < numTimeSlots; i++) {
-          startHourTxt = hoursDataArr[Number(hrStart) + Number(minStart)*2 + i - START_HOUR_DAY]
+          startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
           if (reservation.instructor) {
             _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
           } else {

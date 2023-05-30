@@ -13,7 +13,7 @@ let axios = Axios.create({
 
 export const httpService = {
     get(endpoint, data, role= UserRoles[0]) {
-        return ajax(endpoint, 'GET', role, data)
+        return ajax(endpoint, 'GET', data, role)
     },
     post(endpoint, data, role= UserRoles[0]) {
         return ajax(endpoint, 'POST', data, role)

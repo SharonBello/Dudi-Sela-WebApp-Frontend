@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { reservationService } from '../../../../../services/reservation.service.js';
 import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js';
 import { Loader } from '../../../../../components/loader.jsx';
-import { getRows, hoursData, hoursDataArr, columnsData } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
+import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
 import { instructorService } from '../../../../../services/instructor.service.js';
 import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
@@ -97,7 +97,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }, [handleEditEvent, tennisInstructors])
 
   const getReservationsByDate = async (_rows) => {
-    let reservations = await reservationService.queryByDate(mDate)
+    let reservations = await reservationService.queryByDate(getCurrentDate())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       fillEventSlots(_rows, reservation)
@@ -128,8 +128,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
+    const _date = getCurrentDate()
     reservations.forEach(reservation => {
-      if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
+      if (reservation.startDate === _date || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
         fillEventSlots(_rows, reservation)
       }
     });

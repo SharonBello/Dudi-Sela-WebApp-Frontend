@@ -102,7 +102,7 @@ export const ClubManager = () => {
           return <ClubCourts />
         case 'נתוני מכירות':
           return <SalesDetails />
-        case 'כרטיסיות':
+        case 'כרטיסיות וזיכויים':
           return <PunchCards />
         case 'משתמשים והרשאות':
           return <UsersPermission />

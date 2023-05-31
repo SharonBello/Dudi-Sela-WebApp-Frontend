@@ -172,7 +172,7 @@ export const NewReservation = () => {
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum })
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }

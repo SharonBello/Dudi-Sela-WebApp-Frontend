@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Box from '@mui/material/Box';
 import { courtService } from '../../../../../services/court.service'
 import Container from '@mui/material/Container';
@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { reservationService } from '../../../../../services/reservation.service';
 
 export const PunchCards = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
@@ -21,7 +22,7 @@ export const PunchCards = () => {
   const _emptyCard = { cardName: undefined, creditAmount: undefined, creditInMinutes: undefined, dueNumDays: undefined, blockOnDate: undefined, price: undefined, additionalDetails: undefined, showForSale: undefined, isMember: false, validForMembers: [], cardHours: []}
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
-
+  const [usersCredit, setUsersCredit] = useState([])
   useEffect(()=> {
     if (punchCards.length === 0) {
       getPunchCards().then(res => {
@@ -40,6 +41,14 @@ export const PunchCards = () => {
       navigate('/')
     }
   }
+  const getUsersCredit = useCallback(async ()=> {
+    let res = await reservationService.getUsersCredit()
+    setUsersCredit(res)
+  })
+  useEffect(()=> {
+    getUsersCredit()
+  }, [])
+
   const closePunchCard = () => {
     console.log("close")
   }
@@ -160,6 +169,28 @@ export const PunchCards = () => {
       )
     }
   }
+  const renderUsersCredit = () => {
+    return (
+      <table className="credit-list">
+        <thead>
+            <tr>
+              <th className='credit-th'>קרדיט</th>
+                <th className='credit-th'>מייל</th>
+                <th className='credit-th'>תאריך</th>
+            </tr>
+        </thead>
+        <tbody>
+            {usersCredit && Object.entries(usersCredit).map(keyVal =>
+                <tr className="table-action-cell" key={keyVal[0]}>
+                    <td className="table-cell-btn">{keyVal[1].user_credit}</td>
+                    <td className="table-cell-btn">{keyVal[1].mail}</td>
+                    <td className="table-cell-btn">{keyVal[1].date}</td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+    )
+  }
   return (
     <Box className="club-box container">
       {renderMessageAlert()}
@@ -177,6 +208,12 @@ export const PunchCards = () => {
         {renderPunchCards()}
         {renderModalPunchCard()}
         {renderIsLoading()}
+        <CustomDivider />
+        <Box className="club-crdit">
+          <Typography id="club-title" variant="h6" component="h2">זיכויים</Typography>
+        </Box>
+        <CustomDivider />
+        {renderUsersCredit()}
       </Container>
     </Box>
   )

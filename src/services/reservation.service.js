@@ -15,6 +15,7 @@ export const reservationService = {
     deleteEvent,
     changeCredit,
     getCredit,
+    getUsersCredit,
     isReservationExists,
     resetByWeekDay,
     addNewReservationToUser,
@@ -120,6 +121,16 @@ async function getCredit(uid) {
         let data = await httpService.get('reservations/usercredit?docId=' + uid)
         let user_credit = data.data.user_credit
         return user_credit
+    } catch (err) {
+        throw err
+    }
+}
+
+async function getUsersCredit(uid) {
+    try {
+        let data = await httpService.get('reservations/userscredit')
+        let users_credit = data.data.users_credit
+        return users_credit
     } catch (err) {
         throw err
     }

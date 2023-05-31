@@ -76,7 +76,7 @@ export const secondaryDrawerList = [
   //   icon: 'https://res.cloudinary.com/primap/image/upload/v1679990470/General/Dudi%20Sela/Icons/sales-data_hulrat.svg'
   // },
   {
-    title: 'כרטיסיות',
+    title: 'כרטיסיות וזיכויים',
     icon: 'https://res.cloudinary.com/primap/image/upload/v1679990469/General/Dudi%20Sela/Icons/punch-card_pfrcqo.svg'
   },
   {

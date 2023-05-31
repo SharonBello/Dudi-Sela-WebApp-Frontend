@@ -34,7 +34,14 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
 
   const getEvent = (courtNumber, hour) => {
-    const foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
+    let foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
+    // if (!foundEvent) { // a subscriber event
+    //   foundEvent = events.current.find(
+    //        event => event.date === mDate
+    //     && event.courtNumber === courtNumber
+    //     && Number(event.startHour.split(":")[0]) <= hour
+    //     && Number(event.endHour.split(":")[0]) >= hour)
+    // }
     return foundEvent
   }
 
@@ -47,8 +54,13 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     }
     if (rows[courtNum-1][e.field] !== "") {
       const foundEvent = getEvent(courtNum, hoursData[e.field])
-      setSelectedEvent(foundEvent)
-      setIsEventExists(true)
+      if (foundEvent) {
+        setSelectedEvent(foundEvent)
+        setIsEventExists(true)
+        setOpenEditEvent(true)
+      } else {
+        setSelectedEvent()
+      }
     } else {
       const _emptyEvent = EmptyEvent;
       _emptyEvent.courtNumber=courtNum
@@ -56,8 +68,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       _emptyEvent.endHour=(hoursData[e.field]+1).toString()+":00"
       setSelectedEvent(_emptyEvent)
       setIsEventExists(false)
+      setOpenEditEvent(true)
     }
-    setOpenEditEvent(true)
   })
 
   const getColumns = useCallback(() => {
@@ -88,33 +100,37 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     let reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour.split(":")[0] - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
+      fillEventSlots(_rows, reservation)
     });
     setRows(_rows)
   }
 
+  const fillEventSlots = (_rows, reservation) => {
+    const hrStart = reservation.startHour.split(":")[0]
+    const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
+    const hrEnd = reservation.endHour.split(":")[0]
+    const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
+    let startHourTxt
+    let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
+    numTimeSlots*=2
+    for (let i = 0; i < numTimeSlots; i++) {
+      startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
+      if (reservation.instructor) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
+      } else if (reservation.username) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
+      } else {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+      }
+    }
+  }
   const setTodaysEvents = async () => {
     let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
-        const hrStart = reservation.startHour.split(":")[0]
-        const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
-        const hrEnd = reservation.endHour.split(":")[0]
-        const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
-        let startHourTxt
-        let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
-        numTimeSlots*=2
-        for (let i = 0; i < numTimeSlots; i++) {
-          startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
-          if (reservation.instructor) {
-            _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
-          } else {
-            _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
-          }
-        }
+        fillEventSlots(_rows, reservation)
       }
     });
     getReservationsByDate(_rows)

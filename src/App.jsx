@@ -12,7 +12,7 @@ import Fab from '@mui/material/Fab';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import ScrollTop from './components/scroll-top.jsx'
 import './main.scss'
-import { STORAGE_KEY_LOGGED_USER } from './services/user.service.js'
+import { STORAGE_KEY_LOGGED_USER, auth } from './services/user.service.js'
 import { courtService } from './services/court.service.js'
 
 export const App = () => {
@@ -25,6 +25,8 @@ export const App = () => {
       const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
       const res = await courtService.getUser({"email": email})
       dispatch(setUserUid(uid))
+      const accessToken = await auth.currentUser.getIdToken()
+      sessionStorage.setItem("accessToken", accessToken)
       dispatch(setUserRole(res.data.role))
       navigate('/')
    });

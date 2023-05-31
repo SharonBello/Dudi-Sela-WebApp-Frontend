@@ -3,6 +3,7 @@ import { getAuth, signInWithCredential, GoogleAuthProvider } from "firebase/auth
 import { initializeApp } from 'firebase/app'
 import getFirebaseConfig from './firebase.js';
 export const STORAGE_KEY_LOGGED_USER = 'loggedUser'
+export const ACCESS_TOKEN = 'accessToken'
 
 export const userService = {
     login,
@@ -38,6 +39,7 @@ async function signup(payload, role='subscriber') {
 
 async function authSignout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
+    sessionStorage.removeItem(ACCESS_TOKEN)
     return await httpService.post('auth/signout', {}, 'subscriber')
 }
 

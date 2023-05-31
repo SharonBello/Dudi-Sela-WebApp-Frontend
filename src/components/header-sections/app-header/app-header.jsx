@@ -6,6 +6,7 @@ import { ProfileMenu } from '../profile-menu/profile-menu.jsx'
 import { SideMenu } from '../side-menu/side-menu.jsx'
 import { useWindowDimensions } from '../../../hooks/useWindowDimensions.jsx'
 import { userService } from '../../../services/user.service.js'
+import { courtService } from '../../../services/court.service.js'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
@@ -61,6 +62,19 @@ export const AppHeader = () => {
       window.removeEventListener("scroll", handleScroll)
     }
   }, [pathname, handleScroll])
+
+  const setUser = useCallback(async (_user) => {
+    const res = await courtService.getUser({"email": JSON.parse(_user).email})
+    res && dispatch(setUserRole(res.data.role))
+  }, [])
+
+  useEffect(() => {
+    const _user = sessionStorage.getItem('loggedUser')
+    if (!role && _user) {
+      setUser(_user)
+    }
+  }, [])
+
 
   const onCloseMenu = () => {
     setShowProfileMenu(false)

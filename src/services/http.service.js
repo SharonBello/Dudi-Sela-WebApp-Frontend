@@ -28,24 +28,25 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data, role) {
     try {
-        let res
+        let res, accessToken
         if (auth && auth.currentUser) {
-            const accessToken = await auth.currentUser.getIdToken()
-
-            if (method === 'GET') {
-                res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken, 'role': role } })
-            }
-            if (method === 'POST') {
-                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken, 'role': role } })
-            }
-            if (method === 'DELETE') {
-                res = await axios.delete(`${BASE_URL}${endpoint}`, {headers: {
-                        'AuthToken': accessToken,
-                        'role': role
-                    },
-                    data: data
-                });
-            }
+            accessToken = await auth.currentUser.getIdToken()
+        } else {
+            accessToken = sessionStorage.getItem("accessToken")
+        }
+        if (method === 'GET') {
+            res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken, 'role': role } })
+        }
+        if (method === 'POST') {
+            res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken, 'role': role } })
+        }
+        if (method === 'DELETE') {
+            res = await axios.delete(`${BASE_URL}${endpoint}`, {headers: {
+                    'AuthToken': accessToken,
+                    'role': role
+                },
+                data: data
+            });
         }
         return res
     } catch (err) {

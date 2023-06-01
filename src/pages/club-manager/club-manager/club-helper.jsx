@@ -133,3 +133,7 @@ export const EmptyEvent = { "dayOfWeek": "", "eventType": EventTypes[1], "startD
       "price": "", "paidStatus":PaymentStatus[0], "description": "", "title":"", "phoneNumber": "", "instructor": "", "participants": [], "shouldJoinClass": false}
 
 export const UserRoles = ['subscriber', 'student', 'instructor', 'manager', 'admin']
+
+export const ToLocaleIsrael = (_date) => {
+  return _date.toLocaleDateString('he-IL', {timeZone:'Asia/Jerusalem'}).replace(/\D/g,'/')
+}

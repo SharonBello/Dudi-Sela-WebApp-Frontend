@@ -34,7 +34,7 @@ export const NewReservation = () => {
   const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
   const { width } = useWindowDimensions()
-  const todaysDate = dayjs().format('YYYY-MM-DD')
+  const todaysDate = dayjs().format('DD-MM-YYYY')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)

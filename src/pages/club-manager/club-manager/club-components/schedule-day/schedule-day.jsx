@@ -9,6 +9,10 @@ import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate } from '.
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
 import { instructorService } from '../../../../../services/instructor.service.js';
 import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
+import Snackbar from '@mui/material/Snackbar'
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert'
 
 export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [rows, setRows] = useState(getRows())
@@ -21,30 +25,48 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const [columns, setColumns] = useState([])
   const events = useRef([])
   const START_HOUR_DAY = 6
+  const [messageAlert, setMessageAlert] = useState()
+  const [showMessageAlert, setShowMessageAlert] = useState(false)
 
   const getInstructors = useCallback(async () => {
     let instructors = await instructorService.getInstructors()
     setTennisInstructors(instructors)
   }, [setTennisInstructors])
 
+  const handleCloseAlert = (event, reason) => {
+    setShowMessageAlert(false)
+  }
+
   const getClassParticipants = useCallback(async () => {
     let participants = await instructorService.getParticipants()
     setClassParticipants(participants)
   }, [setClassParticipants])
 
-
+  const alertAction = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="#F2F6F7"
+        onClick={handleCloseAlert}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  )
   const getEvent = (courtNumber, hour) => {
     let foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
-    // if (!foundEvent) { // a subscriber event
-    //   foundEvent = events.current.find(
-    //        event => event.date === mDate
-    //     && event.courtNumber === courtNumber
-    //     && Number(event.startHour.split(":")[0]) <= hour
-    //     && Number(event.endHour.split(":")[0]) >= hour)
-    // }
+    if (!foundEvent) { // a subscriber event
+      setMessageAlert("לא ניתן לערוך הזמנה פרטית של משתמש")
+      setShowMessageAlert(true)
+      // foundEvent = events.current.find(
+      //      event => event.date === mDate
+      //   && event.courtNumber === courtNumber
+      //   && Number(event.startHour.split(":")[0]) <= hour
+      //   && Number(event.endHour.split(":")[0]) >= hour)
+    }
     return foundEvent
   }
-
   const handleEditEvent = useCallback((e, rows) => {
     const courtNum = e.row.courtNumber
     if (courtNum>0) {
@@ -58,8 +80,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         setSelectedEvent(foundEvent)
         setIsEventExists(true)
         setOpenEditEvent(true)
-      } else {
-        setSelectedEvent()
       }
     } else {
       const _emptyEvent = EmptyEvent;
@@ -89,12 +109,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         },
         type: 'singleSelect',
         width: 140,
-        editable: true,
-        renderEditCell: { handleEditEvent },
       })
     });
     setColumns(_columns);
-  }, [handleEditEvent, tennisInstructors])
+  }, [tennisInstructors])
 
   const getReservationsByDate = async (_rows) => {
     let reservations = await reservationService.queryByDate(getCurrentDate())
@@ -161,16 +179,49 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       )
     }
   }
+  const renderMessageAlert = () => {
+    if (showMessageAlert) {
+      return (
+        <Snackbar
+          open={true}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+          action={alertAction}
+        >
+          <Alert
+            severity="info"
+            sx={{
+              minWidth: '100%',
+              color: '#1d1d1d',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '10px',
+              backgroundColor: '#50D4F2'
+            }}
+            spacing={5}
+            variant="filled"
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >{messageAlert}</Alert>
+        </Snackbar>
+      )
+    }
+  }
 
   return (
     <>
       {renderModal()}
+      {renderMessageAlert()}
       <Box className="schedule" sx={{ width: '100%', height: 500 }}>
         <DataGrid
           onCellClick={(e) => handleEditEvent(e, rows)}
+          onCellDoubleClick={(e) => handleEditEvent(e, rows)}
+          onCellEditStart={(e) => handleEditEvent(e, rows)}
+          isCellEditable={false}
+          columnDefs={{editable: false}}
           rows={rows}
           columns={columns}
-          editMode="row"
           sx={{ m: 2 }}
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}

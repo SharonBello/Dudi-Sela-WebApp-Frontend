@@ -96,10 +96,10 @@ export const AboutClub = () => {
           <TextBox label="מידע נוסף" value={moreDetails} setValue={setMoreDetails} />
           <TextBox label="מידע נוסף באנגלית" value={moreDetailsInEng} setValue={setMoreDetailsInEng} />
         </Box>
-        <Box className="btn-club-components-container flex align-center">
+        {/* <Box className="btn-club-components-container flex align-center"> */}
           {/* <UploadButton /> */}
-          <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
-        </Box>
+          <Button className="save-club-info-btn" variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
+        {/* </Box> */}
       </div>
     </Box>
   )

@@ -145,8 +145,6 @@ export const NewReservation = () => {
     setCourtsData(_courtsData);
   }
 
-
-
   const addReservation = async () => {
     const _date = dayjs(date).format(DateFormat)
     const _startHour = startHour.toString()+":00"

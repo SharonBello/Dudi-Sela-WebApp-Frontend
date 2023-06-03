@@ -71,7 +71,7 @@ export const ClubSettings = () => {
     <Box className="club-setting-box container">
       {renderIsLoading()}
       <div className="club-setting-content">
-        <Typography id="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
+        <Typography id="club-title" className="club-title" variant="h6" component="h2">הגדרות מועדון</Typography>
         <CustomDivider className="grid-divider" />
         <Box className="main-component-club-setting-fields">
           <TextBox label="זמן בשעות שניתן לבטל לפני מועד הזמנת המגרש" value={hrBeforeCancel} setValue={setHrBeforeCancel} />
@@ -87,9 +87,9 @@ export const ClubSettings = () => {
             <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" value={addPartnersToAll} setValue={setAddPartnersToAll} />
           </Box>
         </Box>
-        <Box className="btn-club-setting-components-container flex align-center">
-          <Button variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
-        </Box>
+        {/* <Box className="btn-club-setting-components-container flex align-center"> */}
+          <Button className="save-club-setting-btn" variant="contained" component="label" onClick={(e) => handleSave(e)}>שמור</Button>
+        {/* </Box> */}
       </div>
     </Box>
   )

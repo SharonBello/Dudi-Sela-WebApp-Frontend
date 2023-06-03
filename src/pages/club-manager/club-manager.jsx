@@ -123,9 +123,9 @@ export const ClubManager = () => {
             <li style={{ width: "20%" }}><Typography>{weekDayInHebrew[weekDay]} {date}</Typography></li>
             <li>
               <ul className='clean-list flex align-center justify-center' style={{ gap: "1rem" }}>
-                <li className="schedule-daily-btn"><button onClick={openPreviousDaySchedule}><ArrowForwardIosIcon /></button></li>
+                <li className="flex-column align-center justify-center schedule-daily-btn"><button className="flex-column align-center justify-center" onClick={openPreviousDaySchedule}><ArrowForwardIosIcon /></button></li>
                 <li className="today-btn"><button onClick={openTodaysSchedule}>היום</button></li>
-                <li className="schedule-daily-btn"><button onClick={openNextDaySchedule}><ArrowBackIosIcon /></button></li>
+                <li className="flex-column align-center justify-center schedule-daily-btn"><button className="flex-column align-center justify-center" onClick={openNextDaySchedule}><ArrowBackIosIcon /></button></li>
               </ul>
             </li>
             <li className="flex" style={{ width: "20%", justifyContent: "end" }}>
@@ -140,7 +140,7 @@ export const ClubManager = () => {
   }
 
   return (
-    <div className="flex-column align-center container">
+    <div className="flex-column align-center container manager-container">
       <article className="side-drawer flex">
         {renderSecondarySideDrawer()}
         <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />

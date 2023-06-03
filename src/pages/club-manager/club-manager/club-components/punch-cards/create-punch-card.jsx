@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider';
 import { TextBox } from '../../../../shared-components/text-box';
 import { SwitchInput } from '../../../../shared-components/switch-input';
 import { SelectMenu } from '../../../../shared-components/select-menu'
-import { MemberTypes, DemoPunchCards, DemoWorkHours } from '../../club-helper'
+import { MemberTypes } from '../../club-helper'
 import { AddClubHours } from '../club-hours/add-club-hours'
 import { ClubHoursList } from '../club-hours/club-hours-list'
 import { courtService } from '../../../../../services/court.service'
@@ -40,20 +40,24 @@ export const CreatePunchCard = ({ selectedCard, showModalCreate, closePunchCard,
               navigate('/')
             }
           }
-    }, [])
+    }, [navigate])
+
     const handleSaveClubHours = async (e, clubHours) => {
       const _clubHours = JSON.parse(JSON.stringify(clubHoursList))
       _clubHours.push(clubHours)
       setClubHoursList(_clubHours)
     }
+
     const handleDeleteClubHour = async(e, index) => {
       const _clubHours = JSON.parse(JSON.stringify(clubHoursList))
       _clubHours.splice(index, 1)
       setClubHoursList(_clubHours)
     }
+
     const handleEditClubHours = async (e, clubHours) => {
       console.log(clubHours)
     }
+
     return (
         <Modal
             open={showModalCreate}
@@ -93,7 +97,7 @@ export const CreatePunchCard = ({ selectedCard, showModalCreate, closePunchCard,
                         <ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>
-                            <button disabled={isLoading} onClick={(e) => handleSave(e, {cardName, creditAmount, creditInMinutes, dueNumDays, blockOnDate, price, additionalDetails, showForSale, validForMembers, cardHours: clubHoursList })} className='save-btn'>
+                            <button disabled={isLoading} onClick={(e) => handleSave(e, {cardName, creditAmount, creditInMinutes, dueNumDays, blockOnDate, price, additionalDetails, showForSale, validForMembers, cardHours: clubHoursList })} className='save-btn' style={{whiteSpace: "nowarp"}}>
                                 שמור כרטיסיה
                             </button>
                             <button onClick={handleClose} className='cancel-btn'>

@@ -1,15 +1,35 @@
-// .schedule-container {
-//     padding-block: 5vh 5vh;
-//     min-width: 100%;
-//     flex: 1;
+.manager-container {
+    padding-block: 8vh 5vh;
+    min-width: 100%;
+    flex: 1;
 
-.side-drawer {
-    margin-left: auto;
-}
+    .side-drawer {
+        margin-left: auto;
+    }
 
-.schedule-daily-btn {
-    button {
-        font-size: xx-large;
+    .schedule-daily-btn {
+        & button {
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 1rem 1.2rem;
+            border-radius: 4px;
+            background-color: $brand;
+            // min-width: fit-content;
+            text-align: center;
+            font-size: calc(0.8rem + 0.4vw);
+            white-space: nowrap;
+            // border: none;
+            // outline: none;
+            // padding: 0;
+            // background-color: transparent;
+            // font-size: xx-large;
+
+            &:hover {
+                background-color: $header;
+                color: $brand;
+            }
+        }
     }
 }
 
@@ -17,7 +37,6 @@
     width: 150px;
 }
 
-.schedule-daily-btn,
 .submit-button {
     border: none;
     outline: none;
@@ -60,7 +79,6 @@ img.app-logo {
 .schedule {
     overflow-x: hidden;
 }
-// }
 
 img.drawer-icon {
     height: 1.5rem;
@@ -107,4 +125,23 @@ img.drawer-icon {
     font-size: calc(0.8rem + 0.4vw);
     // padding-inline: 1rem;
     text-align: right;
+}
+
+.today-btn {
+    & button {
+        background-color: transparent;
+        color: $brand;
+        outline: none;
+        border: none;
+        padding: calc(0.4rem + 0.6vw);
+        font-size: calc(1rem + 0.8vw);
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $brand;
+            color: $header;
+
+        }
+    }
 }

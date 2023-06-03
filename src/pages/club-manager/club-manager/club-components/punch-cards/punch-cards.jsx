@@ -19,19 +19,25 @@ export const PunchCards = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedCard, setSelectedCard] = useState();
   const navigate = useNavigate()
-  const _emptyCard = { cardName: undefined, creditAmount: undefined, creditInMinutes: undefined, dueNumDays: undefined, blockOnDate: undefined, price: undefined, additionalDetails: undefined, showForSale: undefined, isMember: false, validForMembers: [], cardHours: []}
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [usersCredit, setUsersCredit] = useState([])
-  useEffect(()=> {
-    if (punchCards.length === 0) {
-      getPunchCards().then(res => {
-        setPunchCards(res)
-      })
-      setSelectedCard(_emptyCard)
-    }
-  }, [])
-  const getPunchCards = async () => {
+
+  const _emptyCard = {
+    cardName: undefined,
+    creditAmount: undefined,
+    creditInMinutes: undefined,
+    dueNumDays: undefined,
+    blockOnDate: undefined,
+    price: undefined,
+    additionalDetails: undefined,
+    showForSale: undefined,
+    isMember: false,
+    validForMembers: [],
+    cardHours: []
+  }
+
+  const getPunchCards = useCallback(async () => {
     try {
       // setIsLoading(true)
       let res = await courtService.getPunchCards()
@@ -40,55 +46,76 @@ export const PunchCards = () => {
     } catch (error) {
       navigate('/')
     }
-  }
-  const getUsersCredit = useCallback(async ()=> {
+  }, [navigate])
+
+  useEffect(() => {
+    if (punchCards.length === 0) {
+      getPunchCards().then(res => {
+        setPunchCards(res)
+      })
+      setSelectedCard(_emptyCard)
+    }
+  }, [_emptyCard, getPunchCards, punchCards.length])
+
+
+  const getUsersCredit = useCallback(async () => {
     let res = await reservationService.getUsersCredit()
     setUsersCredit(res)
-  })
-  useEffect(()=> {
-    getUsersCredit()
   }, [])
 
+  useEffect(() => {
+    getUsersCredit()
+  }, [getUsersCredit])
+
   const closePunchCard = () => {
-    console.log("close")
+    console.info("close")
   }
 
   const handleClose = () => {
-      setShowModalCreate(false)
-      setSelectedCard(_emptyCard)
+    setShowModalCreate(false)
+    setSelectedCard(_emptyCard)
   }
+
   const renderModalCreate = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading}/>
+        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading} />
       )
     }
   }
+
   const handleShowPunchCard = (e, card) => {
-    console.log(e, card)
+    console.info(e, card)
     setSelectedCard(card)
     setShowModalCreate(true)
   }
+
   const renderPunchCards = () => {
     return (
-      punchCards.map((card) => <button onClick={(e) => handleShowPunchCard(e, card)}>
-        <h2>{card.cardName}</h2>
-        <div>כמות קרדיט: {card.creditAmount}</div>
-        <div>מחיר: {card.price}</div>
-      </button>
-      )
-    )
+      punchCards.map((card) => {
+        return (
+          <button onClick={(e) => handleShowPunchCard(e, card)} className="card-type-btn flex-column">
+            {card.cardName}
+            <span>כמות קרדיט: {card.creditAmount}</span>
+            <span>מחיר: {card.price}</span>
+          </button>
+        )
+      }))
   }
+
   const removeSelectedCard = async (court) => {
-    let res = await courtService.deletePunchCard(court)
+    await courtService.deletePunchCard(court).then(
+      setShowModalCreate(false)
+    )
     // getClubCards().then(res => {
     //   setCardData(res)
     // })
-    setShowModalCreate(false)
   }
+
   const validateCard = (card) => {
     return (card.cardName && card.cardName.trim() !== "" && card.creditAmount && Number(card.creditAmount) > 0 && card.price && Number(card.price) > 0)
   }
+
   const saveSelectedCard = async (e, card) => {
     if (validateCard(card)) {
       setIsLoading(true)
@@ -110,16 +137,19 @@ export const PunchCards = () => {
       setShowMessageAlert(true)
     }
   }
+
   const renderModalPunchCard = () => {
     if (showModalCreate) {
       return (
-        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading} removeSelectedCard={removeSelectedCard}/>
+        <CreatePunchCard selectedCard={selectedCard} showModalCreate={showModalCreate} closePunchCard={closePunchCard} handleSave={saveSelectedCard} handleClose={(e) => handleClose(e)} isLoading={isLoading} removeSelectedCard={removeSelectedCard} />
       )
     }
   }
+
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
   }
+
   const alertAction = (
     <>
       <IconButton
@@ -132,6 +162,7 @@ export const PunchCards = () => {
       </IconButton>
     </>
   )
+
   const renderMessageAlert = () => {
     if (showMessageAlert) {
       return (
@@ -162,6 +193,7 @@ export const PunchCards = () => {
       )
     }
   }
+
   const renderIsLoading = () => {
     if (isLoading) {
       return (
@@ -169,51 +201,57 @@ export const PunchCards = () => {
       )
     }
   }
+
   const renderUsersCredit = () => {
     return (
       <table className="credit-list">
         <thead>
-            <tr>
-              <th className='credit-th'>קרדיט</th>
-                <th className='credit-th'>מייל</th>
-                <th className='credit-th'>תאריך</th>
-            </tr>
+          <tr>
+            <th className='credit-th'>קרדיט</th>
+            <th className='credit-th'>מייל</th>
+            <th className='credit-th'>תאריך</th>
+          </tr>
         </thead>
         <tbody>
-            {usersCredit && Object.entries(usersCredit).map(keyVal =>
-                <tr className="table-action-cell" key={keyVal[0]}>
-                    <td className="table-cell-btn">{keyVal[1].user_credit}</td>
-                    <td className="table-cell-btn">{keyVal[1].mail}</td>
-                    <td className="table-cell-btn">{keyVal[1].date}</td>
-                </tr>
-            )}
+          {usersCredit && Object.entries(usersCredit).map(keyVal =>
+            <tr className="table-action-cell" key={keyVal[0]}>
+              <td className="table-cell-btn">{keyVal[1].user_credit}</td>
+              <td className="table-cell-btn">{keyVal[1].mail}</td>
+              <td className="table-cell-btn">{keyVal[1].date}</td>
+            </tr>
+          )}
         </tbody>
-    </table>
+      </table>
     )
   }
+
   return (
-    <Box className="club-box container">
+    <Box className="punch-card-box container">
       {renderMessageAlert()}
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">כרטיסיות</Typography>
+      <Container className="punch-card-content">
+        <Box className="punch-card-header">
+          <Typography id="club-title" className="club-title" variant="h6" component="h2">כרטיסיות</Typography>
         </Box>
-        <CustomDivider />
-        <button onClick={() => setShowModalCreate(true)}>
-          <h2>צור כרטיסיה</h2>
-        </button>
-        {renderModalCreate()}
+
         <CustomDivider />
         <h2>סוגי כרטיסיות</h2>
-        {renderPunchCards()}
-        {renderModalPunchCard()}
-        {renderIsLoading()}
+        <div className="card-type-container flex">
+          {renderPunchCards()}
+          {renderModalPunchCard()}
+          {renderIsLoading()}
+        </div>
         <CustomDivider />
-        <Box className="club-crdit">
-          <Typography id="club-title" variant="h6" component="h2">זיכויים</Typography>
+
+        <Box className="club-credit">
+          <Typography id="club-title" className="club-title" variant="h6" component="h2">זיכויים</Typography>
+          {renderUsersCredit()}
         </Box>
+
         <CustomDivider />
-        {renderUsersCredit()}
+
+        <button onClick={() => setShowModalCreate(true)} className="create-punch-card-btn">צור כרטיסיה</button>
+        {renderModalCreate()}
+
       </Container>
     </Box>
   )

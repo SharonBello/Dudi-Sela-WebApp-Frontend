@@ -1,10 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CustomDivider from '../../../../shared-components/custom-divider';
 import Typography from '@mui/material/Typography'
 import { CreateClubCourse } from './create-club-course';
-import { DemoClubCourses } from '../../club-helper';
 import { Loader } from '../../../../../components/loader.jsx';
 import { useNavigate } from 'react-router-dom'
 import { courtService } from '../../../../../services/court.service'
@@ -15,15 +14,7 @@ export const ClubClasses = () => {
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
-  useEffect(()=> {
-    if (clubClasses.length === 0) {
-      getClubClasses().then(res => {
-        setClubClasses(res)
-      })
-    }
-  }, [])
-
-  const getClubClasses = async () => {
+  const getClubClasses = useCallback(async () => {
     try {
       setIsLoading(true)
       let res = await courtService.getClubClasses()
@@ -32,16 +23,25 @@ export const ClubClasses = () => {
     } catch (error) {
       navigate('/')
     }
-  }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (clubClasses.length === 0) {
+      getClubClasses().then(res => {
+        setClubClasses(res)
+      })
+    }
+  }, [clubClasses.length, getClubClasses])
+
 
   const closeClubCourse = () => {
-    console.log("close")
+    console.info("close")
   }
 
   const handleSave = async (e, clubClass) => {
     if (clubClass.title.trim() !== "") {
       setIsLoading(true)
-      let res = await courtService.addClubClass(clubClass)
+      await courtService.addClubClass(clubClass)
       getClubClasses().then(res => {
         setClubClasses(res)
       })
@@ -59,14 +59,17 @@ export const ClubClasses = () => {
 
   const renderClubCourses = () => {
     return (
-      clubClasses.map((course) => <button>
-        <h2>{course.title}</h2>
-        <div>מדריך: {course.tennisInstructor}</div>
-        <div>תיאור הקורס: {course.description}</div>
-      </button>
-      )
+      clubClasses.map((course) => {
+        return (
+          <button className="class-type-btn flex-column">{course.title}
+            <span>מדריך: {course.tennisInstructor}</span>
+            <span>תיאור הקורס: {course.description}</span>
+          </button>
+        )
+      })
     )
   }
+
   const renderIsLoading = () => {
     if (isLoading) {
       return (
@@ -75,20 +78,19 @@ export const ClubClasses = () => {
     }
   }
   return (
-    <Box className="club-box container">
+    <Box className="club-classes-box container">
       {renderIsLoading()}
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">חוגים</Typography>
-        </Box>
-        <CustomDivider />
-        <button onClick={() => setShowModalCreate(true)}>
-          <h2>הוסף חוג</h2>
-        </button>
-        {renderModalCreate()}
+      <Container className="club-classes-content">
+        <Typography id="club-title" className="club-title" variant="h6" component="h2">חוגים</Typography>
         <CustomDivider />
         <h2>סוגי החוגים</h2>
-        {renderClubCourses()}
+        <div className="classess-type-container flex">
+          {renderClubCourses()}
+        </div>
+        <Box className="save-classess-btn-container">
+          <button onClick={() => setShowModalCreate(true)} className="save-club-classes-btn">הוסף חוג</button>
+        </Box>
+        {renderModalCreate()}
       </Container>
     </Box>
   )

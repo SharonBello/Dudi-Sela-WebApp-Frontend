@@ -115,7 +115,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   }, [tennisInstructors])
 
   const getReservationsByDate = async (_rows) => {
-    let reservations = await reservationService.queryByDate(getCurrentDate())
+    const reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       fillEventSlots(_rows, reservation)

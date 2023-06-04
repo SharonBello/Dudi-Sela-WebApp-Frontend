@@ -6,8 +6,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useWindowDimensions } from '../../hooks/useWindowDimensions.jsx'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
@@ -35,6 +34,7 @@ export const NewReservation = () => {
   const [courtsData, setCourtsData] = useState()
   const { width } = useWindowDimensions()
   const todaysDate = dayjs().format('DD-MM-YYYY')
+  const shownDate = dayjs().format('YYYY-MM-DD')
   const [showSuccessAlert, setShowSuccessAlert] = useState(false)
   const [successMessage, setSuccessMessage] = useState("")
   const [showFailureAlert, setShowFailureAlert] = useState(false)
@@ -508,23 +508,17 @@ export const NewReservation = () => {
           <ThemeProvider theme={theme}>
             <Stack spacing={4} sx={{ display: "flex-column", alignItems: "center", justifyContent: "justify-between", gap: "1.5rem" }}>
               <section className="date-container flex">
-               {(width < 600) ? <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="il">
-                  <MobileDatePicker
-                    label="תאריך"
-                    defaultValue={dayjs(todaysDate)}
-                    onChange={handleSelectDate}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-                  : <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DesktopDatePicker
+              <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
+                  <DatePicker
                       label="תאריך"
-                      defaultValue={dayjs(todaysDate)}
+                      format="DD-MM-YYYY"
+                      defaultValue={dayjs(shownDate)}
                       onChange={handleSelectDate}
                       renderInput={(params) => <TextField {...params} />}
-                    />
-                  </LocalizationProvider>}
+                  />
+              </LocalizationProvider>
               </section>
+
               <section className="hours-container flex-column align-center justify-between">
                 {renderStartHourSelect()}
                 {handleDurationSelect()}

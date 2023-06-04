@@ -60,19 +60,26 @@ export const NewReservation = () => {
 
   const saturdayDate = getSaturdayDate()
   const handleCourtsData = useCallback(async (date) => {
-    let res = await courtService.getClubCourts()
-    const courtsData = {
-      start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-      end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-      court_numbers: res.data.club_courts.map( court => court.name)
+    setIsLoading(true)
+    try {
+      let res = await courtService.getClubCourts()
+      const courtsData = {
+        start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+        end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+        court_numbers: res.data.club_courts.map( court => court.name)
+      }
+      setCourtsData(courtsData);
+      let _date
+      if (!date) {
+        date = new Date()
+      }
+      _date = dayjs(date).format(DateFormat)
+      handleDateChange(_date, courtsData)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsLoading(false)
     }
-    setCourtsData(courtsData);
-    let _date
-    if (!date) {
-      date = new Date()
-    }
-    _date = dayjs(date).format(DateFormat)
-    handleDateChange(_date, courtsData)
   }, [])
 
   useEffect(() => {
@@ -269,7 +276,7 @@ export const NewReservation = () => {
         _endHour = val + durationTime[0]
       }
       else { _endHour = endHour }
-      if (areCourtsAvailable(val, _endHour, _courtsData, _date)) {
+      if (areCourtsAvailable(val, _endHour, _courtsData, _date) && !isLoading) {
         return (
           <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
         )
@@ -279,7 +286,7 @@ export const NewReservation = () => {
   }
 
   const renderStartHourSelect = () => {
-    if (courtsData) {
+    if (courtsData && !isLoading) {
       // let reservations = [] // await reservationService.queryByDate(_date)
 
       return (
@@ -288,7 +295,7 @@ export const NewReservation = () => {
             {courtsData.start_time.map((val, index) => {
               const valText = hoursData[val - START_HOUR_DAY]
               return (
-                <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                <button disabled={isLoading} key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
                   onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
               )
             })}
@@ -310,7 +317,7 @@ export const NewReservation = () => {
   }
 
   const handleDurationSelect = () => {
-    if (showDuration && courtsData) {
+    if (showDuration && courtsData && !isLoading) {
       return (
         <FormControl sx={{ m: 3, minWidth: 150 }}>
           <InputLabel>משך שעות</InputLabel>
@@ -324,6 +331,7 @@ export const NewReservation = () => {
             {durationTime.map(option => {
               return (
                 <MenuItem
+                disabled={isLoading}
                   key={option}
                   value={option}>
                   {option}
@@ -337,13 +345,13 @@ export const NewReservation = () => {
   }
 
   const renderCourtNumberSelect = () => {
-    if (courtsData) {
+    if (courtsData && !isLoading) {
       return (
         <>
           <div className="court-number-container flex">
             {courtsData.court_numbers.map(option => {
               return (
-                <button className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
+                <button disabled={isLoading} className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
               )
             })}
           </div>

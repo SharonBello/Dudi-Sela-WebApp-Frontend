@@ -32,7 +32,7 @@ export const UsersPermission = () => {
   const [usersData, setUsersData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(()=> {
+  useEffect(() => {
     if (userName) {
       const message = `שלום  ${userName} לטניס דודי סלע  מזמין אותך להצטרף למערכת הזמנות ממוחשבת. לחץ על הקישור להורדת האפליקציה https://lazuz.co.il`
       setUserMessage(message)
@@ -42,18 +42,18 @@ export const UsersPermission = () => {
     getClubUsers().then(res => {
       setClubUsers(res)
       if (res.length > 0) {
-        const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
+        const _rowsTableUsers = res.map((user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
         setRowsTableUsers(_rowsTableUsers);
         setUsersData(res)
       }
     })
   })
-  useEffect(()=> {
+  useEffect(() => {
     if (clubUsers.length === 0) {
       getClubUsers().then(res => {
         setClubUsers(res)
         if (res.length > 0) {
-          const _rowsTableUsers = res.map( (user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
+          const _rowsTableUsers = res.map((user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
           setRowsTableUsers(_rowsTableUsers);
           setUsersData(res)
         }
@@ -74,7 +74,7 @@ export const UsersPermission = () => {
   const handleSearch = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setRowsTableUsers(rowsTableUsers.filter( (user) => user.email.indexOf(email.trim()) !== -1));
+    setRowsTableUsers(rowsTableUsers.filter((user) => user.email.indexOf(email.trim()) !== -1));
     if (email.trim() === "") handleGetClubUsers()
   }
   const createUserData = (fullName, primaryPhone, email, permission, validTill) => {
@@ -104,13 +104,13 @@ export const UsersPermission = () => {
   }
   const handleSaveUser = async (selectedUser) => {
     setIsLoading(true)
-    let res = await courtService.saveClubUser(selectedUser)
+    await courtService.saveClubUser(selectedUser)
     handleGetClubUsers()
     setIsLoading(false)
   }
   const handleDeleteUser = async (selectedUser) => {
     setIsLoading(true)
-    let res = await courtService.deleteClubUser(selectedUser)
+    await courtService.deleteClubUser(selectedUser)
     handleGetClubUsers()
     setIsLoading(false)
   }
@@ -118,13 +118,13 @@ export const UsersPermission = () => {
     if (showSearchUser) {
       return (
         <>
-        <Box className="main-component-fields-container">
-          <TextBox label="חפש שם משתמש לפי כתובת מייל" value={email} setValue={setEmail} />
-        </Box>
-        <Box className="">
-        <Button label="חפש" component="label" onClick={(e) => handleSearch(e)}>חפש</Button>
-        <Button label="ביטול" component="label" onClick={()=> handelCancelSearch() }>ביטול</Button>
-        </Box></>
+          <Box className="main-component-fields-container">
+            <TextBox label="חפש שם משתמש לפי כתובת מייל" value={email} setValue={setEmail} />
+          </Box>
+          <Box className="">
+            <Button label="חפש" component="label" onClick={(e) => handleSearch(e)}>חפש</Button>
+            <Button label="ביטול" component="label" onClick={() => handelCancelSearch()}>ביטול</Button>
+          </Box></>
       )
     }
   }
@@ -143,23 +143,30 @@ export const UsersPermission = () => {
     }
   }
   return (
-    <Box className="club-box container">
+    <Box className="users-permission-box container">
       {renderIsLoading()}
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">משתמשים</Typography>
+      <Container className="users-permission-content">
+        <Box className="users-permission-header">
+          <Typography id="club-title" variant="h6" component="h2">משתמשים והרשאות</Typography>
         </Box>
         <CustomDivider />
-        <button onClick={() => toggleAddUser()}>
-          <h2>הוסף משתמש</h2>
-        </button>
-        {renderModal()}
-        <button onClick={() => toggleSearchUser()}>
-          <h2>חפש משתמש</h2>
-        </button>
-        {renderSearchUser()}
+        <div className="users-permission-actions-container flex">
+          <button onClick={() => toggleAddUser()} className="permission-actions-btn flex">
+            הוסף משתמש
+          </button>
+          {renderModal()}
+          <button onClick={() => toggleSearchUser()} className="permission-actions-btn flex">
+            חפש משתמש
+          </button>
+          {renderSearchUser()}
+        </div>
         <CustomDivider />
-        <UsersTable handleGetClubUsers={handleGetClubUsers} usersData={usersData} rows={rowsTableUsers} handleSaveUser={handleSaveUser} handleDeleteUser={handleDeleteUser}/>
+        <UsersTable
+          handleGetClubUsers={handleGetClubUsers}
+          usersData={usersData}
+          rows={rowsTableUsers}
+          handleSaveUser={handleSaveUser}
+          handleDeleteUser={handleDeleteUser} />
         <CustomDivider />
       </Container>
     </Box>

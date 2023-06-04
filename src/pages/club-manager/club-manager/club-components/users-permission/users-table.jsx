@@ -189,7 +189,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function UsersTable({handleGetClubUsers, usersData, rows, handleSaveUser, handleDeleteUser}) {
+export default function UsersTable({ handleGetClubUsers, usersData, rows, handleSaveUser, handleDeleteUser }) {
   const [order, setOrder] = useState(DEFAULT_ORDER);
   const [orderBy, setOrderBy] = useState(DEFAULT_ORDER_BY);
   const [selectedUser, setSelectedUser] = useState();
@@ -230,7 +230,7 @@ export default function UsersTable({handleGetClubUsers, usersData, rows, handleS
 
       setVisibleRows(updatedRows);
     },
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rows, rowsPerPage],
   );
 
   const handleSelectUser = (event, index) => {
@@ -256,7 +256,7 @@ export default function UsersTable({handleGetClubUsers, usersData, rows, handleS
       const newPaddingHeight = (dense ? 33 : 53) * numEmptyRows;
       setPaddingHeight(newPaddingHeight);
     },
-    [order, orderBy, dense, rowsPerPage],
+    [rows, order, orderBy, rowsPerPage, dense],
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -277,7 +277,7 @@ export default function UsersTable({handleGetClubUsers, usersData, rows, handleS
       // There is no layout jump to handle on the first page.
       setPaddingHeight(0);
     },
-    [order, orderBy],
+    [order, orderBy, rows],
   );
 
   const onDeletePerimission = (e) => {
@@ -307,94 +307,79 @@ export default function UsersTable({handleGetClubUsers, usersData, rows, handleS
 
   return (
     <>
-        {renderModal()}
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-                <TableContainer>
-                <Table
-                    sx={{ minWidth: 750 }}
-                    aria-labelledby="tableTitle"
-                    size={dense ? 'small' : 'medium'}
-                >
-                    <EnhancedTableHead
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={handleRequestSort}
-                    rowCount={rows.length}
-                    />
-                    <TableBody>
-                    {visibleRows
-                        ? visibleRows.map((row, index) => {
-                            const labelId = `enhanced-table-checkbox-${index}`;
+      {renderModal()}
+      <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? 'small' : 'medium'}
+            >
+              <EnhancedTableHead
+                order={order}
+                orderBy={orderBy}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {visibleRows
+                  ? visibleRows.map((row, index) => {
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                            return (
-                            <TableRow
-                                hover
-                                onMouseOver={(event) => handleSelectUser(event, index)}
-                                role="checkbox"
-                                tabIndex={-1}
-                                key={row.fullName}
-                                sx={{ cursor: 'pointer' }}
-                            >
-                                <TableCell
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                >
-                                {row.fullName}
-                                </TableCell>
-                                <TableCell align="right">{row.primaryPhone}</TableCell>
-                                <TableCell align="right">{row.email}</TableCell>
-                                <TableCell align="right">{row.permission}</TableCell>
-                                <TableCell align="right">{row.validTill}</TableCell>
-                                <TableCell align="right">
-                                    <SaveButton onSave={onSavePerimission} />
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant="contained"
-                                        color={"secondary"}
-                                        onClick={(e) => onDeletePerimission(e)}>
-                                        <FontAwesomeIcon icon={faTrashAlt} />
-                                    </Button>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant="contained"
-                                        color={"secondary"}
-                                        onClick={(e) => onOpenPersonalDetails(e)}>
-                                        <FontAwesomeIcon icon={faUserEdit} />
-                                    </Button>
-                                </TableCell>
+                    return (
+                      <TableRow
+                        hover
+                        onMouseOver={(event) => handleSelectUser(event, index)}
+                        role="checkbox"
+                        tabIndex={-1}
+                        key={row.fullName}
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        <TableCell component="th" id={labelId} scope="row" padding="none">{row.fullName}</TableCell>
+                        <TableCell align="right">{row.primaryPhone}</TableCell>
+                        <TableCell align="right">{row.email}</TableCell>
+                        <TableCell align="right">{row.permission}</TableCell>
+                        <TableCell align="right">{row.validTill}</TableCell>
+                        <TableCell align="right">
+                          <div className="table-actions-cell flex">
+                            <SaveButton onSave={onSavePerimission} />
+                            <button onClick={(e) => onOpenPersonalDetails(e)} className="table-actions-btn">
+                              <FontAwesomeIcon icon={faUserEdit} />
+                            </button>
+                            <button onClick={(e) => onDeletePerimission(e)} className="table-actions-btn">
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                          </div>
+                        </TableCell>
 
-                            </TableRow>
-                            );
-                        })
-                        : null}
-                    {paddingHeight > 0 && (
-                        <TableRow
-                        style={{
-                            height: paddingHeight,
-                        }}
-                        >
-                        <TableCell colSpan={6} />
-                        </TableRow>
-                    )}
-                    </TableBody>
-                </Table>
-                </TableContainer>
-                <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>
-        </Box>
+                      </TableRow>
+                    );
+                  })
+                  : null}
+                {paddingHeight > 0 && (
+                  <TableRow
+                    style={{
+                      height: paddingHeight,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Box>
     </>
 
   );

@@ -304,7 +304,7 @@ export default function PermissionsTable({rows}) {
 
       setVisibleRows(updatedRows);
     },
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rows, rowsPerPage],
   );
 
   const handleSelectAllClick = (event) => {
@@ -340,7 +340,7 @@ export default function PermissionsTable({rows}) {
       const newPaddingHeight = (dense ? 33 : 53) * numEmptyRows;
       setPaddingHeight(newPaddingHeight);
     },
-    [order, orderBy, dense, rowsPerPage],
+    [rows, order, orderBy, rowsPerPage, dense],
   );
 
   const handleChangeRowsPerPage = useCallback(
@@ -361,7 +361,7 @@ export default function PermissionsTable({rows}) {
       // There is no layout jump to handle on the first page.
       setPaddingHeight(0);
     },
-    [order, orderBy],
+    [order, orderBy, rows],
   );
 
   const handleChangeDense = (event) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -19,7 +19,7 @@ export const ClubCourts = () => {
   const [showAddCourtForm, setShowAddCourtForm] = useState(false)
   const [showCourtConstraints, setShowCourtConstraints] = useState(false)
   // const [showAllCourts, setShowAllCourts] = useState(false)
-  const courtActions = [{ title: "מגרשים", subtitle: "כל המגרשים", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(false); } }, { title: "הוסף מגרש", subtitle: "הוסף מגרש חדש", onClick: () => { setShowAddCourtForm(true); setShowCourtConstraints(false); } }, { title: "מאפייני מגרש", subtitle: "סוגי מגרשים ומחירים", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(true); } }];
+  const courtActions = [{ title: "כל המגרשים", subtitle: "", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(false); } }, { title: "הוסף מגרש חדש", subtitle: "", onClick: () => { setShowAddCourtForm(true); setShowCourtConstraints(false); } }, { title: "אילוצי מגרש ומחירים", subtitle: "", onClick: () => { setShowAddCourtForm(false); setShowCourtConstraints(true); } }];
   const [courtName, setCourtName] = useState();
   const [courtType, setCourtType] = useState("טניס");
   const [priceConstraints, setPriceConstraints] = useState([])
@@ -29,10 +29,31 @@ export const ClubCourts = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [openEditCourt, setOpenEditCourt] = useState(false)
   const [selectedCourt, setSelectedCourt] = useState([]);
-
   const navigate = useNavigate()
 
-  useEffect(()=> {
+  const getClubCourts = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      let res = await courtService.getClubCourts()
+      setIsLoading(false)
+      return res.data.club_courts
+    } catch (error) {
+      navigate('/')
+    }
+  }, [navigate])
+
+  const getPriceConstraints = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      let res = await courtService.getPriceConstraints()
+      setIsLoading(false)
+      return res.data.price_constraints
+    } catch (error) {
+      navigate('/')
+    }
+  }, [navigate])
+
+  useEffect(() => {
     if (courtData.length === 0) {
       getClubCourts().then(res => {
         setCourtData(res)
@@ -44,86 +65,77 @@ export const ClubCourts = () => {
         setEditPriceConstraints(res)
       })
     }
-  }, [])
+  }, [courtData.length, editPriceConstraints.length, getClubCourts, getPriceConstraints])
+
   const removeSelectedCourt = async (court) => {
-    let res = await courtService.deleteClubCourt(court)
+    await courtService.deleteClubCourt(court)
     getClubCourts().then(res => {
       setCourtData(res)
     })
     setOpenEditCourt(false)
   }
+
   const saveSelectedCourt = async (courtName, courtType) => {
     selectedCourt.name = courtName
     selectedCourt.type = courtType
-    let res = await courtService.editClubCourt(selectedCourt)
+    await courtService.editClubCourt(selectedCourt)
     getClubCourts().then(res => {
       setCourtData(res)
     })
     setOpenEditCourt(false)
   }
-  const getClubCourts = async () => {
-    try {
-      setIsLoading(true)
-      let res = await courtService.getClubCourts()
-      setIsLoading(false)
-      return res.data.club_courts
-    } catch (error) {
-      navigate('/')
-    }
-  }
-  const getPriceConstraints = async () => {
-    try {
-      setIsLoading(true)
-      let res = await courtService.getPriceConstraints()
-      setIsLoading(false)
-      return res.data.price_constraints
-    } catch (error) {
-      navigate('/')
-    }
-  }
+
   const handleOpenCourt = (court) => {
     setSelectedCourt(court)
     setOpenEditCourt(true)
   }
+
   const closeEditCourt = () => {
     setOpenEditCourt(false)
   }
 
-
   const renderEditCourt = () => {
     if (openEditCourt) {
       return (
-        <EditCourtModal selectedCourt={selectedCourt} openEditCourt={openEditCourt} closeEditCourt={closeEditCourt} saveSelectedCourt={saveSelectedCourt} removeSelectedCourt={removeSelectedCourt} />
+        <EditCourtModal
+          selectedCourt={selectedCourt}
+          openEditCourt={openEditCourt}
+          closeEditCourt={closeEditCourt}
+          saveSelectedCourt={saveSelectedCourt}
+          removeSelectedCourt={removeSelectedCourt} />
       )
     }
   }
+
   const renderCourts = () => {
     if (courtData && courtData.length > 0) {
       return (
         courtData.map((court) => {
-          return <Box key={court.name} className="club-court">
-            <div variant="contained" component="label" onClick={() => handleOpenCourt(court)}>
-              {court.name} - {court.type}
-            </div>
+          return <Box className="courts-btn-container flex">
+          <button onClick={() => handleOpenCourt(court)} className="club-court-btn flex">
+            {court.name} - {court.type}
+          </button>
           </Box>
         })
-      )
+        )
     }
   }
+
   const renderCourtActions = () => {
     return (
       courtActions.map((action) => {
-        return <button onClick={action.onClick}>
-          <h1>{action.title}</h1>
-          <h2>{action.subtitle}</h2>
+        return <button onClick={action.onClick} className="court-actions-btn flex-column">
+          <p>{action.title}</p>
+          <span>{action.subtitle}</span>
         </button>
       })
     )
   }
+
   const saveCourt = async () => {
     if (courtName.trim() !== "") {
       setIsLoading(true)
-      let res = await courtService.addClubCourt({"name": Number(courtName), "type": courtType})
+      let res = await courtService.addClubCourt({ "name": Number(courtName), "type": courtType })
       getClubCourts().then(res => {
         setCourtData(res)
       })
@@ -131,9 +143,11 @@ export const ClubCourts = () => {
       console.log(res.data.result)
     }
   }
+
   const validatePriceConstraint = (value, key) => {
-    return !(key === 'price' && value<0)
+    return !(key === 'price' && value < 0)
   }
+
   const addNewConstraint = (value, key, innerkey) => {
     if (validatePriceConstraint(value, key)) {
       const mData = JSON.parse(JSON.stringify(newConstraint))
@@ -141,6 +155,7 @@ export const ClubCourts = () => {
       setNewConstraint(mData)
     }
   }
+
   const handleEditConstraint = (value, index, key, innerkey) => {
     if (validatePriceConstraint(value, key)) {
       const mData = JSON.parse(JSON.stringify(editPriceConstraints))
@@ -148,12 +163,14 @@ export const ClubCourts = () => {
       setEditPriceConstraints(JSON.parse(JSON.stringify(mData)))
     }
   }
+
   // const validateTimeConstraint = (constraint) => {
   //   return (constraint.hours.endHour.split(":")[0]>constraint.hours.startHour.split(":")[0])
   // }
+
   const saveConstraint = async (e) => {
     e.stopPropagation()
-    if (newConstraint.days.length>0) {
+    if (newConstraint.days.length > 0) {
       setIsLoading(true)
       let res = await courtService.addPriceConstraint(newConstraint)
       setIsLoading(false)
@@ -162,6 +179,7 @@ export const ClubCourts = () => {
       }
     }
   }
+
   const editConstraint = async (e, constraint) => {
     e.stopPropagation()
     setIsLoading(true)
@@ -171,6 +189,7 @@ export const ClubCourts = () => {
       priceConstraintsFromDb()
     }
   }
+
   const deleteConstraint = async (e, index) => {
     setIsLoading(true)
     let res = await courtService.deletePriceConstraint(priceConstraints[index])
@@ -179,12 +198,14 @@ export const ClubCourts = () => {
       priceConstraintsFromDb()
     }
   }
+
   const priceConstraintsFromDb = () => {
     getPriceConstraints().then(res => {
       setPriceConstraints(res)
       setEditPriceConstraints(res)
     })
   }
+
   const renderIsLoading = () => {
     if (isLoading) {
       return (
@@ -192,6 +213,7 @@ export const ClubCourts = () => {
       )
     }
   }
+
   const renderAddCourtForm = () => {
     return (
       <div>
@@ -202,6 +224,7 @@ export const ClubCourts = () => {
       </div>
     )
   }
+
   const renderNewConstraint = () => {
     return (
       <>
@@ -214,6 +237,7 @@ export const ClubCourts = () => {
       </>
     )
   }
+
   const renderConstraintsPanel = () => {
     return (
       <>
@@ -225,10 +249,11 @@ export const ClubCourts = () => {
       </>
     )
   }
+
   const renderConstraints = () => {
     return (
       <>
-      {editPriceConstraints && editPriceConstraints.length>0 && editPriceConstraints.map((datum, index) =>
+        {editPriceConstraints && editPriceConstraints.length > 0 && editPriceConstraints.map((datum, index) =>
           <Box>
             <p>{editPriceConstraints[index].days.join(", ")}</p>
             <SelectMenu multiple={true} defaultValue={editPriceConstraints[index].days} inputLabel="בחר ימים" values={WeekDays} setValue={(values) => handleEditConstraint(values, index, "days")} />
@@ -243,19 +268,22 @@ export const ClubCourts = () => {
       </>
     )
   }
+
   return (
-    <Box className="club-box container">
-      <Container className="club-content">
-        <Box className="club-header">
-          <Typography id="club-title" variant="h6" component="h2">ניהול מגרשים</Typography>
+    <Box className="club-managment-box container">
+      <Container className="club-managment-content">
+        <Box className="club-managment-header">
+          <Typography id="club-title" className="club-title" variant="h6" component="h2">ניהול מגרשים</Typography>
         </Box>
         <CustomDivider />
-        {renderEditCourt()}
-        {renderCourts()}
-        {renderCourtActions()}
-        {showAddCourtForm && renderAddCourtForm()}
-        {showCourtConstraints && renderConstraintsPanel()}
-        {renderIsLoading()}
+        <div className="club-managment-actions-container flex-column">
+          {renderEditCourt()}
+          {renderCourts()}
+          {renderCourtActions()}
+          {showAddCourtForm && renderAddCourtForm()}
+          {showCourtConstraints && renderConstraintsPanel()}
+          {renderIsLoading()}
+        </div>
       </Container>
     </Box>
   )

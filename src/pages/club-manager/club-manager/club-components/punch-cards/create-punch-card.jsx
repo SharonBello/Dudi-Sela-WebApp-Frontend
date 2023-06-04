@@ -91,9 +91,9 @@ export const CreatePunchCard = ({ selectedCard, showModalCreate, closePunchCard,
                         <CustomDivider className="grid-divider" />
                         <AddClubHours handleSaveClubHours={handleSaveClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
-                        <Box className="club-hours-instructions">
+                        {/* <Box className="club-hours-instructions">
                             <span>תקפות הכרטיסייה</span>
-                        </Box>
+                        </Box> */}
                         <ClubHoursList clubHoursList={clubHoursList} handleSaveClubHours={handleSaveClubHours} handleDeleteClubHour={handleDeleteClubHour} handleEditClubHours={handleEditClubHours}/>
                         <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                         <div className='flex align-center justify-between save-cancel-btn-container'>

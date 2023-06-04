@@ -20,7 +20,7 @@ export const AddClubHours = ({handleSaveClubHours}) => {
         <SelectMenu multiple={true} inputLabel="ימים" defaultValue={validForDays}    values={WeekDays}  setValue={setValidForDays} />
         <SelectMenu inputLabel="משעה" defaultValue={HourConstraint.hours.startHour} values={DayHours()} setValue={setFromHour} />
         <SelectMenu inputLabel="עד שעה" defaultValue={HourConstraint.hours.endHour} values={DayHours()} setValue={setTillHour} />
-        <button className="save-btn" onClick={(e) => handleSaveClubHours(e, {"hours": {"startHour": fromHour, "endHour": tillHour}, "days": validForDays})}>שמור</button>
+        <button className="save-btn" onClick={(e) => handleSaveClubHours(e, {"hours": {"startHour": fromHour, "endHour": tillHour}, "days": validForDays})}>שמור שעות</button>
     </Box>
   )
 }

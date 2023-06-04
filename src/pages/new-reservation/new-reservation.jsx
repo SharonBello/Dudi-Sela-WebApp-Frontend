@@ -104,22 +104,27 @@ export const NewReservation = () => {
     const reservations = await reservationService.queryByDate(_date)
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
     const reservations2 = await reservationService.queryByDayofweek(dayOfWeek) // query club events
+    const _start_time = []
     hoursVals.forEach(hour => {
       const setCourts = new Set()
       reservations.forEach(reservation => {
-        if (reservation.startHour === hour) {
+        if (hour>=reservation.startHour && hour<=reservation.endHour) {
           setCourts.add(reservation.courtNumber)
         }
       });
       reservations2.forEach(reservation => {
-        if (Number(reservation.startHour.split(":")[0]) === hour) {
-          setCourts.add(reservation.courtNumber)
+        const _reservation = JSON.parse(JSON.stringify(reservation))
+        _reservation.startHour = Number(reservation.startHour.split(":")[0])
+        _reservation.endHour = Number(reservation.endHour.split(":")[0])
+        if (hour>=_reservation.startHour && hour<=_reservation.endHour) {
+          setCourts.add(_reservation.courtNumber)
         }
       });
-      if (setCourts.size === _courtsData.court_numbers.length) {// all courts are reserved
-        _courtsData.start_time.splice(hour - START_HOUR_DAY, 1)
+      if (setCourts.size !== _courtsData.court_numbers.length) {// if all courts are not reserved
+        _start_time.push(hour)
       }
     })
+    _courtsData.start_time = _start_time
     setCourtsData(_courtsData);
   }
 
@@ -135,9 +140,10 @@ export const NewReservation = () => {
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
     reservations = await reservationService.queryByDayofweek(dayOfWeek) // query club events
     reservations.forEach(reservation => {
-      reservation.startHour = Number(reservation.startHour.split(":")[0])
-      reservation.endHour = Number(reservation.endHour.split(":")[0])
-      if (reservation.dayOfWeek === dayOfWeek && isIntersected(reservation, _startHour, _endHour)) {
+      const _reservation = JSON.parse(JSON.stringify(reservation))
+      _reservation.startHour = Number(reservation.startHour.split(":")[0])
+      _reservation.endHour = Number(reservation.endHour.split(":")[0])
+      if (reservation.dayOfWeek === dayOfWeek && isIntersected(_reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
         _courtsData.court_numbers.splice(index, 1);
       }

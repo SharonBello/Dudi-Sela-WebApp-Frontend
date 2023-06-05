@@ -42,7 +42,7 @@ export const NewReservation = () => {
   const [messageAlert, setMessageAlert] = useState()
   const [warningMessage, setWarningMessage] = useState(false)
   const [, setOpenAlert] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
@@ -295,7 +295,7 @@ export const NewReservation = () => {
             {courtsData.start_time.map((val, index) => {
               const valText = hoursData[val - START_HOUR_DAY]
               return (
-                <button disabled={isLoading} key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
                   onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
               )
             })}
@@ -351,7 +351,7 @@ export const NewReservation = () => {
           <div className="court-number-container flex">
             {courtsData.court_numbers.map(option => {
               return (
-                <button disabled={isLoading} className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
+                <button className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
               )
             })}
           </div>

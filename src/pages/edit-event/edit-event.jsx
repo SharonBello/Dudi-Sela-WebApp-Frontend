@@ -34,7 +34,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 
-export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants }) => {
+export const EditEventModal = ({ updateScheduleView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -132,6 +132,7 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
     e.preventDefault()
     if (validateEvent() === true) {
       saveClubEvent()
+      updateScheduleView()
     } else {
       setShowMessageAlert(true)
       setIsLoading(false)
@@ -234,6 +235,10 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
           const _particpants = [...participants]
           _particpants.push(value)
           setParticipants(_particpants)
+
+          const _classParticipants = [...classParticipants]
+          _classParticipants.push(value)
+          setClassParticipants(_classParticipants)
         }
       })
     } else if (classParticipants.includes(value.trim())) {

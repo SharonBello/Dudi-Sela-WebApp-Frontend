@@ -154,12 +154,18 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     });
     getReservationsByDate(_rows)
   }
-  useEffect(() => {
+
+  const updateScheduleView = useCallback(()=> {
+    setOpenEditEvent(false)
     getInstructors()
     getClassParticipants()
     initSchedule()
     setTodaysEvents()
     getColumns()
+  }, [])
+
+  useEffect(() => {
+    updateScheduleView()
   }, [mDate])
 
   const initSchedule = () => {
@@ -175,7 +181,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} />
+        <EditEventModal updateScheduleView={updateScheduleView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
       )
     }
   }

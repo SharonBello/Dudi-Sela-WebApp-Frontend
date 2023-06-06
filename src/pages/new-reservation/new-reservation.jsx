@@ -77,8 +77,6 @@ export const NewReservation = () => {
       handleDateChange(_date, courtsData)
     } catch (err) {
       console.error(err)
-    } finally {
-      setIsLoading(false)
     }
   }, [])
 
@@ -133,6 +131,7 @@ export const NewReservation = () => {
     })
     _courtsData.start_time = _start_time
     setCourtsData(_courtsData);
+    setIsLoading(false)
   }
 
   const filterCourtNumbers = async (_startHour, _endHour, _date) => {
@@ -348,6 +347,7 @@ export const NewReservation = () => {
     if (courtsData && !isLoading) {
       return (
         <>
+          <label>מספר מגרש</label>
           <div className="court-number-container flex">
             {courtsData.court_numbers.map(option => {
               return (
@@ -532,7 +532,6 @@ export const NewReservation = () => {
                 {handleDurationSelect()}
               </section>
               <section className="court-number-section flex-column">
-                <label>מספר מגרש</label>
                 {renderCourtNumberSelect()}
               </section>
               <input

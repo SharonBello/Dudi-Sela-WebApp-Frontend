@@ -31,6 +31,8 @@ import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 import { reservationService } from "../../services/reservation.service"
+import { InputBox } from '../shared-components/input-box.jsx';
+import { instructorService } from '../../services/instructor.service.js';
 
 export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants }) => {
 
@@ -225,6 +227,20 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
       setParticipants(_particpants)
     }
   }
+  const submitNewParticpant = (e, value) => {
+    if (value.trim() !== "" && !classParticipants.includes(value.trim())) {
+      instructorService.addParticipant({"name": value.trim()}).then(res => {
+        if (res.data.result === 0) {
+          const _particpants = [...participants]
+          _particpants.push(value)
+          setParticipants(_particpants)
+        }
+      })
+    } else if (classParticipants.includes(value.trim())) {
+      setMessageAlert("התלמיד כבר קיים במערכת")
+      setShowMessageAlert(true)
+    }
+  }
   const removeParticipant = (participant) => {
     const _particpants = [...participants]
     if (_particpants.includes(participant)) {
@@ -276,9 +292,10 @@ export const EditEventModal = ({ tennisInstructors, selectedEvent, openEditEvent
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
                 <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
                 <ParticipantsList participants={participants} setParticipants={setParticipants} />
-                <SelectMenu inputLabel="הוסף משתתף" values={classParticipants} setValue={addParticipant} />
+                <SelectMenu inputLabel="הוסף תלמיד קיים" values={classParticipants} setValue={addParticipant} />
                 <SelectMenu inputLabel="הסר משתתף" values={participants} setValue={removeParticipant} />
               </div>
+              <InputBox inputLabel="הכנס תלמיד חדש" handleSubmit={submitNewParticpant}/>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>
                 <button disabled={isLoading} onClick={handleSave} className='save-btn'>

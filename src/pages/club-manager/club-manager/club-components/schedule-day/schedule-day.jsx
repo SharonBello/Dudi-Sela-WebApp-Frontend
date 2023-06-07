@@ -178,10 +178,17 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setTodaysEvents()
   }
 
+  const updateEventInView = async (updatedEvent) => {
+    let idx = events.current.findIndex(event => event.id === updatedEvent.id)
+    events.current[idx] = updatedEvent
+    let _rows = getRows()
+    fillEventSlots(_rows, updatedEvent)
+    setRows(_rows)
+  }
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal updateScheduleView={updateScheduleView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
+        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
       )
     }
   }

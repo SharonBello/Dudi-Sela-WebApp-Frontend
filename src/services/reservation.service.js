@@ -67,7 +67,6 @@ async function queryByDayofweek(dayofweek, role='subscriber') {
     }
 }
 
-
 async function postByWeekDay(weekday, role='admin') {
     try {
         let res = await httpService.post('reservations/schedule/weekday?weekday=' + weekday, {}, role)

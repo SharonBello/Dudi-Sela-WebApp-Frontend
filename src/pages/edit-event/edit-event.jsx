@@ -34,7 +34,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 
-export const EditEventModal = ({ updateScheduleView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants }) => {
+export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants }) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -91,9 +91,7 @@ export const EditEventModal = ({ updateScheduleView, tennisInstructors, selected
     return true
   }
 
-  const saveClubEvent = async () => {
-    const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
-    price, paidStatus, description, title, phoneNumber, instructor, participants, "id": selectedEvent.id}
+  const saveClubEvent = async (payload) => {
 
     if (!loggedUser) {
       navigate('/signin')
@@ -131,8 +129,10 @@ export const EditEventModal = ({ updateScheduleView, tennisInstructors, selected
     e.stopPropagation()
     e.preventDefault()
     if (validateEvent() === true) {
-      saveClubEvent()
-      updateScheduleView()
+      const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
+      price, paidStatus, description, title, phoneNumber, instructor, participants, "id": selectedEvent.id}
+      saveClubEvent(payload)
+      updateEventInView(payload)
     } else {
       setShowMessageAlert(true)
       setIsLoading(false)

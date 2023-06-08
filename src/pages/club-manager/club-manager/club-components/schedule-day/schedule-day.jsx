@@ -14,7 +14,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
 
-export const ScheduleDay = ({ mDate, dayOfWeek }) => {
+export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
@@ -114,7 +114,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
     setColumns(_columns);
   }, [tennisInstructors])
 
-  const getReservationsByDate = async (_rows) => {
+  const getReservationsByDate = async (_rows, mDate) => {
     const reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
@@ -142,7 +142,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
       }
     }
   }
-  const setTodaysEvents = async () => {
+  const setTodaysEvents = async (mDate, dayOfWeek) => {
     let _rows = getRows()
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
@@ -152,21 +152,21 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
         fillEventSlots(_rows, reservation)
       }
     });
-    getReservationsByDate(_rows)
+    getReservationsByDate(_rows, mDate)
   }
 
-  const updateScheduleView = useCallback(()=> {
+  const updateScheduleView = useCallback((mDate, dayOfWeek)=> {
     setOpenEditEvent(false)
     getInstructors()
     getClassParticipants()
     initSchedule()
-    setTodaysEvents()
+    setTodaysEvents(mDate, dayOfWeek)
     getColumns()
   }, [])
 
   useEffect(() => {
-    updateScheduleView()
-  }, [mDate])
+    updateScheduleView(mDate, dayOfWeek)
+  }, [mDate, dayOfWeek])
 
   const initSchedule = () => {
     let _rows = getRows()
@@ -175,7 +175,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
-    setTodaysEvents()
   }
 
   const updateEventInView = async (updatedEvent) => {
@@ -188,7 +187,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
+        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
       )
     }
   }

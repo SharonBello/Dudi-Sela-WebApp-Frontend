@@ -34,7 +34,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 
-export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants }) => {
+export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -275,7 +275,7 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
 
 
             <Typography className="modal-body-text">
-                  יום בשבוע - {dayOfWeek}
+                  יום בשבוע - {dayInHebrew}
                 </Typography>
               <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
               <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />

@@ -62,3 +62,7 @@
 .modal-box .save-cancel-btn-container .save-btn {
     width: fit-content;
 }
+.MuiFormControl-root.flex-row {
+    display: flex;
+    flex-direction: row;
+}

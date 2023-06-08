@@ -133,7 +133,7 @@ export const ClubManager = () => {
                 alt="logo" />
             </li>
           </ul>
-          <ScheduleDay mDate={date} dayOfWeek={weekDay.toLowerCase()} />
+          <ScheduleDay mDate={date} dayOfWeek={weekDay.toLowerCase()} dayInHebrew={weekDayInHebrew[weekDay]}/>
         </>
       )
     }

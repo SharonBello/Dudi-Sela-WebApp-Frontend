@@ -12,8 +12,7 @@ export const InputBox = ({ inputLabel = "", handleSubmit }) => {
     return (
         <FormControl className="flex-row" sx={{ m: 1, minWidth: 120 }}>
             <TextField value={value} onChange={handleChange} label={inputLabel} id="outlined-basic" />
-            {/* TODO remove class table-actions-btn it is not used  */}
-            <Button variant="outlined" onClick={(e) => handleSubmit(e, value)} className="table-actions-btn">
+            <Button variant="outlined" onClick={(e) => handleSubmit(e, value)}>
             שמור
             </Button>
         </FormControl>

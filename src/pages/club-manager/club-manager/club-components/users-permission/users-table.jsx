@@ -344,10 +344,10 @@ export default function UsersTable({ handleGetClubUsers, usersData, rows, handle
                         <TableCell align="right">
                           <div className="table-actions-cell flex">
                             <SaveButton onSave={onSavePerimission} />
-                            <button onClick={(e) => onOpenPersonalDetails(e)} className="table-actions-btn">
+                            <button onClick={(e) => onOpenPersonalDetails(e)}>
                               <FontAwesomeIcon icon={faUserEdit} />
                             </button>
-                            <button onClick={(e) => onDeletePerimission(e)} className="table-actions-btn">
+                            <button onClick={(e) => onDeletePerimission(e)}>
                               <FontAwesomeIcon icon={faTrashAlt} />
                             </button>
                           </div>

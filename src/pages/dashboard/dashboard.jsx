@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
@@ -6,153 +6,118 @@ import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import dayjs from 'dayjs';
 import { Typography } from '@mui/material';
-import { getCurrentDate, getRows } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import { getCurrentDate, getRows, hoursDataArr, columnsData, weekDayInHebrew } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import { FrequencyTypes } from '../club-manager/club-manager/club-helper.jsx'
 
 export const Dashboard = () => {
-  const weekDay = dayjs().format('dddd');
   const [date] = useState(getCurrentDate())
-  const [instructors, setInstructors] = useState([])
+  const [tennisInstructors, setTennisInstructors] = useState([])
   const [rows, setRows] = useState(getRows())
   const START_HOUR_DAY = 6
-  const weekDayInHebrew = { 'Sunday': "יום ראשון", 'Monday': "יום שני", 'Tuesday': "יום שלישי", 'Wednesday': "יום רביעי", 'Thursday': "יום חמישי", 'Friday': "יום שישי", 'Saturday': "יום שבת" };
+  const events = useRef([])
+  const [columns, setColumns] = useState([])
+  const [weekDay] = useState(dayjs().format('dddd'))
+  const [dayOfWeek] = useState(weekDay.toLowerCase())
+  const [dayInHebrew] = useState(weekDayInHebrew[weekDay])
 
-  const columnsData = [
-    {
-      hour: 'courtNumber',
-      headerName: 'מספר מגרש'
-    },
-    {
-      hour: 'sixAM',
-      headerName: '6:00'
-    },
-    {
-      hour: 'sevenAM',
-      headerName: '7:00'
-    },
-    {
-      hour: 'eightAM',
-      headerName: '8:00'
-    },
-    {
-      hour: 'nineAM',
-      headerName: '9:00'
-    },
-    {
-      hour: 'tenAM',
-      headerName: '10:00'
-    },
-    {
-      hour: 'elevenAM',
-      headerName: '1:00'
-    },
-    {
-      hour: 'twelveAM',
-      headerName: '12:00'
-    },
-    {
-      hour: 'onePM',
-      headerName: '13:00'
-    },
-    {
-      hour: 'twoPM',
-      headerName: '14:00'
-    },
-    {
-      hour: 'threePM',
-      headerName: '15:00'
-    },
-    {
-      hour: 'fourPM',
-      headerName: '16:00'
-    },
-    {
-      hour: 'fivePM',
-      headerName: '17:00'
-    },
-    {
-      hour: 'sixPM',
-      headerName: '18:00'
-    },
-    {
-      hour: 'sevenPM',
-      headerName: '19:00'
-    },
-    {
-      hour: 'eightPM',
-      headerName: '20:00'
-    },
-    {
-      hour: 'ninePM',
-      headerName: '21:00'
-    },
-    {
-      hour: 'tenPM',
-      headerName: '22:00'
-    },
-    {
-      hour: 'elevenPM',
-      headerName: '23:00'
+  const fillEventSlots = (_rows, reservation) => {
+    const hrStart = reservation.startHour.split(":")[0]
+    const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
+    const hrEnd = reservation.endHour.split(":")[0]
+    const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
+    let startHourTxt
+    let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
+    numTimeSlots*=2
+    for (let i = 0; i < numTimeSlots; i++) {
+      startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
+      if (reservation.instructor) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
+      } else if (reservation.username) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
+      } else {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+      }
     }
-  ]
+  }
 
-  const hoursDataArr = useMemo(
-    () => ['sixAM', 'sevenAM', 'eightAM', 'nineAM', 'tenAM', 'elevenAM', 'twelveAM', 'onePM', 'twoPM', 'threePM', 'fourPM', 'fivePM', 'sixPM', 'sevenPM', 'eightPM', 'ninePM', 'tenPM', 'elevenPM'],
-    []
-  );
+  const getReservationsByDate = async (_rows, date) => {
+    const reservations = await reservationService.queryByDate(date)
+    events.current.push(...reservations)
+    reservations.forEach(reservation => {
+      fillEventSlots(_rows, reservation)
+    });
+    setRows(_rows)
+  }
 
-  const getColumns = () => {
+  const setTodaysEvents = async (date, dayOfWeek) => {
+    let _rows = getRows()
+    let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
+    events.current.push(...reservations)
+    const _date = getCurrentDate()
+    reservations.forEach(reservation => {
+      if (reservation.startDate === _date || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
+        fillEventSlots(_rows, reservation)
+      }
+    });
+    getReservationsByDate(_rows, date)
+  }
+
+  const getInstructors = useCallback(async () => {
+    let instructors = await instructorService.getInstructors()
+    setTennisInstructors(instructors)
+  }, [setTennisInstructors])
+
+  const getColumns = useCallback(() => {
     const _columns = [];
     columnsData.forEach(col => {
       _columns.push({
         field: col.hour,
         headerName: col.headerName,
+        cellClassName: (params) => {
+          if(!tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
+            return 'single-event';
+          }
+          if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
+            return 'week-event';
+          }
+          return;
+        },
         type: 'singleSelect',
         width: 140,
-        cellClassName: (params) => {
-          if (instructors.includes(params.value)) {
-            return 'reservation-by-instructor';
-          } else if (params.value !== "" && col.headerName !== "מספר מגרש") {
-            return 'reservation-by-user';
-          } else {
-            return '';
-          }
-        },
       })
     });
-    return _columns;
-  }
-  const columns = getColumns();
+    setColumns(_columns);
+  }, [tennisInstructors])
 
-  const getTodaysReservations = useCallback(async () => {
-    let reservations = await reservationService.queryByDate(date)
-    let _rows = [...rows]
-    reservations.forEach(reservation => {
-      const startHourTxt = hoursDataArr[reservation.startHour - START_HOUR_DAY]
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username.split("@")[0]
-    });
+  const initSchedule = () => {
+    let _rows = getRows()
     setRows(_rows)
-  }, [date, rows, hoursDataArr])
+  }
 
-  const getInstructors = useCallback(async () => {
-    let instructors = await instructorService.getInstructors()
-    setInstructors(instructors)
-  }, [setInstructors])
+  const updateScheduleView = useCallback((date, dayOfWeek)=> {
+    initSchedule()
+    getInstructors()
+    setTodaysEvents(date, dayOfWeek)
+    getColumns()
+  }, [])
 
   useEffect(() => {
-    getInstructors()
-    getTodaysReservations()
-  }, [getTodaysReservations, getInstructors])
+    updateScheduleView(date, dayOfWeek)
+  }, [date, dayOfWeek])
+
 
   return (
     <div className='flex-column align-center justify-center container-block dashboard-container'>
       <Typography component="h1" variant="h5">האקדמיה לטניס דודי סלע</Typography>
-      <Typography>{weekDayInHebrew[weekDay]} {date}</Typography>
+      <Typography>{dayInHebrew} {date}</Typography>
 
       <Box className="dashboard" sx={{ width: '100%', height: 500 }}>
-        <DataGrid
+      <DataGrid
+          isCellEditable={false}
+          columnDefs={{editable: false}}
           rows={rows}
           columns={columns}
-          editMode="row"
+          sx={{ m: 2 }}
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />

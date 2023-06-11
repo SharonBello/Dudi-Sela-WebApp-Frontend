@@ -142,7 +142,7 @@ export const AppHeader = () => {
           {(role === "admin" && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
           </li> : null)}
 
-          {(role === "admin" === true && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
+          {(role === "admin" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
           </li> : null)}
 
           <li>

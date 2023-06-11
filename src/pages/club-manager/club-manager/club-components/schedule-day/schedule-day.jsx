@@ -180,7 +180,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const updateEventInView = async (updatedEvent) => {
     let idx = events.current.findIndex(event => event.id === updatedEvent.id)
     events.current[idx] = updatedEvent
-    let _rows = getRows()
+    let _rows = JSON.parse(JSON.stringify(rows))
     fillEventSlots(_rows, updatedEvent)
     setRows(_rows)
   }

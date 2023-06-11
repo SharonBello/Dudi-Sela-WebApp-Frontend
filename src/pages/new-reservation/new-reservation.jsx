@@ -29,9 +29,11 @@ export const NewReservation = () => {
   const navigate = useNavigate()
   const [startHour, setStartHour] = useState()
   const [endHour, setEndHour] = useState()
+  const [durationInHrs, setDurationInHrs] = useState(1)
   const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(() => new Date());
   const [courtsData, setCourtsData] = useState()
+  const [initialCourtNumbers, setInitialCourtNumbers] = useState([])
   const { width } = useWindowDimensions()
   const todaysDate = dayjs().format('DD-MM-YYYY')
   const shownDate = dayjs().format('YYYY-MM-DD')
@@ -69,11 +71,14 @@ export const NewReservation = () => {
         court_numbers: res.data.club_courts.map( court => court.name)
       }
       setCourtsData(courtsData);
+      if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts.map( court => court.name))
       let _date
       if (!date) {
         date = new Date()
       }
       _date = dayjs(date).format(DateFormat)
+      setSelectedStartHour()
+      setDurationInHrs(1)
       handleDateChange(_date, courtsData)
     } catch (err) {
       console.error(err)
@@ -135,7 +140,9 @@ export const NewReservation = () => {
   }
 
   const filterCourtNumbers = async (_startHour, _endHour, _date) => {
-    let _courtsData = JSON.parse(JSON.stringify(courtsData))
+    let _courtsData = {}
+    _courtsData = JSON.parse(JSON.stringify(courtsData))
+    _courtsData['court_numbers'] = JSON.parse(JSON.stringify(initialCourtNumbers));
     let reservations = await reservationService.queryByDate(_date) // query user reservations
     reservations.forEach(reservation => {
       if (isIntersected(reservation, _startHour, _endHour)) {
@@ -218,6 +225,7 @@ export const NewReservation = () => {
     const startHour = parseInt(e.currentTarget.value)
     setStartHour(startHour)
     setEndHour(startHour + 1)
+    setDurationInHrs(1)
     const _date = dayjs(date).format(DateFormat)
     filterCourtNumbers(startHour, startHour + 1, _date)
     setCourtNumber()
@@ -229,6 +237,7 @@ export const NewReservation = () => {
     e.stopPropagation()
     e.preventDefault()
     setIsLoading(true)
+    setDurationInHrs(e.target.value)
     setEndHour(e.target.value + startHour)
     const _date = dayjs(date).format(DateFormat)
     filterCourtNumbers(startHour, e.target.value + startHour, _date)
@@ -316,14 +325,15 @@ export const NewReservation = () => {
   }
 
   const handleDurationSelect = () => {
-    if (showDuration && courtsData && !isLoading) {
+    if (showDuration) {
       return (
         <FormControl sx={{ m: 3, minWidth: 150 }}>
           <InputLabel>משך שעות</InputLabel>
           <Select
             label="משך שעות"
             labelId="durationHours"
-            defaultValue="1"
+            defaultValue={durationInHrs}
+            value={durationInHrs}
             onChange={(e) => handleDurationChange(e)}
             required
           >
@@ -367,6 +377,7 @@ export const NewReservation = () => {
       setStartHour()
       setEndHour()
       setCourtNumber()
+      setDurationInHrs(1)
       handleCourtsData(_date)
     } else {
       setWarningMessage(true)

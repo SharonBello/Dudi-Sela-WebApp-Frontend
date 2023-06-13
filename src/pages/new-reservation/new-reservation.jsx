@@ -23,6 +23,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { DateFormat } from '../club-manager/club-manager/club-helper.jsx'
+import { AvailablePunchCards } from './available-punch-cards.jsx';
+import Button from '@mui/material/Button';
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
@@ -49,6 +51,9 @@ export const NewReservation = () => {
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
   const [clubCourts, setClubCourts] = useState([])
+  const [punchCards, setPunchCards] = useState([])
+  const [showPunchCards, setShowPunchCards] = useState(false)
+
   const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
@@ -61,6 +66,19 @@ export const NewReservation = () => {
   }
 
   const saturdayDate = getSaturdayDate()
+
+  const getPunchCards = useCallback(async () => {
+      let res = await courtService.getPunchCards()
+      return res.data.punch_cards
+    }, [])
+  useEffect(() => {
+  if (punchCards.length === 0) {
+      getPunchCards().then(res => {
+      setPunchCards(res)
+      })
+  }
+  }, [getPunchCards])
+
   const handleCourtsData = useCallback(async (date) => {
     setIsLoading(true)
     try {
@@ -516,26 +534,45 @@ export const NewReservation = () => {
     }
   }
 
+  const handleSelectDisounts = () => {
+    return (
+      setShowPunchCards(true)
+    )
+  }
+
+  const closePunchCards = () => {
+    setShowPunchCards(false)
+  }
+
+  const renderPunchCards = () => {
+    if (showPunchCards) {
+      return (
+        <AvailablePunchCards punchCards={punchCards} showPunchCards={showPunchCards} closePunchCards={closePunchCards}/>
+      )
+    }
+  }
   return (
     <>
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
+      {renderPunchCards()}
       <form dir="rtl" className="container flex-column form-container" onSubmit={handleSubmit}>
         {renderIsLoading()}
         <CacheProvider value={cacheRtl}>
           <ThemeProvider theme={theme}>
             <Stack spacing={4} sx={{ display: "flex-column", alignItems: "center", justifyContent: "justify-between", gap: "1.5rem" }}>
-              <section className="date-container flex">
-              <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
-                  <DatePicker
-                      label="תאריך"
-                      format="DD-MM-YYYY"
-                      defaultValue={dayjs(shownDate)}
-                      onChange={handleSelectDate}
-                      renderInput={(params) => <TextField {...params} />}
-                  />
-              </LocalizationProvider>
+              <section className="date-container flex-row">
+                <LocalizationProvider dateAdapter={AdapterDayjs} locale="en-gb">
+                    <DatePicker
+                        label="תאריך"
+                        format="DD-MM-YYYY"
+                        defaultValue={dayjs(shownDate)}
+                        onChange={handleSelectDate}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
+                <Button className="punch-card" onClick={handleSelectDisounts}>כרטיסיות</Button>
               </section>
 
               <section className="hours-container flex-column align-center justify-between">
@@ -550,7 +587,6 @@ export const NewReservation = () => {
                 type='submit'
                 disabled={isLoading}
                 value='הזמנת מגרש'
-              // onClick={handleSubmit}
               />
             </Stack>
 

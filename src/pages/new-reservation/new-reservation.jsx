@@ -314,21 +314,41 @@ export const NewReservation = () => {
   const renderStartHourSelect = () => {
     if (courtsData && !isLoading) {
       // let reservations = [] // await reservationService.queryByDate(_date)
-
-      return (
-        <>
-          <div className="start-hour-container flex">
-            {courtsData.start_time.map((val, index) => {
-              const valText = hoursData[val - START_HOUR_DAY]
-              return (
-                <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
-                  onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
-              )
-            })}
-            {renderEndHourSelect()}
-          </div>
-        </>
-      )
+      const currentHour = dayjs().hour()
+      const _date = dayjs(date).format(DateFormat)
+      if (_date === shownDate) {
+        return (
+          <>
+            <div className="start-hour-container flex">
+              {courtsData.start_time.map((val, index) => {
+                if ((val - START_HOUR_DAY) > currentHour) {
+                  const valText = hoursData[val - START_HOUR_DAY]
+                  return (
+                    <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                      onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
+                  )
+                }
+              })}
+              {renderEndHourSelect()}
+            </div>
+          </>
+        )
+      } else {
+        return (
+          <>
+            <div className="start-hour-container flex">
+              {courtsData.start_time.map((val, index) => {
+                const valText = hoursData[val - START_HOUR_DAY]
+                return (
+                  <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
+                    onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
+                )
+              })}
+              {renderEndHourSelect()}
+            </div>
+          </>
+        )
+      }
     }
   }
 

@@ -3,11 +3,7 @@ import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
 import Container from '@mui/material/Container';
 
-export const AvailablePunchCards = ({punchCards, showPunchCards, closePunchCards}) => {
-
-    const selectPunchCard = (e, card) => {
-        console.log(e)
-      }
+export const AvailablePunchCards = ({punchCards, showPunchCards, closePunchCards, selectPunchCard}) => {
 
     const renderPunchCards = () => {
         return (
@@ -34,7 +30,7 @@ export const AvailablePunchCards = ({punchCards, showPunchCards, closePunchCards
                 <Container className="modal-content">
                     <Box className="modal-header">
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            בחר כרטיסייה
+                            בחר\קנה כרטיסייה
                         </Typography>
                     </Box>
                     <Box className="modal-body flex-row">

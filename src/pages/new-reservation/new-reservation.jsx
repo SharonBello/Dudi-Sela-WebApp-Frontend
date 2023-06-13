@@ -413,16 +413,17 @@ export const NewReservation = () => {
     setShowSuccessAlert(false)
     setShowFailureAlert(false)
     setShowMessageAlert(false)
+    setShowPunchCards(false)
     if (warningMessage) {
       setWarningMessage(false)
       return
     }
-    if (reason === 'clickaway') {
-      navigate('/user-reservations')
-      return;
-    }
+    // if (reason === 'clickaway') {
+    //   navigate('/user-reservations')
+    //   return;
+    // }
     setOpenAlert(false);
-    navigate('/user-reservations')
+    // navigate('/user-reservations')
   }
 
   const alertAction = (
@@ -544,10 +545,20 @@ export const NewReservation = () => {
     setShowPunchCards(false)
   }
 
+  const selectPunchCard = async (e, card) => {
+    let _userCredit = await reservationService.getCredit(uid)
+    const resCredit = await reservationService.changeCredit(uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate })
+    if (resCredit.data.result === 0) {
+      let _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`
+      setShowSuccessAlert(true)
+      setSuccessMessage(_message)
+    }
+  }
+
   const renderPunchCards = () => {
     if (showPunchCards) {
       return (
-        <AvailablePunchCards punchCards={punchCards} showPunchCards={showPunchCards} closePunchCards={closePunchCards}/>
+        <AvailablePunchCards punchCards={punchCards} showPunchCards={showPunchCards} closePunchCards={closePunchCards} selectPunchCard={selectPunchCard}/>
       )
     }
   }

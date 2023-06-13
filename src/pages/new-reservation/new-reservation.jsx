@@ -603,7 +603,7 @@ export const NewReservation = () => {
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </LocalizationProvider>
-                <Button className="punch-card" onClick={handleSelectDisounts}>כרטיסיות</Button>
+                <Button className="punch-card" onClick={handleSelectDisounts}>מבצעים</Button>
               </section>
 
               <section className="hours-container flex-column align-center justify-between">

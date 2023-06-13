@@ -13,6 +13,7 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
+import { courtService } from '../../../../../services/court.service.js';
 
 export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const [rows, setRows] = useState(getRows())
@@ -27,7 +28,12 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const START_HOUR_DAY = 6
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
+  const [clubClasses, setClubClasses] = useState([])
 
+  const getClubClasses = useCallback(async () => {
+      let res = await courtService.getClubClasses()
+      setClubClasses(res.data.club_classes)
+  }, []);
   const getInstructors = useCallback(async () => {
     let instructors = await instructorService.getInstructors()
     setTennisInstructors(instructors)
@@ -99,7 +105,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
         field: col.hour,
         headerName: col.headerName,
         cellClassName: (params) => {
-          if(!tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
+          if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
             return 'single-event';
           }
           if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
@@ -112,7 +118,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
       })
     });
     setColumns(_columns);
-  }, [tennisInstructors])
+  }, [tennisInstructors, clubClasses])
 
   const getReservationsByDate = async (_rows, mDate) => {
     const reservations = await reservationService.queryByDate(mDate)
@@ -158,6 +164,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const updateScheduleView = useCallback((mDate, dayOfWeek)=> {
     setOpenEditEvent(false)
     getInstructors()
+    getClubClasses()
     getClassParticipants()
     initSchedule()
     setTodaysEvents(mDate, dayOfWeek)
@@ -187,7 +194,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
+        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
       )
     }
   }

@@ -7,6 +7,11 @@ import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { Loader } from '../../components/loader.jsx';
 import { createTheme } from '@mui/material/styles'
@@ -34,7 +39,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 
-export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants, dayInHebrew}) => {
+export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -54,6 +59,8 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [clubCourts, setClubCourts] = useState([])
+  const [showConfirmBox, setShowConfirmBox] = useState(false)
+  const [clubClass, setClubClass] = useState()
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const navigate = useNavigate()
@@ -64,7 +71,8 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
         setClubCourts(res.data.club_courts.map(court => court.name))
       })
     }
-}, [])
+  }, [])
+
   const theme = createTheme({
     direction: 'rtl',
   })
@@ -130,7 +138,7 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
     e.preventDefault()
     if (validateEvent() === true) {
       const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
-      price, paidStatus, description, title, phoneNumber, instructor, participants, "id": selectedEvent.id}
+      price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), "shouldJoinClass": !!clubClass, "id": selectedEvent.id}
       saveClubEvent(payload)
       updateEventInView(payload)
     } else {
@@ -254,10 +262,46 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
       setParticipants(_particpants)
     }
   }
+  const closeConfirmBox = () => {
+    setShowConfirmBox(false)
+  }
+  const handleChangeName = () => {
+    setShowConfirmBox(false)
+    setTitle(clubClass.title)
+  }
+  const renderConfirmChange = () => {
+    if (showConfirmBox) {
+      return (
+        <Dialog
+            open={showConfirmBox}
+            onClose={closeConfirmBox}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                    {"האם את/ה רוצה לשנות את כותרת הארוע לשם הקורס?"}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={closeConfirmBox}>לא</Button>
+                <Button onClick={handleChangeName} autoFocus>
+                    כן
+                </Button>
+            </DialogActions>
+        </Dialog>
+    )
+    }
+  }
+  const handleClubClassChange = (e) => {
+    setShowConfirmBox(true)
+    setClubClass(e.target.value)
+  }
   return (
     <>
       {renderIsLoading()}
       {renderMessageAlert()}
+      {renderConfirmChange()}
       <Modal
         open={openEditEvent}
         onClose={closeEditEvent}
@@ -277,7 +321,7 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, selectedE
             <Typography className="modal-body-text">
                   יום בשבוע - {dayInHebrew}
                 </Typography>
-              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} />
+              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} clubClasses={clubClasses} handleClubClassChange={handleClubClassChange}/>
               <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">

@@ -9,8 +9,10 @@ import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
-export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass }) => {
+export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass, clubClasses, handleClubClassChange }) => {
 
     const handleScheduleType = (e, eventType) => {
         if (eventType !== null) setEventType(eventType);
@@ -22,6 +24,24 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
         setShouldJoinClass(e.target.checked);
     };
 
+    const renderSelectClass = () => {
+        if (shouldJoinClass) {
+            return (
+                <Select
+                onChange={handleClubClassChange}
+                required
+              >
+                {clubClasses.map(option =>
+                <MenuItem
+                    key={option.id}
+                    value={option}>
+                    {option.title}
+                </MenuItem>
+                )}
+              </Select>
+              )
+        }
+    }
     return (
         <Box className="schedule-type-container flex-column">
             <Typography className="modal-body-text">
@@ -72,6 +92,7 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                             }}
                         />}
                         label="צרף לחוג" />
+                        {renderSelectClass()}
                 </FormGroup>
             </Box>
         </Box>

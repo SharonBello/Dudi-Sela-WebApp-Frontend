@@ -106,7 +106,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
         headerName: col.headerName,
         cellClassName: (params) => {
           if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
-            return 'single-event';
+            return 'single-event'; //TODO single-event, move tennisInstructors to parent component
           }
           if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
             return 'week-event';

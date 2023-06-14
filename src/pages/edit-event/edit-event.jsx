@@ -93,7 +93,7 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
       return false
     }
     if (!(title.trim() !== "" || instructor.trim() !== "")) {
-      setMessageAlert("יש למלא מדריך אחד לפחות או את כותרת ארוע")
+      setMessageAlert("יש למלא מדריך אחד לפחות או את כותרת הארוע")
       return false
     }
     return true

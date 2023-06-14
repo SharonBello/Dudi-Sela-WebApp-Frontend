@@ -26,7 +26,7 @@ export const ReservationPreview = ({ item, todaysDate }) => {
     const [showFailureAlert, setShowFailureAlert] = useState(false)
 
     const navigate = useNavigate()
-    const NUM_DAYS_CANCEL_REGISTRATION = 1
+    const NUM_DAYS_CANCEL_REGISTRATION = 1 //TODO take the number in hours frm club manager page
     let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 

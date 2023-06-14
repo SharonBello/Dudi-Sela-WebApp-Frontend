@@ -133,7 +133,7 @@ export const PunchCards = () => {
       setShowModalCreate(false)
       setSelectedCard(_emptyCard)
     } else {
-      setMessageAlert('כרטיסייה חייבת להיות עם שם, מפסר ניקובים, ומחיר')
+      setMessageAlert('כרטיסייה חייבת להיות עם שם, מספר ניקובים, ומחיר')
       setShowMessageAlert(true)
     }
   }

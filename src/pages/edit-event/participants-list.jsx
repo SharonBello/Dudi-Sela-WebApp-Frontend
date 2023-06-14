@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 
 
-export const ParticipantsList = ({participants, setParticipants}) => {
+export const ParticipantsList = ({participants}) => {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 

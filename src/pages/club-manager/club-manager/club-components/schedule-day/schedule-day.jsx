@@ -20,7 +20,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [tennisInstructors, setTennisInstructors] = useState([])
-  const [classParticipants, setClassParticipants] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
   const [isEventExists, setIsEventExists] = useState(false)
   const [columns, setColumns] = useState([])
@@ -42,11 +41,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
   }
-
-  const getClassParticipants = useCallback(async () => {
-    let participants = await instructorService.getParticipants()
-    setClassParticipants(participants)
-  }, [setClassParticipants])
 
   const alertAction = (
     <>
@@ -165,7 +159,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
     setOpenEditEvent(false)
     getInstructors()
     getClubClasses()
-    getClassParticipants()
     initSchedule()
     setTodaysEvents(mDate, dayOfWeek)
     getColumns()
@@ -194,7 +187,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
+        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
       )
     }
   }

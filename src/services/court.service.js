@@ -12,7 +12,7 @@ export const courtService = {
     getClubClasses,
     addPunchCard,
     editPunchCard,
-    addClubClass,
+    updateClubClass,
     addClubUser,
     getClubHours,
     addClubHours,
@@ -130,7 +130,7 @@ async function editPunchCard(data, role='admin') {
     }
 }
 
-async function addClubClass(data, role='admin') {
+async function updateClubClass(data, role='admin') {
     try {
         let res = await httpService.post('courts/clubclasses/addClubClass', data, role)
         return res

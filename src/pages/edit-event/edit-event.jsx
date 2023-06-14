@@ -39,7 +39,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 
-export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, classParticipants, setClassParticipants, dayInHebrew}) => {
+export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -138,7 +138,7 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
     e.preventDefault()
     if (validateEvent() === true) {
       const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
-      price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), "shouldJoinClass": !!clubClass, "id": selectedEvent.id}
+      price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), shouldJoinClass, "id": selectedEvent.id}
       saveClubEvent(payload)
       updateEventInView(payload)
     } else {
@@ -229,39 +229,6 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
     if (isEventExists && isClubEvent)
       return (<FontAwesomeIcon className="delete-event" onClick={handleDeleteEvent} icon={faTrashAlt} />)
   }
-  const addParticipant = (newParticipant) => {
-    const _particpants = [...participants]
-    if (!_particpants.includes(newParticipant)) {
-      _particpants.push(newParticipant)
-      setParticipants(_particpants)
-    }
-  }
-  const submitNewParticpant = (e, value) => {
-    if (value.trim() !== "" && !classParticipants.includes(value.trim())) {
-      instructorService.addParticipant({"name": value.trim()}).then(res => {
-        if (res.data.result === 0) {
-          const _particpants = [...participants]
-          _particpants.push(value)
-          setParticipants(_particpants)
-
-          const _classParticipants = [...classParticipants]
-          _classParticipants.push(value)
-          setClassParticipants(_classParticipants)
-        }
-      })
-    } else if (classParticipants.includes(value.trim())) {
-      setMessageAlert("התלמיד כבר קיים במערכת")
-      setShowMessageAlert(true)
-    }
-  }
-  const removeParticipant = (participant) => {
-    const _particpants = [...participants]
-    if (_particpants.includes(participant)) {
-      const index = _particpants.indexOf(participant);
-      _particpants.splice(index, 1);
-      setParticipants(_particpants)
-    }
-  }
   const closeConfirmBox = () => {
     setShowConfirmBox(false)
   }
@@ -293,9 +260,16 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
     )
     }
   }
-  const handleClubClassChange = (e) => {
+  const handleClubClassChange = async (e) => {
     setShowConfirmBox(true)
     setClubClass(e.target.value)
+    let res = await courtService.getClubClasses()
+    const idx = res.data.club_classes.findIndex(i => i.id === e.target.value.id)
+    setParticipants(JSON.parse(res.data.club_classes[idx].participants))
+  }
+  const renderParticipantsList = () => {
+    if (shouldJoinClass)
+      return (<ParticipantsList participants={participants} />)
   }
   return (
     <>
@@ -340,17 +314,14 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
                 <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
-                <ParticipantsList participants={participants} setParticipants={setParticipants} />
-                <SelectMenu inputLabel="הוסף תלמיד קיים" values={classParticipants} setValue={addParticipant} />
-                <SelectMenu inputLabel="הסר משתתף" values={participants} setValue={removeParticipant} />
+                {renderParticipantsList()}
               </div>
-              <InputBox inputLabel="הכנס תלמיד חדש" handleSubmit={submitNewParticpant}/>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className='flex align-center justify-between save-cancel-btn-container'>
                 <button disabled={isLoading} onClick={handleSave} className='save-btn'>
                   שמירה
                 </button>
-                <div>
+                <div className="flex-row">
                   <button disabled={isLoading} onClick={closeEditEvent} className='cancel-btn'>
                     ביטול
                   </button>

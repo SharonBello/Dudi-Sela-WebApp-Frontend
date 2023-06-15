@@ -19,32 +19,33 @@ import { useSelector } from "react-redux"
 import dayjs from "dayjs"
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 
-export const ReservationPreview = ({ item, todaysDate }) => {
+export const ReservationPreview = ({ item, todaysDate, hrBeforeCancel }) => {
     const [isCancelable, setIsCancelable] = useState(false)
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showFailureAlert, setShowFailureAlert] = useState(false)
 
     const navigate = useNavigate()
-    const NUM_DAYS_CANCEL_REGISTRATION = 1 //TODO take the number in hours frm club manager page
     let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const getTimeLeft = useCallback((item) => {
         const futureDate = dayjs(item.date)
-        const timeLeft = futureDate.diff(todaysDate, 'day')
-        return timeLeft
+        let timeLeftInDays = futureDate.diff(todaysDate, 'day')
+        const currentHour = dayjs().hour()
+        const hrDiff = item.startHour.split(":")[0] - currentHour
+        return hrDiff + timeLeftInDays*24;
     }, [todaysDate])
 
     const getIsCancelable = useCallback((item) => {
         const cancelItem = getTimeLeft(item)
-        if (cancelItem > NUM_DAYS_CANCEL_REGISTRATION) {
+        if (cancelItem > hrBeforeCancel) {
             setIsCancelable(true)
         }
         else {
             setIsCancelable(false)
         }
-    }, [NUM_DAYS_CANCEL_REGISTRATION, getTimeLeft])
+    }, [hrBeforeCancel, getTimeLeft])
 
     const onDeleteReservation = async () => {
         setShowDeleteAlert(true)

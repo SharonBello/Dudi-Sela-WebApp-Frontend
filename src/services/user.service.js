@@ -2,6 +2,7 @@ import { httpService } from './http.service.js'
 import { getAuth, signInWithCredential, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from 'firebase/app'
 import getFirebaseConfig from './firebase.js';
+import { courtService } from './court.service.js';
 export const STORAGE_KEY_LOGGED_USER = 'loggedUser'
 export const ACCESS_TOKEN = 'accessToken'
 
@@ -27,10 +28,15 @@ async function login(userCred, role='subscriber') {
     }
 }
 
-async function signup(payload, role='subscriber') {
+async function signup(mailAndPswd, payload,  role='subscriber') {
     try {
-        const user = await httpService.post('auth/signup', payload, role)
-        _handleLogin(payload)
+        const user = await httpService.post('auth/signup', mailAndPswd, role)
+        _handleLogin(mailAndPswd)
+        setTimeout(async () => {
+            // TODO addSubscriber
+            // const res = await courtService.addSubscriber(payload)
+            // console.log(res)
+        }, 5000)
         return user
     } catch (err) {
         throw err

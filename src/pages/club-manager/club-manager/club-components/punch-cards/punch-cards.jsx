@@ -202,6 +202,17 @@ export const PunchCards = () => {
     }
   }
 
+  const renderUserCredit = (keyVal) => {
+    if (keyVal[1].user_credit>0) {
+      return (
+        <tr className="table-action-cell" key={keyVal[0]}>
+          <td className="table-cell-btn">{keyVal[1].user_credit}</td>
+          <td className="table-cell-btn">{keyVal[1].mail}</td>
+          <td className="table-cell-btn">{keyVal[1].date}</td>
+        </tr>
+      )
+    }
+  }
   const renderUsersCredit = () => {
     return (
       <table className="credit-list">
@@ -214,11 +225,7 @@ export const PunchCards = () => {
         </thead>
         <tbody>
           {usersCredit && Object.entries(usersCredit).map(keyVal =>
-            <tr className="table-action-cell" key={keyVal[0]}>
-              <td className="table-cell-btn">{keyVal[1].user_credit}</td>
-              <td className="table-cell-btn">{keyVal[1].mail}</td>
-              <td className="table-cell-btn">{keyVal[1].date}</td>
-            </tr>
+            renderUserCredit(keyVal)
           )}
         </tbody>
       </table>

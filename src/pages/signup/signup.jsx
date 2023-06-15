@@ -21,6 +21,7 @@ import createCache from '@emotion/cache'
 import { login, setLoggedUser, setUserUid, setUserRole } from '../../store/actions/user.actions.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
+import { UserRoles } from '../club-manager/club-manager/club-helper.jsx'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -60,14 +61,22 @@ export const Signup = () => {
     setConditionsModal(false)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const payload = {
       email: data.get('email'),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
+      phone: data.get('phone'),
+      password: data.get('password'),
+      role: UserRoles[0]
+    }
+    const mailAndPswd = {
+      email: data.get('email'),
       password: data.get('password'),
     }
-    userService.signup(payload)
+    userService.signup(mailAndPswd, payload)
       .then((response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
@@ -76,7 +85,6 @@ export const Signup = () => {
         } else {
           const miniUser = {"email": payload.email, "uid": response.data.uid}
           sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
-
           dispatch(setUserUid(response.data.uid))
           //signup doesnt give an admin role
           dispatch(login(payload))
@@ -121,6 +129,39 @@ export const Signup = () => {
                       label="כתובת מייל"
                       name="email"
                       autoComplete="email"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="firstname"
+                      label="שם פרטי"
+                      name="firstname"
+                      autoComplete="firstname"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="lastname"
+                      label="שם משפחה"
+                      name="lastname"
+                      autoComplete="lastname"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="phone"
+                      label="טלפון"
+                      name="phone"
+                      autoComplete="phone"
                       autoFocus
                     />
                   </Grid>

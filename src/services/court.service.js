@@ -27,7 +27,8 @@ export const courtService = {
     editClubCourt,
     deleteClubUser,
     saveClubUser,
-    getUser
+    getUser,
+    addSubscriber
 }
 
 async function getClubCourts() {
@@ -143,6 +144,16 @@ async function updateClubClass(data, role='admin') {
 async function addClubUser(data, role='admin') {
     try {
         let res = await httpService.post('courts/clubusers/addClubUser', data, role)
+        return res
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+async function addSubscriber(data, role='subscriber') {
+    try {
+        let res = await httpService.post('courts/clubusers/addSubscriber', data, role)
         return res
     }
     catch (err) {

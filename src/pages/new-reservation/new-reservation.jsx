@@ -203,7 +203,7 @@ export const NewReservation = () => {
         let resExists = false
         if (!resExists) { //!resExists.data.isExists
           let _userCredit = await reservationService.getCredit(uid)
-          const creditNum = payload.endHour - payload.startHour
+          const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {

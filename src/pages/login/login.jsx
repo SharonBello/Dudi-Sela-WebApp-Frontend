@@ -51,6 +51,7 @@ export const Login = () => {
           dispatch(setUserRole(null))
           setIsLogin(!isLogin)
           navigate('/signin')
+          alert(response.data.message)
         } else {
           const miniUser = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)) // { email: user.email, uid: user.uid}
           if (!miniUser) {

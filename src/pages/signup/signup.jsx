@@ -22,6 +22,7 @@ import { login, setLoggedUser, setUserUid, setUserRole } from '../../store/actio
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 import { UserRoles } from '../club-manager/club-manager/club-helper.jsx'
+import { courtService } from '../../services/court.service.js'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
@@ -77,11 +78,12 @@ export const Signup = () => {
       password: data.get('password'),
     }
     userService.signup(mailAndPswd, payload)
-      .then((response) => {
+      .then(async (response) => {
         if (!response.data.uid) {
           dispatch(setUserUid(null))
           dispatch(setUserRole(null))
-          navigate('/signin')
+          navigate('/signup')
+          alert(response.data.message)
         } else {
           const miniUser = {"email": payload.email, "uid": response.data.uid}
           sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
@@ -90,11 +92,14 @@ export const Signup = () => {
           dispatch(login(payload))
           dispatch(setLoggedUser())
           navigate('/')
+          const resAddSub = await courtService.addSubscriber(payload)
+          console.log(resAddSub)
         }
 
       })
       .catch((error) => {
         console.error(error)
+        alert(error.message)
       })
   }
 
@@ -126,7 +131,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="email"
-                      label="כתובת מייל"
+                      label="כתובת מייל - חייבת להיות ייחודית במערכת"
                       name="email"
                       autoComplete="email"
                       autoFocus
@@ -170,7 +175,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       name="password"
-                      label="סיסמא"
+                      label="סיסמא - צריכה להיות לפחות 6 אותיות וספרה"
                       type="password"
                       id="password"
                       autoComplete="new-password"

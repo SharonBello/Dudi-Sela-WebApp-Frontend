@@ -20,7 +20,7 @@ export const UsersPermission = () => {
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [showAddUser, setShowAddUser] = useState(false);
   const [showSearchUser, setShowSearchUser] = useState(false);
-  const [email, setEmail] = useState();
+  const [searchVal, setSearchVal] = useState();
   const [userName, setUserName] = useState();
   const [userMessage, setUserMessage] = useState(`שלום  מועדון האקדמיה לטניס דודי סלע  מזמין אותך להצטרף למערכת הזמנות ממוחשבת. לחץ על הקישור להורדת האפליקציה https://lazuz.co.il`);
   const [permissionType, setPermissionType] = useState()
@@ -28,6 +28,7 @@ export const UsersPermission = () => {
   const [userPermissions, setUserPermissions] = useState([])
   const navigate = useNavigate()
   const [rowsTableUsers, setRowsTableUsers] = useState([])
+  const [iRowsTableUsers, initRowsTableUsers] = useState([])
   const [rowsUserPermissions, setRowsUserPermissions] = useState([])
   const [usersData, setUsersData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -44,6 +45,7 @@ export const UsersPermission = () => {
       if (res.length > 0) {
         const _rowsTableUsers = res.map((user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
         setRowsTableUsers(_rowsTableUsers);
+        initRowsTableUsers(_rowsTableUsers);
         setUsersData(res)
       }
     })
@@ -55,6 +57,7 @@ export const UsersPermission = () => {
         if (res.length > 0) {
           const _rowsTableUsers = res.map((user) => createUserData(user.fullName, user.primaryPhone, user.email, user.role, user.validTill))
           setRowsTableUsers(_rowsTableUsers);
+          initRowsTableUsers(_rowsTableUsers);
           setUsersData(res)
         }
       })
@@ -71,11 +74,17 @@ export const UsersPermission = () => {
     }
   }
 
-  const handleSearch = (e) => {
-    e.stopPropagation()
-    e.preventDefault()
-    setRowsTableUsers(rowsTableUsers.filter((user) => user.email.indexOf(email.trim()) !== -1));
-    if (email.trim() === "") handleGetClubUsers()
+  // ||
+  //     user.primaryPhone.indexOf(searchVal) !== -1 ||
+  //     user.fullName.indexOf(searchVal) !== -1
+  const isFoundUser = (user) => {
+    const foundUser=user && ((user.email && user.email.indexOf(searchVal) !== -1) || (user.primaryPhone && user.primaryPhone.indexOf(searchVal) !== -1) || (user.fullName && user.fullName.indexOf(searchVal) !== -1));
+    return foundUser;
+  }
+  const handleSearch = (e, searchVal) => {
+    const _rows = iRowsTableUsers.filter(user => isFoundUser(user))
+    setRowsTableUsers(_rows)
+    if (searchVal === "") handleGetClubUsers()
   }
   const createUserData = (fullName, primaryPhone, email, permission, validTill) => {
     return {
@@ -119,10 +128,10 @@ export const UsersPermission = () => {
       return (
         <>
           <Box className="main-component-fields-container">
-            <TextBox label="חפש שם משתמש לפי כתובת מייל" value={email} setValue={setEmail} />
+            <TextBox label="חפש שם משתמש לפי מייל, שם, וטלפון" value={searchVal} setValue={setSearchVal} />
           </Box>
           <Box className="">
-            <Button label="חפש" component="label" onClick={(e) => handleSearch(e)}>חפש</Button>
+            <Button label="חפש" component="label" onClick={(e) => handleSearch(e, searchVal)}>חפש</Button>
             <Button label="ביטול" component="label" onClick={() => handelCancelSearch()}>ביטול</Button>
           </Box></>
       )
@@ -205,7 +214,7 @@ export const UsersPermission = () => {
 //     return (
 //       <>
 //       <Box className="main-component-fields-container">
-//         <TextBox label="טלפון הלקוח" value={email} setValue={setEmail} />
+//         <TextBox label="טלפון הלקוח" value={email} setValue={setSearchVal} />
 //         <TextBox label="שם משתמש (בכניסה לאפליקציה)" value={userName} setValue={setUserName} />
 //         <TextBox label="תוכן מודעה" value={userMessage} setValue={setUserMessage} />
 //       </Box>

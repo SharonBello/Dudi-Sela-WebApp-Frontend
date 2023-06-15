@@ -32,13 +32,9 @@ async function signup(mailAndPswd, payload,  role='subscriber') {
     try {
         const user = await httpService.post('auth/signup', mailAndPswd, role)
         _handleLogin(mailAndPswd)
-        setTimeout(async () => {
-            // TODO addSubscriber
-            // const res = await courtService.addSubscriber(payload)
-            // console.log(res)
-        }, 5000)
         return user
     } catch (err) {
+        alert(err.message)
         throw err
     }
 }

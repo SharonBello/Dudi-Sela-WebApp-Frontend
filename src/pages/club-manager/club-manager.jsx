@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
@@ -29,6 +30,7 @@ export const ClubManager = () => {
   const [secondaryDrawerTitle, setSecondaryDrawerTitle] = useState()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const role = useSelector((storeState) => storeState.userModule.role)
 
   const openTodaysSchedule = () => {
     setUnFormattedDate(new Date())
@@ -139,11 +141,18 @@ export const ClubManager = () => {
     }
   }
 
+  const renderPriameryDrawer = () => {
+    if (role==='admin') {
+      return (
+        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />
+      )
+    }
+  }
   return (
     <div className="flex-column align-center container manager-container">
       <article className="side-drawer flex">
         {renderSecondarySideDrawer()}
-        <PrimarySideDrawer primaryDrawerList={primaryDrawerList} mainFuncs={mainFuncs} />
+        {renderPriameryDrawer()}
       </article>
       {renderScheduleManager()}
       {renderClubComponent()}

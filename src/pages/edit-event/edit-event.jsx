@@ -84,10 +84,12 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
   })
 
   const isIntersected = (selectedRow, stHr, edHr, instructor) => {
-    if ((selectedRow[hoursDataArr[stHr]] !== "" && selectedRow[hoursDataArr[stHr]] !== instructor) || (selectedRow[hoursDataArr[edHr]] !== "" && selectedRow[hoursDataArr[stHr]] !== instructor)) {
+    const START_HOUR_DAY = 6
+    if ((selectedRow[hoursDataArr[(stHr-START_HOUR_DAY)*2]] === "" || selectedRow[hoursDataArr[(stHr-START_HOUR_DAY)*2]] === instructor) && (selectedRow[hoursDataArr[((edHr-0.5)-START_HOUR_DAY)*2]] === "" || selectedRow[hoursDataArr[(edHr-START_HOUR_DAY)*2]] === instructor)) {
+      return false
+    } else {
       return true
     }
-    return false
   }
 
   const validateEvent = () => {
@@ -97,7 +99,6 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
       setMessageAlert("ההזמנה היא על שעות של ארוע אחר")
       return false
     }
-    // required fields, startHour, endHour, instructorIndices at least one instructor,
     if (!stHr && stHr>5 && stHr<24) {
       setMessageAlert("יש למלא שעת התחלה")
       return false

@@ -131,7 +131,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="email"
-                      label="כתובת מייל - חייבת להיות ייחודית במערכת"
+                      label="כתובת מייל - צריך להיות ייחודי במערכת"
                       name="email"
                       autoComplete="email"
                       autoFocus

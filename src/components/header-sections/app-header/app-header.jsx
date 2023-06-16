@@ -139,10 +139,10 @@ export const AppHeader = () => {
           <li><NavLink to={`/about`} onClick={handleClick} className="link-page">על האקדמיה</NavLink>
           </li>
 
-          {(role === "admin" && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
+          {((role === "admin" || role === "instructor") && loggedUser ? <li><NavLink to={`/manager`} className="link-page">מנהל ההזמנות</NavLink>
           </li> : null)}
 
-          {(role === "admin" && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
+          {((role === "admin" || role === "instructor") && loggedUser ? <li><NavLink to={`/dashboard`} className="link-page">לוח הודעות</NavLink>
           </li> : null)}
 
           <li>

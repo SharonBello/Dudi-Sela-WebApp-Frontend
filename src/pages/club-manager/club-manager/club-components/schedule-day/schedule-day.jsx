@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { reservationService } from '../../../../../services/reservation.service.js';
@@ -28,6 +29,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const [clubClasses, setClubClasses] = useState([])
+  const role = useSelector((storeState) => storeState.userModule.role)
 
   const getClubClasses = useCallback(async () => {
       let res = await courtService.getClubClasses()
@@ -185,7 +187,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
     setRows(_rows)
   }
   const renderModal = () => {
-    if (openEditEvent) {
+    if (openEditEvent  && role==='admin')  {
       return (
         <EditEventModal selectedRow={rows[selectedCourtNumber-1]} updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
       )

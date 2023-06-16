@@ -164,6 +164,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       id="phone"
+                      type="number"
                       label="טלפון"
                       name="phone"
                       autoComplete="phone"
@@ -175,7 +176,7 @@ export const Signup = () => {
                       required
                       fullWidth
                       name="password"
-                      label="סיסמא - צריכה להיות לפחות 6 אותיות וספרה"
+                      label="סיסמא - צריכה להיות לפחות 6 אותיות"
                       type="password"
                       id="password"
                       autoComplete="new-password"

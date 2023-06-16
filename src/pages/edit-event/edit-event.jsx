@@ -38,8 +38,9 @@ import { hoursData } from '../club-manager/club-manager/club-components/schedule
 import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
+import { hoursDataArr } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
-export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
+export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -82,13 +83,26 @@ export const EditEventModal = ({ updateEventInView, tennisInstructors, clubClass
     key: 'muirtl',
   })
 
+  const isIntersected = (selectedRow, stHr, edHr, instructor) => {
+    if ((selectedRow[hoursDataArr[stHr]] !== "" && selectedRow[hoursDataArr[stHr]] !== instructor) || (selectedRow[hoursDataArr[edHr]] !== "" && selectedRow[hoursDataArr[stHr]] !== instructor)) {
+      return true
+    }
+    return false
+  }
+
   const validateEvent = () => {
+    const stHr = startHour.split(":")[0]
+    const edHr = endHour.split(":")[0]
+    if (isIntersected(selectedRow, Number(stHr), Number(edHr), instructor)) {
+      setMessageAlert("ההזמנה היא על שעות של ארוע אחר")
+      return false
+    }
     // required fields, startHour, endHour, instructorIndices at least one instructor,
-    if (!startHour) {
+    if (!stHr && stHr>5 && stHr<24) {
       setMessageAlert("יש למלא שעת התחלה")
       return false
     }
-    if (!endHour) {
+    if (!edHr && edHr>6 && edHr<24) {
       setMessageAlert("יש למלא שעת סיום")
       return false
     }

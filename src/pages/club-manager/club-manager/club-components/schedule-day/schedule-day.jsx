@@ -187,7 +187,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const renderModal = () => {
     if (openEditEvent) {
       return (
-        <EditEventModal updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
+        <EditEventModal selectedRow={rows[selectedCourtNumber-1]} updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
       )
     }
   }

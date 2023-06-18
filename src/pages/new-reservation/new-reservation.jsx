@@ -373,9 +373,9 @@ export const NewReservation = () => {
 
   const renderCourtNumber = (option) => {
     if (option.type === TypeGames[0]) {
-      return (<>{option.name}</>)
+      return (<span className="optionTennis">{option.name}</span>)
     } else {
-      return (<>{option.name}-{option.type}</>)
+      return (<span className="optionType">{option.name} - {option.type}</span>)
     }
   }
   const renderCourtNumberSelect = () => {

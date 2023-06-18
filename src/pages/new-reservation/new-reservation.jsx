@@ -120,9 +120,11 @@ export const NewReservation = () => {
   const isIntersected = (reservation, _startHour, _endHour) => {
     return (_startHour > reservation.startHour && _endHour < reservation.endHour) || // intersect within
     (_startHour === reservation.startHour && _endHour === reservation.endHour) || // exact equal
-      (_startHour <= reservation.startHour && _endHour >= reservation.endHour) || // overlap right and left
+      (_startHour < reservation.startHour && _endHour > reservation.endHour) || // overlap right and left
       (_startHour > reservation.startHour && _startHour < reservation.endHour && _endHour > reservation.endHour) || // intersect right
-      (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
+      (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) || // intersect left
+      (_startHour === reservation.startHour) ||
+      (_endHour === reservation.endHour)
   }
 
   const handleCourtsSet= (courtsSet, reservation, hour) => {
@@ -301,26 +303,6 @@ export const NewReservation = () => {
     }
   }
 
-  const renderEndHourSelect = () => {
-    let _courtsData = JSON.parse(JSON.stringify(courtsData))
-    const _date = dayjs(date).format(DateFormat)
-    // if courts available for startTime (valText), return button
-    let _endHour
-    courtsData.start_time.map(val => {
-      const valText = hoursData[val - START_HOUR_DAY]
-      if (!endHour) {
-        _endHour = val + durationTime[0]
-      }
-      else { _endHour = endHour }
-      if (areCourtsAvailable(val, _endHour, _courtsData, _date) && !isLoading) {
-        return (
-          <button key={val} value={val} className="start-hour-btn flex" onClick={(e) => handleStartHourSelect(e)}>{valText}</button>
-        )
-      }
-      return null
-    })
-  }
-
   const renderStartHourSelect = () => {
     if (courtsData && !isLoading) {
       // let reservations = [] // await reservationService.queryByDate(_date)
@@ -339,7 +321,6 @@ export const NewReservation = () => {
                   )
                 }
               })}
-              {renderEndHourSelect()}
             </div>
           </>
         )
@@ -354,27 +335,11 @@ export const NewReservation = () => {
                     onClick={(e) => handleStartHourSelect(e, index)}>{valText}</button>
                 )
               })}
-              {renderEndHourSelect()}
             </div>
           </>
         )
       }
     }
-  }
-
-  const areCourtsAvailable = (_startHour, _endHour, _courtsData, _date) => {
-    reservationsByDate.forEach(reservation => {
-      const _reservation = JSON.parse(JSON.stringify(reservation))
-      _reservation.startHour = Number(reservation.startHour.split(":")[0])
-      _reservation.endHour = Number(reservation.endHour.split(":")[0])
-      if (isIntersected(_reservation, _startHour, _endHour)) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        if (index!==-1) {
-          _courtsData.court_numbers.splice(index, 1);
-        }
-      }
-    });
-    return (_courtsData.court_numbers.length > 0);
   }
 
   const handleDurationSelect = () => {

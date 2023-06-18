@@ -71,12 +71,13 @@ export const NewReservation = () => {
       let res = await courtService.getPunchCards()
       return res.data.punch_cards
     }, [])
+
   useEffect(() => {
-  if (punchCards.length === 0) {
-      getPunchCards().then(res => {
-      setPunchCards(res)
-      })
-  }
+    if (punchCards.length === 0) {
+        getPunchCards().then(res => {
+        setPunchCards(res)
+        })
+    }
   }, [getPunchCards])
 
   const handleCourtsData = useCallback(async (date) => {
@@ -124,31 +125,33 @@ export const NewReservation = () => {
       (_startHour < reservation.startHour && _endHour > reservation.startHour && _endHour < reservation.endHour) // intersect left
   }
 
+  const handleCourtsSet= (courtsSet, reservation, hour) => {
+    const _reservation = JSON.parse(JSON.stringify(reservation))
+    _reservation.startHour = Number(reservation.startHour.split(":")[0])
+    _reservation.endHour = Number(reservation.endHour.split(":")[0])
+    if (hour>=_reservation.startHour && hour<=_reservation.endHour) {
+      courtsSet.add(_reservation.courtNumber)
+    }
+  }
   const handleDateChange = async (_date, mCourtsData) => {
     if (!mCourtsData) {
       mCourtsData = courtsData
     }
     let _courtsData = JSON.parse(JSON.stringify(mCourtsData))
     const reservations = await reservationService.queryByDate(_date)
+    setReservationsByDate(reservations)
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
     const reservations2 = await reservationService.queryByDayofweek(dayOfWeek) // query club events
     const _start_time = []
     hoursVals.forEach(hour => {
-      const setCourts = new Set()
+      const courtsSet = new Set()
       reservations.forEach(reservation => {
-        if (hour>=reservation.startHour && hour<=reservation.endHour) {
-          setCourts.add(reservation.courtNumber)
-        }
+        handleCourtsSet(courtsSet, reservation, hour)
       });
       reservations2.forEach(reservation => {
-        const _reservation = JSON.parse(JSON.stringify(reservation))
-        _reservation.startHour = Number(reservation.startHour.split(":")[0])
-        _reservation.endHour = Number(reservation.endHour.split(":")[0])
-        if (hour>=_reservation.startHour && hour<=_reservation.endHour) {
-          setCourts.add(_reservation.courtNumber)
-        }
+        handleCourtsSet(courtsSet, reservation, hour)
       });
-      if (setCourts.size !== _courtsData.court_numbers.length) {// if all courts are not reserved
+      if (courtsSet.size !== _courtsData.court_numbers.length) {// if all courts are not reserved
         _start_time.push(hour)
       }
     })
@@ -163,9 +166,14 @@ export const NewReservation = () => {
     _courtsData['court_numbers'] = JSON.parse(JSON.stringify(initialCourtNumbers));
     let reservations = await reservationService.queryByDate(_date) // query user reservations
     reservations.forEach(reservation => {
-      if (isIntersected(reservation, _startHour, _endHour)) {
+      const _reservation = JSON.parse(JSON.stringify(reservation))
+      _reservation.startHour = Number(reservation.startHour.split(":")[0])
+      _reservation.endHour = Number(reservation.endHour.split(":")[0])
+      if (isIntersected(_reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
+        if (index!==-1) {
+          _courtsData.court_numbers.splice(index, 1);
+        }
       }
     });
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
@@ -176,7 +184,9 @@ export const NewReservation = () => {
       _reservation.endHour = Number(reservation.endHour.split(":")[0])
       if (reservation.dayOfWeek === dayOfWeek && isIntersected(_reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
+        if (index!==-1) {
+          _courtsData.court_numbers.splice(index, 1);
+        }
       }
     });
     setCourtsData(_courtsData);
@@ -321,7 +331,7 @@ export const NewReservation = () => {
           <>
             <div className="start-hour-container flex">
               {courtsData.start_time.map((val, index) => {
-                if ((val - START_HOUR_DAY) > currentHour) {
+                if (val > currentHour) {
                   const valText = hoursData[val - START_HOUR_DAY]
                   return (
                     <button key={val} value={val} className={(selectedStartHour === index) ? ("start-hour-btn flex active") : ("start-hour-btn flex")}
@@ -354,9 +364,14 @@ export const NewReservation = () => {
 
   const areCourtsAvailable = (_startHour, _endHour, _courtsData, _date) => {
     reservationsByDate.forEach(reservation => {
-      if (isIntersected(reservation, _startHour, _endHour)) {
+      const _reservation = JSON.parse(JSON.stringify(reservation))
+      _reservation.startHour = Number(reservation.startHour.split(":")[0])
+      _reservation.endHour = Number(reservation.endHour.split(":")[0])
+      if (isIntersected(_reservation, _startHour, _endHour)) {
         const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
-        _courtsData.court_numbers.splice(index, 1);
+        if (index!==-1) {
+          _courtsData.court_numbers.splice(index, 1);
+        }
       }
     });
     return (_courtsData.court_numbers.length > 0);

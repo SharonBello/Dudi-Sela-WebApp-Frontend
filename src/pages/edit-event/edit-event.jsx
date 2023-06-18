@@ -87,7 +87,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
     const START_HOUR_DAY = 6
     if ((selectedRow[hoursDataArr[(stHr-START_HOUR_DAY)*2]] === "" || selectedRow[hoursDataArr[(stHr-START_HOUR_DAY)*2]] === instructor) && (selectedRow[hoursDataArr[((edHr-0.5)-START_HOUR_DAY)*2]] === "" || selectedRow[hoursDataArr[(edHr-START_HOUR_DAY)*2]] === instructor)) {
       return false
-    } else {
+    } else if (!(Number(selectedEvent.startHour.split(":")[0]) === stHr && Number(selectedEvent.endHour.split(":")[0]) === edHr)) {
       return true
     }
   }
@@ -95,7 +95,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
   const validateEvent = () => {
     const stHr = startHour.split(":")[0]
     const edHr = endHour.split(":")[0]
-    if (isIntersected(selectedRow, Number(stHr), Number(edHr), instructor)) {
+    if (isIntersected(selectedRow, Number(stHr), Number(edHr), instructor) ) {
       setMessageAlert("ההזמנה היא על שעות של ארוע אחר")
       return false
     }

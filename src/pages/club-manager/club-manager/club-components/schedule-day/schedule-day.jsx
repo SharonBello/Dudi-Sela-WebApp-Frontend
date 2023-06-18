@@ -175,7 +175,11 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const updateEventInView = async (updatedEvent) => {
     if (updatedEvent) {
       let idx = events.current.findIndex(event => event.id === updatedEvent.id)
-      events.current[idx] = updatedEvent
+      if (idx!==-1) {
+        events.current[idx] = updatedEvent
+      } else {
+        events.current.push(updatedEvent)
+      }
       let _rows = JSON.parse(JSON.stringify(rows))
       fillEventSlots(_rows, updatedEvent)
       setRows(_rows)
@@ -183,6 +187,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
       updateScheduleView(mDate, dayOfWeek)
     }
   }
+
   const renderModal = () => {
     if (openEditEvent  && role==='admin')  {
       return (

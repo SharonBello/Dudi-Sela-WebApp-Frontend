@@ -13,14 +13,16 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
+import { courtService } from '../../../../../services/court.service.js';
 
 export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennisInstructors }) => {
-  const [rows, setRows] = useState(getRows())
+  const [rows, setRows] = useState([])
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState()
   const [isEventExists, setIsEventExists] = useState(false)
   const [columns, setColumns] = useState([])
+  const [clubCourts, setClubCourts] = useState()
   const events = useRef([])
   const START_HOUR_DAY = 6
   const [messageAlert, setMessageAlert] = useState()
@@ -131,8 +133,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
       }
     }
   }
-  const setTodaysEvents = async (mDate, dayOfWeek) => {
-    let _rows = getRows()
+  const setTodaysEvents = async (mDate, dayOfWeek, _rows) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     const _date = getCurrentDate()
@@ -144,10 +145,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     getReservationsByDate(_rows, mDate)
   }
 
-  const updateScheduleView = useCallback((mDate, dayOfWeek)=> {
+  const updateScheduleView = useCallback(async(mDate, dayOfWeek)=> {
     setOpenEditEvent(false)
-    initSchedule()
-    setTodaysEvents(mDate, dayOfWeek)
+    const _rows = await initSchedule()
+    setTodaysEvents(mDate, dayOfWeek, _rows)
   }, [])
 
   useEffect(() => {
@@ -158,9 +159,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     updateScheduleView(mDate, dayOfWeek)
   }, [mDate, dayOfWeek])
 
-  const initSchedule = () => {
-    let _rows = getRows()
-    setRows(_rows)
+  const initSchedule = async () => {
+    const res = await courtService.getClubCourts()
+    setClubCourts(res.data.club_courts)
+    return getRows(res.data.club_courts)
   }
 
   const closeEditEvent = () => {

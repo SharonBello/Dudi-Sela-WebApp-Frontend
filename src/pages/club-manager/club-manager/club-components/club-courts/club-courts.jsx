@@ -218,7 +218,7 @@ export const ClubCourts = () => {
     return (
       <div>
         הוסף מגרש
-        <TextBox label="שם" value={courtName} setValue={setCourtName} />
+        <TextBox type="number" label="מספר מגרש" value={courtName} setValue={setCourtName} />
         <SelectMenu inputLabel="סוג מגרש" defaultValue={courtType} values={TypeGames} setValue={setCourtType} />
         <Button disabled={isLoading} variant="contained" component="label" onClick={() => saveCourt()}>הוסף מגרש</Button>
       </div>

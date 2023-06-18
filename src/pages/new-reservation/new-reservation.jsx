@@ -22,7 +22,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { Loader } from '../../components/loader.jsx';
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
-import { DateFormat } from '../club-manager/club-manager/club-helper.jsx'
+import { DateFormat, TypeGames } from '../club-manager/club-manager/club-helper.jsx'
 import { AvailablePunchCards } from './available-punch-cards.jsx';
 import Button from '@mui/material/Button';
 
@@ -88,10 +88,10 @@ export const NewReservation = () => {
       const courtsData = {
         start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
         end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-        court_numbers: res.data.club_courts.map( court => court.name)
+        court_numbers: res.data.club_courts
       }
       setCourtsData(courtsData);
-      if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts.map( court => court.name))
+      if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts)
       let _date
       if (!date) {
         date = new Date()
@@ -173,7 +173,7 @@ export const NewReservation = () => {
       _reservation.startHour = Number(reservation.startHour.split(":")[0])
       _reservation.endHour = Number(reservation.endHour.split(":")[0])
       if (isIntersected(_reservation, _startHour, _endHour)) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        const index = _courtsData.court_numbers.findIndex(r => r.name === reservation.courtNumber)
         if (index!==-1) {
           _courtsData.court_numbers.splice(index, 1);
         }
@@ -185,7 +185,7 @@ export const NewReservation = () => {
       _reservation.startHour = Number(reservation.startHour.split(":")[0])
       _reservation.endHour = Number(reservation.endHour.split(":")[0])
       if (reservation.dayOfWeek === dayOfWeek && isIntersected(_reservation, _startHour, _endHour)) {
-        const index = _courtsData.court_numbers.indexOf(reservation.courtNumber)
+        const index = _courtsData.court_numbers.findIndex(r => r.name === reservation.courtNumber)
         if (index!==-1) {
           _courtsData.court_numbers.splice(index, 1);
         }
@@ -278,7 +278,7 @@ export const NewReservation = () => {
   const handleCourtNumberChange = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setCourtNumber(+e.target.innerHTML)
+    setCourtNumber(+e.target.value)
   }
 
   const validateForm = (e) => {
@@ -371,6 +371,13 @@ export const NewReservation = () => {
     }
   }
 
+  const renderCourtNumber = (option) => {
+    if (option.type === TypeGames[0]) {
+      return (<>{option.name}</>)
+    } else {
+      return (<>{option.name}-{option.type}</>)
+    }
+  }
   const renderCourtNumberSelect = () => {
     if (courtsData && !isLoading) {
       return (
@@ -379,7 +386,7 @@ export const NewReservation = () => {
           <div className="court-number-container flex">
             {courtsData.court_numbers.map(option => {
               return (
-                <button className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)}>{option}</button>
+                <button className="court-number-btn flex" onClick={(e) => handleCourtNumberChange(e)} value={option.name}>{renderCourtNumber(option)}</button>
               )
             })}
           </div>

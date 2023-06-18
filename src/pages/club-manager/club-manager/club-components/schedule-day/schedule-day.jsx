@@ -8,7 +8,7 @@ import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js
 import { Loader } from '../../../../../components/loader.jsx';
 import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
-import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
+import { FrequencyTypes, EmptyEvent, EventTypes } from '../../club-helper.jsx'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -89,7 +89,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         headerName: col.headerName,
         cellClassName: (params) => {
           if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
-            return 'single-event'; //TODO single-event, move tennisInstructors to parent component
+            return 'single-event';
           }
           if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
             return 'week-event';
@@ -148,8 +148,11 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     setOpenEditEvent(false)
     initSchedule()
     setTodaysEvents(mDate, dayOfWeek)
-    getColumns()
   }, [])
+
+  useEffect(() => {
+    getColumns()
+  }, [tennisInstructors, clubClasses])
 
   useEffect(() => {
     updateScheduleView(mDate, dayOfWeek)
@@ -165,11 +168,15 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   }
 
   const updateEventInView = async (updatedEvent) => {
-    let idx = events.current.findIndex(event => event.id === updatedEvent.id)
-    events.current[idx] = updatedEvent
-    let _rows = JSON.parse(JSON.stringify(rows))
-    fillEventSlots(_rows, updatedEvent)
-    setRows(_rows)
+    if (updatedEvent) {
+      let idx = events.current.findIndex(event => event.id === updatedEvent.id)
+      events.current[idx] = updatedEvent
+      let _rows = JSON.parse(JSON.stringify(rows))
+      fillEventSlots(_rows, updatedEvent)
+      setRows(_rows)
+    } else {
+      updateScheduleView(mDate, dayOfWeek)
+    }
   }
   const renderModal = () => {
     if (openEditEvent  && role==='admin')  {

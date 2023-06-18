@@ -31,7 +31,6 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
 import dayjs from 'dayjs'
-import { EventTypes, FrequencyTypes, PaymentStatus, DateFormat } from '../club-manager/club-manager/club-helper.jsx'
 import { SelectMenu } from '../shared-components/select-menu'
 import { courtService } from '../../services/court.service';
 import { hoursData } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
@@ -239,6 +238,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
       setMessageAlert("הארוע לא נמחק")
     }
     setShowMessageAlert(true)
+    updateEventInView()
   }
   const renderDeleteEvent = () => {
     if (isEventExists && isClubEvent)

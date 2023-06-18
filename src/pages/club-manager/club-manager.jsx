@@ -18,7 +18,7 @@ import { ClubHours } from './club-manager/club-components/club-hours/club-hours.
 import { PunchCards } from './club-manager/club-components/punch-cards/punch-cards.jsx'
 import { ClubCourts } from './club-manager/club-components/club-courts/club-courts.jsx'
 import { SalesDetails } from './club-manager/club-components/sales-details/sales-details.jsx'
-import { primaryDrawerList, secondaryDrawerList, DateFormat } from './club-manager/club-helper.jsx'
+import { primaryDrawerList, secondaryDrawerList, DateFormat, ColorMenu } from './club-manager/club-helper.jsx'
 import { courtService } from '../../services/court.service.js'
 import { instructorService } from '../../services/instructor.service.js';
 
@@ -139,6 +139,19 @@ export const ClubManager = () => {
     }
   }
 
+  const renderColorMenu = () => {
+    return (
+      ColorMenu.map((item) => {
+        return (
+          <div className="flex colorIndex">
+            <div className="reservationColor" style={{"backgroundColor": item.color}}></div>
+            <div className="reservationLabel">{item.label}</div>
+          </div>
+        )
+      })
+    )
+  }
+
   const renderScheduleManager = () => {
     if (showScheduleManager) {
       return (
@@ -159,6 +172,9 @@ export const ClubManager = () => {
             </li>
           </ul>
           <ScheduleDay mDate={date} dayOfWeek={weekDay.toLowerCase()} dayInHebrew={weekDayInHebrew[weekDay]} clubClasses={clubClasses} tennisInstructors={tennisInstructors} />
+          <div className="color-menu flex-column">
+            {renderColorMenu()}
+          </div>
         </>
       )
     }
@@ -171,6 +187,7 @@ export const ClubManager = () => {
       )
     }
   }
+
   return (
     <div className="flex-column align-center container manager-container">
       <article className="side-drawer flex">

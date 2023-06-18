@@ -68,7 +68,7 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                             </Typography>
                         </Box>
                     </ToggleButton>
-                    <ToggleButton value="לא זמין" onClick={(e) => handleScheduleType(e, "לא זמין")}>
+                    <ToggleButton disabled={true} value="לא זמין" onClick={(e) => handleScheduleType(e, "לא זמין")}>
                         <Box className="flex align-center">
                             <EventBusyIcon />
                             <Typography>

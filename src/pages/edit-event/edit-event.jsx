@@ -38,6 +38,7 @@ import { reservationService } from "../../services/reservation.service"
 import { InputBox } from '../shared-components/input-box.jsx';
 import { instructorService } from '../../services/instructor.service.js';
 import { hoursDataArr } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import { EventTypes } from '../club-manager/club-manager/club-helper.jsx';
 
 export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
 
@@ -153,6 +154,9 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
     if (validateEvent() === true) {
       const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
       price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), shouldJoinClass, "id": selectedEvent.id}
+      if (eventType === EventTypes[2]) {
+        payload.title = "-" + payload.title + '-'
+      }
       saveClubEvent(payload)
       updateEventInView(payload)
     } else {

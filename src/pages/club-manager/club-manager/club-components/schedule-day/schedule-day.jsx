@@ -90,11 +90,14 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         field: col.hour,
         headerName: col.headerName,
         cellClassName: (params) => {
+          if (params.value[0] === "-" && params.value[params.value.length-1] === "-"  && col.headerName !== "מספר מגרש") {
+            return 'not-available-event';
+          }
           if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
             return 'single-event';
           }
-          if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
-            return 'week-event';
+         if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
+            return 'weekly-event';
           }
           return;
         },

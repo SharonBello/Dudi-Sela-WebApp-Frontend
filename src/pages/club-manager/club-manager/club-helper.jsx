@@ -112,7 +112,7 @@ export const DemoClubCourses = [
 
 export const DemoInstructors = ["תומר צירקין","אור","יואב בן צבי","יוני","דודי סלע"]
 
-export const EventTypes = ["הזמנה", "הזמנה פנימית", "לא זמין"]
+export const EventTypes = ["הזמנה חיצונית", "הזמנה פנימית", "לא זמין"]
 
 export const FrequencyTypes = ["חד פעמי", "שבועי"]
 
@@ -138,4 +138,4 @@ export const ToLocaleIsrael = (_date) => {
   return _date.toLocaleDateString('he-IL', {timeZone:'Asia/Jerusalem'}).replace(/\D/g,'/')
 }
 
-export const ColorMenu = [{"label": "הזמנה", "color": "lightgrey"}, {"label": "הזמנה פנימית", "color": "rgb(227, 56, 56)"}, {"label": "לא זמין", "color": "purple"} ]
+export const ColorMenu = [{"label": "הזמנה חיצונית", "color": "lightgrey"}, {"label": "הזמנה פנימית", "color": "rgb(227, 56, 56)"}, {"label": "לא זמין", "color": "purple"} ]

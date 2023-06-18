@@ -206,11 +206,14 @@ button.submit-button.small-margin {
     margin-right: 8px !important;
   }
 
-  .week-event {
+  .weekly-event {
     background-color: rgb(227, 56, 56);
     color: #fff;
   }
   .single-event {
     background-color: lightgrey;
+  }
+  .not-available-event {
+    background-color: purple;
   }
 }

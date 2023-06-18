@@ -78,7 +78,7 @@ export const Dashboard = () => {
             return 'single-event';
           }
           if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
-            return 'week-event';
+            return 'weekly-event';
           }
           return;
         },

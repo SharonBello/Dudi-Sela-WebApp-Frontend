@@ -52,11 +52,11 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                     value={eventType}
                     exclusive
                     className="flex align-center toggle-schedule-type">
-                    <ToggleButton value="הזמנה" onClick={(e) => handleScheduleType(e, "הזמנה")}>
+                    <ToggleButton value="הזמנה חיצונית" onClick={(e) => handleScheduleType(e, "הזמנה חיצונית")}>
                         <Box className="flex align-center justify-between">
                             <CalendarMonthIcon />
                             <Typography>
-                                הזמנה
+                                הזמנה חיצונית
                             </Typography>
                         </Box>
                     </ToggleButton>
@@ -68,7 +68,7 @@ export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJ
                             </Typography>
                         </Box>
                     </ToggleButton>
-                    <ToggleButton disabled={true} value="לא זמין" onClick={(e) => handleScheduleType(e, "לא זמין")}>
+                    <ToggleButton value="לא זמין" onClick={(e) => handleScheduleType(e, "לא זמין")}>
                         <Box className="flex align-center">
                             <EventBusyIcon />
                             <Typography>

@@ -50,6 +50,7 @@ export const NewReservation = () => {
   const [showDuration, setShowDuration] = useState(false)
   const [selectedStartHour, setSelectedStartHour] = useState();
   const [reservationsByDate, setReservationsByDate] = useState([])
+  const [reservationsByDayOfWeek, setReservationsByDayOfWeek] = useState([])
   const [clubCourts, setClubCourts] = useState([])
   const [punchCards, setPunchCards] = useState([])
   const [showPunchCards, setShowPunchCards] = useState(false)
@@ -144,6 +145,7 @@ export const NewReservation = () => {
     setReservationsByDate(reservations)
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
     const reservations2 = await reservationService.queryByDayofweek(dayOfWeek) // query club events
+    setReservationsByDayOfWeek(reservations2)
     const _start_time = []
     hoursVals.forEach(hour => {
       const courtsSet = new Set()
@@ -166,8 +168,7 @@ export const NewReservation = () => {
     let _courtsData = {}
     _courtsData = JSON.parse(JSON.stringify(courtsData))
     _courtsData['court_numbers'] = JSON.parse(JSON.stringify(initialCourtNumbers));
-    let reservations = await reservationService.queryByDate(_date) // query user reservations
-    reservations.forEach(reservation => {
+    reservationsByDate.forEach(reservation => {
       const _reservation = JSON.parse(JSON.stringify(reservation))
       _reservation.startHour = Number(reservation.startHour.split(":")[0])
       _reservation.endHour = Number(reservation.endHour.split(":")[0])
@@ -179,8 +180,7 @@ export const NewReservation = () => {
       }
     });
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
-    reservations = await reservationService.queryByDayofweek(dayOfWeek) // query club events
-    reservations.forEach(reservation => {
+    reservationsByDayOfWeek.forEach(reservation => {
       const _reservation = JSON.parse(JSON.stringify(reservation))
       _reservation.startHour = Number(reservation.startHour.split(":")[0])
       _reservation.endHour = Number(reservation.endHour.split(":")[0])

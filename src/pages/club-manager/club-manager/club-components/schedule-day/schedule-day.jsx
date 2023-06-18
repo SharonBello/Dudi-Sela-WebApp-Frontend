@@ -8,19 +8,16 @@ import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js
 import { Loader } from '../../../../../components/loader.jsx';
 import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
-import { instructorService } from '../../../../../services/instructor.service.js';
 import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
-import { courtService } from '../../../../../services/court.service.js';
 
-export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
+export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennisInstructors }) => {
   const [rows, setRows] = useState(getRows())
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
-  const [tennisInstructors, setTennisInstructors] = useState([])
   const [selectedEvent, setSelectedEvent] = useState()
   const [isEventExists, setIsEventExists] = useState(false)
   const [columns, setColumns] = useState([])
@@ -28,17 +25,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
   const START_HOUR_DAY = 6
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
-  const [clubClasses, setClubClasses] = useState([])
   const role = useSelector((storeState) => storeState.userModule.role)
-
-  const getClubClasses = useCallback(async () => {
-      let res = await courtService.getClubClasses()
-      setClubClasses(res.data.club_classes)
-  }, []);
-  const getInstructors = useCallback(async () => {
-    let instructors = await instructorService.getInstructors()
-    setTennisInstructors(instructors)
-  }, [setTennisInstructors])
 
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
@@ -159,8 +146,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew }) => {
 
   const updateScheduleView = useCallback((mDate, dayOfWeek)=> {
     setOpenEditEvent(false)
-    getInstructors()
-    getClubClasses()
     initSchedule()
     setTodaysEvents(mDate, dayOfWeek)
     getColumns()

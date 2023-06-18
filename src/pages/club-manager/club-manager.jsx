@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -19,6 +19,8 @@ import { PunchCards } from './club-manager/club-components/punch-cards/punch-car
 import { ClubCourts } from './club-manager/club-components/club-courts/club-courts.jsx'
 import { SalesDetails } from './club-manager/club-components/sales-details/sales-details.jsx'
 import { primaryDrawerList, secondaryDrawerList, DateFormat } from './club-manager/club-helper.jsx'
+import { courtService } from '../../services/court.service.js'
+import { instructorService } from '../../services/instructor.service.js';
 
 export const ClubManager = () => {
   const [date, setDate] = useState(getCurrentDate())
@@ -31,6 +33,27 @@ export const ClubManager = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const role = useSelector((storeState) => storeState.userModule.role)
+  const [clubClasses, setClubClasses] = useState([])
+  const [tennisInstructors, setTennisInstructors] = useState([])
+
+  const getClubClasses = useCallback(async () => {
+    let res = await courtService.getClubClasses()
+    setClubClasses(res.data.club_classes)
+  }, []);
+
+  const getInstructors = useCallback(async () => {
+    let instructors = await instructorService.getInstructors()
+    setTennisInstructors(instructors)
+  }, [setTennisInstructors])
+
+  const getData = useCallback(()=> {
+    getInstructors()
+    getClubClasses()
+  }, [])
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   const openTodaysSchedule = () => {
     setUnFormattedDate(new Date())
@@ -135,7 +158,7 @@ export const ClubManager = () => {
                 alt="logo" />
             </li>
           </ul>
-          <ScheduleDay mDate={date} dayOfWeek={weekDay.toLowerCase()} dayInHebrew={weekDayInHebrew[weekDay]}/>
+          <ScheduleDay mDate={date} dayOfWeek={weekDay.toLowerCase()} dayInHebrew={weekDayInHebrew[weekDay]} clubClasses={clubClasses} tennisInstructors={tennisInstructors} />
         </>
       )
     }

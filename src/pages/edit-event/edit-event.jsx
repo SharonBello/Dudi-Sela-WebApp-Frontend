@@ -121,7 +121,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
     }
     else if (loggedUser || uid) {
       try {
-        // validate that event of same date/time doesnt exist
+        // TODO validate that event of same date/time doesnt exist
         // let resExists = await eventService.isEventExists(uid, payload)
         // if (!resExists.data.isExists) {
         let res
@@ -141,8 +141,6 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
       catch (err) {
         console.log(err)
         // setShowFailureAlert(true)
-      } finally {
-        setIsLoading(false)
       }
     }
   }

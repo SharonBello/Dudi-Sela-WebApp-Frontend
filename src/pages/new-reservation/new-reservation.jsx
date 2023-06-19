@@ -25,6 +25,7 @@ import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
 import { DateFormat, TypeGames } from '../club-manager/club-manager/club-helper.jsx'
 import { AvailablePunchCards } from './available-punch-cards.jsx';
 import Button from '@mui/material/Button';
+import { weekDayLowerCase } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
@@ -34,7 +35,11 @@ export const NewReservation = () => {
   const [durationInHrs, setDurationInHrs] = useState(1)
   const [courtNumber, setCourtNumber] = useState()
   const [date, setDate] = useState(() => new Date());
-  const [courtsData, setCourtsData] = useState()
+  const [courtsData, setCourtsData] = useState({
+    start_time: [],
+    end_time: [],
+    court_numbers: []
+  })
   const [initialCourtNumbers, setInitialCourtNumbers] = useState([])
   const { width } = useWindowDimensions()
   const todaysDate = dayjs().format('DD-MM-YYYY')
@@ -54,9 +59,7 @@ export const NewReservation = () => {
   const [clubCourts, setClubCourts] = useState([])
   const [punchCards, setPunchCards] = useState([])
   const [showPunchCards, setShowPunchCards] = useState(false)
-
   const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
-  const hoursVals = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
@@ -85,12 +88,9 @@ export const NewReservation = () => {
     setIsLoading(true)
     try {
       let res = await courtService.getClubCourts()
-      const courtsData = {
-        start_time: [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
-        end_time: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-        court_numbers: res.data.club_courts
-      }
-      setCourtsData(courtsData);
+      const _courtsData = JSON.parse(JSON.stringify(courtsData))
+      _courtsData.court_numbers = res.data.club_courts
+      setCourtsData(_courtsData);
       if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts)
       let _date
       if (!date) {
@@ -105,8 +105,24 @@ export const NewReservation = () => {
     }
   }, [])
 
+  const handleClubHours = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const _date = dayjs(date).format(DateFormat)
+      const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
+      const hours = await getActiveHours(weekDayLowerCase[dayOfWeek])
+      const _courtsData = JSON.parse(JSON.stringify(courtsData))
+      _courtsData.start_time = hours
+      _courtsData.end_time = hours.map(h => h+1)
+      setCourtsData(_courtsData);
+    } catch (err) {
+      console.error(err)
+    }
+  }, [])
+
   useEffect(() => {
     handleCourtsData()
+    handleClubHours()
     }, [])
 
   const theme = createTheme({
@@ -136,6 +152,34 @@ export const NewReservation = () => {
       courtsSet.add(_reservation.courtNumber)
     }
   }
+
+  const getActiveDay = (_clubHours, dayOfWeek) => {
+    let activeDayIdx;
+    let idx=0;
+    while (idx < _clubHours.data.length) {
+      if (_clubHours.data[idx].days.includes(dayOfWeek)) {
+        activeDayIdx = idx;
+        break;
+      }
+      idx++;
+    }
+    return activeDayIdx;
+  }
+
+  const getActiveHours = async (dayOfWeek) => {
+    let _clubHours = await courtService.getClubHours()
+    let activeDayIdx = getActiveDay(_clubHours, dayOfWeek)
+    if (activeDayIdx !== undefined) {
+      let stHr = _clubHours.data[activeDayIdx].hours.startHour.split(":")[0]
+      let edHr = _clubHours.data[activeDayIdx].hours.endHour.split(":")[0]
+      let hours = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+      hours = hours.filter(h => h>=stHr && h<edHr)
+      return hours
+    } else {
+      return []
+    }
+  }
+
   const handleDateChange = async (_date, mCourtsData) => {
     if (!mCourtsData) {
       mCourtsData = courtsData
@@ -147,7 +191,8 @@ export const NewReservation = () => {
     const reservations2 = await reservationService.queryByDayofweek(dayOfWeek) // query club events
     setReservationsByDayOfWeek(reservations2)
     const _start_time = []
-    hoursVals.forEach(hour => {
+    const hours = await getActiveHours(weekDayLowerCase[dayOfWeek])
+    hours.forEach(hour => {
       const courtsSet = new Set()
       reservations.forEach(reservation => {
         handleCourtsSet(courtsSet, reservation, hour)

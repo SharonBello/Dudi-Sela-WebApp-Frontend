@@ -69,6 +69,7 @@ export const columnsData = [{hour: 'courtNumber', headerName:'מספר מגרש'
   {hour: 'eightThirtyPM', headerName:'20:30'},{hour: 'ninePM', headerName:'21:00'},{hour: 'nineThirtyPM', headerName:'21:30'},{hour: 'tenPM', headerName:'22:00'},
   {hour: 'tenThirtyPM', headerName:'22:30'},{hour: 'elevenPM', headerName:'23:00'},{hour: 'elevenThirtyPM', headerName:'23:30'}]
 export const weekDayInHebrew = {'Sunday':"יום ראשון",'Monday':"יום שני",'Tuesday':"יום שלישי",'Wednesday':"יום רביעי",'Thursday':"יום חמישי",'Friday':"יום שישי",'Saturday':"יום שבת"}
+export const weekDayLowerCase = {'sunday':"ראשון",'monday':"שני",'tuesday':"שלישי",'wednesday':"רביעי",'thursday':"חמישי",'friday':"שישי",'saturday':"שבת"}
 
 const mockScheduleDay = []
 for (let courtNumber = 1; courtNumber < 7; courtNumber++) {

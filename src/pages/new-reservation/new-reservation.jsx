@@ -26,6 +26,11 @@ import { DateFormat, TypeGames } from '../club-manager/club-manager/club-helper.
 import { AvailablePunchCards } from './available-punch-cards.jsx';
 import Button from '@mui/material/Button';
 import { weekDayLowerCase } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import { CourtPrice } from '../edit-event/court-price.jsx';
 
 export const NewReservation = () => {
   const START_HOUR_DAY = 6
@@ -58,12 +63,15 @@ export const NewReservation = () => {
   const [reservationsByDayOfWeek, setReservationsByDayOfWeek] = useState([])
   const [clubCourts, setClubCourts] = useState([])
   const [punchCards, setPunchCards] = useState([])
+  const [priceConstraints, setPriceConstraints] = useState([])
+  const [showConfirmBox, setShowConfirmBox] = useState(false)
   const [showPunchCards, setShowPunchCards] = useState(false)
   const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
+  const role = useSelector((storeState) => storeState.userModule.role)
 
   const getSaturdayDate = () => {
     return dayjs().day(6)
@@ -72,19 +80,32 @@ export const NewReservation = () => {
   const saturdayDate = getSaturdayDate()
 
   const getPunchCards = useCallback(async () => {
-      let res = await courtService.getPunchCards()
-      return res.data.punch_cards
-    }, [])
+    let res = await courtService.getPunchCards()
+    return res.data.punch_cards
+  }, [])
 
   useEffect(() => {
     if (punchCards.length === 0) {
         getPunchCards().then(res => {
-        setPunchCards(res)
+          setPunchCards(res)
         })
     }
   }, [getPunchCards])
 
-  const handleCourtsData = useCallback(async (date) => {
+  const getPriceConstraints = useCallback(async () => {
+    let res = await courtService.getPriceConstraints()
+    return res.data.price_constraints
+  }, [])
+
+  useEffect(() => {
+    if (priceConstraints.length === 0) {
+        getPriceConstraints().then(res => {
+          setPriceConstraints(res)
+        })
+    }
+  }, [getPriceConstraints])
+
+const handleCourtsData = useCallback(async (date) => {
     setIsLoading(true)
     try {
       let res = await courtService.getClubCourts()
@@ -336,12 +357,88 @@ export const NewReservation = () => {
     return true
   }
 
+  const handleCancelPay = () => {
+    setShowConfirmBox(false)
+  }
+  const handleConfirmPay = () => {
+    setShowConfirmBox(false)
+    setIsLoading(true)
+    addReservation()
+  }
+  const getPrice = (memberType, dayOfWeek) => {
+    let idx=0
+    let courtPrice
+    while (idx < priceConstraints.length) {
+      if (priceConstraints[idx].memberType === memberType && priceConstraints[idx].days.includes(weekDayLowerCase[dayOfWeek])
+      && Number(priceConstraints[idx].hours.startHour.split(":")[0]) <= startHour && Number(priceConstraints[idx].hours.endHour.split(":")[0]) >= endHour) {
+       courtPrice = priceConstraints[idx].price
+       break
+      }
+      idx++
+    }
+    if (courtPrice === undefined) {
+      memberType='כל החברים'
+      idx=0
+      while (idx < priceConstraints.length) {
+        if (priceConstraints[idx].memberType === memberType) {
+         courtPrice = priceConstraints[idx].price
+         break
+        }
+        idx++
+      }
+    }
+    return courtPrice
+  }
+
+  const renderConfirmPayment = (dayOfWeek) => {
+    let memberType
+    switch (role) {
+      case 'admin':
+        memberType = 'מנהל'
+        break;
+      case 'instructor':
+        memberType = 'מאמן'
+        break;
+      case 'student':
+        memberType = 'סטודנט\\חייל'
+        break;
+      case 'subscriber':
+        memberType = 'כל החברים'
+        break;
+      default:
+        memberType = 'כל החברים'
+        break;
+    }
+    const courtPrice = getPrice(memberType, dayOfWeek)
+    if (showConfirmBox) {
+      return (
+        <Dialog
+            open={showConfirmBox}
+            onClose={handleCancelPay}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {`התשלום עבור המגרש הוא ${courtPrice} שקלים. האם מאשר?`}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleConfirmPay} autoFocus>
+                    כן
+                </Button>
+                <Button onClick={handleCancelPay}>לא</Button>
+            </DialogActions>
+        </Dialog>
+    )
+    }
+  }
+
   const handleSubmit = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    if (validateForm() === true) {
-      setIsLoading(true)
-      addReservation()
+    if (validateForm()) {
+      setShowConfirmBox(true)
     } else {
       setMessageAlert(validateForm())
       setShowMessageAlert(true)
@@ -350,7 +447,6 @@ export const NewReservation = () => {
 
   const renderStartHourSelect = () => {
     if (courtsData && !isLoading) {
-      // let reservations = [] // await reservationService.queryByDate(_date)
       const currentHour = dayjs().hour()
       const _date = dayjs(date).format(DateFormat)
       if (_date === shownDate) {
@@ -613,11 +709,14 @@ export const NewReservation = () => {
       )
     }
   }
+  const _date = dayjs(date).format(DateFormat)
+  const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
   return (
     <>
       {renderSuccessAlert()}
       {renderFailureAlert()}
       {renderMessageAlert()}
+      {renderConfirmPayment(dayOfWeek)}
       {renderPunchCards()}
       <form dir="rtl" className="container flex-column form-container" onSubmit={handleSubmit}>
         {renderIsLoading()}

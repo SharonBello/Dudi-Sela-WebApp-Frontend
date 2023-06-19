@@ -284,7 +284,7 @@ const handleCourtsData = useCallback(async (date) => {
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate })
+            const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": -creditNum, "mail": loggedUser.data.uid.email, "date": todaysDate, "punch_cards": [] })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
@@ -694,12 +694,15 @@ const handleCourtsData = useCallback(async (date) => {
   }
 
   const selectPunchCard = async (e, card) => {
-    const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate })
+    const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.data.uid.email, "date": todaysDate, "punch_cards": [] })
+    let _message
     if (resCredit.data.result === 0) {
-      let _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`
-      setShowSuccessAlert(true)
-      setSuccessMessage(_message)
+      _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`
+    } else {
+      _message = `קניית הכרטיסייה נכשלה`
     }
+    setShowSuccessAlert(true)
+    setSuccessMessage(_message)
   }
 
   const renderPunchCards = () => {

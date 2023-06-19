@@ -256,9 +256,8 @@ export const NewReservation = () => {
     }
     else if (loggedUser || uid) {
       try {
-        // TODO: await reservationService.isReservationExists(uid, payload)
-        let resExists = false
-        if (!resExists) { //!resExists.data.isExists
+        let resExists = await reservationService.isReservationExists(uid, payload)
+        if (!resExists.data.isExists) { //!resExists.data.isExists
           let _userCredit = await reservationService.getCredit(uid)
           const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
           let _successMessage = ""
@@ -282,6 +281,7 @@ export const NewReservation = () => {
         } else {
           setMessageAlert("המגרש כבר לא פנוי להזמנה")
           setShowMessageAlert(true)
+          setIsLoading(false)
         }
       }
       catch (err) {
@@ -323,7 +323,7 @@ export const NewReservation = () => {
   const handleCourtNumberChange = (e) => {
     e.stopPropagation()
     e.preventDefault()
-    setCourtNumber(+e.target.value)
+    setCourtNumber(Number(e.currentTarget.value))
   }
 
   const validateForm = (e) => {
@@ -598,7 +598,6 @@ export const NewReservation = () => {
   }
 
   const selectPunchCard = async (e, card) => {
-    let _userCredit = await reservationService.getCredit(uid)
     const resCredit = await reservationService.changeCredit(uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate })
     if (resCredit.data.result === 0) {
       let _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`

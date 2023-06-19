@@ -95,7 +95,7 @@ async function addNewReservation(data, role='subscriber') {
     }
 }
 
-async function isReservationExists(uid, data, role='admin') {
+async function isReservationExists(uid, data, role='subscriber') {
     try {
         let res = await httpService.post('reservations/reservation/exists?docId=' + uid, data, role)
         return res

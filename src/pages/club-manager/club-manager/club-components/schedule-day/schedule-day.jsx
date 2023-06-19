@@ -83,8 +83,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     }
   })
 
-  const getColumns = useCallback(async () => {
-    let _columns = [];
+  const getColumns = useCallback(() => {
+    const _columns = [];
     columnsData.forEach(col => {
       _columns.push({
         field: col.hour,
@@ -105,10 +105,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         width: 140,
       })
     });
-    let _clubHours = await courtService.getClubHours()
-    let stHr = _clubHours.data[0].hours.startHour.split(":")[0]
-    let edHr = _clubHours.data[0].hours.endHour.split(":")[0]
-    _columns = _columns.filter(c => Number(c.headerName.split(":")[0]) >=stHr && Number(c.headerName.split(":")[0])<edHr)
     setColumns(_columns);
   }, [tennisInstructors, clubClasses])
 

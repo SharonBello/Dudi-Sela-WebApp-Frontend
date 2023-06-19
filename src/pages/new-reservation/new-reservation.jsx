@@ -279,12 +279,12 @@ const handleCourtsData = useCallback(async (date) => {
       try {
         let resExists = await reservationService.isReservationExists(uid, payload)
         if (!resExists.data.isExists) { //!resExists.data.isExists
-          let _userCredit = await reservationService.getCredit(uid)
+          let _userCredit = await reservationService.getCredit(uid.uid)
           const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
           let _successMessage = ""
           // use credit if exists
           if ((_userCredit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate })
+            const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
@@ -694,7 +694,7 @@ const handleCourtsData = useCallback(async (date) => {
   }
 
   const selectPunchCard = async (e, card) => {
-    const resCredit = await reservationService.changeCredit(uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate })
+    const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate })
     if (resCredit.data.result === 0) {
       let _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`
       setShowSuccessAlert(true)

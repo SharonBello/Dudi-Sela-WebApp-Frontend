@@ -118,8 +118,7 @@ async function changeCredit(uid, data, role='subscriber') {
 async function getCredit(uid) {
     try {
         let data = await httpService.get('reservations/usercredit?docId=' + uid)
-        let user_credit = data.data.user_credit
-        return user_credit
+        return data.data
     } catch (err) {
         throw err
     }

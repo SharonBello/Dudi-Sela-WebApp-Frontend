@@ -232,6 +232,29 @@ export const PunchCards = () => {
     )
   }
 
+  const renderCardCredit = (punchCards) => {
+    return (
+      Object.keys(punchCards).map((key) => {
+        return (
+          <button className="card-type-btn flex-column">
+            שם כרטיסייה: {key}
+            <span>כמות קרדיט: {punchCards[key]}</span>
+          </button>
+        )
+      }))
+  }
+  const renderCardsCredit = () => {
+    if (usersCredit) {
+      return (
+        usersCredit && Object.entries(usersCredit).map(keyVal =>
+          <span className="flex-row">
+            {renderCardCredit(keyVal[1].punch_cards)}
+          </span>
+        )
+      )
+    }
+  }
+
   return (
     <Box className="punch-card-box container">
       {renderMessageAlert()}
@@ -252,6 +275,7 @@ export const PunchCards = () => {
         <Box className="club-credit">
           <Typography id="club-title" className="club-title" variant="h6" component="h2">זיכויים</Typography>
           {renderUsersCredit()}
+          {renderCardsCredit()}
         </Box>
 
         <CustomDivider />

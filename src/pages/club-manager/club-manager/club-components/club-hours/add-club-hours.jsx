@@ -7,7 +7,7 @@ import { WeekDays, DayHours, DemoWorkHours, HourConstraint } from '../../club-he
 export const AddClubHours = ({handleSaveClubHours}) => {
   const [workHours, setWorkHours] = useState([]);
   const [fromHour, setFromHour] = useState('06:00');
-  const [tillHour, setTillHour] = useState('11:00');
+  const [tillHour, setTillHour] = useState('23:00');
   const [validForDays, setValidForDays] = useState([])
 
   useEffect(() => {

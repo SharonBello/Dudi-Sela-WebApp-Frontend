@@ -4,12 +4,33 @@ import { ReservationPreview } from '../reservation-preview/reservation-preview.j
 import { DateFormat } from '../../pages/club-manager/club-manager/club-helper.jsx'
 import dayjs from 'dayjs';
 import { courtService } from '../../services/court.service.js';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { reservationService } from "../../services/reservation.service"
+import { useSelector } from "react-redux"
+import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service';
+import { useNavigate } from "react-router"
 
 export const ReservationList = ({ reservations }) => {
     const todaysDate = dayjs().format(DateFormat)
     const [sorting, setSorting] = useState({ field: 'date', ascending: false })
     const [currentReservations, setCurrentReservations] = useState(reservations)
     const [hrBeforeCancel, setHrBeforeCancel] = useState();
+    const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false)
+    const [showFailureAlert, setShowFailureAlert] = useState(false)
+    const [selectedReservation, setSelectedReservation] = useState()
+    const navigate = useNavigate()
+    let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
+    let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
     const applySorting = (e, key, ascending) => {
         e.preventDefault();
@@ -43,8 +64,155 @@ export const ReservationList = ({ reservations }) => {
           });
         }
       }, [])
+
+
+    const onDeleteReservation = async (e, item) => {
+        setShowDeleteAlert(true)
+        setSelectedReservation(item)
+    }
+
+    const closeDeleteAlert = () => {
+        setShowDeleteAlert(false);
+    }
+
+    const handleDeleteReservation = async () => {
+        if (!loggedUser) {
+            navigate('/signin')
+        }
+        if (loggedUser) {
+            const payload = selectedReservation
+            const res = await reservationService.deleteReservation(uid.uid, payload)
+            let email // TODO fix this alternative option for loggedUser struct
+            if (loggedUser.data) {
+              email = loggedUser.data.uid.email
+            }
+            if (loggedUser.uid) {
+              email = loggedUser.uid.email
+            }
+            const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": 1, "mail": email, "date": todaysDate})
+            setShowDeleteAlert(false)
+            if (res.data.result === 0 && resCredit.data.result === 0) {
+                setShowSuccessAlert(true)
+            } else {
+                setShowSuccessAlert(false)
+            }
+        }
+    }
+
+    const handleCloseAlert = (event, reason) => {
+        setShowSuccessAlert(false)
+        setShowFailureAlert(false)
+        navigate('/')
+    }
+
+
+    const alertAction = (
+        <>
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="#F2F6F7"
+                onClick={handleCloseAlert}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </>
+    )
+      const renderSuccessAlert = () => {
+        if (showSuccessAlert) {
+            return (
+                <Snackbar
+                    open={true}
+                    autoHideDuration={60000}
+                    onClose={handleCloseAlert}
+                    action={alertAction}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert
+                        severity="success"
+                        onClose={handleCloseAlert}
+                        sx={{
+                            minWidth: '100%',
+                            color: '#1d1d1d',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: '10px',
+                            backgroundColor: '#C9DB39'
+                        }}
+                        spacing={5}
+                        variant="filled"
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        המגרש בוטל בהצלחה, הכרטיסיה זוכתה בהזמנה של מגרש (מידע בפרופיל האישי) </Alert>
+                </Snackbar>
+            )
+        }
+    }
+
+    const renderFailureAlert = () => {
+        if (showFailureAlert) {
+            return (
+                <Snackbar
+                    open={true}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={6000}
+                    onClose={handleCloseAlert}
+                    action={alertAction}
+                >
+                    <Alert
+                        severity="error"
+                        onClose={handleCloseAlert}
+                        sx={{
+                            minWidth: '100%',
+                            color: '#fff',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            gap: '10px',
+                            backgroundColor: '#dc0000'
+                        }}
+                        spacing={5}
+                        // margin={5}
+                        variant="filled"
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    >
+                        ביטול המגרש נכשל</Alert>
+                </Snackbar>
+            )
+        }
+    }
+
+    const renderDeleteAlert = () => {
+        return (
+            <Dialog
+                open={showDeleteAlert}
+                onClose={closeDeleteAlert}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"ביטול הזמנה"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {" האם את/ה בטוח/ה שברצונך לבטל את ההזמנה?"}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDeleteAlert}>לא</Button>
+                    <Button onClick={handleDeleteReservation} autoFocus>
+                        כן
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        )
+    }
     return (
         <section className="list-of-reservations-container">
+            {renderDeleteAlert()}
+            {renderSuccessAlert()}
+            {renderFailureAlert()}
             <table className="reservations-list">
                 <thead>
                     <tr>
@@ -62,6 +230,7 @@ export const ReservationList = ({ reservations }) => {
                             item={item}
                             todaysDate={todaysDate}
                             hrBeforeCancel={hrBeforeCancel}
+                            onDeleteReservation={onDeleteReservation}
                         />
                     )}
                 </tbody>

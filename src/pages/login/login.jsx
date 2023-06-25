@@ -33,11 +33,11 @@ export const Login = () => {
     key: 'muirtl',
   })
 
-  // useEffect(() => {
-  //   if (window.google) {
-  //     setGoogleAccounts("loginDiv")
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (window.google) {
+      setGoogleAccounts("loginDiv")
+    }
+  }, []);
 
   const loginUser = (email, password) => {
     const payload = {

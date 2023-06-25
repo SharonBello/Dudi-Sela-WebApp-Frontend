@@ -21,12 +21,11 @@ export const App = () => {
 
    window.addEventListener("storage", async () => {
       dispatch(setLoggedUser())
-      const uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
-      const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
+      const miniUser = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER))
+      const uid = miniUser.uid
+      const email = miniUser.email
       const res = await courtService.getUser({"email": email})
       dispatch(setUserUid(uid))
-      const accessToken = await auth.currentUser.getIdToken()
-      sessionStorage.setItem("accessToken", accessToken)
       dispatch(setUserRole(res.data.role))
       navigate('/')
    });

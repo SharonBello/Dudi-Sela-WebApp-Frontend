@@ -8,7 +8,7 @@ export const UserReservations = () => {
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
 
   const fetchReservations = useCallback(async () => {
-    let reservations = await reservationService.query(uid.uid);
+    let reservations = await reservationService.query(uid);
     if (reservations && reservations.data) {
       const _reservations = reservations.data.reservations.reverse()
       setReservations(_reservations)
@@ -16,7 +16,7 @@ export const UserReservations = () => {
   },[])
   useEffect(() => {
     fetchReservations()
-  }, [reservations])
+  }, [])
 
 
   return (

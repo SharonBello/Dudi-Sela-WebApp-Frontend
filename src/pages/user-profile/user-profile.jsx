@@ -12,7 +12,7 @@ export const UserProfile = () => {
 
     const getUserCredit = useCallback( async (uid, userCredit) => {
         if ((loggedUser || uid) && userCredit === undefined) {
-            let _userCredit = await reservationService.getCredit(uid.uid)
+            let _userCredit = await reservationService.getCredit(uid)
             setUserCredit(_userCredit.user_credit)
             setCardsCredit(_userCredit.punch_cards)
         }

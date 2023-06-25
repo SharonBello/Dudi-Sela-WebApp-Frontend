@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import { auth } from '../services/user.service.js'
 import { UserRoles } from '../pages/club-manager/club-manager/club-helper.jsx'
+import { getAuth } from "firebase/auth";
 
 
 const BASE_URL = process.env.NODE_ENV === 'production'
@@ -28,19 +29,19 @@ export const httpService = {
 
 async function ajax(endpoint, method = 'GET', data, role) {
     try {
-        let res, accessToken
-        if (auth && auth.currentUser) {
-            accessToken = await auth.currentUser.getIdToken()
-        } else {
-            accessToken = sessionStorage.getItem("accessToken")
-        }
-        if (method === 'GET') {
+        let res
+        const accessToken = sessionStorage.getItem("accessToken")
+        if (method === 'GET' && accessToken) {
             res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken, 'role': role } })
         }
         if (method === 'POST') {
-            res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken, 'role': role } })
+            if (endpoint.indexOf('signin')!==-1 || endpoint.indexOf('signup')!==-1 || endpoint.indexOf('signout')!==-1 || endpoint.indexOf('clubuser')!==-1) {
+                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'role': role } })
+            } else if (accessToken){
+                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken, 'role': role } })
+            }
         }
-        if (method === 'DELETE') {
+        if (method === 'DELETE' && accessToken) {
             res = await axios.delete(`${BASE_URL}${endpoint}`, {headers: {
                     'AuthToken': accessToken,
                     'role': role

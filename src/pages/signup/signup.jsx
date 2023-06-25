@@ -65,11 +65,13 @@ export const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
+    const fullName = data.get('firstname') + ' ' + data.get('lastname')
     const payload = {
       email: data.get('email'),
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname'),
-      phone: data.get('phone'),
+      firstName: data.get('firstname'),
+      lastName: data.get('lastname'),
+      fullName: fullName,
+      primaryPhone: data.get('phone'),
       password: data.get('password'),
       role: UserRoles[0]
     }

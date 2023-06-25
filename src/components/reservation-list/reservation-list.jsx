@@ -81,7 +81,7 @@ export const ReservationList = ({ reservations }) => {
         }
         if (loggedUser) {
             const payload = selectedReservation
-            const res = await reservationService.deleteReservation(uid.uid, payload)
+            const res = await reservationService.deleteReservation(uid, payload)
             let email // TODO fix this alternative option for loggedUser struct
             if (loggedUser.data) {
               email = loggedUser.data.uid.email
@@ -89,7 +89,7 @@ export const ReservationList = ({ reservations }) => {
             if (loggedUser.uid) {
               email = loggedUser.uid.email
             }
-            const resCredit = await reservationService.changeCredit(uid.uid, { "userCredit": 1, "mail": email, "date": todaysDate})
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1, "mail": email, "date": todaysDate})
             setShowDeleteAlert(false)
             if (res.data.result === 0 && resCredit.data.result === 0) {
                 setShowSuccessAlert(true)

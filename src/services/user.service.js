@@ -18,9 +18,10 @@ window.userService = userService
 
 async function login(userCred, role='subscriber') {
     try {
-        const loggedUser = await httpService.post('auth/signin', userCred, role)
+        const loggedUser = await httpService.post('signin', userCred, role)
         if (loggedUser) {
-            _handleLogin(userCred)
+            sessionStorage.setItem("accessToken", loggedUser["data"]["stsTokenManager"]["accessToken"])
+            _handleLogin(loggedUser.data)
             return loggedUser
         }
     } catch (err) {
@@ -30,7 +31,7 @@ async function login(userCred, role='subscriber') {
 
 async function signup(mailAndPswd, payload,  role='subscriber') {
     try {
-        const user = await httpService.post('auth/signup', mailAndPswd, role)
+        const user = await httpService.post('signup', mailAndPswd, role)
         _handleLogin(mailAndPswd)
         return user
     } catch (err) {
@@ -42,7 +43,7 @@ async function signup(mailAndPswd, payload,  role='subscriber') {
 async function authSignout() {
     sessionStorage.removeItem(STORAGE_KEY_LOGGED_USER)
     sessionStorage.removeItem(ACCESS_TOKEN)
-    return await httpService.post('auth/signout', {}, 'subscriber')
+    return await httpService.post('signout', {}, 'subscriber')
 }
 
 function _handleLogin(user) {

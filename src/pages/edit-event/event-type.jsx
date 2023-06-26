@@ -11,10 +11,16 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+import { EventTypes } from '../club-manager/club-manager/club-helper.jsx';
 
-export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass, clubClasses, handleClubClassChange }) => {
+export const EventType = ({ eventType, setEventType, shouldJoinClass, setShouldJoinClass, clubClasses, handleClubClassChange, setShowInstructors }) => {
 
     const handleScheduleType = (e, eventType) => {
+        if (eventType === EventTypes[0] || eventType === EventTypes[2] ) {
+            setShowInstructors(false)
+        } else {
+            setShowInstructors(true)
+        }
         if (eventType !== null) setEventType(eventType);
     };
 

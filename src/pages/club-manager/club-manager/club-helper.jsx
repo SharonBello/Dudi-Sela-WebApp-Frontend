@@ -140,4 +140,4 @@ export const ToLocaleIsrael = (_date) => {
   return _date.toLocaleDateString('he-IL', {timeZone:'Asia/Jerusalem'}).replace(/\D/g,'/')
 }
 
-export const ColorMenu = [{"label": "הזמנה חיצונית", "color": "#ADD8E6"}, {"label": "הזמנה פנימית", "color": "#90EE90"}, {"label": "לא זמין", "color": "lightgrey"} ]
+export const ColorMenu = [{"label": "הזמנה חיצונית", "color": "#ADD8E6"}, {"label": "הזמנה פנימית", "color": "#90EE90"}, {"label": "הזמנה פרטית", "color": "#e495d9"}, {"label": "לא זמין", "color": "lightgrey"} ]

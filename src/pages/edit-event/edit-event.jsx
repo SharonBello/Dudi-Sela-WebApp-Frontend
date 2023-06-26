@@ -40,7 +40,7 @@ import { instructorService } from '../../services/instructor.service.js';
 import { hoursDataArr } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 import { EventTypes } from '../club-manager/club-manager/club-helper.jsx';
 
-export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
+export const EditEventModal = ({ showInstructors, setShowInstructors, selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -62,6 +62,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
   const [clubCourts, setClubCourts] = useState([])
   const [showConfirmBox, setShowConfirmBox] = useState(false)
   const [clubClass, setClubClass] = useState()
+
   let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const navigate = useNavigate()
@@ -108,8 +109,13 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
       return false
     }
     if (!(title.trim() !== "" || instructor.trim() !== "")) {
-      setMessageAlert("יש למלא מדריך אחד לפחות או את כותרת הארוע")
-      return false
+      if (eventType === EventTypes[1]) {
+        setMessageAlert("יש למלא מדריך אחד לפחות או את כותרת הארוע")
+        return false
+      } else {
+        setMessageAlert("יש למלא את כותרת הארוע")
+        return false
+      }
     }
     return true
   }
@@ -154,6 +160,9 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
       price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), shouldJoinClass, "id": selectedEvent.id}
       if (eventType === EventTypes[2]) {
         payload.title = "-" + payload.title + '-'
+      }
+      if (eventType === EventTypes[0]) {
+        payload.title = "*" + payload.title + '*'
       }
       saveClubEvent(payload)
       updateEventInView(payload)
@@ -288,6 +297,13 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
     if (shouldJoinClass)
       return (<ParticipantsList participants={participants} />)
   }
+  const renderInstructors = () => {
+    if (showInstructors) {
+      return (
+        <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
+      )
+    }
+  }
   return (
     <>
       {renderIsLoading()}
@@ -312,7 +328,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
             <Typography className="modal-body-text">
                   יום בשבוע - {dayInHebrew}
                 </Typography>
-              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} clubClasses={clubClasses} handleClubClassChange={handleClubClassChange}/>
+              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} clubClasses={clubClasses} handleClubClassChange={handleClubClassChange} setShowInstructors={setShowInstructors}/>
               <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">
@@ -330,7 +346,7 @@ export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructo
               </Box>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
               <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
-                <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
+                {renderInstructors()}
                 {renderParticipantsList()}
               </div>
               <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />

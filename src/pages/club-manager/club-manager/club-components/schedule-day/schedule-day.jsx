@@ -28,6 +28,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const role = useSelector((storeState) => storeState.userModule.role)
+  const [showInstructors, setShowInstructors] = useState()
 
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
@@ -92,6 +93,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         cellClassName: (params) => {
           if (params.value[0] === "-" && params.value[params.value.length-1] === "-"  && col.headerName !== "מספר מגרש") {
             return 'not-available-event';
+          }
+          if (params.value[0] === "*" && params.value[params.value.length-1] === "*"  && col.headerName !== "מספר מגרש") {
+            return 'outsider-event';
           }
           if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
             return 'single-event';
@@ -170,6 +174,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
 
   const closeEditEvent = () => {
     setOpenEditEvent(false)
+    setShowInstructors(true)
   }
 
   const updateEventInView = async (updatedEvent) => {
@@ -191,7 +196,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const renderModal = () => {
     if (openEditEvent  && role==='admin')  {
       return (
-        <EditEventModal selectedRow={rows[selectedCourtNumber-1]} updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
+        <EditEventModal showInstructors={showInstructors} setShowInstructors={setShowInstructors} selectedRow={rows[selectedCourtNumber-1]} updateEventInView={updateEventInView} selectedEvent={selectedEvent} tennisInstructors={tennisInstructors} clubClasses={clubClasses} selectedCourtNumber={selectedCourtNumber} openEditEvent={openEditEvent} closeEditEvent={closeEditEvent} dayOfWeek={dayOfWeek} dayInHebrew={dayInHebrew} isEventExists={isEventExists} isClubEvent={!selectedEvent.username} />
       )
     }
   }

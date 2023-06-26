@@ -8,6 +8,7 @@ import { Loader } from '../../../../../components/loader.jsx';
 import { useNavigate } from 'react-router-dom'
 import { courtService } from '../../../../../services/court.service'
 import { instructorService } from '../../../../../services/instructor.service.js';
+import { EmptyCourse } from '../../club-helper';
 
 export const ClubClasses = () => {
   const [showModalCreate, setShowModalCreate] = useState(false);
@@ -16,6 +17,7 @@ export const ClubClasses = () => {
   const navigate = useNavigate()
   const [classParticipants, setClassParticipants] = useState([])
   const [selectedCourse, setSelectedCourse] = useState()
+  const [isNewClass, setIsNewClass] = useState(false)
 
   const getClubClasses = useCallback(async () => {
     try {
@@ -54,26 +56,36 @@ export const ClubClasses = () => {
   }
 
   const renderModalCreate = () => {
-    if (showModalCreate) {
+    if (showModalCreate && !isNewClass) {
       return (
-        <CreateClubCourse selectedCourse={selectedCourse} showModalCreate={showModalCreate} closeClubCourse={closeClubCourse} setShowModalCreate={setShowModalCreate} handleSave={handleSave} classParticipants={classParticipants} setClassParticipants={setClassParticipants} />
+        <CreateClubCourse selectedCourse={selectedCourse} showModalCreate={showModalCreate} closeClubCourse={closeClubCourse} setShowModalCreate={setShowModalCreate} handleSave={handleSave} classParticipants={classParticipants} setClassParticipants={setClassParticipants} setIsNewClass={setIsNewClass} isNewClass={isNewClass}/>
       )
     }
+    if (showModalCreate && isNewClass) {
+      return (
+        <CreateClubCourse selectedCourse={EmptyCourse} showModalCreate={showModalCreate} closeClubCourse={closeClubCourse} setShowModalCreate={setShowModalCreate} handleSave={handleSave} classParticipants={classParticipants} setClassParticipants={setClassParticipants} setIsNewClass={setIsNewClass} isNewClass={isNewClass}/>
+      )
+    }
+
   }
   const getClassParticipants = useCallback(async () => {
     let participants = await instructorService.getParticipants()
     setClassParticipants(participants)
   }, [setClassParticipants])
 
-  const handleShowClubCours = (e, course) => {
+  const handleShowClubCourse = (e, course) => {
     setSelectedCourse(course)
     setShowModalCreate(true)
+  }
+  const handleNewClass = () => {
+    setShowModalCreate(true)
+    setIsNewClass(true)
   }
   const renderClubCourses = () => {
     return (
       clubClasses.map((course) => {
         return (
-          <button className="class-type-btn flex-column" onClick={(e) => handleShowClubCours(e, course)} >{course.title}
+          <button className="class-type-btn flex-column" onClick={(e) => handleShowClubCourse(e, course)} >{course.title}
             <span>מדריך: {course.tennisInstructor}</span>
             <span>תיאור הקורס: {course.description}</span>
             <span>תלמידים: {JSON.parse(course.participants).map(p => <span>{p} </span>)}</span>
@@ -101,7 +113,7 @@ export const ClubClasses = () => {
           {renderClubCourses()}
         </div>
         <Box className="save-classess-btn-container">
-          <button onClick={() => setShowModalCreate(true)} className="save-club-classes-btn">הוסף חוג</button>
+          <button onClick={() => handleNewClass()} className="save-club-classes-btn">הוסף חוג</button>
         </Box>
         {renderModalCreate()}
       </Container>

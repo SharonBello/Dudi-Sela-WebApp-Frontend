@@ -15,19 +15,20 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
 
-export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCourse, setShowModalCreate, handleSave, classParticipants, setClassParticipants }) => {
+export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCourse, setShowModalCreate, handleSave, classParticipants, setClassParticipants, setIsNewClass, isNewClass }) => {
     const [description, setDescription] = useState(selectedCourse.title)
     const [idCourse] = useState(selectedCourse.id)
     const [instructorName, setInstructorName] = useState(selectedCourse.tennisInstructor)
     const [courseDescription, setCourseDescription] = useState(selectedCourse.description)
     const [tennisInstructors, setTennisInstructors] = useState([])
     const [isDisabled, setIsDisabled] = useState(false)
-    const [participants, setParticipants] = useState(selectedCourse.participants && JSON.parse(selectedCourse.participants));
+    const [participants, setParticipants] = useState(!isNewClass ? JSON.parse(selectedCourse.participants) : []);
     const [messageAlert, setMessageAlert] = useState()
     const [showMessageAlert, setShowMessageAlert] = useState(false)
 
     const handleClose = () => {
         setShowModalCreate(false)
+        setIsNewClass(false)
     }
     useEffect(() => {
         const getInstructors = async () => {

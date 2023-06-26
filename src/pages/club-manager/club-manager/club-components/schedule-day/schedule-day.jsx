@@ -140,9 +140,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const setTodaysEvents = async (mDate, dayOfWeek, _rows) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
-    const _date = getCurrentDate()
     reservations.forEach(reservation => {
-      if (reservation.startDate === _date || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
+      if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
         fillEventSlots(_rows, reservation)
       }
     });

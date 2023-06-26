@@ -32,18 +32,18 @@ async function ajax(endpoint, method = 'GET', data, role) {
         let res
         const accessToken = sessionStorage.getItem("accessToken")
         if (method === 'GET' && accessToken) {
-            res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'AuthToken': accessToken, 'role': role } })
+            res = await axios.get(`${BASE_URL}${endpoint}`, { headers: { 'authtoken': accessToken, 'role': role } })
         }
         if (method === 'POST') {
-            if (endpoint.indexOf('signin')!==-1 || endpoint.indexOf('signup')!==-1 || endpoint.indexOf('signout')!==-1 || endpoint.indexOf('clubuser')!==-1) {
+            if (endpoint.indexOf('signin')!==-1 || endpoint.indexOf('signup')!==-1 || endpoint.indexOf('signout')!==-1) {
                 res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'role': role } })
             } else if (accessToken){
-                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'AuthToken': accessToken, 'role': role } })
+                res = await axios.post(`${BASE_URL}${endpoint}`, data, { headers: { 'authtoken': accessToken, 'role': role } })
             }
         }
         if (method === 'DELETE' && accessToken) {
             res = await axios.delete(`${BASE_URL}${endpoint}`, {headers: {
-                    'AuthToken': accessToken,
+                    'authtoken': accessToken,
                     'role': role
                 },
                 data: data
@@ -53,6 +53,7 @@ async function ajax(endpoint, method = 'GET', data, role) {
     } catch (err) {
         console.dir(err)
         if (err.response && err.response.status === 401) {
+            // TODO signout
             sessionStorage.clear()
         }
         throw err

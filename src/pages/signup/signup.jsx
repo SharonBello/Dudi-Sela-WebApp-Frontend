@@ -94,8 +94,7 @@ export const Signup = () => {
           dispatch(login(payload))
           dispatch(setLoggedUser())
           navigate('/')
-          const resAddSub = await courtService.addSubscriber(payload)
-          console.log(resAddSub)
+          await courtService.addSubscriber(payload)
         }
 
       })

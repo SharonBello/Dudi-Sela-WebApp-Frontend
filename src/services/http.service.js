@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import { auth } from '../services/user.service.js'
+import { auth, userService } from '../services/user.service.js'
 import { UserRoles } from '../pages/club-manager/club-manager/club-helper.jsx'
 import { getAuth } from "firebase/auth";
 
@@ -52,10 +52,10 @@ async function ajax(endpoint, method = 'GET', data, role) {
         return res
     } catch (err) {
         console.dir(err)
-        if (err.response && err.response.status === 401) {
-            // TODO signout
-            sessionStorage.clear()
-        }
+        alert(err.message);
+        sessionStorage.clear()
+        userService.authSignout();
+        document.location.href = '/'
         throw err
     }
 }

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import dayjs from "dayjs"
 
-export const ReservationPreview = ({ item, todaysDate, hrBeforeCancel, onDeleteReservation }) => {
+export const ReservationPreview = ({ item, todaysDate, hrBeforeCancel, onDeleteReservation, isLoading }) => {
     const [isCancelable, setIsCancelable] = useState(false)
 
     const getTimeLeft = useCallback((item) => {
@@ -42,7 +42,7 @@ export const ReservationPreview = ({ item, todaysDate, hrBeforeCancel, onDeleteR
                         <tbody>
                             <tr className="table-action-cell">
                                 <td className="table-cell-btn">
-                                    {isCancelable ? <button className="table-btn" onClick={(e) => onDeleteReservation(e, item)}>
+                                    {isCancelable ? <button disabled={isLoading} className="table-btn" onClick={(e) => onDeleteReservation(e, item)}>
                                         <NavLink to='/user-reservations/'>
                                             <FontAwesomeIcon icon={faTrashAlt} />
                                         </NavLink>

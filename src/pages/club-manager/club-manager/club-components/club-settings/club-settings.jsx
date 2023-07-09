@@ -78,13 +78,13 @@ export const ClubSettings = () => {
           <TextBox label="הזמן הקצר ביותר להזמנה בדקות" disabled={true} value={minPerReservation} setValue={setMinPerReservation} />
           <TextBox label="כמה ימים קדימה אפשר להזמין מראש" disabled={true} value={daysReservedBefore} setValue={setDaysReservedBefore} />
           <TextBox label="מספר טלפון לעדכון ההזמנה" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
-          <TextBox label="days in advance" value={daysInAdvance} setValue={setDaysInAdvance} />
-          <TextBox label="cut off days" value={cutOffDays} setValue={setCutOffDays} />
-          <TextBox label="מרווחי זמן בדקות" value={timeIntervals} setValue={setTimeIntervals} />
+          <TextBox label="days in advance" disabled={true} value={daysInAdvance} setValue={setDaysInAdvance} />
+          <TextBox label="cut off days"disabled={true} value={cutOffDays} setValue={setCutOffDays} />
+          <TextBox label="מרווחי זמן בדקות" disabled={true} value={timeIntervals} setValue={setTimeIntervals} />
           <Box className="switch-input-container">
-            <SwitchInput label="פתוח להזמנות ברשת" value={onlineReserve} setValue={setOnlineReserve} />
-            <SwitchInput label="מועדון לחברים בלבד" value={memberOnlyClub} setValue={setMemberOnlyClub} />
-            <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" value={addPartnersToAll} setValue={setAddPartnersToAll} />
+            <SwitchInput label="פתוח להזמנות ברשת" disabled={true} value={onlineReserve} setValue={setOnlineReserve} />
+            <SwitchInput label="מועדון לחברים בלבד" disabled={true} value={memberOnlyClub} setValue={setMemberOnlyClub} />
+            <SwitchInput label="אפשרות להוסיף פרטנרים לכולם" disabled={true} value={addPartnersToAll} setValue={setAddPartnersToAll} />
           </Box>
         </Box>
         {/* <Box className="btn-club-setting-components-container flex align-center"> */}

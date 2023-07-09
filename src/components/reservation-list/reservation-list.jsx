@@ -28,6 +28,7 @@ export const ReservationList = ({ reservations }) => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false)
     const [showFailureAlert, setShowFailureAlert] = useState(false)
     const [selectedReservation, setSelectedReservation] = useState()
+    const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
     let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
@@ -65,7 +66,6 @@ export const ReservationList = ({ reservations }) => {
         }
       }, [])
 
-
     const onDeleteReservation = async (e, item) => {
         setShowDeleteAlert(true)
         setSelectedReservation(item)
@@ -80,28 +80,24 @@ export const ReservationList = ({ reservations }) => {
             navigate('/signin')
         }
         if (loggedUser) {
+            setIsLoading(true);
             const payload = selectedReservation
             const res = await reservationService.deleteReservation(uid, payload)
-            let email // TODO fix this alternative option for loggedUser struct
-            if (loggedUser.data) {
-              email = loggedUser.data.uid.email
-            }
-            if (loggedUser.uid) {
-              email = loggedUser.uid.email
-            }
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1, "mail": email, "date": todaysDate})
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1, "mail": loggedUser.email, "date": todaysDate, "cardName": ''})
             setShowDeleteAlert(false)
             if (res.data.result === 0 && resCredit.data.result === 0) {
                 setShowSuccessAlert(true)
             } else {
                 setShowSuccessAlert(false)
             }
+            setIsLoading(false);
         }
     }
 
     const handleCloseAlert = (event, reason) => {
         setShowSuccessAlert(false)
         setShowFailureAlert(false)
+        setIsLoading(false);
         navigate('/')
     }
 
@@ -231,6 +227,7 @@ export const ReservationList = ({ reservations }) => {
                             todaysDate={todaysDate}
                             hrBeforeCancel={hrBeforeCancel}
                             onDeleteReservation={onDeleteReservation}
+                            isLoading={isLoading}
                         />
                     )}
                 </tbody>

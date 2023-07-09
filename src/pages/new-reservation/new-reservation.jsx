@@ -66,7 +66,7 @@ export const NewReservation = () => {
   const [priceConstraints, setPriceConstraints] = useState([])
   const [showConfirmBox, setShowConfirmBox] = useState(false)
   const [showPunchCards, setShowPunchCards] = useState(false)
-  const hoursData = ["6 בבוקר", "7 בבוקר", "8 בבוקר", "9 בבוקר", "10 בבוקר", "11 בבוקר", "12 בצהריים", "1 בצהריים", "2 בצהריים", "3 בצהריים", "4 בצהריים", "5 בערב", "6 בערב", "7 בערב", "8 בערב", "9 בערב", "10 בערב", "11 בערב"]
+  const hoursData = ["6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
   const email = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).email
@@ -308,7 +308,7 @@ const handleCourtsData = useCallback(async (date) => {
               _successMessage += `ההזמנה זוכתה מכרטיסיית ${cardName} -`
             }
           } else if ((_userCredit.user_credit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": email, "date": todaysDate })
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": email, "date": todaysDate, "cardName": '' })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }
@@ -719,14 +719,7 @@ const handleCourtsData = useCallback(async (date) => {
 
   const selectPunchCard = async (e, card) => {
     // refactor out punch_cards: []
-    let email
-    if (loggedUser.data) {
-      email = loggedUser.data.uid.email
-    }
-    if (loggedUser.uid) {
-      email = loggedUser.uid.email
-    }
-    const resCredit = await reservationService.changeCredit(uid, { "userCredit": Number(card.creditAmount), "mail": email, "date": todaysDate, "cardName": card.cardName })
+    const resCredit = await reservationService.changeCredit(uid, { "userCredit": Number(card.creditAmount), "mail": loggedUser.email, "date": todaysDate, "cardName": card.cardName })
     let _message
     if (resCredit.data.result === 0) {
       _message = `${card.creditAmount} זיכויים הוספו לכרטיסייה (ראה אזור אישי)`

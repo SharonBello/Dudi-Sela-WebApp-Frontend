@@ -19,11 +19,13 @@ import { userService } from '../../services/user.service.js'
 import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 import { courtService } from '../../services/court.service.js'
+import { Loader } from '../../components/loader.jsx'
 
 export const Login = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [isLogin, setIsLogin] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const theme = createTheme({
     direction: 'rtl',
@@ -74,7 +76,15 @@ export const Login = () => {
       })
   }
 
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
+  }
   const handleSubmit = (ev) => {
+    setIsLoading(true)
     try {
       ev.preventDefault()
       const data = new FormData(ev.currentTarget)
@@ -83,8 +93,10 @@ export const Login = () => {
         password: data.get('password'),
       }
       loginUser(loginInfo.email, loginInfo.password)
+      setIsLoading(false)
     } catch (err) {
       console.error('err', err)
+      setIsLoading(false)
     }
   }
 
@@ -94,6 +106,7 @@ export const Login = () => {
 
   return (
     <main className="login-sign-up-container container flex-column">
+      {renderIsLoading()}
       <CacheProvider value={cacheRtl}>
         <ThemeProvider theme={theme}>
           <div dir="rtl">
@@ -133,6 +146,7 @@ export const Login = () => {
                     autoComplete="current-password"
                   />
                   <Button
+                    disabled={isLoading}
                     type="submit"
                     fullWidth
                     variant="contained"

@@ -23,15 +23,17 @@ export const UserProfile = () => {
     })
 
     const renderCardsCredit = () => {
-      return (
-        Object.keys(cardsCredit).map((key) => {
-          return (
-            <button className="card-type-btn flex-column">
-              שם כרטיסייה: {key}
-              <span>כמות קרדיט: {cardsCredit[key]}</span>
-            </button>
-          )
-        }))
+      if (cardsCredit) {
+        return (
+          Object.keys(cardsCredit).map((key) => {
+            return (
+              <button className="card-type-btn flex-column">
+                שם כרטיסייה: {key}
+                <span>כמות קרדיט: {cardsCredit[key]}</span>
+              </button>
+            )
+          }))
+      }
     }
 
   return (

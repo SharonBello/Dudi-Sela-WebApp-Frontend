@@ -23,11 +23,13 @@ import { setGoogleAccounts } from '../../components/google-accounts/google.accou
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 import { UserRoles } from '../club-manager/club-manager/club-helper.jsx'
 import { courtService } from '../../services/court.service.js'
+import { Loader } from '../../components/loader.jsx'
 
 export const Signup = () => {
   const [conditionsModal, setConditionsModal] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(false)
 
   const theme = createTheme({
     direction: 'rtl',
@@ -63,6 +65,7 @@ export const Signup = () => {
   }
 
   const handleSubmit = async (event) => {
+    setIsLoading(true)
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const fullName = data.get('firstname') + ' ' + data.get('lastname')
@@ -96,16 +99,30 @@ export const Signup = () => {
           navigate('/')
           await courtService.addSubscriber(payload)
         }
-
+        setIsLoading(false)
       })
       .catch((error) => {
         console.error(error)
         alert(error.message)
+        setIsLoading(false)
       })
+  }
+  const handleChangePhone = (e) => {
+    if (e.target.value.trim().length !== 10) {
+      alert("טלפון צריך להיות בן 10 ספרות")
+    }
+  }
+  const renderIsLoading = () => {
+    if (isLoading) {
+      return (
+        <Loader />
+      )
+    }
   }
 
   return (
     <CacheProvider value={cacheRtl}>
+      {renderIsLoading()}
       <ThemeProvider theme={theme}>
         <div dir="rtl">
           <Container component="main" maxWidth="xs">
@@ -166,9 +183,11 @@ export const Signup = () => {
                       fullWidth
                       id="phone"
                       type="number"
-                      label="טלפון"
+                      label="טלפון - צריך להיות 10 ספרות"
                       name="phone"
                       autoComplete="phone"
+                      onBlur={handleChangePhone}
+                      pattern="[1-9]{1}[0-9]{9}"
                       autoFocus
                     />
                   </Grid>
@@ -217,6 +236,7 @@ export const Signup = () => {
                   </section>}
                 </Grid>
                 <Button
+                  disabled={isLoading}
                   type="submit"
                   fullWidth
                   variant="contained"

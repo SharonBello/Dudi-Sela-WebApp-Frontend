@@ -28,7 +28,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const [messageAlert, setMessageAlert] = useState()
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const role = useSelector((storeState) => storeState.userModule.role)
-  const [showInstructors, setShowInstructors] = useState()
+  const [showInstructors, setShowInstructors] = useState(true)
 
   const handleCloseAlert = (event, reason) => {
     setShowMessageAlert(false)
@@ -234,7 +234,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     <>
       {renderModal()}
       {renderMessageAlert()}
-      <Box className="schedule" sx={{ width: '100%', height: 500 }}>
+      <Box className="schedule" sx={{ width: '100%', height: 730 }}>
         <DataGrid
           onCellClick={(e) => handleEditEvent(e, rows)}
           onCellDoubleClick={(e) => handleEditEvent(e, rows)}

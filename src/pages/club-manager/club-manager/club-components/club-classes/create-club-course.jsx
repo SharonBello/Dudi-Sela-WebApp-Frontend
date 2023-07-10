@@ -14,6 +14,7 @@ import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Alert from '@mui/material/Alert'
+import { Autocomplete, TextField } from '@mui/material';
 
 export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCourse, setShowModalCreate, handleSave, classParticipants, setClassParticipants, setIsNewClass, isNewClass }) => {
     const [description, setDescription] = useState(selectedCourse.title)
@@ -25,6 +26,7 @@ export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCou
     const [participants, setParticipants] = useState(!isNewClass ? JSON.parse(selectedCourse.participants) : []);
     const [messageAlert, setMessageAlert] = useState()
     const [showMessageAlert, setShowMessageAlert] = useState(false)
+    const [searchParticipant, setSearchParticipant] = useState()
 
     const handleClose = () => {
         setShowModalCreate(false)
@@ -122,6 +124,9 @@ export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCou
           )
         }
       }
+      const handleSelectParticipant = (event) => {
+        addParticipant(event.target.value);
+    };
 
     return (
         <>
@@ -147,7 +152,15 @@ export const CreateClubCourse = ({ selectedCourse, showModalCreate, closeClubCou
                             <Divider variant="middle" style={{ margin: "4.5vh 5vw" }} />
                             <div className="flex align-center" style={{ gap: "0.5rem", padding: "unset" }}>
                                 <ParticipantsList participants={participants} setParticipants={setParticipants} />
-                                <SelectMenu inputLabel="הוסף תלמיד קיים" values={classParticipants} setValue={addParticipant} />
+                                <Autocomplete
+                                  disablePortal
+                                  id="combo-box-demo"
+                                  options={classParticipants}
+                                  sx={{ width: 300 }}
+                                  renderInput={(params) => <TextField onSelect={handleSelectParticipant} {...params} label="חפש תלמיד" />}
+                                />
+
+                                {/* <SelectMenu inputLabel="הוסף תלמיד קיים" values={classParticipants} setValue={addParticipant} /> */}
                                 <SelectMenu inputLabel="הסר משתתף" values={participants} setValue={removeParticipant} />
                             </div>
                             <InputBox inputLabel="הכנס תלמיד חדש" handleSubmit={submitNewParticpant}/>

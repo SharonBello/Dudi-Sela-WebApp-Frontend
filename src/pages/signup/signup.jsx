@@ -88,7 +88,7 @@ export const Signup = () => {
           dispatch(setUserUid(null))
           dispatch(setUserRole(null))
           navigate('/signup')
-          alert(response.data.message)
+          alert(response.data.code)
         } else {
           const miniUser = {"email": payload.email, "uid": response.data.uid}
           sessionStorage.setItem(STORAGE_KEY_LOGGED_USER, JSON.stringify(miniUser))
@@ -103,7 +103,7 @@ export const Signup = () => {
       })
       .catch((error) => {
         console.error(error)
-        alert(error.message)
+        alert(error)
         setIsLoading(false)
       })
   }
@@ -187,8 +187,6 @@ export const Signup = () => {
                       name="phone"
                       autoComplete="phone"
                       onBlur={handleChangePhone}
-                      pattern="[1-9]{1}[0-9]{9}"
-                      autoFocus
                     />
                   </Grid>
                   <Grid item xs={12}>

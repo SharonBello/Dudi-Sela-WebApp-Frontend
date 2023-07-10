@@ -8,8 +8,9 @@ export const instructorService = {
 
 async function getInstructors() {
     try {
-        let res = await httpService.get('instructors/instructors')
-        return res.data.tennis_instructors;
+        let res = await httpService.get('courts/clubusers')
+        const _instructors = res.data.filter((user) => user.role  === "instructor" && user.firstName);
+        return _instructors.map(user => user.firstName + " " +user.lastName);
     }
     catch (err) {
         throw err

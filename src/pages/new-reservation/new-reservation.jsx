@@ -357,8 +357,14 @@ const handleCourtsData = useCallback(async (date) => {
     e.stopPropagation()
     e.preventDefault()
     setIsLoading(true)
-    setDurationInHrs(e.target.value)
-    setEndHour(e.target.value + startHour)
+    if ((e.target.value + startHour) > 22) {
+      // end hour not valid in range
+      setDurationInHrs(1)
+      setEndHour(startHour + 1)
+    } else {
+      setDurationInHrs(e.target.value)
+      setEndHour(e.target.value + startHour)
+    }
     const _date = dayjs(date).format(DateFormat)
     filterCourtNumbers(startHour, e.target.value + startHour, _date)
     setCourtNumber()

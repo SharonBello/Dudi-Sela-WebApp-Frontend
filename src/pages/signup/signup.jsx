@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { TermsConditionsModal } from '../../components/terms-conditions-modal/terms-conditions-modal.jsx'
@@ -19,7 +19,7 @@ import { userService } from '../../services/user.service.js'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { login, setLoggedUser, setUserUid, setUserRole } from '../../store/actions/user.actions.js'
-import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
+// import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 import { UserRoles } from '../club-manager/club-manager/club-helper.jsx'
 import { courtService } from '../../services/court.service.js'
@@ -40,12 +40,12 @@ export const Signup = () => {
     key: 'muirtl',
   })
 
-  useEffect(() => {
-    /* global google */
-    if (window.google) {
-      setGoogleAccounts("signupDiv")
-    }
-  }, [])
+  // useEffect(() => {
+  //   /* global google */
+  //   if (window.google) {
+  //     setGoogleAccounts("signupDiv")
+  //   }
+  // }, [])
 
   function Copyright(props) {
     return (

@@ -6,7 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { reservationService } from '../../../../../services/reservation.service.js';
 import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js';
 import { Loader } from '../../../../../components/loader.jsx';
-import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
+import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate, getTbColumns, fillEventSlots } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
 import { FrequencyTypes, EmptyEvent, EventTypes } from '../../club-helper.jsx'
 import Snackbar from '@mui/material/Snackbar'
@@ -22,7 +22,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const [selectedEvent, setSelectedEvent] = useState()
   const [isEventExists, setIsEventExists] = useState(false)
   const [columns, setColumns] = useState([])
-  const [clubCourts, setClubCourts] = useState()
   const events = useRef([])
   const START_HOUR_DAY = 6
   const [messageAlert, setMessageAlert] = useState()
@@ -85,30 +84,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   })
 
   const getColumns = useCallback(() => {
-    const _columns = [];
-    columnsData.forEach(col => {
-      _columns.push({
-        field: col.hour,
-        headerName: col.headerName,
-        cellClassName: (params) => {
-          if (params.value[0] === "-" && params.value[params.value.length-1] === "-"  && col.headerName !== "מספר מגרש") {
-            return 'not-available-event';
-          }
-          if (params.value[0] === "*" && params.value[params.value.length-1] === "*"  && col.headerName !== "מספר מגרש") {
-            return 'outsider-event';
-          }
-          if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
-            return 'single-event';
-          }
-         if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
-            return 'weekly-event';
-          }
-          return;
-        },
-        type: 'singleSelect',
-        width: 140,
-      })
-    });
+    const _columns = getTbColumns(columnsData, clubClasses, tennisInstructors);
     setColumns(_columns);
   }, [tennisInstructors, clubClasses])
 
@@ -116,29 +92,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     const reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      fillEventSlots(_rows, reservation)
+      fillEventSlots(_rows, reservation, START_HOUR_DAY)
     });
     setRows(_rows)
-  }
-
-  const fillEventSlots = (_rows, reservation) => {
-    const hrStart = reservation.startHour.split(":")[0]
-    const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
-    const hrEnd = reservation.endHour.split(":")[0]
-    const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
-    let startHourTxt
-    let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
-    numTimeSlots*=2
-    for (let i = 0; i < numTimeSlots; i++) {
-      startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
-      if (reservation.instructor) {
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
-      } else if (reservation.username) {
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
-      } else {
-        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
-      }
-    }
   }
 
   const setTodaysEvents = async (mDate, dayOfWeek, _rows) => {
@@ -146,7 +102,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
-        fillEventSlots(_rows, reservation)
+        fillEventSlots(_rows, reservation, START_HOUR_DAY)
       }
     });
     getReservationsByDate(_rows, mDate)
@@ -168,7 +124,6 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
 
   const initSchedule = async () => {
     const res = await courtService.getClubCourts()
-    setClubCourts(res.data.club_courts)
     return getRows(res.data.club_courts)
   }
 
@@ -186,10 +141,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         events.current.push(updatedEvent)
       }
       let _rows = JSON.parse(JSON.stringify(rows))
-      fillEventSlots(_rows, updatedEvent)
+      fillEventSlots(_rows, updatedEvent, START_HOUR_DAY)
       setRows(_rows)
     } else {
-      updateScheduleView(mDate, dayOfWeek)
+      updateScheduleView(mDate, dayOfWeek,)
     }
   }
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import * as React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { CacheProvider } from '@emotion/react'
 import createCache from '@emotion/cache'
 import { userService } from '../../services/user.service.js'
-import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
+// import { setGoogleAccounts } from '../../components/google-accounts/google.accounts.jsx'
 import { STORAGE_KEY_LOGGED_USER } from '../../services/user.service.js'
 import { courtService } from '../../services/court.service.js'
 import { Loader } from '../../components/loader.jsx'
@@ -35,11 +35,11 @@ export const Login = () => {
     key: 'muirtl',
   })
 
-  useEffect(() => {
-    if (window.google) {
-      setGoogleAccounts("loginDiv")
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.google) {
+  //     setGoogleAccounts("loginDiv")
+  //   }
+  // }, []);
 
   const loginUser = (email, password) => {
     const payload = {
@@ -163,8 +163,8 @@ export const Login = () => {
                     </Grid>
                   </Grid>
 
-                  <div id="loginDiv" className="googleSignin flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem' }}>
-                  </div>
+                  {/* <div id="loginDiv" className="googleSignin flex-column" style={{ minWidth: '100%', marginBlock: '1rem', paddingInlineStart: '5rem' }}>
+                  </div> */}
 
                   <Grid container justifyContent="center">
                     <Grid item>

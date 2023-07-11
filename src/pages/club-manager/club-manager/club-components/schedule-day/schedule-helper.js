@@ -1,5 +1,6 @@
 import dayjs from "dayjs"
-import { DateFormat } from '../../club-helper'
+import { DateFormat, FrequencyTypes } from '../../club-helper'
+import { reservationService } from "../../../../../services/reservation.service"
 
 export const getCurrentDate = () => {
     return dayjs(new Date()).format(DateFormat)
@@ -95,4 +96,53 @@ const scheduleData = {
 
 if (sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
   sessionStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
+}
+
+export const getTbColumns = (columnsData, clubClasses, tennisInstructors) => {
+  const _columns = [];
+  columnsData.forEach(col => {
+    _columns.push({
+      field: col.hour,
+      headerName: col.headerName,
+      cellClassName: (params) => {
+        if (params.value[0] === "-" && params.value[params.value.length-1] === "-"  && col.headerName !== "מספר מגרש") {
+          return 'not-available-event';
+        }
+        if (params.value[0] === "*" && params.value[params.value.length-1] === "*"  && col.headerName !== "מספר מגרש") {
+          return 'outsider-event';
+        }
+        if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
+          return 'single-event';
+        }
+       if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
+          return 'weekly-event';
+        }
+        return;
+      },
+      type: 'singleSelect',
+      width: 140,
+    })
+  })
+  return _columns;
+}
+
+
+export const fillEventSlots = (_rows, reservation, START_HOUR_DAY) => {
+  const hrStart = reservation.startHour.split(":")[0]
+  const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
+  const hrEnd = reservation.endHour.split(":")[0]
+  const minEnd = reservation.endHour.split(":")[1] === "30" ? 0.5 : 0
+  let startHourTxt
+  let numTimeSlots = (Number(hrEnd)+Number(minEnd)) - (Number(hrStart) + Number(minStart))
+  numTimeSlots*=2
+  for (let i = 0; i < numTimeSlots; i++) {
+    startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
+    if (reservation.instructor) {
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
+    } else if (reservation.username) {
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
+    } else {
+      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+    }
+  }
 }

@@ -65,7 +65,9 @@ export const NewReservation = () => {
   const [punchCards, setPunchCards] = useState([])
   const [priceConstraints, setPriceConstraints] = useState([])
   const [showConfirmBox, setShowConfirmBox] = useState(false)
+  const [showPayWithCredit, setShowPayWithCredit] = useState(false)
   const [showPunchCards, setShowPunchCards] = useState(false)
+  const [confirmedUseCredit, setConfirmedUseCredit] = useState(false)
   const hoursData = ["6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"]
   const durationTime = [1, 2, 3, 4]
   let uid = JSON.parse(sessionStorage.getItem(STORAGE_KEY_LOGGED_USER)).uid
@@ -290,20 +292,23 @@ const handleCourtsData = useCallback(async (date) => {
       try {
         let resExists = await reservationService.isReservationExists(uid, payload)
         if (!resExists.data.isExists) {
-          let _userCredit = await reservationService.getCredit(uid)
-          const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
           let _successMessage = ""
-          // use credit from card or regular credit if exists
-          const cardName = getValidCardName(_userCredit)
-          if (cardName) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, cardName: cardName })
-            if (resCredit.data.result === 0) {
-              _successMessage += `ההזמנה זוכתה מכרטיסיית ${cardName} -`
-            }
-          } else if ((_userCredit.user_credit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, "cardName": '' })
-            if (resCredit.data.result === 0) {
-              _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
+          if (confirmedUseCredit) {
+            setConfirmedUseCredit(false)
+            let _userCredit = await reservationService.getCredit(uid)
+            const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
+            // use credit from card or regular credit if exists
+            const cardName = getValidCardName(_userCredit)
+            if (cardName) {
+              const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, cardName: cardName })
+              if (resCredit.data.result === 0) {
+                _successMessage += `ההזמנה זוכתה מכרטיסיית ${cardName} -`
+              }
+            } else if ((_userCredit.user_credit - creditNum) >= 0) {
+              const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, "cardName": '' })
+              if (resCredit.data.result === 0) {
+                _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
+              }
             }
           }
           let res = await reservationService.addNewReservation(payload)
@@ -370,10 +375,14 @@ const handleCourtsData = useCallback(async (date) => {
     setCourtNumber(Number(e.currentTarget.value))
   }
 
+  const canPayWithCredit = async () => {
+    let _userCredit = await reservationService.getCredit(uid)
+    const creditNum = endHour - startHour
+    const cardName = getValidCardName(_userCredit)
+    return (_userCredit.user_credit - creditNum) >= 0 || cardName!==undefined
+  }
+
   const validateForm = (e) => {
-    // if  (!(startHour && courtNumber)) {
-    //   return "נא למלא את כל השדות"
-    // }
     if (startHour >= endHour) {
       return "שעת הסיום חייבת להיות מאוחרת משעת ההתחלה"
     }
@@ -382,11 +391,20 @@ const handleCourtsData = useCallback(async (date) => {
 
   const handleCancelPay = () => {
     setShowConfirmBox(false)
+    setShowPayWithCredit(false)
+  }
+  const handleConfirmPayWithCredit = () => {
+    setConfirmedUseCredit(true)
+    handleConfirmPay()
   }
   const handleConfirmPay = () => {
     setShowConfirmBox(false)
+    setShowPayWithCredit(false)
     setIsLoading(true)
     addReservation()
+  }
+  const handleConfirmPayWithoutCredit = () => {
+    setShowConfirmBox(true)
   }
   const getPrice = (memberType, dayOfWeek) => {
     let idx=0
@@ -443,7 +461,7 @@ const handleCourtsData = useCallback(async (date) => {
         >
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                  {`התשלום עבור המגרש הוא ${courtPrice} שקלים. האם מאשר?`}
+                  {`התשלום עבור המגרש הוא ${courtPrice} שקלים. האם מאשר\\ת?`}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -455,13 +473,40 @@ const handleCourtsData = useCallback(async (date) => {
         </Dialog>
     )
     }
+    if (showPayWithCredit) {
+      return (
+        <Dialog
+            open={showPayWithCredit}
+            onClose={handleCancelPay}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+            <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {`האם מאשר\\ת להשתמש בכרטיסיית הזיכויים?`}
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleConfirmPayWithCredit} autoFocus>
+                    כן
+                </Button>
+                <Button onClick={handleConfirmPayWithoutCredit}>לא</Button>
+            </DialogActions>
+        </Dialog>
+    )
+    }
+
   }
 
   const handleSubmit = (e) => {
     e.stopPropagation()
     e.preventDefault()
     if (validateForm()) {
-      setShowConfirmBox(true)
+      if (canPayWithCredit()) {
+        setShowPayWithCredit(true)
+      } else {
+        setShowConfirmBox(true)
+      }
     } else {
       setMessageAlert(validateForm())
       setShowMessageAlert(true)

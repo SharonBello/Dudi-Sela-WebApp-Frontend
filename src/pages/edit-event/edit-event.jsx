@@ -158,12 +158,6 @@ export const EditEventModal = ({ showInstructors, setShowInstructors, selectedRo
     if (validateEvent() === true) {
       const payload =   { "dayOfWeek": dayOfWeek.toLowerCase(), eventType, startDate, startHour: startHour, endHour: endHour, frequencyType, courtNumber: selectedEvent.courtNumber,
       price, paidStatus, description, title, phoneNumber, instructor, participants, "clubClass":JSON.stringify(clubClass), shouldJoinClass, "id": selectedEvent.id}
-      if (eventType === EventTypes[2]) {
-        payload.title = "-" + payload.title + '-'
-      }
-      if (eventType === EventTypes[0]) {
-        payload.title = "*" + payload.title + '*'
-      }
       saveClubEvent(payload)
       updateEventInView(payload)
     } else {

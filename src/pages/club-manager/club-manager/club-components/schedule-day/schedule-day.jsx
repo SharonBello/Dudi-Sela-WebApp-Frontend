@@ -1,14 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
 import { DataGrid } from '@mui/x-data-grid';
 import { reservationService } from '../../../../../services/reservation.service.js';
-import { STORAGE_KEY_LOGGED_USER } from '../../../../../services/user.service.js';
 import { Loader } from '../../../../../components/loader.jsx';
-import { getRows, hoursData, hoursDataArr, columnsData, getCurrentDate, getTbColumns, fillEventSlots } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
+import { getRows, hoursData, columnsData, getTbColumns, fillEventSlots, updateTypesEvents } from '../../../club-manager/club-components/schedule-day/schedule-helper.js';
 import { EditEventModal } from '../../../../edit-event/edit-event.jsx';
-import { FrequencyTypes, EmptyEvent, EventTypes } from '../../club-helper.jsx'
+import { FrequencyTypes, EmptyEvent } from '../../club-helper.jsx'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -17,6 +15,7 @@ import { courtService } from '../../../../../services/court.service.js';
 
 export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennisInstructors }) => {
   const [rows, setRows] = useState([])
+  const [types, setTypes] = useState([])
   const [openEditEvent, setOpenEditEvent] = useState(false)
   const [selectedCourtNumber, setSelectedCourtNumber] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState()
@@ -28,8 +27,9 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
   const [showMessageAlert, setShowMessageAlert] = useState(false)
   const role = useSelector((storeState) => storeState.userModule.role)
   const [showInstructors, setShowInstructors] = useState(true)
+  const [courtNumbers, setCourtNumbers] = useState([])
 
-  const handleCloseAlert = (event, reason) => {
+  const handleCloseAlert = () => {
     setShowMessageAlert(false)
   }
 
@@ -45,19 +45,20 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
       </IconButton>
     </>
   )
-  const getEvent = (courtNumber, hour) => {
+
+  const getEvent = useCallback((courtNumber, hour) => {
     let foundEvent = events.current.find(event => event.dayOfWeek === dayOfWeek && event.courtNumber === courtNumber && Number(event.startHour.split(":")[0]) <= hour && Number(event.endHour.split(":")[0]) >= hour)
     if (!foundEvent) { // a subscriber event
       setMessageAlert("לא ניתן לערוך הזמנה פרטית של משתמש")
       setShowMessageAlert(true)
-      // foundEvent = events.current.find(
-      //      event => event.date === mDate
-      //   && event.courtNumber === courtNumber
-      //   && Number(event.startHour.split(":")[0]) <= hour
-      //   && Number(event.endHour.split(":")[0]) >= hour)
     }
     return foundEvent
-  }
+  }, [dayOfWeek])
+
+  const updateClassList = useCallback((types, courtNumbers) => {
+    updateTypesEvents(types, courtNumbers)
+  },[])
+
   const handleEditEvent = useCallback((e, rows) => {
     const courtNum = e.row.courtNumber
     if (courtNum>0) {
@@ -81,49 +82,59 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
       setIsEventExists(false)
       setOpenEditEvent(true)
     }
-  })
+  }, [getEvent])
 
   const getColumns = useCallback(() => {
-    const _columns = getTbColumns(columnsData, clubClasses, tennisInstructors);
+    const _columns = getTbColumns(columnsData);
     setColumns(_columns);
-  }, [tennisInstructors, clubClasses])
+  }, [])
 
-  const getReservationsByDate = async (_rows, mDate) => {
+  const getReservationsByDate = async (_rows, mDate, _types) => {
     const reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      fillEventSlots(_rows, reservation, START_HOUR_DAY)
+      fillEventSlots(_rows, reservation, START_HOUR_DAY, _types)
     });
     setRows(_rows)
+    setTypes(_types)
   }
 
-  const setTodaysEvents = async (mDate, dayOfWeek, _rows) => {
+  const setTodaysEvents = useCallback(async (mDate, dayOfWeek, _rows, _types) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
-        fillEventSlots(_rows, reservation, START_HOUR_DAY)
+        fillEventSlots(_rows, reservation, START_HOUR_DAY, _types)
       }
     });
-    getReservationsByDate(_rows, mDate)
-  }
+    getReservationsByDate(_rows, mDate, _types)
+  },[])
 
   const updateScheduleView = useCallback(async(mDate, dayOfWeek)=> {
     setOpenEditEvent(false)
     const _rows = await initSchedule()
-    setTodaysEvents(mDate, dayOfWeek, _rows)
-  }, [])
+    const _types = JSON.parse(JSON.stringify(_rows))
+    setTodaysEvents(mDate, dayOfWeek, _rows, _types)
+  }, [setTodaysEvents])
 
   useEffect(() => {
     getColumns()
-  }, [tennisInstructors, clubClasses])
+  }, [getColumns])
+
+
+  useEffect(() => {
+    setTimeout(()=> {
+      updateClassList(types, courtNumbers)
+    },100)
+  }, [types, updateClassList, courtNumbers])
 
   useEffect(() => {
     updateScheduleView(mDate, dayOfWeek)
-  }, [mDate, dayOfWeek])
+  }, [mDate, dayOfWeek, updateScheduleView])
 
   const initSchedule = async () => {
     const res = await courtService.getClubCourts()
+    setCourtNumbers(res.data.club_courts)
     return getRows(res.data.club_courts)
   }
 
@@ -141,8 +152,10 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
         events.current.push(updatedEvent)
       }
       let _rows = JSON.parse(JSON.stringify(rows))
-      fillEventSlots(_rows, updatedEvent, START_HOUR_DAY)
+      let _types = JSON.parse(JSON.stringify(types))
+      fillEventSlots(_rows, updatedEvent, START_HOUR_DAY, _types)
       setRows(_rows)
+      setTypes(_types)
     } else {
       updateScheduleView(mDate, dayOfWeek,)
     }
@@ -155,6 +168,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
       )
     }
   }
+
   const renderMessageAlert = () => {
     if (showMessageAlert) {
       return (
@@ -189,7 +203,8 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
     <>
       {renderModal()}
       {renderMessageAlert()}
-      <Box className="schedule" sx={{ width: '100%', height: 730 }}>
+      <Box className="schedule" sx={{ width: '100%', height: 730 }}
+      >
         <DataGrid
           onCellClick={(e) => handleEditEvent(e, rows)}
           onCellDoubleClick={(e) => handleEditEvent(e, rows)}
@@ -198,12 +213,11 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
           columnDefs={{editable: false}}
           rows={rows}
           columns={columns}
-          sx={{ m: 2 }}
+          sx={{ fontSize: 16, textOverflow: 'ellipsis' }}
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />
       </Box>
-
     </>
   );
 }

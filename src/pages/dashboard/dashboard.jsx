@@ -6,12 +6,13 @@ import { instructorService } from '../../services/instructor.service.js';
 import { reservationService } from '../../services/reservation.service.js';
 import dayjs from 'dayjs';
 import { Typography } from '@mui/material';
-import { getCurrentDate, getRows, hoursDataArr, columnsData, weekDayInHebrew, getTbColumns, fillEventSlots } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
+import { getCurrentDate, getRows, hoursDataArr, columnsData, weekDayInHebrew, getTbColumns, fillEventSlots, updateTypesEvents } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 import { FrequencyTypes } from '../club-manager/club-manager/club-helper.jsx'
 import { courtService } from '../../services/court.service.js';
 
 export const Dashboard = () => {
   const [date] = useState(getCurrentDate())
+  const [types, setTypes] = useState([])
   const [tennisInstructors, setTennisInstructors] = useState([])
   const [rows, setRows] = useState(getRows())
   const START_HOUR_DAY = 6
@@ -21,26 +22,41 @@ export const Dashboard = () => {
   const [dayOfWeek] = useState(weekDay.toLowerCase())
   const [dayInHebrew] = useState(weekDayInHebrew[weekDay])
   const [clubClasses, setClubClasses] = useState([])
+  const [courtNumbers, setCourtNumbers] = useState([])
 
-  const getReservationsByDate = async (_rows, date) => {
-    const reservations = await reservationService.queryByDate(date)
+
+  const updateClassList = useCallback((types, courtNumbers) => {
+    updateTypesEvents(types, courtNumbers)
+  },[])
+
+  useEffect(() => {
+    setTimeout(()=> {
+      updateClassList(types, courtNumbers)
+    }, 500)
+  }, [types, updateClassList, courtNumbers])
+
+
+  const getReservationsByDate = async (_rows, mDate, _types) => {
+    const reservations = await reservationService.queryByDate(mDate)
     events.current.push(...reservations)
     reservations.forEach(reservation => {
-      fillEventSlots(_rows, reservation, START_HOUR_DAY)
+      fillEventSlots(_rows, reservation, START_HOUR_DAY, _types)
     });
     setRows(_rows)
+    setTypes(_types)
   }
 
-  const setTodaysEvents = async (mDate, dayOfWeek, _rows) => {
+  const setTodaysEvents = useCallback(async (mDate, dayOfWeek, _rows, _types) => {
     let reservations = await reservationService.queryByDayofweek(dayOfWeek.toLowerCase())
     events.current.push(...reservations)
     reservations.forEach(reservation => {
       if (reservation.startDate === mDate || reservation.frequencyType === FrequencyTypes[1]) { // show single day by date or weekly event
-        fillEventSlots(_rows, reservation, START_HOUR_DAY)
+        fillEventSlots(_rows, reservation, START_HOUR_DAY, _types)
       }
     });
-    getReservationsByDate(_rows, mDate)
-  }
+    getReservationsByDate(_rows, mDate, _types)
+  },[])
+
 
   const getClubClasses = useCallback(async () => {
     let res = await courtService.getClubClasses()
@@ -53,20 +69,22 @@ export const Dashboard = () => {
   }, [setTennisInstructors])
 
   const getColumns = useCallback(() => {
-    const _columns = getTbColumns(columnsData, clubClasses, tennisInstructors);
+    const _columns = getTbColumns(columnsData);
     setColumns(_columns);
-  }, [tennisInstructors, clubClasses])
+  }, [])
 
   const initSchedule = async () => {
     const res = await courtService.getClubCourts()
+    setCourtNumbers(res.data.club_courts)
     return getRows(res.data.club_courts)
   }
 
   const updateScheduleView = useCallback(async (date, dayOfWeek)=> {
     const _rows = await initSchedule()
+    const _types = JSON.parse(JSON.stringify(_rows))
     getInstructors()
     getClubClasses()
-    setTodaysEvents(date, dayOfWeek, _rows)
+    setTodaysEvents(date, dayOfWeek, _rows, _types)
     getColumns()
   }, [])
 
@@ -86,10 +104,9 @@ export const Dashboard = () => {
           columnDefs={{editable: false}}
           rows={rows}
           columns={columns}
-          sx={{ m: 2 }}
+          sx={{ fontSize: 16, textOverflow: 'ellipsis' }}
           experimentalFeatures={{ newEditingApi: true }}
-          hideFooter={true}
-        />
+          hideFooter={true} />
       </Box>
     </div>
 

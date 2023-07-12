@@ -1,6 +1,5 @@
 import dayjs from "dayjs"
-import { DateFormat, FrequencyTypes } from '../../club-helper'
-import { reservationService } from "../../../../../services/reservation.service"
+import { DateFormat, FrequencyTypes, EventTypes } from '../../club-helper'
 
 export const getCurrentDate = () => {
     return dayjs(new Date()).format(DateFormat)
@@ -98,36 +97,21 @@ if (sessionStorage.getItem(process.env.REACT_APP_GOOGLE_CLIENT_ID)) {
   sessionStorage.setItem("dudi-sela-schedule", JSON.stringify(scheduleData))
 }
 
-export const getTbColumns = (columnsData, clubClasses, tennisInstructors) => {
+export const getTbColumns = (columnsData) => {
   const _columns = [];
   columnsData.forEach(col => {
     _columns.push({
       field: col.hour,
       headerName: col.headerName,
-      cellClassName: (params) => {
-        if (params.value[0] === "-" && params.value[params.value.length-1] === "-"  && col.headerName !== "מספר מגרש") {
-          return 'not-available-event';
-        }
-        if (params.value[0] === "*" && params.value[params.value.length-1] === "*"  && col.headerName !== "מספר מגרש") {
-          return 'outsider-event';
-        }
-        if(!clubClasses.includes(params.value) && !tennisInstructors.includes(params.value) && params.value !== "" && col.headerName !== "מספר מגרש") {
-          return 'single-event';
-        }
-       if (params.value.length > 0 && col.headerName !== "מספר מגרש") {
-          return 'weekly-event';
-        }
-        return;
-      },
       type: 'singleSelect',
-      width: 140,
+      headerAlign: 'center',
+      flex: 1.5,
     })
   })
   return _columns;
 }
 
-
-export const fillEventSlots = (_rows, reservation, START_HOUR_DAY) => {
+export const fillEventSlots = (_rows, reservation, START_HOUR_DAY, _types) => {
   const hrStart = reservation.startHour.split(":")[0]
   const minStart = reservation.startHour.split(":")[1] === "30" ? 0.5 : 0
   const hrEnd = reservation.endHour.split(":")[0]
@@ -143,6 +127,37 @@ export const fillEventSlots = (_rows, reservation, START_HOUR_DAY) => {
       _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
     } else {
       _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+    }
+    switch (reservation.eventType) {
+      case EventTypes[0]:
+        _types[reservation.courtNumber - 1][startHourTxt] = 'outsider-event'
+        break;
+      case EventTypes[1]:
+        _types[reservation.courtNumber - 1][startHourTxt] = 'insider-event'
+        break;
+      case EventTypes[2]:
+        _types[reservation.courtNumber - 1][startHourTxt] = 'not-available-event'
+        break;
+      default:
+        _types[reservation.courtNumber - 1][startHourTxt] = 'subscriber-event'
+        break;
+    }
+  }
+}
+
+export const updateTypesEvents = (types, courtNumbers) => {
+  for (let i = 0; i < courtNumbers.length; i++) {
+    let elements = document.querySelector(`[data-rowindex="${i}"]`)
+    if (elements && elements.children.length>0) {
+      const els = Array.prototype.slice.call(elements.children)
+      els.forEach(el => {
+          const hr = el.getAttribute('data-field')
+          el.classList.remove('outsider-event')
+          el.classList.remove('insider-event')
+          el.classList.remove('not-available-event')
+          el.classList.remove('subscriber-event')
+          types[i][hr]!=="" && el.classList.add(types[i][hr])
+      })
     }
   }
 }

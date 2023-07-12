@@ -1,10 +1,21 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { ChildrenPractice } from '../../components/homepage-sections/children-practice/children-practice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons"
+import { courtService } from '../../services/court.service'
 
 export const LearnTennis = () => {
+  const [phoneCancelReservation, setPhoneCancelReservation] = useState();
 
+  useEffect(()=> {
+    const getClubPreferences = async () => {
+      let res = await courtService.getClubPreferences()
+      return res.data.club_preferences
+    }
+    getClubPreferences().then(res => {
+      setPhoneCancelReservation("https://wa.me/" + res.phoneCancelReservation)
+    })
+  }, [])
   const tennisAcademyInfo = [
     {
       id: 1,
@@ -19,6 +30,7 @@ export const LearnTennis = () => {
   ]
 
   return (
+
     <div className='academy-info container flex-column'>
       {tennisAcademyInfo.map((item) =>
         <article
@@ -29,7 +41,7 @@ export const LearnTennis = () => {
         </article>
       )}
       <div className='contact-link flex align-center justify-between'>
-        <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" className="flex align-center open-popup-join">רוצים לגדול איתנו?<FontAwesomeIcon icon={faWhatsapp} /></a>
+        <a href={phoneCancelReservation} target="_blank" rel="noreferrer" className="flex align-center open-popup-join">רוצים לגדול איתנו?<FontAwesomeIcon icon={faWhatsapp} /></a>
       </div>
       <div className='slide-images'>
         <ChildrenPractice />

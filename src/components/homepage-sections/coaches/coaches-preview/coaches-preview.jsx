@@ -12,7 +12,8 @@ export const CoachesPreview = ({ coach }) => {
             html: `${coach.video !== '' ? (`<iframe width="419" height="746" src=${coach.embeddedVideo}
             frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`) : (`<img src=${coach.img} alt=${coach.name} />`)}`,
             content: coachDescription,
-            footer: `<div className="flex-column align-center"><h4 style='text-align: center; font-weight: 400;>${coach.description}</h4> <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer" style='background-color: #C9DB39;
+            footer: `<div className="flex-column align-center"><h4 style='text-align: center; font-weight: 400;>${coach.description}</h4>
+            <a target="_blank" rel="noreferrer" style='background-color: #C9DB39;
             color: #1d1d1d;
             min-width: 30%;
             margin-block-start: rem(16px);

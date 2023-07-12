@@ -83,7 +83,8 @@ export const ReservationList = ({ reservations }) => {
             setIsLoading(true);
             const payload = selectedReservation
             const res = await reservationService.deleteReservation(uid, payload)
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": 1, "mail": loggedUser.email, "date": todaysDate, "cardName": ''})
+            const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": creditNum, "mail": loggedUser.email, "date": todaysDate, "cardName": ''})
             setShowDeleteAlert(false)
             if (res.data.result === 0 && resCredit.data.result === 0) {
                 setShowSuccessAlert(true)

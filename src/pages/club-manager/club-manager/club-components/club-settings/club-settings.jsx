@@ -14,7 +14,7 @@ export const ClubSettings = () => {
   const [hrBeforeCancel, setHrBeforeCancel] = useState();
   const [minPerReservation, setMinPerReservation] = useState(60);
   const [daysReservedBefore, setDaysReservedBefore] = useState(7);
-  const [phoneCancelReservation, setPhoneCancelReservation] = useState("0523782815");
+  const [phoneCancelReservation, setPhoneCancelReservation] = useState("97523782815");
   const [daysInAdvance, setDaysInAdvance] = useState(7);
   const [cutOffDays, setCutOffDays] = useState("15:00:00");
   const [timeIntervals, setTimeIntervals] = useState("30");
@@ -77,7 +77,7 @@ export const ClubSettings = () => {
           <TextBox label="זמן בשעות שניתן לבטל לפני מועד הזמנת המגרש" value={hrBeforeCancel} setValue={setHrBeforeCancel} />
           <TextBox label="הזמן הקצר ביותר להזמנה בדקות" disabled={true} value={minPerReservation} setValue={setMinPerReservation} />
           <TextBox label="כמה ימים קדימה אפשר להזמין מראש" disabled={true} value={daysReservedBefore} setValue={setDaysReservedBefore} />
-          <TextBox label="מספר טלפון לעדכון ההזמנה" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
+          <TextBox label="מספר טלפון של מנהל ההזמנות" value={phoneCancelReservation} setValue={setPhoneCancelReservation} />
           <TextBox label="days in advance" disabled={true} value={daysInAdvance} setValue={setDaysInAdvance} />
           <TextBox label="cut off days"disabled={true} value={cutOffDays} setValue={setCutOffDays} />
           <TextBox label="מרווחי זמן בדקות" disabled={true} value={timeIntervals} setValue={setTimeIntervals} />

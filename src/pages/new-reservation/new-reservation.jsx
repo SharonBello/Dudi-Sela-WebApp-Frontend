@@ -293,22 +293,15 @@ const handleCourtsData = useCallback(async (date) => {
           let _userCredit = await reservationService.getCredit(uid)
           const creditNum = payload.endHour.split(":")[0] - payload.startHour.split(":")[0]
           let _successMessage = ""
-          let email // TODO fix this alternative option for loggedUser struct
-          if (loggedUser.data) {
-            email = loggedUser.data.uid.email
-          }
-          if (loggedUser.uid) {
-            email = loggedUser.uid.email
-          }
           // use credit from card or regular credit if exists
           const cardName = getValidCardName(_userCredit)
           if (cardName) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": email, "date": todaysDate, cardName: cardName })
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, cardName: cardName })
             if (resCredit.data.result === 0) {
               _successMessage += `ההזמנה זוכתה מכרטיסיית ${cardName} -`
             }
           } else if ((_userCredit.user_credit - creditNum) >= 0) {
-            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": email, "date": todaysDate, "cardName": '' })
+            const resCredit = await reservationService.changeCredit(uid, { "userCredit": -creditNum, "mail": loggedUser.email, "date": todaysDate, "cardName": '' })
             if (resCredit.data.result === 0) {
               _successMessage += "ההזמנה זוכתה מהכרטיסיה - "
             }

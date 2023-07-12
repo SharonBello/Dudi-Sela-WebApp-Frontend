@@ -1,11 +1,25 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebook, faInstagram, faWhatsapp, faWaze } from "@fortawesome/free-brands-svg-icons"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
+import { courtService } from '../../services/court.service'
 
 export const AppFooter = () => {
   const { pathname } = useLocation()
+  const [phoneCancelReservation, setPhoneCancelReservation] = useState();
+  const [phoneNumCancelReservation, setPhoneNumCancelReservation] = useState();
+
+  useEffect(()=> {
+    const getClubPreferences = async () => {
+      let res = await courtService.getClubPreferences()
+      return res.data.club_preferences
+    }
+    getClubPreferences().then(res => {
+      setPhoneCancelReservation("https://wa.me/" + res.phoneCancelReservation)
+      setPhoneNumCancelReservation("tel"+res.phoneCancelReservation)
+    })
+  }, [])
 
   return (
     (pathname !== '/manager' && pathname !== '/dashboard') ? (
@@ -29,12 +43,12 @@ export const AppFooter = () => {
                   <a href="mailto:dudiselaacademy@gmail.com">שליחת מייל</a>
                 </li>
                 <li>
-                  <a href="https://wa.me/972523782815" target="_blank" rel="noreferrer">
+                  <a href={phoneCancelReservation} target="_blank" rel="noreferrer">
                     שליחת הודעה<FontAwesomeIcon icon={faWhatsapp} />
                   </a>
                 </li>
                 <li>
-                  <a href="tel:972523782815" target="_blank" rel="noreferrer">
+                  <a href={phoneNumCancelReservation} target="_blank" rel="noreferrer">
                     התקשרו אלינו<FontAwesomeIcon icon={faPhone} /></a>
                 </li>
 

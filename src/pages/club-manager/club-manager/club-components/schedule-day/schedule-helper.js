@@ -121,26 +121,28 @@ export const fillEventSlots = (_rows, reservation, START_HOUR_DAY, _types) => {
   numTimeSlots*=2
   for (let i = 0; i < numTimeSlots; i++) {
     startHourTxt = hoursDataArr[(Number(hrStart) + Number(minStart))*2 - START_HOUR_DAY*2 +i]
-    if (reservation.instructor) {
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
-    } else if (reservation.username) {
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
-    } else {
-      _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
-    }
-    switch (reservation.eventType) {
-      case EventTypes[0]:
-        _types[reservation.courtNumber - 1][startHourTxt] = 'outsider-event'
-        break;
-      case EventTypes[1]:
-        _types[reservation.courtNumber - 1][startHourTxt] = 'insider-event'
-        break;
-      case EventTypes[2]:
-        _types[reservation.courtNumber - 1][startHourTxt] = 'not-available-event'
-        break;
-      default:
-        _types[reservation.courtNumber - 1][startHourTxt] = 'subscriber-event'
-        break;
+    if (_rows[reservation.courtNumber - 1]!==undefined && _rows[reservation.courtNumber - 1][startHourTxt]!==undefined) {
+      if (reservation.instructor) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.instructor
+      } else if (reservation.username) {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.username
+      } else {
+        _rows[reservation.courtNumber - 1][startHourTxt] = reservation.title
+      }
+      switch (reservation.eventType) {
+        case EventTypes[0]:
+          _types[reservation.courtNumber - 1][startHourTxt] = 'outsider-event'
+          break;
+        case EventTypes[1]:
+          _types[reservation.courtNumber - 1][startHourTxt] = 'insider-event'
+          break;
+        case EventTypes[2]:
+          _types[reservation.courtNumber - 1][startHourTxt] = 'not-available-event'
+          break;
+        default:
+          _types[reservation.courtNumber - 1][startHourTxt] = 'subscriber-event'
+          break;
+      }
     }
   }
 }

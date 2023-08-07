@@ -40,7 +40,7 @@ import { instructorService } from '../../services/instructor.service.js';
 import { hoursDataArr } from '../club-manager/club-manager/club-components/schedule-day/schedule-helper.js';
 import { EventTypes } from '../club-manager/club-manager/club-helper.jsx';
 
-export const EditEventModal = ({ showInstructors, setShowInstructors, selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
+export const EditEventModal = ({ selectedRow, updateEventInView, tennisInstructors, clubClasses, selectedEvent, openEditEvent, closeEditEvent, dayOfWeek, isEventExists, isClubEvent, dayInHebrew}) => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [eventType, setEventType] = useState(selectedEvent.eventType);
@@ -292,11 +292,9 @@ export const EditEventModal = ({ showInstructors, setShowInstructors, selectedRo
       return (<ParticipantsList participants={participants} />)
   }
   const renderInstructors = () => {
-    if (showInstructors) {
       return (
         <SelectMenu inputLabel="שם המדריך" defaultValue={instructor} values={tennisInstructors} setValue={setInstructor} />
       )
-    }
   }
   return (
     <>
@@ -322,7 +320,7 @@ export const EditEventModal = ({ showInstructors, setShowInstructors, selectedRo
             <Typography className="modal-body-text">
                   יום בשבוע - {dayInHebrew}
                 </Typography>
-              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} clubClasses={clubClasses} handleClubClassChange={handleClubClassChange} setShowInstructors={setShowInstructors}/>
+              <EventType eventType={eventType} setEventType={setEventType} shouldJoinClass={shouldJoinClass} setShouldJoinClass={setShouldJoinClass} clubClasses={clubClasses} handleClubClassChange={handleClubClassChange} />
               <EventTime theme={theme} cacheRtl={cacheRtl} startHour={startHour} endHour={endHour} setStartHour={handleSetStartHour} setEndHour={handleSetEndHour} date={date} setDate={setDate} />
               <EventFrequency theme={theme} cacheRtl={cacheRtl} frequencyType={frequencyType} setFrequencyType={setFrequencyType} />
               <Box className="court-details flex-column">

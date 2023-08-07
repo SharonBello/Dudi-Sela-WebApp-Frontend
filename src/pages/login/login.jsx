@@ -72,6 +72,7 @@ export const Login = () => {
         }
       })
       .catch((error) => {
+        alert("בעית תקשורת ברשת");
         console.error(error)
       })
   }

@@ -105,7 +105,7 @@ export const getTbColumns = (columnsData) => {
       headerName: col.headerName,
       type: 'singleSelect',
       headerAlign: 'center',
-      flex: 1.5,
+      width: 140,
     })
   })
   return _columns;

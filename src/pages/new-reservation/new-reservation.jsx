@@ -113,31 +113,22 @@ const handleCourtsData = useCallback(async (date) => {
       let res = await courtService.getClubCourts()
       const _courtsData = JSON.parse(JSON.stringify(courtsData))
       _courtsData.court_numbers = res.data.club_courts
+
+      let _date = dayjs(date).format(DateFormat)
+      const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
+      const hours = await getActiveHours(weekDayLowerCase[dayOfWeek])
+      _courtsData.start_time = hours
+      _courtsData.end_time = hours.map(h => h+1)
       setCourtsData(_courtsData);
-      if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts)
-      let _date
+
+    if (initialCourtNumbers.length === 0) setInitialCourtNumbers(res.data.club_courts)
       if (!date) {
         date = new Date()
       }
       _date = dayjs(date).format(DateFormat)
       setSelectedStartHour()
       setDurationInHrs(1)
-      handleDateChange(_date, courtsData)
-    } catch (err) {
-      console.error(err)
-    }
-  }, [])
-
-  const handleClubHours = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      const _date = dayjs(date).format(DateFormat)
-      const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
-      const hours = await getActiveHours(weekDayLowerCase[dayOfWeek])
-      const _courtsData = JSON.parse(JSON.stringify(courtsData))
-      _courtsData.start_time = hours
-      _courtsData.end_time = hours.map(h => h+1)
-      setCourtsData(_courtsData);
+      handleDateChange(_date, _courtsData)
     } catch (err) {
       console.error(err)
     }
@@ -145,7 +136,6 @@ const handleCourtsData = useCallback(async (date) => {
 
   useEffect(() => {
     handleCourtsData()
-    handleClubHours()
     }, [])
 
   const theme = createTheme({
@@ -207,7 +197,6 @@ const handleCourtsData = useCallback(async (date) => {
     if (!mCourtsData) {
       mCourtsData = courtsData
     }
-    let _courtsData = JSON.parse(JSON.stringify(mCourtsData))
     const reservations = await reservationService.queryByDate(_date)
     setReservationsByDate(reservations)
     const dayOfWeek = dayjs(_date).format('dddd').toLowerCase()
@@ -215,6 +204,7 @@ const handleCourtsData = useCallback(async (date) => {
     setReservationsByDayOfWeek(reservations2)
     const _start_time = []
     const hours = await getActiveHours(weekDayLowerCase[dayOfWeek])
+    let _courtsData = JSON.parse(JSON.stringify(mCourtsData))
     hours.forEach(hour => {
       const courtsSet = new Set()
       reservations.forEach(reservation => {

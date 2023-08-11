@@ -211,7 +211,7 @@ export const ScheduleDay = ({ mDate, dayOfWeek, dayInHebrew, clubClasses, tennis
           columnDefs={{editable: false}}
           rows={rows}
           columns={columns}
-          sx={{ fontSize: 16, textOverflow: 'ellipsis' }}
+          sx={{ m: 2 }}
           experimentalFeatures={{ newEditingApi: true }}
           hideFooter={true}
         />

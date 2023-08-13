@@ -4,21 +4,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebook, faInstagram, faWhatsapp, faWaze } from "@fortawesome/free-brands-svg-icons"
 import { faPhone } from "@fortawesome/free-solid-svg-icons"
 import { courtService } from '../../services/court.service'
+import { useSelector } from 'react-redux'
 
 export const AppFooter = () => {
   const { pathname } = useLocation()
   const [phoneCancelReservation, setPhoneCancelReservation] = useState();
   const [phoneNumCancelReservation, setPhoneNumCancelReservation] = useState();
+  let loggedUser = useSelector((storeState) => storeState.userModule.loggedUser)
 
   useEffect(()=> {
-    const getClubPreferences = async () => {
-      let res = await courtService.getClubPreferences()
-      return res.data.club_preferences
+    if (loggedUser) {
+      const getClubPreferences = async () => {
+        let res = await courtService.getClubPreferences()
+        return res.data.club_preferences
+      }
+      getClubPreferences().then(res => {
+        setPhoneCancelReservation("https://wa.me/" + res.phoneCancelReservation)
+        setPhoneNumCancelReservation("tel"+res.phoneCancelReservation)
+      })
     }
-    getClubPreferences().then(res => {
-      setPhoneCancelReservation("https://wa.me/" + res.phoneCancelReservation)
-      setPhoneNumCancelReservation("tel"+res.phoneCancelReservation)
-    })
   }, [])
 
   return (

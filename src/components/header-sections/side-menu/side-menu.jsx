@@ -35,6 +35,8 @@ export const SideMenu = ({ menuOpen, user, handleSignout }) => {
         </div>
         <nav className='menu-nav'>
           <ul className='side-menu-profile clean-list flex-column'>
+            {loggedUser ? <li><NavLink to={`/user-reservations/new-reservation`} className="sidebar-item">הזמנת מגרש</NavLink></li> : <span></span>}
+            {loggedUser ?<li><NavLink to={`/user-reservations`} className="sidebar-item">ההזמנות שלי</NavLink></li> : <span></span>}
             <li><NavLink to={`/about`} className="sidebar-item">על האקדמיה</NavLink></li>
             <li><NavLink to={`/learntennis`} className="sidebar-item">לימוד טניס</NavLink></li>
             <li><NavLink to={`/contact`} className="sidebar-item">צרו קשר</NavLink></li>
